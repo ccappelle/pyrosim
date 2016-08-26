@@ -1,0 +1,307 @@
+collision_kernel.lo collision_kernel.o: collision_kernel.cpp \
+  ../../include/ode/common.h ../../include/ode/odeconfig.h \
+  /usr/llvm-gcc-4.2/bin/../lib/gcc/i686-apple-darwin11/4.2.1/include/stddef.h \
+  /usr/llvm-gcc-4.2/bin/../lib/gcc/i686-apple-darwin11/4.2.1/include/limits.h \
+  /usr/llvm-gcc-4.2/bin/../lib/gcc/i686-apple-darwin11/4.2.1/include/syslimits.h \
+  /Applications/Xcode.app/Contents/Developer/usr/llvm-gcc-4.2/lib/gcc/i686-apple-darwin11/4.2.1/include/limits.h \
+  /Applications/Xcode.app/Contents/Developer/usr/llvm-gcc-4.2/lib/gcc/i686-apple-darwin11/4.2.1/include/syslimits.h \
+  /usr/include/limits.h /usr/include/sys/cdefs.h \
+  /usr/include/sys/_symbol_aliasing.h \
+  /usr/include/sys/_posix_availability.h /usr/include/machine/limits.h \
+  /usr/include/i386/limits.h /usr/include/i386/_limits.h \
+  /usr/include/sys/syslimits.h /usr/include/stdio.h \
+  /usr/include/Availability.h /usr/include/AvailabilityInternal.h \
+  /usr/include/_types.h /usr/include/sys/_types.h \
+  /usr/include/machine/_types.h /usr/include/i386/_types.h \
+  /usr/include/stdlib.h /usr/include/sys/wait.h /usr/include/sys/signal.h \
+  /usr/include/sys/appleapiopts.h /usr/include/machine/signal.h \
+  /usr/include/i386/signal.h /usr/include/i386/_structs.h \
+  /usr/include/sys/_structs.h /usr/include/machine/_structs.h \
+  /usr/include/mach/i386/_structs.h /usr/include/sys/resource.h \
+  /usr/include/machine/endian.h /usr/include/i386/endian.h \
+  /usr/include/sys/_endian.h /usr/include/libkern/_OSByteOrder.h \
+  /usr/include/libkern/i386/_OSByteOrder.h /usr/include/alloca.h \
+  /usr/include/machine/types.h /usr/include/i386/types.h \
+  /usr/include/i386/_types.h \
+  /usr/llvm-gcc-4.2/bin/../lib/gcc/i686-apple-darwin11/4.2.1/include/stdarg.h \
+  /usr/include/math.h /usr/include/string.h /usr/include/strings.h \
+  /usr/llvm-gcc-4.2/bin/../lib/gcc/i686-apple-darwin11/4.2.1/include/float.h \
+  ../../include/ode/error.h ../../include/ode/matrix.h \
+  ../../include/ode/rotation.h ../../include/ode/compatibility.h \
+  ../../include/ode/objects.h ../../include/ode/mass.h \
+  ../../include/ode/contact.h ../../include/ode/odemath.h \
+  ../../include/ode/odemath_legacy.h config.h /usr/include/stdint.h \
+  /usr/include/inttypes.h collision_kernel.h \
+  ../../include/ode/collision.h ../../include/ode/collision_space.h \
+  ../../include/ode/odeinit.h ../../include/ode/collision_trimesh.h \
+  objects.h ../../include/ode/memory.h array.h odetls.h odeou.h \
+  collision_util.h collision_std.h collision_transform.h \
+  collision_trimesh_internal.h collision_trimesh_colliders.h \
+  ../../include/ode/collision_trimesh.h ../../OPCODE/Opcode.h \
+  ../../OPCODE/OPC_Settings.h ../../OPCODE/OPC_IceHook.h \
+  /usr/include/assert.h ../../OPCODE/Ice/IcePreprocessor.h \
+  ../../OPCODE/Ice/IceTypes.h ../../OPCODE/Ice/IceFPU.h \
+  ../../OPCODE/Ice/IceMemoryMacros.h ../../OPCODE/Ice/IceUtils.h \
+  ../../OPCODE/Ice/IceContainer.h ../../OPCODE/Ice/IcePairs.h \
+  ../../OPCODE/Ice/IceRevisitedRadix.h ../../OPCODE/Ice/IceRandom.h \
+  ../../OPCODE/Ice/IceAxes.h ../../OPCODE/Ice/IcePoint.h \
+  ../../OPCODE/Ice/IceHPoint.h ../../OPCODE/Ice/IceMatrix3x3.h \
+  ../../OPCODE/Ice/IceMatrix4x4.h ../../OPCODE/Ice/IcePlane.h \
+  ../../OPCODE/Ice/IceRay.h ../../OPCODE/Ice/IceIndexedTriangle.h \
+  ../../OPCODE/Ice/IceTriangle.h ../../OPCODE/Ice/IceTriList.h \
+  ../../OPCODE/Ice/IceAABB.h ../../OPCODE/Ice/IceOBB.h \
+  ../../OPCODE/Ice/IceBoundingSphere.h ../../OPCODE/Ice/IceSegment.h \
+  ../../OPCODE/Ice/IceLSS.h ../../OPCODE/OPC_Common.h \
+  ../../OPCODE/OPC_MeshInterface.h ../../OPCODE/OPC_TreeBuilders.h \
+  ../../OPCODE/OPC_AABBTree.h ../../OPCODE/OPC_OptimizedTree.h \
+  ../../OPCODE/OPC_BaseModel.h ../../OPCODE/OPC_Model.h \
+  ../../OPCODE/OPC_HybridModel.h ../../OPCODE/OPC_Collider.h \
+  ../../OPCODE/OPC_VolumeCollider.h ../../OPCODE/OPC_TreeCollider.h \
+  ../../OPCODE/OPC_RayCollider.h ../../OPCODE/OPC_SphereCollider.h \
+  ../../OPCODE/OPC_OBBCollider.h ../../OPCODE/OPC_AABBCollider.h \
+  ../../OPCODE/OPC_LSSCollider.h ../../OPCODE/OPC_PlanesCollider.h \
+  ../../OPCODE/OPC_Picking.h collision_space_internal.h
+
+../../include/ode/common.h:
+
+../../include/ode/odeconfig.h:
+
+/usr/llvm-gcc-4.2/bin/../lib/gcc/i686-apple-darwin11/4.2.1/include/stddef.h:
+
+/usr/llvm-gcc-4.2/bin/../lib/gcc/i686-apple-darwin11/4.2.1/include/limits.h:
+
+/usr/llvm-gcc-4.2/bin/../lib/gcc/i686-apple-darwin11/4.2.1/include/syslimits.h:
+
+/Applications/Xcode.app/Contents/Developer/usr/llvm-gcc-4.2/lib/gcc/i686-apple-darwin11/4.2.1/include/limits.h:
+
+/Applications/Xcode.app/Contents/Developer/usr/llvm-gcc-4.2/lib/gcc/i686-apple-darwin11/4.2.1/include/syslimits.h:
+
+/usr/include/limits.h:
+
+/usr/include/sys/cdefs.h:
+
+/usr/include/sys/_symbol_aliasing.h:
+
+/usr/include/sys/_posix_availability.h:
+
+/usr/include/machine/limits.h:
+
+/usr/include/i386/limits.h:
+
+/usr/include/i386/_limits.h:
+
+/usr/include/sys/syslimits.h:
+
+/usr/include/stdio.h:
+
+/usr/include/Availability.h:
+
+/usr/include/AvailabilityInternal.h:
+
+/usr/include/_types.h:
+
+/usr/include/sys/_types.h:
+
+/usr/include/machine/_types.h:
+
+/usr/include/i386/_types.h:
+
+/usr/include/stdlib.h:
+
+/usr/include/sys/wait.h:
+
+/usr/include/sys/signal.h:
+
+/usr/include/sys/appleapiopts.h:
+
+/usr/include/machine/signal.h:
+
+/usr/include/i386/signal.h:
+
+/usr/include/i386/_structs.h:
+
+/usr/include/sys/_structs.h:
+
+/usr/include/machine/_structs.h:
+
+/usr/include/mach/i386/_structs.h:
+
+/usr/include/sys/resource.h:
+
+/usr/include/machine/endian.h:
+
+/usr/include/i386/endian.h:
+
+/usr/include/sys/_endian.h:
+
+/usr/include/libkern/_OSByteOrder.h:
+
+/usr/include/libkern/i386/_OSByteOrder.h:
+
+/usr/include/alloca.h:
+
+/usr/include/machine/types.h:
+
+/usr/include/i386/types.h:
+
+/usr/include/i386/_types.h:
+
+/usr/llvm-gcc-4.2/bin/../lib/gcc/i686-apple-darwin11/4.2.1/include/stdarg.h:
+
+/usr/include/math.h:
+
+/usr/include/string.h:
+
+/usr/include/strings.h:
+
+/usr/llvm-gcc-4.2/bin/../lib/gcc/i686-apple-darwin11/4.2.1/include/float.h:
+
+../../include/ode/error.h:
+
+../../include/ode/matrix.h:
+
+../../include/ode/rotation.h:
+
+../../include/ode/compatibility.h:
+
+../../include/ode/objects.h:
+
+../../include/ode/mass.h:
+
+../../include/ode/contact.h:
+
+../../include/ode/odemath.h:
+
+../../include/ode/odemath_legacy.h:
+
+config.h:
+
+/usr/include/stdint.h:
+
+/usr/include/inttypes.h:
+
+collision_kernel.h:
+
+../../include/ode/collision.h:
+
+../../include/ode/collision_space.h:
+
+../../include/ode/odeinit.h:
+
+../../include/ode/collision_trimesh.h:
+
+objects.h:
+
+../../include/ode/memory.h:
+
+array.h:
+
+odetls.h:
+
+odeou.h:
+
+collision_util.h:
+
+collision_std.h:
+
+collision_transform.h:
+
+collision_trimesh_internal.h:
+
+collision_trimesh_colliders.h:
+
+../../include/ode/collision_trimesh.h:
+
+../../OPCODE/Opcode.h:
+
+../../OPCODE/OPC_Settings.h:
+
+../../OPCODE/OPC_IceHook.h:
+
+/usr/include/assert.h:
+
+../../OPCODE/Ice/IcePreprocessor.h:
+
+../../OPCODE/Ice/IceTypes.h:
+
+../../OPCODE/Ice/IceFPU.h:
+
+../../OPCODE/Ice/IceMemoryMacros.h:
+
+../../OPCODE/Ice/IceUtils.h:
+
+../../OPCODE/Ice/IceContainer.h:
+
+../../OPCODE/Ice/IcePairs.h:
+
+../../OPCODE/Ice/IceRevisitedRadix.h:
+
+../../OPCODE/Ice/IceRandom.h:
+
+../../OPCODE/Ice/IceAxes.h:
+
+../../OPCODE/Ice/IcePoint.h:
+
+../../OPCODE/Ice/IceHPoint.h:
+
+../../OPCODE/Ice/IceMatrix3x3.h:
+
+../../OPCODE/Ice/IceMatrix4x4.h:
+
+../../OPCODE/Ice/IcePlane.h:
+
+../../OPCODE/Ice/IceRay.h:
+
+../../OPCODE/Ice/IceIndexedTriangle.h:
+
+../../OPCODE/Ice/IceTriangle.h:
+
+../../OPCODE/Ice/IceTriList.h:
+
+../../OPCODE/Ice/IceAABB.h:
+
+../../OPCODE/Ice/IceOBB.h:
+
+../../OPCODE/Ice/IceBoundingSphere.h:
+
+../../OPCODE/Ice/IceSegment.h:
+
+../../OPCODE/Ice/IceLSS.h:
+
+../../OPCODE/OPC_Common.h:
+
+../../OPCODE/OPC_MeshInterface.h:
+
+../../OPCODE/OPC_TreeBuilders.h:
+
+../../OPCODE/OPC_AABBTree.h:
+
+../../OPCODE/OPC_OptimizedTree.h:
+
+../../OPCODE/OPC_BaseModel.h:
+
+../../OPCODE/OPC_Model.h:
+
+../../OPCODE/OPC_HybridModel.h:
+
+../../OPCODE/OPC_Collider.h:
+
+../../OPCODE/OPC_VolumeCollider.h:
+
+../../OPCODE/OPC_TreeCollider.h:
+
+../../OPCODE/OPC_RayCollider.h:
+
+../../OPCODE/OPC_SphereCollider.h:
+
+../../OPCODE/OPC_OBBCollider.h:
+
+../../OPCODE/OPC_AABBCollider.h:
+
+../../OPCODE/OPC_LSSCollider.h:
+
+../../OPCODE/OPC_PlanesCollider.h:
+
+../../OPCODE/OPC_Picking.h:
+
+collision_space_internal.h:
