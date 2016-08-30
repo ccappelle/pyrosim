@@ -7,7 +7,7 @@ from subprocess import Popen, PIPE
 
 class PYROSIM:
 
-	def __init__(self,playBlind=False,playPaused=False):
+	def __init__(self,playBlind=False,playPaused=False,evalTime=constants.evaluationTime):
 
 		self.numJoints = 0
 
@@ -29,7 +29,7 @@ class PYROSIM:
 
                 # self.simulator = Popen(commandsToSend, stdout=PIPE, stdin=PIPE)
 
-                self.Send('EvaluationTime '+str(constants.evaluationTime)+'\n')
+                self.Send('EvaluationTime '+str(evalTime)+'\n')
 
         def Get_Sensor_Data(self,ID,s,t):
 
