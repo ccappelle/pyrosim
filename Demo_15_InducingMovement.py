@@ -27,5 +27,6 @@ sim.Send_Synapse(sourceNeuronIndex = 0 , targetNeuronIndex = 2 , weight = 1.0 )
 sim.Send_Synapse(sourceNeuronIndex = 1 , targetNeuronIndex = 2 , weight = -1.0 )
 
 
-
 sim.Start()
+
+sim.Collect_Sensor_Data()
