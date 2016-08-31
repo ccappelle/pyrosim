@@ -20,4 +20,13 @@ sim.Send_Cylinder(ID = 1 , x=0, y=ARM_LENGTH/2.0, z=ARM_LENGTH + ARM_RADIUS, r1=
 
 sim.Send_Joint(ID = 0, firstObjectID=0, secondObjectID=1, x=0, y=0, z=ARM_LENGTH + ARM_RADIUS, n1=1, n2=0, n3=0, lo=-3.14159/4.0, hi=+3.14159/4.0)
 
+# Put touch sensors in arm segments.
+
+sim.Send_Touch_Sensor(ID = 0 , objectIndex = 0)
+
+sim.Send_Touch_Sensor(ID = 1 , objectIndex = 1)
+
+# Add sensor neurons and connect them to the sensors.
+
+
 sim.Start()
