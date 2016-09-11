@@ -1,7 +1,7 @@
 all: simulator
 
 simulator: simulator.o environment.o object.o joint.o positionSensor.o proprioceptiveSensor.o touchSensor.o raySensor.o lightSensor.o vestibularSensor.o neuralNetwork.o neuron.o synapse.o
-	/bin/sh ode-0.12/libtool --tag=CXX   --mode=link g++  -g -O2   -o simulator simulator.o environment.o object.o joint.o positionSensor.o proprioceptiveSensor.o touchSensor.o raySensor.o lightSensor.o vestibularSensor.o neuralNetwork.o neuron.o synapse.o ode-0.12/drawstuff/src/libdrawstuff.la ode-0.12/ode/src/libode.la -framework OpenGL -framework GLUT  -lm  -lpthread
+	/bin/sh ode-0.12/libtool --tag=CXX   --mode=link g++  -g -O2   -o simulator simulator.o environment.o object.o joint.o positionSensor.o proprioceptiveSensor.o touchSensor.o raySensor.o lightSensor.o vestibularSensor.o neuralNetwork.o neuron.o synapse.o ode-0.12/drawstuff/src/libdrawstuff.la ode-0.12/ode/src/libode.la -framework OpenGL -framework GLUT  -lm  -lpthread -lGL -lGLU -lglut
 
 synapse.o: synapse.cpp
 	g++ -DHAVE_CONFIG_H -I. -Iode-0.12/ode/src  -Iode-0.12/include -DDRAWSTUFF_TEXTURE_PATH="\"ode-0.12/drawstuff/textures\"" -DdTRIMESH_ENABLED -DdDOUBLE  -g -O2 -MT synapse.o -MD -MP -c -o synapse.o synapse.cpp
@@ -41,3 +41,6 @@ environment.o: environment.cpp
 
 simulator.o: simulator.cpp
 	g++ -DHAVE_CONFIG_H -I. -Iode-0.12/ode/src  -Iode-0.12/include -DDRAWSTUFF_TEXTURE_PATH="\"ode-0.12/drawstuff/textures\"" -DdTRIMESH_ENABLED -DdDOUBLE  -g -O2 -MT simulator.o -MD -MP -c -o simulator.o simulator.cpp
+
+clean:
+	rm *.o *.d simulator
