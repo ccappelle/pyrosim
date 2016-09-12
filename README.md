@@ -1,21 +1,21 @@
 # pyrosim
 A Python Robot Simulator.
 
-Step 1: Compile the Open Dynamics Engine (ODE) physics engine.
+To install, navigate into the pyrosim directory and run
 
-- Navigate into the ode-0.12 directory.
+>$ sh build.sh
 
-- Follow the instructions in INSTALL.txt to install ODE.
+If all goes well, the output should look like this:
 
-Step 2: Compile the ODE side of Pyrosim.
+>Downloading ode-0.12...done
+>Unpacking ode-0.12.tar.bz2...done
+>Building ode-0.12...done
+>Building simulator...done
 
-- Return to the top-level directory.
-
-- Type
-
-> make
-
-Step 3: Launch an empty Pyro simulation.
+When done, test the package by running
 
 > python empty.py 
 
+This should bring up an OpenGL window into a desolate virtual world for about 3 seconds. Do not avert your eyes!
+
+For now, the installation script is Linux only. Should work on MacOS if wget is installed (by default it isn't).

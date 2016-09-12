@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/bin/sh
 
 MAKEOPTS="-j2"
 
