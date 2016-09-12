@@ -3,14 +3,14 @@ A Python Robot Simulator.
 
 To install, navigate into the pyrosim directory and run
 
->$ sh build.sh
+> $ sh build.sh
 
 If all goes well, the output should look like this:
 
->Downloading ode-0.12...done
->Unpacking ode-0.12.tar.bz2...done
->Building ode-0.12...done
->Building simulator...done
+> Downloading ode-0.12...done
+> Unpacking ode-0.12.tar.bz2...done
+> Building ode-0.12...done
+> Building simulator...done
 
 When done, test the package by running
 
