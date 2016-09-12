@@ -14,7 +14,7 @@ Building simulator...done
 ```
 When done, test the package by running
 ```bash
-$ python empty.py
+$ python2 empty.py
 ```
 This should bring up an OpenGL window into a desolate virtual world for about 3 seconds. Do not avert your eyes!
 
