@@ -44,3 +44,6 @@ simulator.o: simulator.cpp
 
 clean:
 	rm *.o *.d simulator
+
+simulator-libtool-test: simulator.o environment.o object.o joint.o positionSensor.o proprioceptiveSensor.o touchSensor.o raySensor.o lightSensor.o vestibularSensor.o neuralNetwork.o neuron.o synapse.o
+	/bin/bash ode-0.12/libtool --tag=CXX   --mode=link g++  -g -O2   -o simulator simulator.o environment.o object.o joint.o positionSensor.o proprioceptiveSensor.o touchSensor.o raySensor.o lightSensor.o vestibularSensor.o neuralNetwork.o neuron.o synapse.o ode-0.12/drawstuff/src/libdrawstuff.la ode-0.12/ode/src/libode.la -framework OpenGL -framework GLUT  -lm  -lpthread -lGL -lGLU -lglut
