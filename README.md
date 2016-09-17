@@ -1,21 +1,20 @@
 # pyrosim
 A Python Robot Simulator.
 
-To install, navigate into the pyrosim directory and run
+Step 1: Run build.sh:
 ```bash
 $ sh build.sh
 ```
-The script should take 5-10 minutes to finish. If all goes well, the output should look like this:
+
+Takes 3-5 minutes. The output should look like this:
 ```
-Downloading ode-0.12...done
 Unpacking ode-0.12.tar.bz2...done
 Building ode-0.12...done
 Building simulator...done
 ```
-When done, test the package by running
+
+Step 2: Test the package by running
 ```bash
-$ python2 empty.py
+$ python2.7 empty.py
 ```
 This should bring up an OpenGL window into a desolate virtual world for about 3 seconds. Do not avert your eyes!
-
-For now, the installation script is Linux only. Should work on MacOS if wget is installed (by default it isn't).

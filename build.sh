@@ -2,9 +2,9 @@
 
 MAKEOPTS="-j2"
 
-echo -n "Downloading ode-0.12..." &&
-wget https://sourceforge.net/projects/opende/files/ODE/0.12/ode-0.12.tar.bz2 > /tmp/odewget 2>&1 &&
-echo "done" &&
+#echo -n "Downloading ode-0.12..." &&
+#wget https://sourceforge.net/projects/opende/files/ODE/0.12/ode-0.12.tar.bz2 > /tmp/odewget 2>&1 &&
+#echo "done" &&
 
 echo -n "Unpacking ode-0.12.tar.bz2..." &&
 tar -xjf ode-0.12.tar.bz2 &&
