@@ -1,0 +1,5 @@
+*.o
+*.d
+*.pyc
+simulator
+ode-0.12/*
