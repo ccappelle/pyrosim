@@ -38,9 +38,9 @@ public:
 	void Write_Sensor_Data(int evalPeriod);
 
 private:
-        void Add_Motor_Neuron(int ID, int jointID, int layer, double tau);
+        void Add_Motor_Neuron(int ID, int jointID, double tau);
 
-	void Add_Sensor_Neuron(int ID, int sensorID, int sensorValueIndex, int layer, double tau);
+	void Add_Sensor_Neuron(int ID, int sensorID, int sensorValueIndex, double tau);
 
         void Connect_Motor_Neuron_to_Joint( int jointID, NEURON *motorNeuron );
 
@@ -75,8 +75,6 @@ private:
 	void Create_Touch_Sensor(int evalPeriod);
 
 	void Create_Vestibular_Sensor(int evalPeriod);
-
-	void Finished_Reading_From_Python(void);
 
         void Update_Sensor_Neurons(int t);
 };

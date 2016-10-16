@@ -16,11 +16,11 @@ sim.Send_Touch_Sensor(ID = 0 , objectIndex = 0)
 
 sim.Send_Touch_Sensor(ID = 1 , objectIndex = 1)
 
-sim.Send_Sensor_Neuron(ID=0, sensorID=0, layer=0 )
+sim.Send_Sensor_Neuron(ID=0, sensorID=0 )
 
-sim.Send_Sensor_Neuron(ID=1, sensorID=1, layer=0 )
+sim.Send_Sensor_Neuron(ID=1, sensorID=1 )
 
-sim.Send_Motor_Neuron(ID = 2 , jointID = 0 , layer = 1 )
+sim.Send_Motor_Neuron(ID = 2 , jointID = 0 )
 
 sim.Send_Synapse(sourceNeuronIndex = 0 , targetNeuronIndex = 2 , weight = 1.0 )
 

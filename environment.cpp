@@ -113,8 +113,6 @@ void ENVIRONMENT::Read_From_Python(dWorldID world,dSpaceID space, int *evaluatio
 
                 std::cin >> incomingString;
         }
-
-	Finished_Reading_From_Python();
 }
 
 void ENVIRONMENT::Poll_Sensors(int t) {
@@ -152,16 +150,16 @@ void ENVIRONMENT::Write_Sensor_Data(int evalPeriod) {
 
 // ----------------------- Private methods ---------------------------
 
-void ENVIRONMENT::Add_Motor_Neuron(int ID, int jointID, int layer, double tau) {
+void ENVIRONMENT::Add_Motor_Neuron(int ID, int jointID, double tau) {
 
-        NEURON *motorNeuron = neuralNetwork->Add_Motor_Neuron(ID,layer,tau);
+        NEURON *motorNeuron = neuralNetwork->Add_Motor_Neuron(ID,tau);
 
         Connect_Motor_Neuron_to_Joint( jointID, motorNeuron );
 }
 
-void ENVIRONMENT::Add_Sensor_Neuron(int ID, int sensorID, int sensorValueIndex, int layer, double tau) {
+void ENVIRONMENT::Add_Sensor_Neuron(int ID, int sensorID, int sensorValueIndex, double tau) {
 
-        NEURON *sensorNeuron = neuralNetwork->Add_Sensor_Neuron(ID,sensorValueIndex,layer,tau);
+        NEURON *sensorNeuron = neuralNetwork->Add_Sensor_Neuron(ID,sensorValueIndex,tau);
 
         Connect_Sensor_To_Sensor_Neuron( sensorID, sensorNeuron );
 }
@@ -172,15 +170,11 @@ void ENVIRONMENT::Create_Bias_Neuron(void) {
 
         std::cin >> ID;
 
-        int layer;
-
-        std::cin >> layer;
-
         if ( neuralNetwork == NULL )
 
                 Create_Neural_Network();
 
-        neuralNetwork->Add_Bias_Neuron(ID,layer);
+        neuralNetwork->Add_Bias_Neuron(ID);
 }
 
 void ENVIRONMENT::Create_Hidden_Neuron(void) {
@@ -188,10 +182,6 @@ void ENVIRONMENT::Create_Hidden_Neuron(void) {
         int ID;
 
         std::cin >> ID;
-
-        int layer;
-
-        std::cin >> layer;
 
 	double tau;
 
@@ -201,7 +191,7 @@ void ENVIRONMENT::Create_Hidden_Neuron(void) {
 
                 Create_Neural_Network();
 
-	neuralNetwork->Add_Hidden_Neuron(ID,layer,tau);
+	neuralNetwork->Add_Hidden_Neuron(ID,tau);
 }
 
 void ENVIRONMENT::Create_Joint( dWorldID world, dSpaceID space, int index) {
@@ -251,10 +241,6 @@ void ENVIRONMENT::Create_Motor_Neuron(void) {
 
         std::cin >> jointID;
 
-        int layer;
-
-        std::cin >> layer;
-
 	double tau;
 
 	std::cin >> tau;
@@ -263,7 +249,7 @@ void ENVIRONMENT::Create_Motor_Neuron(void) {
 
                 Create_Neural_Network();
 
-        Add_Motor_Neuron(ID,jointID,layer,tau);
+        Add_Motor_Neuron(ID,jointID,tau);
 }
 
 void ENVIRONMENT::Create_Neural_Network(void) {
@@ -361,10 +347,6 @@ void ENVIRONMENT::Create_Sensor_Neuron(void) {
 
         std::cin >> sensorValueIndex;
 
-        int layer; 
-
-        std::cin >> layer; 
-
 	double tau;
 
 	std::cin >> tau;
@@ -373,7 +355,7 @@ void ENVIRONMENT::Create_Sensor_Neuron(void) {
 
 		Create_Neural_Network();
 
-	Add_Sensor_Neuron(ID,sensorID,sensorValueIndex,layer,tau);
+	Add_Sensor_Neuron(ID,sensorID,sensorValueIndex,tau);
 }
 
 void ENVIRONMENT::Create_Synapse(void) {
@@ -409,13 +391,6 @@ void ENVIRONMENT::Create_Vestibular_Sensor(int evalPeriod) {
         std::cin >> objectIndex;
 
         objects[objectIndex]->Create_Vestibular_Sensor(ID,evalPeriod);
-}
-
-void ENVIRONMENT::Finished_Reading_From_Python(void) {
-
-	if ( neuralNetwork )
-
-		neuralNetwork->Finished_Reading_From_Python();
 }
 
 void ENVIRONMENT::Update_Sensor_Neurons(int t) {

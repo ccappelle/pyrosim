@@ -11,18 +11,18 @@ extern int SENSOR_NEURON;
 
 extern int BIAS_NEURON;
 
-NEURON::NEURON(int myID, int neuronType, int layer, double tau) {
+NEURON::NEURON(int myID, int neuronType, double tau) {
 
-	Initialize(myID,neuronType,layer,tau);
+	Initialize(myID,neuronType,tau);
 
 	if ( type == BIAS_NEURON )
 
 		value = 1.0;
 }
 
-NEURON::NEURON(int myID, int neuronType, int svIndex, int layer, double tau) {
+NEURON::NEURON(int myID, int neuronType, int svIndex, double tau) {
 
-	Initialize(myID,neuronType,layer,tau);
+	Initialize(myID,neuronType,tau);
 	
 	sensorValueIndex = svIndex;
 }
@@ -34,11 +34,6 @@ NEURON::~NEURON(void) {
 int  NEURON::Get_ID(void) {
 
 	return ID;
-}
-
-int  NEURON::Get_Layer(void) {
-
-	return layer;
 }
 
 int  NEURON::Get_Sensor_Value_Index(void) {
@@ -114,15 +109,13 @@ void NEURON::Threshold(void) {
 
 // ------------------ Private methods -------------------
 
-void NEURON::Initialize(int myID, int neuronType, int l, double t) {
+void NEURON::Initialize(int myID, int neuronType, double t) {
 
         ID = myID;
 
         type = neuronType;
 
         sensorValueIndex = -1;
-
-	layer = l;
 
 	tau = t;
 

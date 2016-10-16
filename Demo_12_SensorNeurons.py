@@ -16,8 +16,8 @@ sim.Send_Touch_Sensor(ID = 0 , objectIndex = 0)
 
 sim.Send_Touch_Sensor(ID = 1 , objectIndex = 1)
 
-sim.Send_Sensor_Neuron(ID=0, sensorID=0, layer=0 )
+sim.Send_Sensor_Neuron(ID=0, sensorID=0 )
 
-sim.Send_Sensor_Neuron(ID=1, sensorID=1, layer=0 )
+sim.Send_Sensor_Neuron(ID=1, sensorID=1 )
 
 sim.Start()

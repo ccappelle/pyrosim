@@ -15,20 +15,16 @@ private:
 
 	double previousValue;
 
-	int layer;
-
 	double tau;
 	
 public:
-        NEURON(int myID, int neuronType, int layer, double tau);
+        NEURON(int myID, int neuronType, double tau);
 
-	NEURON(int myID, int neuronType, int svIndex, int layer, double tau);
+	NEURON(int myID, int neuronType, int svIndex, double tau);
 
 	~NEURON(void);
 
 	int Get_ID(void);
-
-	int Get_Layer(void);
 
 	double Get_Previous_Value(void);
 
@@ -51,7 +47,7 @@ public:
 	void Threshold(void);
 
 private:
-	void Initialize(int myID, int neuronType, int l, double t);
+	void Initialize(int myID, int neuronType, double t);
 
 };
 

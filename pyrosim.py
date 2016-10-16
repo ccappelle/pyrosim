@@ -35,13 +35,11 @@ class PYROSIM:
 
                 return self.dataFromPython[ID,s,t]
 
-	def Send_Bias_Neuron(self, ID = 0 , layer = 0 ):
+	def Send_Bias_Neuron(self, ID = 0 ):
 
                 outputString = 'BiasNeuron'
 
                 outputString = outputString + ' ' + str(ID)
-
-                outputString = outputString + ' ' + str(layer)
 
                 outputString = outputString + '\n'
 
@@ -94,13 +92,11 @@ class PYROSIM:
 
                 self.Send(outputString)
 
-	def Send_Hidden_Neuron(self, ID = 0 , layer = 0 , tau = 1.0 ):
+	def Send_Hidden_Neuron(self, ID = 0 , tau = 1.0 ):
 
 		outputString = 'HiddenNeuron'
 
 		outputString = outputString + ' ' + str(ID)
-
-                outputString = outputString + ' ' + str(layer)
 
                 outputString = outputString + ' ' + str(tau)
 
@@ -156,15 +152,13 @@ class PYROSIM:
 
                 self.Send(outputString)
 
-        def Send_Motor_Neuron(self , ID = 0 , jointID = 0 , layer = 0 , tau = 1.0 ):
+        def Send_Motor_Neuron(self , ID = 0 , jointID = 0 , tau = 1.0 ):
 
                 outputString = 'MotorNeuron'
 
                 outputString = outputString + ' ' + str(ID)
 
                 outputString = outputString + ' ' + str(jointID)
-
-                outputString = outputString + ' ' + str(layer)
 
                 outputString = outputString + ' ' + str(tau)
 
@@ -196,7 +190,7 @@ class PYROSIM:
 
                 self.Send(outputString)
 
-	def Send_Sensor_Neuron(self, ID=0, sensorID=0, sensorValueIndex=0, layer=0, tau=1.0 ):
+	def Send_Sensor_Neuron(self, ID=0, sensorID=0, sensorValueIndex=0, tau=1.0 ):
 
 		outputString = 'SensorNeuron'
 
@@ -205,8 +199,6 @@ class PYROSIM:
                 outputString = outputString + ' ' + str(sensorID)
 
                 outputString = outputString + ' ' + str(sensorValueIndex)
-
-                outputString = outputString + ' ' + str(layer)
 
                 outputString = outputString + ' ' + str(tau)
 
