@@ -107,9 +107,20 @@ void NEURAL_NETWORK::Finished_Reading_From_Python(void) {
 
 void NEURAL_NETWORK::Update(void) {
 
+	Push_Current_Values_To_Previous_Values();
+
+	Reset_Neuron_Values();
+
+	Update_Neurons();
+
+	Threshold_Neurons();
+
+	/*
 	for ( int l = 1 ; l < numLayers ; l++ )
 
 		Update_Layer(l);
+	*/
+
 }
 
 // ------------------------- Private methods -----------------------------
@@ -191,6 +202,27 @@ void NEURAL_NETWORK::Organize_Neurons_Into_Layers(void) {
 	}
 }
 
+void NEURAL_NETWORK::Push_Current_Values_To_Previous_Values(void) {
+
+        for (int n = 0 ; n < numNeurons ; n++ )
+
+		neurons[n]->Push_Current_Value_To_Previous_Value();
+}
+
+void NEURAL_NETWORK::Reset_Neuron_Values(void) {
+
+	for ( int n = 0 ; n < numNeurons ; n++ )
+
+		neurons[n]->Reset();
+}
+
+void NEURAL_NETWORK::Threshold_Neurons(void) {
+
+        for ( int n = 0 ; n < numNeurons ; n++ )
+
+		neurons[n]->Threshold();	
+}
+
 void NEURAL_NETWORK::Update_Layer(int l) {
 
 	for ( int tn = firstNeuronInLayer[l] ; tn <= lastNeuronInLayer[l] ; tn++ )
@@ -231,6 +263,23 @@ void NEURAL_NETWORK::Update_Neuron_On_Layer(int tn, int l) {
 */
 
 	neurons[tn]->Threshold();
+}
+
+void NEURAL_NETWORK::Update_Neurons(void) {
+
+	for ( int s = 0 ; s < numSynapses ; s++ ) {
+
+		int sni = synapses[s]->Get_Source_Neuron_Index();
+
+		int tni = synapses[s]->Get_Target_Neuron_Index();
+	
+		double w = synapses[s]->Get_Weight();
+
+		double influence = w * neurons[sni]->Get_Previous_Value();
+
+		neurons[tni]->Set( neurons[tni]->Get_Value() + influence );
+	}
+
 }
 
 #endif

@@ -54,11 +54,17 @@ private:
 
 	void Organize_Neurons_Into_Layers(void);
 
+	void Push_Current_Values_To_Previous_Values(void);
+
 	void Reset_Neuron_Values(void);
+
+	void Threshold_Neurons(void);
 
 	void Update_Layer(int l);
 
 	void Update_Neuron_On_Layer(int tn, int l);
+
+	void Update_Neurons(void);
 };
 
 #endif

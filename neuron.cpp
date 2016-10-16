@@ -89,7 +89,11 @@ void NEURON::Push_Current_Value_To_Previous_Value(void) {
 
 void NEURON::Reset(void) {
 
-	value = 0.0;
+        if ( type == BIAS_NEURON )
+
+                value = 1.0;
+	else
+		value = 0.0;
 }
 
 void NEURON::Set(double v) {
@@ -99,9 +103,11 @@ void NEURON::Set(double v) {
 
 void NEURON::Threshold(void) {
 
-	if ( Get_Type() == SENSOR_NEURON )
+	if ( (Get_Type() == SENSOR_NEURON) || (Get_Type() == BIAS_NEURON) )
 
 		return;
+
+	value = previousValue + tau * value;
 
 	value = tanh(value);
 }
