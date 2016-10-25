@@ -13,6 +13,8 @@ class PYROSIM:
 
 		self.numSensors = 0
 
+		self.evaluationTime = evalTime
+
 		commandsToSend = ['./simulator']
 
 		if ( playBlind == True ):
@@ -298,7 +300,7 @@ class PYROSIM:
 
 			index = index + 1
 
-			for t in range(0,constants.evaluationTime):
+			for t in range(0,self.evaluationTime):
 
                         	for s in range(0,numSensorValues):
 

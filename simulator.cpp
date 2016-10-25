@@ -22,9 +22,11 @@ static dWorldID world;
 static dSpaceID space;
 static dJointGroupID contactgroup;
 dsFunctions fn;
+
 int timer;
 int evaluationTime = 100;
 int runBlind;
+
 ENVIRONMENT *environment;
 int numberOfBodies = 0;
 static dGeomID ground;
