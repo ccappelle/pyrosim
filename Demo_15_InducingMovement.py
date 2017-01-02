@@ -16,15 +16,15 @@ sim.Send_Touch_Sensor(sensorID = 0 , objectID = 0)
 
 sim.Send_Touch_Sensor(sensorID = 1 , objectID = 1)
 
-#sim.Send_Sensor_Neuron(neuronID=0, sensorID=0 )
+sim.Send_Sensor_Neuron(neuronID=0, sensorID=0 )
 
-#sim.Send_Sensor_Neuron(neuronID=1, sensorID=1 )
+sim.Send_Sensor_Neuron(neuronID=1, sensorID=1 )
 
-#sim.Send_Motor_Neuron(neuronID = 2 , jointID = 0 )
+sim.Send_Motor_Neuron(neuronID=2 , jointID=0 )
 
-#sim.Send_Synapse(sourceNeuronID = 0 , targetNeuronID = 2 , weight = 1.0 )
+sim.Send_Synapse(sourceNeuronID = 0 , targetNeuronID = 2 , weight = 1.0 )
 
-#sim.Send_Synapse(sourceNeuronID = 1 , targetNeuronID = 2 , weight = -1.0 )
+sim.Send_Synapse(sourceNeuronID = 1 , targetNeuronID = 2 , weight = -1.0 )
 
 sim.Start()
 

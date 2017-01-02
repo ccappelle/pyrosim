@@ -37,11 +37,11 @@ class PYROSIM:
 
                 return self.dataFromPython[ID,s,t]
 
-	def Send_Bias_Neuron(self, ID = 0 ):
+	def Send_Bias_Neuron(self, neuronID = 0 ):
 
                 outputString = 'BiasNeuron'
 
-                outputString = outputString + ' ' + str(ID)
+                outputString = outputString + ' ' + str(neuronID)
 
                 outputString = outputString + '\n'
 
@@ -94,11 +94,11 @@ class PYROSIM:
 
                 self.Send(outputString)
 
-	def Send_Hidden_Neuron(self, ID = 0 , tau = 1.0 ):
+	def Send_Hidden_Neuron(self, neuronID = 0 , tau = 1.0 ):
 
 		outputString = 'HiddenNeuron'
 
-		outputString = outputString + ' ' + str(ID)
+		outputString = outputString + ' ' + str(neuronID)
 
                 outputString = outputString + ' ' + str(tau)
 
@@ -154,11 +154,11 @@ class PYROSIM:
 
                 self.Send(outputString)
 
-        def Send_Motor_Neuron(self , ID = 0 , jointID = 0 , tau = 1.0 ):
+        def Send_Motor_Neuron(self , neuronID = 0 , jointID = 0 , tau = 1.0 ):
 
                 outputString = 'MotorNeuron'
 
-                outputString = outputString + ' ' + str(ID)
+                outputString = outputString + ' ' + str(neuronID)
 
                 outputString = outputString + ' ' + str(jointID)
 
@@ -192,11 +192,11 @@ class PYROSIM:
 
                 self.Send(outputString)
 
-	def Send_Sensor_Neuron(self, ID=0, sensorID=0, sensorValueIndex=0, tau=1.0 ):
+	def Send_Sensor_Neuron(self, neuronID=0, sensorID=0, sensorValueIndex=0, tau=1.0 ):
 
 		outputString = 'SensorNeuron'
 
-                outputString = outputString + ' ' + str(ID)
+                outputString = outputString + ' ' + str(neuronID)
 
                 outputString = outputString + ' ' + str(sensorID)
 
@@ -228,13 +228,13 @@ class PYROSIM:
 
                 self.Send(outputString)
 
-        def Send_Synapse(self, sourceNeuronIndex = 0 , targetNeuronIndex = 0 , weight = 0.0 ):
+        def Send_Synapse(self, sourceNeuronID = 0 , targetNeuronID = 0 , weight = 0.0 ):
 
 	        outputString = 'Synapse'
 
-                outputString = outputString + ' ' + str(sourceNeuronIndex)
+                outputString = outputString + ' ' + str(sourceNeuronID)
 
-                outputString = outputString + ' ' + str(targetNeuronIndex)
+                outputString = outputString + ' ' + str(targetNeuronID)
 
                 outputString = outputString + ' ' + str(weight)
 
