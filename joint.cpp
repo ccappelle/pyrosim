@@ -45,11 +45,19 @@ void JOINT::Actuate(void) {
 
 	double zeroToOne = motorNeuronValue/2.0 + 0.5;
 
-	double desiredAngle = zeroToOne * ( highStop - lowStop ) + lowStop;
+	double diff;
 
-	double currentAngle = dJointGetHingeAngle(joint);
+        double desiredTarget = zeroToOne * ( highStop - lowStop ) + lowStop;
 
-	double diff = desiredAngle - currentAngle;
+	double currentTarget;
+
+	if ( positionControl )
+
+        	currentTarget = dJointGetHingeAngle(joint);
+	else
+		currentTarget = dJointGetHingeAngleRate(joint);
+
+       	diff = desiredTarget - currentTarget;
 
 	dJointSetHingeParam(joint,dParamVel, speed * diff);
 
