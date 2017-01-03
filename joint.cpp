@@ -49,13 +49,15 @@ void JOINT::Actuate(void) {
 
         double desiredTarget = zeroToOne * ( highStop - lowStop ) + lowStop;
 
-	double currentTarget;
+	double currentTarget = dJointGetHingeAngle(joint);
 
+	/*
 	if ( positionControl )
 
         	currentTarget = dJointGetHingeAngle(joint);
 	else
 		currentTarget = dJointGetHingeAngleRate(joint);
+	*/
 
        	diff = desiredTarget - currentTarget;
 
