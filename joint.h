@@ -19,6 +19,7 @@ private:
 	double	normalZ;
 	double  lowStop;
 	double  highStop;
+	int	positionControl;
 
 	double  speed;
 

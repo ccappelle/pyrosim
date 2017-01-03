@@ -22,6 +22,8 @@ JOINT::JOINT(void) {
         lowStop = 0;
         highStop = 0;
 
+	positionControl = true;
+
 	speed = 0.0;
 
         joint = NULL;
@@ -49,15 +51,13 @@ void JOINT::Actuate(void) {
 
         double desiredTarget = zeroToOne * ( highStop - lowStop ) + lowStop;
 
-	double currentTarget = dJointGetHingeAngle(joint);
+	double currentTarget;
 
-	/*
 	if ( positionControl )
 
         	currentTarget = dJointGetHingeAngle(joint);
 	else
 		currentTarget = dJointGetHingeAngleRate(joint);
-	*/
 
        	diff = desiredTarget - currentTarget;
 
