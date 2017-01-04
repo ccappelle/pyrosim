@@ -22,9 +22,9 @@ JOINT::JOINT(void) {
         lowStop = 0;
         highStop = 0;
 
-	positionControl = true;
-
 	speed = 0.0;
+
+	positionControl = true;
 
         joint = NULL;
 
@@ -154,6 +154,16 @@ void JOINT::Read_From_Python(void) {
         std::cin >> highStop;
 
         std::cin >> speed;
+
+	char temp[100];
+
+	std::cin >> temp;
+
+	if ( strcmp(temp,"True")==0 )
+
+		positionControl = true;
+	else
+		positionControl = false;
 }
 
 void JOINT::Update_Sensor_Neurons(int t) {
