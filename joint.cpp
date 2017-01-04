@@ -102,9 +102,12 @@ void JOINT::Create_In_Simulator(dWorldID world, OBJECT *firstObject, OBJECT *sec
 
 	dJointSetHingeAxis(joint,normalX,normalY,normalZ);
 
-	dJointSetHingeParam(joint,dParamLoStop,lowStop);
+	if ( positionControl == true ) {
 
-        dJointSetHingeParam(joint,dParamHiStop,highStop);
+		dJointSetHingeParam(joint,dParamLoStop,lowStop);
+
+        	dJointSetHingeParam(joint,dParamHiStop,highStop);
+	}
 }
 
 void JOINT::Create_Proprioceptive_Sensor(int myID, int evalPeriod) {
