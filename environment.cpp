@@ -200,9 +200,21 @@ void ENVIRONMENT::Create_Joint( dWorldID world, dSpaceID space, int index) {
 
 	joints[index]->Read_From_Python();
 
-	OBJECT *firstObject = objects[ joints[index]->Get_First_Object_Index() ];
+	int firstObjectID = joints[index]->Get_First_Object_Index();
 
-        OBJECT *secondObject = objects[ joints[index]->Get_Second_Object_Index() ];
+	int secondObjectID = joints[index]->Get_Second_Object_Index();
+
+	OBJECT *firstObject = NULL;
+
+	if ( firstObjectID >= 0 )
+
+		firstObject = objects[ firstObjectID ];
+
+        OBJECT *secondObject = NULL;
+
+	if ( secondObjectID >= 0 )
+
+		secondObject = objects[ secondObjectID ];
 
 	joints[index]->Create_In_Simulator(	world, firstObject , secondObject );
 

@@ -55,6 +55,14 @@ public:
 	void Update_Sensor_Neurons(int t);
 
 	void Write_To_Python(int evalPeriod);
+
+private:
+	void Create_Fixed_Joint_In_Simulator(dWorldID world, OBJECT *firstObject, OBJECT *secondObject);
+
+        void Create_Hinge_Joint_In_Simulator(dWorldID world, OBJECT *firstObject, OBJECT *secondObject);
+
+	int  Is_Fixed_Joint(OBJECT *firstObject, OBJECT *secondObject);
+
 };
 
 #endif

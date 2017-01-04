@@ -94,20 +94,11 @@ int  JOINT::Connect_To_Motor_Neuron(int jointID, NEURON *mNeuron) {
 
 void JOINT::Create_In_Simulator(dWorldID world, OBJECT *firstObject, OBJECT *secondObject) {
 
-	joint = dJointCreateHinge(world,0);
+	if ( Is_Fixed_Joint(firstObject,secondObject) )
 
-	dJointAttach( joint , firstObject->Get_Body() , secondObject->Get_Body() );
-
-	dJointSetHingeAnchor(joint,x,y,z);
-
-	dJointSetHingeAxis(joint,normalX,normalY,normalZ);
-
-	if ( positionControl == true ) {
-
-		dJointSetHingeParam(joint,dParamLoStop,lowStop);
-
-        	dJointSetHingeParam(joint,dParamHiStop,highStop);
-	}
+		Create_Fixed_Joint_In_Simulator(world,firstObject,secondObject);
+	else
+		Create_Hinge_Joint_In_Simulator(world,firstObject,secondObject);
 }
 
 void JOINT::Create_Proprioceptive_Sensor(int myID, int evalPeriod) {
@@ -181,6 +172,44 @@ void JOINT::Write_To_Python(int evalPeriod) {
         if ( proprioceptiveSensor )
 
                 proprioceptiveSensor->Write_To_Python(evalPeriod);
+}
+
+// ------------------- Private methods --------------------------
+
+void JOINT::Create_Fixed_Joint_In_Simulator(dWorldID world, OBJECT *firstObject, OBJECT *secondObject) {
+
+        joint = dJointCreateFixed(world,0);
+
+        if ( firstObject == NULL )
+
+                dJointAttach( joint , 0 , secondObject->Get_Body() );
+        else
+                dJointAttach( joint , firstObject->Get_Body() , 0 );
+
+	dJointSetFixed(joint);
+}
+
+void JOINT::Create_Hinge_Joint_In_Simulator(dWorldID world, OBJECT *firstObject, OBJECT *secondObject) {
+
+        joint = dJointCreateHinge(world,0);
+
+        dJointAttach( joint , firstObject->Get_Body() , secondObject->Get_Body() );
+
+        dJointSetHingeAnchor(joint,x,y,z);
+
+        dJointSetHingeAxis(joint,normalX,normalY,normalZ);
+
+        if ( positionControl == true ) {
+
+                dJointSetHingeParam(joint,dParamLoStop,lowStop);
+
+                dJointSetHingeParam(joint,dParamHiStop,highStop);
+        }
+}
+
+int  JOINT::Is_Fixed_Joint(OBJECT *firstObject, OBJECT *secondObject) {
+
+        return ( (firstObject==NULL) || (secondObject==NULL) );
 }
 
 #endif
