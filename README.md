@@ -23,5 +23,6 @@ This should bring up an OpenGL window displaying an empty, virtual world.
 The window will close on its own after a few seconds.
 
 Step 3: To build robots and environments for them, follow the programming
-projects at https://www.reddit.com/r/ludobots/wiki/pyrosim/simulation.
+projects at https://www.reddit.com/r/ludobots/wiki/pyrosim/simulation,
+starting with step #3.
  
