@@ -8,7 +8,9 @@ A Python Robot Simulator.
 2. For Mac and Linux users (currently not available for Windows):
 
   1. Run build.sh:
+
   `$ sh build.sh`
+
   This takes three to five minutes. The output should look like this:
   ```
   Unpacking ode-0.12.tar.bz2...done
