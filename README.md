@@ -29,7 +29,7 @@ then re-install Pyrosim:
 $ sh build.sh
 ```
 
-Test the package by running
+Once you get all three `done' confirmations, test the package by running
 ```bash
 $ python Demo_00_Empty_Sim.py 
 ```
