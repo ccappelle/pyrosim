@@ -12,11 +12,12 @@ A Python Robot Simulator.
   `$ sh build.sh`
 
   This takes three to five minutes. The output should look like this:
-  ```
-  Unpacking ode-0.12.tar.bz2...done
-  Building ode-0.12...done
-  Building simulator...done
-  ```
+  
+  `Unpacking ode-0.12.tar.bz2...done`
+
+  `Building ode-0.12...done`
+
+  `Building simulator...done`
 
   2. If you are installing from Linux and you do not get the third
   `done' confirmation, install these additional packages
