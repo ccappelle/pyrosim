@@ -3,7 +3,7 @@ A Python Robot Simulator.
 
 ## For Windows users.
 
-Follow the tutorial here.
+Follow the tutorial [here](https://youtu.be/tNGrxDftclA).
 
 ## For Mac and Linux users (currently not available for Windows):
 
