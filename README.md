@@ -36,6 +36,6 @@ $ python Demo_00_Empty_Sim.py
 This should bring up an OpenGL window displaying an empty, virtual world.
 The window will close on its own after a few seconds.
 
-Start making robots [here](https://www.reddit.com/r/ludobots/wiki/pyrosim/simulation),
+Now you can start making robots [here](https://www.reddit.com/r/ludobots/wiki/pyrosim/simulation),
 starting at step #3.
 
