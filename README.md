@@ -14,7 +14,9 @@ A Python Robot Simulator.
   This takes three to five minutes. The output should look like this:
   
   ```Unpacking ode-0.12.tar.bz2...done
+
   Building ode-0.12...done
+
   Building simulator...done
   ```
 
