@@ -3,11 +3,11 @@ A Python Robot Simulator.
 
 ## For Windows users.
 
-1. Follow the tutorial here.
+Follow the tutorial here.
 
 ## For Mac and Linux users (currently not available for Windows):
 
-1. Run build.sh:
+Run build.sh:
 ```bash
 $ sh build.sh
 ```
@@ -18,7 +18,7 @@ Building ode-0.12...done
 Building simulator...done
 ```
 
-2. If you are installing from Linux and you do not get the third
+If you are installing from Linux and you do not get the third
 `done' confirmation, install these additional packages
 ```
 $ sudo apt-get install build-essential
@@ -29,13 +29,13 @@ then re-install Pyrosim:
 $ sh build.sh
 ```
 
-3. Test the package by running
+Test the package by running
 ```bash
 $ python Demo_00_Empty_Sim.py 
 ```
 This should bring up an OpenGL window displaying an empty, virtual world.
 The window will close on its own after a few seconds.
 
-4. Start making robots [here](https://www.reddit.com/r/ludobots/wiki/pyrosim/simulation),
+Start making robots [here](https://www.reddit.com/r/ludobots/wiki/pyrosim/simulation),
 starting at step #3.
 
