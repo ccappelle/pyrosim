@@ -15,6 +15,20 @@ Building ode-0.12...done
 Building simulator...done
 ```
 
+If you are installing from Linux and you do not get the third
+`done' confirmation, install these additional packages
+
+```
+$ sudo apt-get install build-essential
+$ sudo apt-get install freeglut3-dev
+```
+
+then re-install Pyrosim:
+
+```
+$ sh build.sh
+```
+
 Step 2: Test the package by running
 ```bash
 $ python Demo_00_Empty_Sim.py 
