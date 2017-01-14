@@ -20,6 +20,7 @@ A Python Robot Simulator.
 
   If you are installing from Linux and you do not get the third
   `done' confirmation, install these additional packages
+
   ```
   $ sudo apt-get install build-essential
   $ sudo apt-get install freeglut3-dev
