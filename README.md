@@ -1,11 +1,11 @@
 # pyrosim
 A Python Robot Simulator.
 
-1. For Windows users:
+1. **For Windows users:**
 
   Follow the tutorial [here](https://youtu.be/tNGrxDftclA).
 
-2. For Mac and Linux users:
+2. **For Mac and Linux users:**
 
   Run build.sh:
 
