@@ -1,5 +1,6 @@
 import math
 import sys
+import numpy as np
 
 import constants
 
@@ -33,9 +34,9 @@ class PYROSIM:
 
                 self.Send('EvaluationTime '+str(evalTime)+'\n')
 
-        def Get_Sensor_Data(self,ID,s,t):
+        def Get_Sensor_Data(self,sensorID=0,s=0):
 
-                return self.dataFromPython[ID,s,t]
+                return self.dataFromPython[sensorID,s,:]
 
 	def Send_Bias_Neuron(self, neuronID = 0 ):
 
@@ -146,6 +147,8 @@ class PYROSIM:
 
                 self.Send(outputString)
 
+                self.numSensors = self.numSensors + 1
+
 	def Send_Light_Source(self, objectIndex = 0 ):
 
                 outputString = 'LightSource'
@@ -182,6 +185,8 @@ class PYROSIM:
 
                 self.Send(outputString)
 
+                self.numSensors = self.numSensors + 1
+
         def Send_Proprioceptive_Sensor(self, sensorID=0, jointID = 0):
 
                 outputString = 'ProprioceptiveSensor'
@@ -193,6 +198,8 @@ class PYROSIM:
                 outputString = outputString + '\n'
 
                 self.Send(outputString)
+
+                self.numSensors = self.numSensors + 1
 
 	def Send_Sensor_Neuron(self, neuronID=0, sensorID=0, sensorValueIndex=0, tau=1.0 ):
 
@@ -230,6 +237,8 @@ class PYROSIM:
 
                 self.Send(outputString)
 
+                self.numSensors = self.numSensors + 1
+
         def Send_Synapse(self, sourceNeuronID = 0 , targetNeuronID = 0 , weight = 0.0 ):
 
 	        outputString = 'Synapse'
@@ -243,7 +252,7 @@ class PYROSIM:
                 outputString = outputString + '\n'
 
                 self.Send(outputString)
-	
+
         def Send_Touch_Sensor(self, sensorID=0, objectID=0):
 
                 outputString = 'TouchSensor'
@@ -256,19 +265,21 @@ class PYROSIM:
 
                 self.Send(outputString)
 
+                self.numSensors = self.numSensors + 1
+
 	def Send_Vestibular_Sensor(self, sensorID=0, objectID = 0):
 
                 outputString = 'VestibularSensor'
 
                 outputString = outputString + ' ' + str(sensorID)
 
-                self.numSensors = self.numSensors + 1
-
                 outputString = outputString + ' ' + str(objectID)
 
                 outputString = outputString + '\n'
 
                 self.Send(outputString)
+
+                self.numSensors = self.numSensors + 1
 
         def Start(self):
 
@@ -284,7 +295,7 @@ class PYROSIM:
 
 	def Collect_Sensor_Data(self,dataFromSimulator):
 
-		self.dataFromPython = {}
+		self.dataFromPython = np.zeros([self.numSensors,4,self.evaluationTime],dtype='f')
 
                 dataFromSimulator = dataFromSimulator[0]
 
