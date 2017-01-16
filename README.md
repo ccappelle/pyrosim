@@ -1,5 +1,6 @@
-# pyrosim
-A Python Robot Simulator. Installation instructions.
+# pyrosim: A python robot simulator. 
+
+## Installation instructions.
 
   Download or clone the repository using the green button at the top of this page.
 
@@ -15,7 +16,6 @@ A Python Robot Simulator. Installation instructions.
 
   ```
   commandsToSend = ['./simulator']
-
   ```
 
   to
