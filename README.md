@@ -8,7 +8,7 @@
 
   Make sure you have Python installed on your machine.
 
-1. **For Windows users:**
+### For Windows users:
 
   Open the file called pyrosim.py in your favorite text editor or IDE.
 
@@ -29,7 +29,7 @@
 
   If that does not work, follow the tutorial [here](https://youtu.be/tNGrxDftclA).
 
-2. **For Mac and Linux users:**
+### For Mac and Linux users:
 
   Open a terminal window, and navigate into that directory. For example:
 
@@ -72,5 +72,7 @@
   This should bring up an OpenGL window displaying an empty, virtual world.
   The window will close on its own after a few seconds.
 
-3. Now you can start making robots [here](https://www.reddit.com/r/ludobots/wiki/pyrosim/simulation), starting at step #3.
+### Next steps.
+
+Now you can start making robots [here](https://www.reddit.com/r/ludobots/wiki/pyrosim/simulation), starting at step #3.
 
