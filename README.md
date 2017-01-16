@@ -1,11 +1,41 @@
 # pyrosim
-A Python Robot Simulator.
+A Python Robot Simulator. Installation instructions.
+
+  Download or clone the repository using the green button at the top of this page.
+
+  If you downloaded the zipped version, unzip the directory somewhere you can access it.
+
+  Make sure you have Python installed on your machine.
 
 1. **For Windows users:**
 
-  Follow the tutorial [here](https://youtu.be/tNGrxDftclA).
+  Open the file called pyrosim.py in your favorite text editor or IDE.
+
+  Change line 20 from
+
+  ```
+  commandsToSend = ['./simulator']
+
+  ```
+
+  to
+
+  ```
+  commandsToSend = ['./simulator.exe']
+  ```
+
+  Now run Demo_00_Empty_Sim.py, and you should see a new window open onto
+  an empty virtual environment, [like this](https://imgur.com/a/FNQpE).
+
+  If that does not work, follow the tutorial [here](https://youtu.be/tNGrxDftclA).
 
 2. **For Mac and Linux users:**
+
+  Open a terminal window, and navigate into that directory. For example:
+
+  ```bash
+  $ cd ~/Desktop/pyrosim
+  ```
 
   Run build.sh:
 
