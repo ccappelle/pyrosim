@@ -6,11 +6,11 @@
 
   If you downloaded the zipped version, unzip the directory somewhere you can access it.
 
-  Make sure you have Python installed on your machine.
-
 ### For Windows users:
 
-  Open the file called pyrosim.py in your favorite text editor or IDE.
+  Make sure you have [Python](https://www.python.org/downloads/windows/) installed on your machine.
+
+  In the pyrosim directory, open the file called pyrosim.py using your favorite text editor or IDE.
 
   Change line 20 from
 
@@ -23,6 +23,8 @@
   ```
   commandsToSend = ['./simulator.exe']
   ```
+
+  Save the file and close it.
 
   Now run Demo_00_Empty_Sim.py, and you should see a new window open onto
   an empty virtual environment, [like this](https://imgur.com/a/FNQpE).
