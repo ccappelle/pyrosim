@@ -21,8 +21,16 @@
   to
 
   ```
-  commandsToSend = ['./simulator.exe']
+  commandsToSend = ['./simulator7.exe']
   ```
+
+  if you have Windows 7 or 8, or change the line to 
+
+  ```
+  commandsToSend = ['./simulator10.exe']
+  ```
+
+  if you have a Windows 10 machine.
 
   Save the file and close it.
 
