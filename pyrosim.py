@@ -32,7 +32,7 @@ class PYROSIM:
 
                 # self.simulator = Popen(commandsToSend, stdout=PIPE, stdin=PIPE)
 
-                self.Send('EvaluationTime '+str(evalTime)+'\n')
+		self.Send('EvaluationTime '+str(evalTime)+'\n')
 
         def Get_Sensor_Data(self,sensorID=0,s=0):
 
