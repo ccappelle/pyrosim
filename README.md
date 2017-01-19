@@ -53,7 +53,8 @@
   
   Save the file and close it.
 
-  Now open a command prompt and navigate into the Pyrosim directory.
+  Now [open a command prompt](https://www.youtube.com/watch?v=C6UkfGafBGI)
+  and [navigate](https://www.youtube.com/watch?v=xNXtttJUREk) into the Pyrosim directory.
 
   Now run Demo_00_Empty_Sim.py by typing
 
