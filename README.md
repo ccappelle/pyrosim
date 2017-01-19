@@ -10,7 +10,8 @@
 
   Make sure you have [Anaconda](https://www.continuum.io/downloads) installed on your machine.
   (Choose `Download for Windows', choose the Python2.7 version, and choose 64-bit if you have
-   64-bit machine, and 32-bit otherwise.)
+   64-bit machine, and 32-bit otherwise. You can find out whether you have a 32-bit or 64-bit
+   machine [here](https://support.microsoft.com/en-us/help/15056/windows-7-32-64-bit-faq).)
 
   In the pyrosim directory, open the file called pyrosim.py using your favorite text editor or IDE.
 
