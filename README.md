@@ -8,7 +8,9 @@
 
 ### For Windows users:
 
-  Make sure you have [Python](https://www.python.org/downloads/windows/) installed on your machine.
+  Make sure you have [Anaconda](https://www.continuum.io/downloads) installed on your machine.
+  (Choose `Download for Windows', choose the Python2.7 version, and choose 64-bit if you have
+   64-bit machine, and 32-bit otherwise.)
 
   In the pyrosim directory, open the file called pyrosim.py using your favorite text editor or IDE.
 
