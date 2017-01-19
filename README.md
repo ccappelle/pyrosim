@@ -37,6 +37,20 @@
 
   Save the file and close it.
 
+  Now open Demo_00_Empty_Sim.py and change this line
+
+  ```
+  sim = PYROSIM() 
+  ```
+
+  to this
+
+  ```
+  sim = PYROSIM(evalTime=10000) 
+  ```
+  
+  Save the file and close it.
+
   Now run Demo_00_Empty_Sim.py, and you should see a new window open onto
   an empty virtual environment, [like this](https://imgur.com/a/FNQpE).
 
