@@ -8,12 +8,14 @@
 
 ### For Windows users:
 
-  Make sure you have [Anaconda](https://www.continuum.io/downloads) installed on your machine.
-  (Choose `Download for Windows', choose the Python2.7 version, and choose 64-bit if you have
-   64-bit machine, and 32-bit otherwise. You can find out whether you have a 32-bit or 64-bit
-   machine [here](https://support.microsoft.com/en-us/help/15056/windows-7-32-64-bit-faq).)
+  Install [Anaconda](https://www.continuum.io/downloads)--a package that includes Python
+  and useful Python libraries--if you don't already have it by 
+  choosing `Download for Windows', the Python2.7 version, and the 64-bit version if you have
+  a 64-bit machine and 32-bit otherwise. (You can find out whether you have a 32-bit or 64-bit
+  machine [here](https://support.microsoft.com/en-us/help/15056/windows-7-32-64-bit-faq).)
 
-  In the pyrosim directory, open the file called pyrosim.py using your favorite text editor or IDE.
+  Now open the file called pyrosim.py in the pyrosim directory using your favorite text
+  editor.
 
   Change line 20 from
 
@@ -37,7 +39,7 @@
 
   Save the file and close it.
 
-  Now open Demo_00_Empty_Sim.py and change this line
+  Now open Demo_00_Empty_Sim.py, again using your favorite text editor, and change this line
 
   ```
   sim = PYROSIM() 
@@ -51,7 +53,15 @@
   
   Save the file and close it.
 
-  Now run Demo_00_Empty_Sim.py, and you should see a new window open onto
+  Now open a command prompt and navigate into the Pyrosim directory.
+
+  Now run Demo_00_Empty_Sim.py by typing
+
+  ```
+  c:\pyrosim> python Demo_00_Empty_Sim.py
+  ```
+
+  You should see a new window open onto
   an empty virtual environment, [like this](https://imgur.com/a/FNQpE).
 
   If that does not work, follow the tutorial [here](https://youtu.be/tNGrxDftclA).
