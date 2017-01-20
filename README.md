@@ -69,10 +69,7 @@
   in there. Now 
   [change your path environment variable](http://www.computerhope.com/issues/ch000549.htm)
   to include the directory
-  that contains python.exe. Execute
-  ```
-  c:\pyrosim> python Demo_00_Empty_Sim.py
-  ```
+  that contains python.exe. Execute ```c:\pyrosim> python Demo_00_Empty_Sim.py```
   again.
 
   When the command works, you should see a new window open onto
