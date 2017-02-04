@@ -303,6 +303,10 @@ class PYROSIM:
 
 		index = 0
 
+                if ( dataFromSimulator == [] ):
+
+                        return
+
 		while ( dataFromSimulator[index] != 'Done' ):
 
 			ID = int( dataFromSimulator[index] )
