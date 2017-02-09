@@ -23,7 +23,6 @@
 // Sourceforge tests require the textures in the drawstuff folder
 
 #ifndef DRAWSTUFF_TEXTURE_PATH
-#define DRAWSTUFF_TEXTURE_PATH "./textures"
-//#define DRAWSTUFF_TEXTURE_PATH "../../drawstuff/textures"
+#define DRAWSTUFF_TEXTURE_PATH "../../drawstuff/textures"
 #endif
 
