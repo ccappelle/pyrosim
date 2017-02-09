@@ -1,14 +1,19 @@
 import math
 import sys
 import numpy as np
-
+import os
 import constants
 
 from subprocess import Popen, PIPE
 
 class PYROSIM:
 
-	def __init__(self,playBlind=False,playPaused=False,evalTime=constants.evaluationTime):
+	def __init__(self,playBlind=False,playPaused=False,evalTime=constants.evaluationTime,xyz=(0.8317,-0.9817,0.8),
+  hpr= (121.0,-27.500,0.0)):
+
+		#gets directory of pyrosim
+		#useful because we can now call pyrosim from other directories
+		pyrosim_path_name=os.path.dirname(os.path.abspath(__file__)) 
 
 		self.numJoints = 0
 
@@ -16,7 +21,7 @@ class PYROSIM:
 
 		self.evaluationTime = evalTime
 
-		commandsToSend = ['./simulator']
+		commandsToSend = [path_name+'/simulator']
 
 		if ( playBlind == True ):
 
@@ -30,7 +35,15 @@ class PYROSIM:
 
 		self.simulator = Popen(commandsToSend, stdout=PIPE, stdin=PIPE, stderr=PIPE)
 
+		#Sends texture path to ODE. Assumes textures are in folder called textures in pyrosim directory
+		self.Send(path_name+'/textures' + '\n')
+
 		# self.simulator = Popen(commandsToSend, stdout=PIPE, stdin=PIPE)
+		#Send camera position and orientation to ode -- ccappelle
+		for cam_pos in xyz:
+			self.Send(str(cam_pos)+'\n')
+		for cam_orientation in hpr:
+			self.Send(str(cam_orientation)+'\n')
 
 		self.Send('EvaluationTime '+str(evalTime)+'\n')
 
@@ -288,7 +301,6 @@ class PYROSIM:
 	def Wait_To_Finish(self):
 
 		dataFromSimulator = self.simulator.communicate()
-
 		self.Collect_Sensor_Data(dataFromSimulator)
 
 # --------------------- Private methods -----------------------------

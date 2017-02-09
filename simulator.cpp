@@ -9,7 +9,6 @@
 #endif
 
 #include <drawstuff/drawstuff.h>
-#include "texturepath.h"
 #ifdef dDOUBLE
 #define dsDrawLine dsDrawLineD
 #define dsDrawBox dsDrawBoxD
@@ -30,6 +29,10 @@ int runBlind;
 ENVIRONMENT *environment;
 int numberOfBodies = 0;
 static dGeomID ground;
+
+static float xyz[3] = {0.8317f,-0.9817f,0.8000f};
+static float hpr[3] = {121.0000f,-27.5000f,0.0000f}; //Camera coordinates
+static char texturePathStr[100];
 
 void Draw_Distance_Sensor(dGeomID myGeom, dGeomID hisGeom);
 
@@ -125,8 +128,9 @@ static void start()
 {
   dAllocateODEDataForThread(dAllocateMaskAll);
 
-  static float xyz[3] = {0.8317f,-0.9817f,0.8000f};
-  static float hpr[3] = {121.0000f,-27.5000f,0.0000f};
+  // replaced by user input --ccappelle
+  //static float xyz[3] = {0.8317f,-0.9817f,0.8000f};
+  //static float hpr[3] = {121.0000f,-27.5000f,0.0000f};
   dsSetViewpoint (xyz,hpr);
 }
 
@@ -186,7 +190,8 @@ void Initialize_ODE(void) {
   	fn.step = &simLoop;
   	fn.command = &command;
   	fn.stop = 0;
-  	fn.path_to_textures = DRAWSTUFF_TEXTURE_PATH;
+  	//fn.path_to_textures = DRAWSTUFF_TEXTURE_PATH; //uses user defined texture path == can call pyrosim from different directory
+    fn.path_to_textures = texturePathStr;
 
  	dInitODE2(0);
   	world = dWorldCreate();
@@ -203,6 +208,20 @@ void Initialize_ODE(void) {
 void Initialize_Environment(void) {
 
         environment = new ENVIRONMENT();
+}
+
+void Read_Camera_From_Python(void){
+  //Set texture path for objects
+  std::cin >> texturePathStr;
+
+    // Sets initial camera from python pipe -- ccappelle
+    for (int i=0;i<3;i++){
+    std::cin >> (xyz[i]);
+  }
+  for (int j=0;j<3;j++){
+    std::cin >> (hpr[j]);
+  }
+
 }
 
 void Read_From_Python(void) {
@@ -232,6 +251,9 @@ int main (int argc, char **argv)
 	if ( (argc > 1) && (strcmp(argv[1],"-blind")==0) )
 
 		runBlind = true;
+        
+
+        Read_Camera_From_Python(); //--ccappelle
 
         Initialize_ODE();
 
