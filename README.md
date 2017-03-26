@@ -1,6 +1,6 @@
 # pyrosim: A python robot simulator. 
 
-Pyrosim enables the creation of robots with arbitraries body plans
+Pyrosim enables the creation of robots with arbitrary body plans
 and neural controllers, and the optimization of them in arbitrary simulated
 environments.
 
