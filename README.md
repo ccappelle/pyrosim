@@ -6,7 +6,7 @@ environments.
 
 ## Installation instructions.
 
-  Download or clone the repository using the green button at the top of this page.
+  Download or clone the GitHub [repository](https://github.com/jbongard/pyrosim).
 
   If you downloaded the zipped version, unzip the directory somewhere you can access it.
 
