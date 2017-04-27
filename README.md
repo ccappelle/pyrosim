@@ -10,6 +10,8 @@ environments.
 
   If you downloaded the zipped version, unzip the directory somewhere you can access it.
 
+  Note: Pyrosim is intended for use with Python2.x. It does not yet run smoothly with Python3.x.
+
 ### For Windows users:
 
   Install [Anaconda](https://www.continuum.io/downloads)--a package that includes Python
