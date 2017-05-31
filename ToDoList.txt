@@ -1,6 +1,6 @@
 to do:
 
-### comments and make api
+comments and make api
 
 change ludobots pyrosim link to point to old version
 
@@ -20,7 +20,7 @@ check ids
 
 motar strength
 
-input function
+#completed 2017-05-31 ---- input function
 
 different joint types
 
@@ -33,4 +33,7 @@ demos
   fast strong motor
   fast weak motor
   
--- impulse forces
+impulse forces
+
+debug mode (draw joints etc.)
+

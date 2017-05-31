@@ -30,6 +30,9 @@ int runBlind;
 ENVIRONMENT *environment;
 int numberOfBodies = 0;
 float dt = 0.05;
+static float xyz[3] = {0.8317f,-0.9817f,0.8000f};
+static float hpr[3] = {121.0000f,-27.5000f,0.0000f};
+
 static dGeomID ground;
 
 void Draw_Distance_Sensor(dGeomID myGeom, dGeomID hisGeom);
@@ -125,9 +128,6 @@ static void nearCallback (void *data, dGeomID o1, dGeomID o2)
 static void start()
 {
   dAllocateODEDataForThread(dAllocateMaskAll);
-
-  static float xyz[3] = {0.8317f,-0.9817f,0.8000f};
-  static float hpr[3] = {121.0000f,-27.5000f,0.0000f};
   dsSetViewpoint (xyz,hpr);
 }
 
@@ -208,7 +208,7 @@ void Initialize_Environment(void) {
 
 void Read_From_Python(void) {
 
-	environment->Read_From_Python(world,space,&evaluationTime);
+	environment->Read_From_Python(world,space,&evaluationTime,&dt,xyz,hpr);
 }
 
 void Terminate(void) {

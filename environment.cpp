@@ -41,18 +41,34 @@ void ENVIRONMENT::Draw(void) {
                 objects[i]->Draw();
 }
 
-void ENVIRONMENT::Read_From_Python(dWorldID world,dSpaceID space, int *evaluationTime) {
+void ENVIRONMENT::Read_From_Python(dWorldID world,dSpaceID space, int *evaluationTime,
+                                        float *dt, float *xyz, float *hpr) {
 
         char incomingString[100];
 
         std::cin >> incomingString;
 
         while ( strcmp(incomingString,"Done") != 0 ) {
-
+                //Simulator timing
                 if ( strcmp(incomingString,"EvaluationTime") == 0 )
-
 			std::cin >> (*evaluationTime);
 
+                else if ( strcmp(incomingString,"TimeInterval") == 0)
+                        std::cin >> (*dt);
+
+                //Camera
+                else if ( strcmp(incomingString,"Camera") == 0)
+                {
+                        std::cin >> xyz[0];
+                        std::cin >> xyz[1];
+                        std::cin >> xyz[2];
+
+                        std::cin >> hpr[0];
+                        std::cin >> hpr[1];
+                        std::cin >> hpr[2];
+                }
+
+                //Bodies
                 else if ( strcmp(incomingString,"Box") == 0 )
 
 			Create_Object(world,space,numberOfBodies,BOX);
@@ -65,6 +81,7 @@ void ENVIRONMENT::Read_From_Python(dWorldID world,dSpaceID space, int *evaluatio
 
 			Create_Joint(world,space,numberOfJoints);
 
+                //Sensors
 		else if ( strcmp(incomingString,"PositionSensor") == 0 )
 
 			Create_Position_Sensor(*evaluationTime);
@@ -93,6 +110,7 @@ void ENVIRONMENT::Read_From_Python(dWorldID world,dSpaceID space, int *evaluatio
 
 			Create_Light_Source();
 
+                //Neurons
 		else if ( strcmp(incomingString,"SensorNeuron") == 0 )
 
 			Create_Sensor_Neuron();
@@ -111,6 +129,7 @@ void ENVIRONMENT::Read_From_Python(dWorldID world,dSpaceID space, int *evaluatio
 
                 else if ( strcmp(incomingString,"FunctionNeuron") == 0)
                         Create_Function_Neuron(*evaluationTime);
+                //Synapse
 		else
 			Create_Synapse();
 

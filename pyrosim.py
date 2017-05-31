@@ -8,8 +8,9 @@ from subprocess import Popen, PIPE
 
 class PYROSIM:
 
-	def __init__(self,playBlind=False,playPaused=False,evalTime=constants.evaluationTime,
-					time_step=constants.time_step, debug=False):
+	def __init__(self,playBlind=False,playPaused=False,evalTime=constants.evaluation_time,
+					dt=constants.dt, debug=False, xyz=constants.xyz,
+					hpr=constants.hpr):
 
 		self.numJoints = 0
 		self.numSensors = 0
@@ -17,29 +18,85 @@ class PYROSIM:
 		self.strings_to_send = []
 
 		self.evaluationTime = evalTime
-		self.time_step = time_step
+		self.dt = dt
 		self.playPaused = playPaused
 		self.playBlind = playBlind
 		self.debug = debug
 		# self.simulator = Popen(commandsToSend, stdout=PIPE, stdin=PIPE)
 
-		self.Send('EvaluationTime '+str(evalTime)+'\n')
+		self._Send('EvaluationTime '+str(evalTime)+'\n')
+		self._Send('TimeInterval ' + str(self.dt)+'\n')
+		self.Send_Camera(xyz, hpr)
 
-	def Get_Sensor_Data(self,sensorID=0,s=0):
+	def Get_Sensor_Data(self,sensorID=0,svi=0):
+		"""Get the post simulation data from a specified sensor
 
-		return self.dataFromPython[sensorID,s,:]
+		Paramaters
+		----------
+		sensorID : int , optional
+			the sensors ID tag
+		svi 	 : int , optional
+			The sensor value index. Certain sensors have multiple values 
+			(e.g. the position sensor) and the svi specifies which to 
+			access (e.g. for a position sensor, svi=0 corresponds to the
+			x value of that sensor)
+
+		Returns
+		-------
+		list of float
+			Returns the list of sensor values over the simulation.
+		"""
+
+		return self.dataFromPython[sensorID,svi,:]
 
 	def Send_Bias_Neuron(self, neuronID = 0 ):
+		"""Send bias neuron to simulator
+
+		Paramaters
+		----------
+		neuronID : int, optional
+			User specified ID tag for the neuron
+
+		Returns
+		-------
+		None
+		"""
 
 		outputString = 'BiasNeuron'
-
 		outputString = outputString + ' ' + str(neuronID)
-
 		outputString = outputString + '\n'
+		self._Send(outputString)
 
-		self.Send(outputString)
+	def Send_Box(stelf, objectID=0, x=0, y=0, z=0, length=0.1, width=0.1, height=0.1, r=1, g=1, b=1):
+		"""Send box body to the simulator
 
-	def Send_Box(self, objectID=0, x=0, y=0, z=0, length=0.1, width=0.1, height=0.1, r=1, g=1, b=1):
+		Paramaters
+		----------
+		objectID : int, optional
+			User specified body ID tag for the box
+		x 		 : float, optional
+			The x position coordinate of the center 
+		y		 : float, optional
+			The y position coordinate of the center 
+		z		 : float, optional
+			The z position coordinate of the center 
+		length   : float, optional
+			The length of the box
+		width   : float, optional
+			The width of the box
+		height  : float, optional
+			The height of the box
+		r       : float, optional
+			The amount of the color red in the box (r in [0,1])
+		g       : float, optional
+			The amount of the color green in the box (g in [0,1])
+		b       : float, optional
+			The amount of the color blue in the box (b in [0,1])
+			
+		Returns
+		-------
+		None
+		"""
 
 		outputString = 'Box'
 
@@ -59,7 +116,20 @@ class PYROSIM:
 
 		outputString = outputString + '\n'
 
-		self.Send(outputString)
+		self._Send(outputString)
+
+	def Send_Camera(self,xyz,hpr):
+		outputString = 'Camera'
+		self.xyz = xyz
+		self.hpr = hpr
+
+		for i in xyz:
+			outputString = outputString + ' ' + str(i)
+		for j in hpr:
+			outputString = outputString + ' ' + str(j)
+
+		outputString = outputString + '\n'
+		self._Send(outputString)
 
 	def Send_Cylinder(self, objectID=0, x=0, y=0, z=0, r1=0, r2=0, r3=1, length=1.0, radius=0.1, r=1, g=1, b=1):
 
@@ -84,7 +154,7 @@ class PYROSIM:
 
 		outputString = outputString + '\n'
 
-		self.Send(outputString)
+		self._Send(outputString)
 
 	def Send_User_Input_Neuron(self, neuronID=0, values=1):
 
@@ -102,12 +172,12 @@ class PYROSIM:
 			outputString = outputString + ' ' + str(values[index])
 
 		outputString = outputString + '\n'
-		self.Send(outputString)
+		self._Send(outputString)
 
 
 	def Send_Function_Neuron(self, neuronID=0, function= math.sin):
-		end_time = self.evaluationTime*self.time_step
-		time_vals = np.arange(0,end_time,self.time_step)
+		end_time = self.evaluationTime*self.dt
+		time_vals = np.arange(0,end_time,self.dt)
 		output_vals = list(map(function,time_vals))
 		self.Send_User_Input_Neuron( neuronID, output_vals)
 
@@ -121,7 +191,7 @@ class PYROSIM:
 
 		outputString = outputString + '\n'
 
-		self.Send(outputString)
+		self._Send(outputString)
 
 	def Send_Joint(self, jointID=0, firstObjectID=0, secondObjectID=1, x=0, y=0, z=0, n1=0, n2=0, n3=1, lo=-math.pi/4.0, hi=+math.pi/4.0 , speed=1.0, positionControl = True):
 
@@ -149,7 +219,7 @@ class PYROSIM:
 
 		outputString = outputString + '\n'
 
-		self.Send(outputString)
+		self._Send(outputString)
 
 	def Send_Light_Sensor(self, sensorID=0, objectID = 0 ):
 
@@ -161,7 +231,7 @@ class PYROSIM:
 
 		outputString = outputString + '\n'
 
-		self.Send(outputString)
+		self._Send(outputString)
 
 		self.numSensors = self.numSensors + 1
 
@@ -173,7 +243,7 @@ class PYROSIM:
 
 		outputString = outputString + '\n'
 
-		self.Send(outputString)
+		self._Send(outputString)
 
 	def Send_Motor_Neuron(self , neuronID = 0 , jointID = 0 , tau = 1.0 ):
 
@@ -187,7 +257,7 @@ class PYROSIM:
 
 		outputString = outputString + '\n'
 
-		self.Send(outputString)
+		self._Send(outputString)
 
 	def Send_Position_Sensor(self, sensorID=0, objectID = 0):
 
@@ -199,7 +269,7 @@ class PYROSIM:
 
 		outputString = outputString + '\n'
 
-		self.Send(outputString)
+		self._Send(outputString)
 
 		self.numSensors = self.numSensors + 1
 
@@ -213,7 +283,7 @@ class PYROSIM:
 
 		outputString = outputString + '\n'
 
-		self.Send(outputString)
+		self._Send(outputString)
 
 		self.numSensors = self.numSensors + 1
 
@@ -231,7 +301,7 @@ class PYROSIM:
 
 		outputString = outputString + '\n'
 
-		self.Send(outputString)
+		self._Send(outputString)
 
 	def Send_Ray_Sensor(self, sensorID=0, objectID=0, x=0,y=0,z=0, r1=0,r2=0,r3=1):
 
@@ -251,7 +321,7 @@ class PYROSIM:
 
 		outputString = outputString + '\n'
 
-		self.Send(outputString)
+		self._Send(outputString)
 
 		self.numSensors = self.numSensors + 1
 
@@ -267,7 +337,7 @@ class PYROSIM:
 
 		outputString = outputString + '\n'
 
-		self.Send(outputString)
+		self._Send(outputString)
 
 	def Send_Touch_Sensor(self, sensorID=0, objectID=0):
 
@@ -279,7 +349,7 @@ class PYROSIM:
 
 		outputString = outputString + '\n'
 
-		self.Send(outputString)
+		self._Send(outputString)
 
 		self.numSensors = self.numSensors + 1
 
@@ -293,7 +363,7 @@ class PYROSIM:
 
 		outputString = outputString + '\n'
 
-		self.Send(outputString)
+		self._Send(outputString)
 
 		self.numSensors = self.numSensors + 1
 
@@ -323,11 +393,11 @@ class PYROSIM:
 
 		dataFromSimulator = self.pipe.communicate()
 
-		self.Collect_Sensor_Data(dataFromSimulator)
+		self._Collect_Sensor_Data(dataFromSimulator)
 
 # --------------------- Private methods -----------------------------
 
-	def Collect_Sensor_Data(self,dataFromSimulator):
+	def _Collect_Sensor_Data(self,dataFromSimulator):
 
 		self.dataFromPython = np.zeros([self.numSensors,4,self.evaluationTime],dtype='f')
 
@@ -361,7 +431,7 @@ class PYROSIM:
 
 					index = index + 1
 
-	def Send(self,string_to_send):
+	def _Send(self,string_to_send):
 		if self.debug:
 			print string_to_send
 		self.strings_to_send.append(string_to_send)

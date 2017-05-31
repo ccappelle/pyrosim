@@ -31,7 +31,8 @@ public:
 
         void Poll_Sensors(int timeStep);
 
-	void Read_From_Python(dWorldID world,dSpaceID space, int *evaluationTime);
+	void Read_From_Python(dWorldID world,dSpaceID space, int *evaluationTime, float *dt,
+								float *xyz, float *hpr);
 
 	void Update_Neural_Network(int timeStep);
 
