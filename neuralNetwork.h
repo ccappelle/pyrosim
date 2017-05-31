@@ -23,6 +23,8 @@ public:
 
 	void   Add_Bias_Neuron(int ID);
 
+	void Add_Function_Neuron(int ID, double *timeValues);
+
 	void   Add_Hidden_Neuron(int ID, double tau);
 
 	NEURON *Add_Motor_Neuron(int ID, double tau);
@@ -31,7 +33,7 @@ public:
 
 	void   Add_Synapse(void);
 
-	void Update(void);
+	void Update(int timeStep);
 
 private:
 	void Initialize_Neurons(void);
@@ -40,7 +42,7 @@ private:
 
 	void Push_Current_Values_To_Previous_Values(void);
 
-	void Reset_Neuron_Values(void);
+	void Reset_Neuron_Values(int timeStep);
 
 	void Threshold_Neurons(void);
 

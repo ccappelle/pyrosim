@@ -11,20 +11,27 @@ extern int SENSOR_NEURON;
 
 extern int BIAS_NEURON;
 
+extern int FUNCTION_NEURON;
+
+
 NEURON::NEURON(int myID, int neuronType, double tau) {
 
 	Initialize(myID,neuronType,tau);
-
-	if ( type == BIAS_NEURON )
-
+	if ( type == BIAS_NEURON)
 		value = 1.0;
 }
 
 NEURON::NEURON(int myID, int neuronType, int svIndex, double tau) {
 
 	Initialize(myID,neuronType,tau);
-	
 	sensorValueIndex = svIndex;
+}
+
+NEURON::NEURON(int myID, double *tv){
+	Initialize(myID, FUNCTION_NEURON, 1.0);
+
+	timeValues = tv;
+	value = timeValues[0];
 }
 
 NEURON::~NEURON(void) {
@@ -82,23 +89,33 @@ void NEURON::Push_Current_Value_To_Previous_Value(void) {
 	previousValue = value;
 }
 
-void NEURON::Reset(void) {
+void NEURON::Reset(int timeStep) {
 
         if ( type == BIAS_NEURON )
 
                 value = 1.0;
+        else if ( type == FUNCTION_NEURON)
+        {
+        	previousValue = value;
+        	
+        	value = timeValues[timeStep];
+        	std::cout << "Time step: " << timeStep << "  Actual value:" << timeValues[timeStep] << "  Value:" << value << std::endl;
+        	//value = 1.0;
+        }
 	else
 		value = 0.0;
 }
 
 void NEURON::Set(double v) {
+	if (type == BIAS_NEURON || type == FUNCTION_NEURON)
+		return;
 
 	value = v;
 }
 
 void NEURON::Threshold(void) {
 
-	if ( (Get_Type() == SENSOR_NEURON) || (Get_Type() == BIAS_NEURON) )
+	if ( (Get_Type() == SENSOR_NEURON) || (Get_Type() == BIAS_NEURON) || (Get_Type() == FUNCTION_NEURON))
 
 		return;
 
@@ -122,6 +139,8 @@ void NEURON::Initialize(int myID, int neuronType, double t) {
         value = 0.0;
 
 	previousValue = 0.0;
+
+	//timeValues = NULL;
 
 }
 

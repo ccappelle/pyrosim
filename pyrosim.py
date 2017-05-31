@@ -8,28 +8,19 @@ from subprocess import Popen, PIPE
 
 class PYROSIM:
 
-	def __init__(self,playBlind=False,playPaused=False,evalTime=constants.evaluationTime):
+	def __init__(self,playBlind=False,playPaused=False,evalTime=constants.evaluationTime,
+					time_step=constants.time_step, debug=False):
 
 		self.numJoints = 0
-
 		self.numSensors = 0
 
+		self.strings_to_send = []
+
 		self.evaluationTime = evalTime
-
-		commandsToSend = ['./simulator']
-
-		if ( playBlind == True ):
-
-			commandsToSend.append('-blind')
-		else:
-			commandsToSend.append('-notex')
-
-		if ( playPaused == True ):
-
-			commandsToSend.append('-pause')
-
-		self.simulator = Popen(commandsToSend, stdout=PIPE, stdin=PIPE, stderr=PIPE)
-
+		self.time_step = time_step
+		self.playPaused = playPaused
+		self.playBlind = playBlind
+		self.debug = debug
 		# self.simulator = Popen(commandsToSend, stdout=PIPE, stdin=PIPE)
 
 		self.Send('EvaluationTime '+str(evalTime)+'\n')
@@ -94,6 +85,31 @@ class PYROSIM:
 		outputString = outputString + '\n'
 
 		self.Send(outputString)
+
+	def Send_User_Input_Neuron(self, neuronID=0, values=1):
+
+		outputString = 'FunctionNeuron'
+
+		try:
+			iterator = iter(values)
+		except TypeError:
+			values = [values]*self.evaluationTime
+		
+		outputString = outputString + ' ' + str(neuronID)
+
+		for i in range(self.evaluationTime):
+			index = i%len(values)
+			outputString = outputString + ' ' + str(values[index])
+
+		outputString = outputString + '\n'
+		self.Send(outputString)
+
+
+	def Send_Function_Neuron(self, neuronID=0, function= math.sin):
+		end_time = self.evaluationTime*self.time_step
+		time_vals = np.arange(0,end_time,self.time_step)
+		output_vals = list(map(function,time_vals))
+		self.Send_User_Input_Neuron( neuronID, output_vals)
 
 	def Send_Hidden_Neuron(self, neuronID = 0 , tau = 1.0 ):
 
@@ -283,11 +299,29 @@ class PYROSIM:
 
 	def Start(self):
 
-		self.Send('Done\n')
+		commandsToSend = ['./simulator']
+
+		if ( self.playBlind == True ):
+
+			commandsToSend.append('-blind')
+		else:
+			commandsToSend.append('-notex')
+
+		if ( self.playPaused == True ):
+
+			commandsToSend.append('-pause')
+
+		self.pipe = Popen(commandsToSend, stdout=PIPE, stdin=PIPE, stderr=PIPE)
+
+		#self.Send('Done\n')
+		for string_to_send in self.strings_to_send:
+			self.pipe.stdin.write(string_to_send)
+
+		self.pipe.stdin.write('Done\n')
 
 	def Wait_To_Finish(self):
 
-		dataFromSimulator = self.simulator.communicate()
+		dataFromSimulator = self.pipe.communicate()
 
 		self.Collect_Sensor_Data(dataFromSimulator)
 
@@ -327,6 +361,8 @@ class PYROSIM:
 
 					index = index + 1
 
-	def Send(self,stringToSend):
-
-		self.simulator.stdin.write( stringToSend )
+	def Send(self,string_to_send):
+		if self.debug:
+			print string_to_send
+		self.strings_to_send.append(string_to_send)
+		#self.simulator.stdin.write( stringToSend )

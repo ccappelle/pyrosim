@@ -15,6 +15,8 @@ int	HIDDEN_NEURON	= 2;
 
 int	MOTOR_NEURON	= 3;
 
+int FUNCTION_NEURON = 4;
+
 int	MAX_SYNAPSES	= 1000000;
 
 int	BOX		= 0;

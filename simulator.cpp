@@ -29,6 +29,7 @@ int runBlind;
 
 ENVIRONMENT *environment;
 int numberOfBodies = 0;
+float dt = 0.05;
 static dGeomID ground;
 
 void Draw_Distance_Sensor(dGeomID myGeom, dGeomID hisGeom);
@@ -158,7 +159,7 @@ void Simulate_For_One_Time_Step(void) {
 
 	environment->Actuate_Joints();
 
-        dWorldStep (world,0.05);
+        dWorldStep (world, dt);
 
         dJointGroupEmpty(contactgroup);
 

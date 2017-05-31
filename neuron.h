@@ -16,11 +16,15 @@ private:
 	double previousValue;
 
 	double tau;
+
+	double *timeValues;
 	
 public:
         NEURON(int myID, int neuronType, double tau);
 
 	NEURON(int myID, int neuronType, int svIndex, double tau);
+
+	NEURON(int myID,  double *timeValues);
 
 	~NEURON(void);
 
@@ -40,7 +44,7 @@ public:
 
 	void Push_Current_Value_To_Previous_Value(void);
 
-	void Reset(void);
+	void Reset(int timeStep);
 
 	void Set( double v );
 

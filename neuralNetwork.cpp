@@ -19,6 +19,8 @@ extern int HIDDEN_NEURON;
 
 extern int MOTOR_NEURON;
 
+extern int FUNCTION_NEURON;
+
 NEURAL_NETWORK::NEURAL_NETWORK(void) {
 
 	Initialize_Neurons();
@@ -32,10 +34,15 @@ NEURAL_NETWORK::~NEURAL_NETWORK(void) {
 
 void NEURAL_NETWORK::Add_Bias_Neuron(int ID) {
 
-        neurons[numNeurons] = new NEURON(ID,BIAS_NEURON,1.0);
+        neurons[numNeurons] = new NEURON(ID,BIAS_NEURON, 1.0);
 
         numNeurons++;
 
+}
+
+void NEURAL_NETWORK::Add_Function_Neuron(int ID, double *timeValues){
+	neurons[numNeurons] = new NEURON(ID, timeValues);
+	numNeurons++;
 }
 
 void NEURAL_NETWORK::Add_Hidden_Neuron(int ID, double tau) {
@@ -72,11 +79,11 @@ void NEURAL_NETWORK::Add_Synapse(void) {
         synapses[numSynapses++] = new SYNAPSE(); 
 }
 
-void NEURAL_NETWORK::Update(void) {
+void NEURAL_NETWORK::Update(int timeStep) {
 
 	Push_Current_Values_To_Previous_Values();
 
-	Reset_Neuron_Values();
+	Reset_Neuron_Values(timeStep);
 
 	Update_Neurons();
 
@@ -114,11 +121,11 @@ void NEURAL_NETWORK::Push_Current_Values_To_Previous_Values(void) {
 		neurons[n]->Push_Current_Value_To_Previous_Value();
 }
 
-void NEURAL_NETWORK::Reset_Neuron_Values(void) {
+void NEURAL_NETWORK::Reset_Neuron_Values(int timeStep) {
 
 	for ( int n = 0 ; n < numNeurons ; n++ )
 
-		neurons[n]->Reset();
+		neurons[n]->Reset(timeStep);
 }
 
 void NEURAL_NETWORK::Threshold_Neurons(void) {

@@ -29,11 +29,11 @@ public:
 
 	void Draw(void);
 
-        void Poll_Sensors(int t);
+        void Poll_Sensors(int timeStep);
 
 	void Read_From_Python(dWorldID world,dSpaceID space, int *evaluationTime);
 
-	void Update_Neural_Network(int t);
+	void Update_Neural_Network(int timeStep);
 
 	void Write_Sensor_Data(int evalPeriod);
 
@@ -48,6 +48,8 @@ private:
 
 	void Create_Bias_Neuron( void );
 
+	void Create_Function_Neuron(int evalPeriod);
+	
 	void Create_Hidden_Neuron( void );
 
 	void Create_Joint( dWorldID world, dSpaceID space, int index);
@@ -76,7 +78,7 @@ private:
 
 	void Create_Vestibular_Sensor(int evalPeriod);
 
-        void Update_Sensor_Neurons(int t);
+        void Update_Sensor_Neurons(int timeStep);
 };
 
 #endif

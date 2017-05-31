@@ -108,6 +108,9 @@ void ENVIRONMENT::Read_From_Python(dWorldID world,dSpaceID space, int *evaluatio
                 else if ( strcmp(incomingString,"MotorNeuron") == 0 )
 
                         Create_Motor_Neuron();
+
+                else if ( strcmp(incomingString,"FunctionNeuron") == 0)
+                        Create_Function_Neuron(*evaluationTime);
 		else
 			Create_Synapse();
 
@@ -115,24 +118,23 @@ void ENVIRONMENT::Read_From_Python(dWorldID world,dSpaceID space, int *evaluatio
         }
 }
 
-void ENVIRONMENT::Poll_Sensors(int t) {
+void ENVIRONMENT::Poll_Sensors(int timeStep) {
 
         for (int i=0;i<numberOfBodies;i++)
 
-                objects[i]->Poll_Sensors(numberOfBodies,objects,t);
+                objects[i]->Poll_Sensors(numberOfBodies,objects,timeStep);
 
         for (int j=0;j<numberOfJoints;j++)
 
-                joints[j]->Poll_Sensors(t);
+                joints[j]->Poll_Sensors(timeStep);
 }
 
-void ENVIRONMENT::Update_Neural_Network(int t) {
+void ENVIRONMENT::Update_Neural_Network(int timeStep) {
 
-	Update_Sensor_Neurons(t);
-
+	Update_Sensor_Neurons(timeStep);
 	if ( neuralNetwork )
 
-		neuralNetwork->Update();
+		neuralNetwork->Update(timeStep);
 }
 
 void ENVIRONMENT::Write_Sensor_Data(int evalPeriod) {
@@ -177,6 +179,21 @@ void ENVIRONMENT::Create_Bias_Neuron(void) {
         neuralNetwork->Add_Bias_Neuron(ID);
 }
 
+void ENVIRONMENT::Create_Function_Neuron(int evalPeriod){
+        int ID;
+        std::cin >> ID;
+
+        if( neuralNetwork == NULL)
+                Create_Neural_Network();
+        double *timeValues = new double[evalPeriod];
+
+        for(int i=0; i<evalPeriod; i++)
+        {
+                std::cin >> timeValues[i];
+        }
+
+        neuralNetwork->Add_Function_Neuron(ID, timeValues);
+}
 void ENVIRONMENT::Create_Hidden_Neuron(void) {
 
         int ID;
@@ -405,14 +422,14 @@ void ENVIRONMENT::Create_Vestibular_Sensor(int evalPeriod) {
         objects[objectIndex]->Create_Vestibular_Sensor(ID,evalPeriod);
 }
 
-void ENVIRONMENT::Update_Sensor_Neurons(int t) {
+void ENVIRONMENT::Update_Sensor_Neurons(int timeStep) {
 
         for (int i=0;i<numberOfBodies;i++)
 
-                objects[i]->Update_Sensor_Neurons(t);
+                objects[i]->Update_Sensor_Neurons(timeStep);
 
         for (int j=0;j<numberOfJoints;j++)
 
-                joints[j]->Update_Sensor_Neurons(t);
+                joints[j]->Update_Sensor_Neurons(timeStep);
 }
 #endif
