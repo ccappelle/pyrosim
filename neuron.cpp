@@ -99,8 +99,6 @@ void NEURON::Reset(int timeStep) {
         	previousValue = value;
         	
         	value = timeValues[timeStep];
-        	std::cout << "Time step: " << timeStep << "  Actual value:" << timeValues[timeStep] << "  Value:" << value << std::endl;
-        	//value = 1.0;
         }
 	else
 		value = 0.0;

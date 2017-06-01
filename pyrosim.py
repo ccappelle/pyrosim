@@ -805,15 +805,13 @@ class PYROSIM:
 		dataFromSimulator = dataFromSimulator.split()
 
 		index = 0
+		print dataFromSimulator
 
-                if ( dataFromSimulator == [] ):
-
-                        return
+		if ( dataFromSimulator == [] ):
+			return
 
 		while ( dataFromSimulator[index] != 'Done' ):
-
 			ID = int( dataFromSimulator[index] )
-
 			index = index + 1
 
 			numSensorValues = int( dataFromSimulator[index] ) 
