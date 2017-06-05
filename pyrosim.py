@@ -339,7 +339,7 @@ class PYROSIM:
 		return True
 
 	def Send_Joint(self, jointID=0, firstObjectID=0, secondObjectID=1, x=0, y=0, z=0, n1=0, n2=0, n3=1, 
-					lo=-math.pi/4.0, hi=+math.pi/4.0 , speed=1.0, torque=1.0, positionControl = True):
+					lo=-math.pi/4.0, hi=+math.pi/4.0 , speed=1.0, torque=10.0, positionControl = True):
 		"""Send a hinge joint to the simulator
 
 		Parameters
@@ -678,13 +678,64 @@ class PYROSIM:
 			True if successful, False otherwise
 		"""
 
+
+		return self.Send_Developing_Synapse(sourceNeuronID=sourceNeuronID, targetNeuronID=targetNeuronID,
+										startWeight=weight,endWeight=weight,
+										startTime=0.,endTime=0.)
+
+	def Send_Developing_Synapse(self, sourceNeuronID=0, targetNeuronID=0, 
+								startWeight=0.0, endWeight=0.0, 
+								startTime=0., endTime=1.0):
+		"""Sends a synapse to the simulator
+
+		Developing synapses are synapses which change over time. 
+		The synapse will interpolate between the startWeight and endWeight
+		over the desired time range dictated by startTime and endTime.
+		startTime and endTime are in [0,1] where 0 maps to time step 0
+		and 1 maps to the evalTime of the simulation. Setting startTime
+		equal to endTime results in a discrete change from startWeight
+		to endWeight in the synapse at the specified time step. If
+		startTime >= endTime times are changed such that
+		endTime = startTime.
+
+		Parameters
+		----------
+		sourceNeuronID : int, optional
+			The ID of the source neuron of the synapse
+		targetNeuronID : int, optional
+			The ID of the target neuron of the synapse
+		startWeight	   : float, optional
+			The starting edge weight of the synapse
+		endWeight 	   : float, optional
+			The ending edge weight of the synapse
+		startTime	   : float, optional
+			The starting time of development. startTime in [0,1]
+		endTime 	   : float, optional
+			The ending time of development. endTime in [0,1]
+		Returns:
+		--------
+		bool
+			True if successful, False otherwise
+		"""
+		if startTime >= endTime:
+			endTime = startTime
+
+		startTime = int(startTime * (self.evaluationTime-1))
+		endTime = int(endTime * (self.evaluationTime-1))
+
 		outputString = 'Synapse'
 
 		outputString = outputString + ' ' + str(sourceNeuronID)
 
 		outputString = outputString + ' ' + str(targetNeuronID)
 
-		outputString = outputString + ' ' + str(weight)
+		outputString = outputString + ' ' + str(startWeight)
+
+		outputString = outputString + ' ' + str(endWeight)
+
+		outputString = outputString + ' ' + str(startTime)
+
+		outputString = outputString + ' ' + str(endTime)		
 
 		outputString = outputString + '\n'
 
@@ -800,12 +851,14 @@ class PYROSIM:
 
 		self.dataFromPython = np.zeros([self.numSensors,4,self.evaluationTime],dtype='f')
 
+		if self.debug:
+			print dataFromSimulator[1]
+
 		dataFromSimulator = dataFromSimulator[0]
 
 		dataFromSimulator = dataFromSimulator.split()
 
 		index = 0
-		print dataFromSimulator
 
 		if ( dataFromSimulator == [] ):
 			return

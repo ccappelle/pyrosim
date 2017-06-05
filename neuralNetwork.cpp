@@ -84,6 +84,7 @@ void NEURAL_NETWORK::Update(int timeStep) {
 	Push_Current_Values_To_Previous_Values();
 
 	Reset_Neuron_Values(timeStep);
+	Update_Synapses(timeStep);
 
 	Update_Neurons();
 
@@ -133,6 +134,12 @@ void NEURAL_NETWORK::Threshold_Neurons(void) {
         for ( int n = 0 ; n < numNeurons ; n++ )
 
 		neurons[n]->Threshold();	
+}
+
+void NEURAL_NETWORK::Update_Synapses(int timeStep){
+	for (int s=0; s<numSynapses; s++){
+		synapses[s]->Update_Weight(timeStep);
+	}
 }
 
 void NEURAL_NETWORK::Update_Neurons(void) {

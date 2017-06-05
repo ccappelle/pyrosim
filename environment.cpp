@@ -49,6 +49,7 @@ void ENVIRONMENT::Read_From_Python(dWorldID world,dSpaceID space, int *evaluatio
         std::cin >> incomingString;
 
         while ( strcmp(incomingString,"Done") != 0 ) {
+                //std::cerr << incomingString << "\n";
                 //Simulator timing
                 if ( strcmp(incomingString,"EvaluationTime") == 0 )
 			std::cin >> (*evaluationTime);

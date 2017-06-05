@@ -46,6 +46,8 @@ private:
 
 	void Threshold_Neurons(void);
 
+	void Update_Synapses(int timeStep);
+
 	void Update_Neurons(void);
 };
 

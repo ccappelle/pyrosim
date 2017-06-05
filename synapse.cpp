@@ -11,7 +11,15 @@ SYNAPSE::SYNAPSE(void) {
 
         std::cin >> targetNeuronIndex;
 
-	std::cin >> weight;
+	std::cin >> startWeight;
+
+	std::cin >> endWeight;
+
+	std::cin >> startTime;
+
+	std::cin >> endTime;
+
+	weight = startWeight;
 }
 
 SYNAPSE::~SYNAPSE(void) {
@@ -39,7 +47,30 @@ void SYNAPSE::Print(void) {
 
         std::cerr << targetNeuronIndex << " ";
 
-        std::cerr << weight << "\n";
+        std::cerr << startWeight << " ";
+
+        std::cerr << endWeight << " ";
+
+        std::cerr << startTime << " ";
+
+        std::cerr << endTime << "\n";
 }
 
+void SYNAPSE::Update_Weight(int time){
+	if (time < startTime)
+		weight = startWeight;
+	else if (time>endTime)
+		weight = endWeight;
+	else if (startTime == endTime)
+		weight = endWeight;
+	else
+	{
+		double startRatio = 1.-(time-startTime)/double(endTime-startTime);
+		double endRatio = 1.-(endTime-time)/double(endTime-startTime);
+		weight = startRatio*startWeight + endRatio*endWeight;
+		std::cerr << startRatio << "," << endRatio << "\n";
+
+	}
+	std::cerr << time << " " << weight << "\n";
+}
 #endif

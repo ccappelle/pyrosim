@@ -154,7 +154,6 @@ void Simulate_For_One_Time_Step(void) {
 	dSpaceCollide (space,0,&nearCallback);
 
         environment->Poll_Sensors(timer);
-
 	environment->Update_Neural_Network(timer);
 
 	environment->Actuate_Joints();

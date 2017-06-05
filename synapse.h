@@ -10,7 +10,11 @@ private:
 	int targetNeuronIndex;
 
 	double weight;
-	
+	double startWeight;
+	double endWeight;
+	int startTime;
+	int endTime;
+
 public:
         SYNAPSE(void);
 
@@ -23,6 +27,8 @@ public:
 	double Get_Weight(void);
 
 	void Print(void);
+
+	void Update_Weight(int time);
 };
 
 #endif
