@@ -1,7 +1,5 @@
 # pyrosim: A python robot simulator. 
 
-## Documentation
-(Work in progress) documentation available [here](https://ccappelle.github.io/pyrosim/code.html)
 
 Pyrosim enables the creation of robots with arbitrary body plans
 and neural controllers, and the optimization of them in arbitrary simulated
@@ -9,12 +7,18 @@ environments.
 
 ## Installation instructions.
 
-  Download or clone the GitHub [repository](https://github.com/jbongard/pyrosim).
+  Download or clone the GitHub [repository](https://github.com/ccappelle/pyrosim).
 
   If you downloaded the zipped version, unzip the directory somewhere you can access it.
 
   Note: Pyrosim is intended for use with Python2.x. It does not yet run smoothly with Python3.x.
+  Pyrosim also currently only supports Linux and Mac OS. Windows support has been discontinued
+  for the time being.
 
+  This is the new version of pyrosim. For those looking for the old version it can be found
+  [here](https://github.com/jbongard/pyrosim).
+
+[comment]: #(
 ### For Windows users:
 
   Install [Anaconda](https://www.continuum.io/downloads)--a package that includes Python
@@ -85,6 +89,7 @@ environments.
   an empty virtual environment, [like this](https://imgur.com/a/FNQpE).
 
   If that does not work, follow the tutorial [here](https://youtu.be/tNGrxDftclA).
+)
 
 ### For Mac and Linux users:
 
