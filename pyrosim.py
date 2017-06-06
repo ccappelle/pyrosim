@@ -1,64 +1,78 @@
 import math
-import sys
+import sys, os
 import numpy as np
 
 import constants
 
 from subprocess import Popen, PIPE
 
-class PYROSIM:
+class Simulator:
 	"""Python interface for ODE simulator
 	
 	Attributes
 	----------
-	playBlind  : bool, optional
+	play_blind   : bool, optional
 		If True the simulation runs without graphics (headless) else if False the simulation 
 		runs with graphics (the default is False)
-	playPaused : bool, optional
+	play_paused : bool, optional
 		If True the simulation starts paused else if False the simulation starts running. 
 		With simulation window in focus use Ctrl-p to toggle pausing the simulation. 
 		(the default is False)
-	evalTime   : int, optional
+	eval_time    : int, optional
 		The number of discrete steps in the simulation (the default is 100)
-	dt 		   : float, optional
+	dt 		    : float, optional
 		The time in seconds between physics world steps. Larger dt values create more unstable
 		physics. (the default is 0.05)
-	xyz		   : list of 3 floats
+	gravity     : float, optional
+		The gravity in the system. Negative values implie normal downward force of gravity.
+		(default is -1.0)
+	xyz		    : list of 3 floats
 		The xyz position of the camera (default is [0.8317,-0.9817,0.8000])
 	hpr
 		The heading, pitch, and roll of the camera (default is [121,-27.5,0.0])
-	debug	   : bool, optional
+	use_textures: bool, optional
+		Draw default ODE textures or not during simulation. (default is False)
+	debug	    : bool, optional
 		If True print out every string command sent through the pipe to the simulator
 		(the default is False)
 	"""
-	def __init__(self,playBlind=False,playPaused=False,evalTime=constants.evaluation_time,
-					dt=constants.dt, xyz=constants.xyz, hpr=constants.hpr, debug=False):
+	def __init__(self,play_blind=False,play_paused=False,
+					eval_time=constants.evaluation_time,dt=constants.dt, gravity=constants.gravity,
+					xyz=constants.xyz, hpr=constants.hpr, use_textures=False,
+					debug=False):
 
 		self.numJoints = 0
-		self.numSensors = 0
+		self.num_sensors = 0
 
 		self.strings_to_send = []
 
-		self.evaluationTime = evalTime
+		self.play_paused = play_paused
+		self.play_blind = play_blind
+		self.eval_time = eval_time
 		self.dt = dt
-		self.playPaused = playPaused
-		self.playBlind = playBlind
+		self.gravity = gravity
 		self.debug = debug
-		# self.simulator = Popen(commandsToSend, stdout=PIPE, stdin=PIPE)
+		self.use_textures = use_textures
+		self.evaluated = False
 
-		if (self.playPaused == True and self.playBlind == True):
-			self.playPaused = False
+		self.pyrosim_path =  os.path.dirname(os.path.abspath(__file__))+'/simulator'
 
-		self._Send('EvaluationTime '+str(evalTime)+'\n')
+		if (self.play_paused == True and self.play_blind == True):
+			self.play_paused = False
+
+		#Initial simulator commands
+		self._Send('TexturePath ' + self.pyrosim_path+'/textures'+'\n') 
+		self._Send('EvaluationTime '+str(self.eval_time)+'\n')
 		self._Send('TimeInterval ' + str(self.dt)+'\n')
+		self._Send('Gravity ' + str(self.gravity)+'\n')
 		self.Send_Camera(xyz, hpr)
 
-	def Get_Sensor_Data(self,sensorID=0,svi=0):
+	def Get_Sensor_Data(self,sensor_ID=0,svi=0):
 		"""Get the post simulation data from a specified sensor
 
 		Parameters
 		----------
-		sensorID : int , optional
+		sensor_ID : int , optional
 			the sensors ID tag
 		svi 	 : int , optional
 			The sensor value index. Certain sensors have multiple values 
@@ -71,15 +85,17 @@ class PYROSIM:
 		list of float
 			Returns the list of sensor values over the simulation.
 		"""
+		if self.evaluated:
+			return self.data[sensor_ID,svi,:]
+		else:
+			return 'No Data'
 
-		return self.dataFromPython[sensorID,svi,:]
-
-	def Send_Bias_Neuron(self, neuronID = 0 ):
+	def Send_Bias_Neuron(self, neuron_ID = 0 ):
 		"""Send bias neuron to simulator
 
 		Parameters
 		----------
-		neuronID : int, optional
+		neuron_ID : int, optional
 			User specified ID tag for the neuron
 
 		Returns
@@ -88,19 +104,19 @@ class PYROSIM:
 			True if successful, False otherwise
 		"""
 
-		outputString = 'BiasNeuron'
-		outputString = outputString + ' ' + str(neuronID)
-		outputString = outputString + '\n'
-		self._Send(outputString)
+		output_string = 'BiasNeuron'
+		output_string = output_string + ' ' + str(neuron_ID)
+		output_string = output_string + '\n'
+		self._Send(output_string)
 
 		return True
 
-	def Send_Box(self, objectID=0, x=0, y=0, z=0, length=0.1, width=0.1, height=0.1, r=1, g=1, b=1):
+	def Send_Box(self, body_ID=0, x=0, y=0, z=0, length=0.1, width=0.1, height=0.1, r=1, g=1, b=1):
 		"""Send box body to the simulator
 
 		Parameters
 		----------
-		objectID : int, optional
+		body_ID : int, optional
 			User specified body ID tag for the box
 		x 		 : float, optional
 			The x position coordinate of the center 
@@ -127,25 +143,25 @@ class PYROSIM:
 			True if successful, False otherwise
 		"""
 
-		outputString = 'Box'
+		output_string = 'Box'
 
-		outputString = outputString + ' ' + str(objectID)
+		output_string = output_string + ' ' + str(body_ID)
 
-		outputString = outputString + ' ' + str(x)
-		outputString = outputString + ' ' + str(y)
-		outputString = outputString + ' ' + str(z)
+		output_string = output_string + ' ' + str(x)
+		output_string = output_string + ' ' + str(y)
+		output_string = output_string + ' ' + str(z)
 
-		outputString = outputString + ' ' + str(length)
-		outputString = outputString + ' ' + str(width)
-		outputString = outputString + ' ' + str(height)
+		output_string = output_string + ' ' + str(length)
+		output_string = output_string + ' ' + str(width)
+		output_string = output_string + ' ' + str(height)
 
-		outputString = outputString + ' ' + str(r)
-		outputString = outputString + ' ' + str(g)
-		outputString = outputString + ' ' + str(b)
+		output_string = output_string + ' ' + str(r)
+		output_string = output_string + ' ' + str(g)
+		output_string = output_string + ' ' + str(b)
 
-		outputString = outputString + '\n'
+		output_string = output_string + '\n'
 
-		self._Send(outputString)
+		self._Send(output_string)
 		return True
 
 	def Send_Camera(self,xyz,hpr):
@@ -164,24 +180,24 @@ class PYROSIM:
 		None
 		"""
 		
-		outputString = 'Camera'
+		output_string = 'Camera'
 		self.xyz = xyz
 		self.hpr = hpr
 
 		for i in xyz:
-			outputString = outputString + ' ' + str(i)
+			output_string = output_string + ' ' + str(i)
 		for j in hpr:
-			outputString = outputString + ' ' + str(j)
+			output_string = output_string + ' ' + str(j)
 
-		outputString = outputString + '\n'
-		self._Send(outputString)
+		output_string = output_string + '\n'
+		self._Send(output_string)
 
-	def Send_Cylinder(self, objectID=0, x=0, y=0, z=0, r1=0, r2=0, r3=1, length=1.0, radius=0.1, r=1, g=1, b=1):
+	def Send_Cylinder(self, body_ID=0, x=0, y=0, z=0, r1=0, r2=0, r3=1, length=1.0, radius=0.1, r=1, g=1, b=1):
 		"""Send cylinder body to the simulator
 
 		Parameters
 		----------
-		objectID : int, optional
+		body_ID : int, optional
 			User specified body ID tag for the cylinder (default is 0)
 		x 		 : float, optional
 			The x position coordinate of the center (default is 0)
@@ -218,36 +234,36 @@ class PYROSIM:
 			True if successful, False otherwise
 		"""
 
-		outputString = 'Cylinder'
+		output_string = 'Cylinder'
 
-		outputString = outputString + ' ' + str(objectID)
+		output_string = output_string + ' ' + str(body_ID)
 
-		outputString = outputString + ' ' + str(x)
-		outputString = outputString + ' ' + str(y)
-		outputString = outputString + ' ' + str(z)
+		output_string = output_string + ' ' + str(x)
+		output_string = output_string + ' ' + str(y)
+		output_string = output_string + ' ' + str(z)
 
-		outputString = outputString + ' ' + str(r1)
-		outputString = outputString + ' ' + str(r2)
-		outputString = outputString + ' ' + str(r3)
+		output_string = output_string + ' ' + str(r1)
+		output_string = output_string + ' ' + str(r2)
+		output_string = output_string + ' ' + str(r3)
 
-		outputString = outputString + ' ' + str(length)
-		outputString = outputString + ' ' + str(radius)
+		output_string = output_string + ' ' + str(length)
+		output_string = output_string + ' ' + str(radius)
 
-		outputString = outputString + ' ' + str(r)
-		outputString = outputString + ' ' + str(g)
-		outputString = outputString + ' ' + str(b)
+		output_string = output_string + ' ' + str(r)
+		output_string = output_string + ' ' + str(g)
+		output_string = output_string + ' ' + str(b)
 
-		outputString = outputString + '\n'
+		output_string = output_string + '\n'
 
-		self._Send(outputString)
+		self._Send(output_string)
 		return True
 
-	def Send_User_Input_Neuron(self, neuronID=0, values=1):
+	def Send_User_Input_Neuron(self, neuron_ID=0, values=1):
 		"""Send neuron to the simulator which takes user defined values at each time step
 		
 		Parameters
 		----------
-		neuronID : int, optional
+		neuron_ID : int, optional
 			The user specified ID tag of the neuron
 		values   : list of floats or float, optional
 			The user specified values for the neuron. If length of values < the number of
@@ -259,25 +275,25 @@ class PYROSIM:
 		bool
 			True if successful, False otherwise
 		"""
-		outputString = 'FunctionNeuron'
+		output_string = 'FunctionNeuron'
 
 		try:
 			iterator = iter(values)
 		except TypeError:
-			values = [values]*self.evaluationTime
+			values = [values]*self.eval_time
 		
-		outputString = outputString + ' ' + str(neuronID)
+		output_string = output_string + ' ' + str(neuron_ID)
 
-		for i in range(self.evaluationTime):
+		for i in range(self.eval_time):
 			index = i%len(values)
-			outputString = outputString + ' ' + str(values[index])
+			output_string = output_string + ' ' + str(values[index])
 
-		outputString = outputString + '\n'
-		self._Send(outputString)
+		output_string = output_string + '\n'
+		self._Send(output_string)
 
 		return True
 
-	def Send_Function_Neuron(self, neuronID=0, function= math.sin):
+	def Send_Function_Neuron(self, neuron_ID=0, function= math.sin):
 		"""Send neuron to simulator which takes its value from the user defined function
 
 		The function is mapped to the specific time in the simulation based on both 
@@ -286,7 +302,7 @@ class PYROSIM:
 
 		Parameters
 		----------
-		neuronID : int, optional
+		neuron_ID : int, optional
 			The user specified ID tag of the neuron
 		function : function, optional
 			The function which defines the neuron value. Valid functions return
@@ -298,12 +314,12 @@ class PYROSIM:
 			True if successful, False otherwise
 		"""
 
-		end_time = self.evaluationTime*self.dt
+		end_time = self.eval_time*self.dt
 		time_vals = np.arange(0,end_time,self.dt)
 		output_vals = list(map(function,time_vals))
-		return self.Send_User_Input_Neuron( neuronID, output_vals)
+		return self.Send_User_Input_Neuron( neuron_ID, output_vals)
 
-	def Send_Hidden_Neuron(self, neuronID = 0 , tau = 1.0 ):
+	def Send_Hidden_Neuron(self, neuron_ID = 0 , tau = 1.0 ):
 		"""Send a hidden neuron to the simulator
 
 		Hidden neurons are basic neurons which can have inputs and outputs. 
@@ -312,7 +328,7 @@ class PYROSIM:
 
 		Parameters
 		----------
-		neuronID : int, optional
+		neuron_ID : int, optional
 			The user specified ID tag of the neuron
 		tau      : float, optional
 			The 'learning rate' of the neuron. Increasing tau increases
@@ -326,31 +342,31 @@ class PYROSIM:
 			True if successful, False otherwise
 		"""
 
-		outputString = 'HiddenNeuron'
+		output_string = 'HiddenNeuron'
 
-		outputString = outputString + ' ' + str(neuronID)
+		output_string = output_string + ' ' + str(neuron_ID)
 
-		outputString = outputString + ' ' + str(tau)
+		output_string = output_string + ' ' + str(tau)
 
-		outputString = outputString + '\n'
+		output_string = output_string + '\n'
 
-		self._Send(outputString)
+		self._Send(output_string)
 
 		return True
 
-	def Send_Joint(self, jointID=0, firstObjectID=0, secondObjectID=1, x=0, y=0, z=0, n1=0, n2=0, n3=1, 
-					lo=-math.pi/4.0, hi=+math.pi/4.0 , speed=1.0, torque=10.0, positionControl = True):
+	def Send_Joint(self, joint_ID=0, first_body_ID=0, second_body_ID=1, x=0, y=0, z=0, n1=0, n2=0, n3=1, 
+					lo=-math.pi/4.0, hi=+math.pi/4.0 , speed=1.0, torque=10.0, pos_control = True):
 		"""Send a hinge joint to the simulator
 
 		Parameters
 		----------
-		jointID 	    : int, optional
+		joint_ID 	    : int, optional
 			User specified  ID tag for the joint (default is 0)
-		firstObjectID   : int, optional
+		first_body_ID   : int, optional
 			The body ID of the first body the joint is connected to.
 			If set equal to -1, the joint is connected to a point in
 			space (default is 0)
-		secondOjbectID  : int, optional
+		secondbodyID  : int, optional
 			The body ID of the second body the joint is connected to.
 			If set equal to -1, the joint is connected to a point in
 			space (default is 1)
@@ -378,7 +394,7 @@ class PYROSIM:
 			The upper limit in radians of the joint (default is pi/4)
 		speed           : float, optional
 			The speed of the motor of the joint (default is 1.0)
-		positionControl : bool, optional
+		pos_control : bool, optional
 			True means use position control. This means the motor neuron
 			output is treated as a target angle for the joint to actuate
 			to. False means the motor neuron output is treated as a target
@@ -390,43 +406,43 @@ class PYROSIM:
 			True if successful, False otherwise
 		"""
 
-		outputString = 'Joint'
+		output_string = 'Joint'
 
-		outputString = outputString + ' ' + str(jointID)
+		output_string = output_string + ' ' + str(joint_ID)
 
-		outputString = outputString + ' ' + str(firstObjectID)
-		outputString = outputString + ' ' + str(secondObjectID)
+		output_string = output_string + ' ' + str(first_body_ID)
+		output_string = output_string + ' ' + str(second_body_ID)
 
-		outputString = outputString + ' ' + str(x)
-		outputString = outputString + ' ' + str(y)
-		outputString = outputString + ' ' + str(z)
+		output_string = output_string + ' ' + str(x)
+		output_string = output_string + ' ' + str(y)
+		output_string = output_string + ' ' + str(z)
 
-		outputString = outputString + ' ' + str(n1)
-		outputString = outputString + ' ' + str(n2)
-		outputString = outputString + ' ' + str(n3)
+		output_string = output_string + ' ' + str(n1)
+		output_string = output_string + ' ' + str(n2)
+		output_string = output_string + ' ' + str(n3)
 
-		outputString = outputString + ' ' + str(lo)
-		outputString = outputString + ' ' + str(hi)
+		output_string = output_string + ' ' + str(lo)
+		output_string = output_string + ' ' + str(hi)
 
-		outputString = outputString + ' ' + str(speed)
-		outputString = outputString + ' ' + str(torque)
+		output_string = output_string + ' ' + str(speed)
+		output_string = output_string + ' ' + str(torque)
 
-		outputString = outputString + ' ' + str(positionControl)
+		output_string = output_string + ' ' + str(pos_control)
 
-		outputString = outputString + '\n'
+		output_string = output_string + '\n'
 
-		self._Send(outputString)
+		self._Send(output_string)
 
 		return True
 
-	def Send_Light_Sensor(self, sensorID=0, objectID = 0 ):
+	def Send_Light_Sensor(self, sensor_ID=0, body_ID = 0 ):
 		"""Attaches a light sensor to a body in simulation
 
 		Parameters
 		----------
-		sensorID : int, optional
+		sensor_ID : int, optional
 			The user defined ID of the sensor
-		objectID : int, optional
+		body_ID : int, optional
 			The body ID of the body to connect the sensor to
 
 		Returns
@@ -435,26 +451,26 @@ class PYROSIM:
 			True if successful
 		"""
 
-		outputString = 'LightSensor'
+		output_string = 'LightSensor'
 
-		outputString = outputString + ' ' + str(sensorID)
+		output_string = output_string + ' ' + str(sensor_ID)
 
-		outputString = outputString + ' ' + str(objectID)
+		output_string = output_string + ' ' + str(body_ID)
 
-		outputString = outputString + '\n'
+		output_string = output_string + '\n'
 
-		self._Send(outputString)
+		self._Send(output_string)
 
-		self.numSensors = self.numSensors + 1
+		self.num_sensors = self.num_sensors + 1
 
 		return True
 
-	def Send_Light_Source(self, objectIndex = 0 ):
+	def Send_Light_Source(self, body_ID = 0 ):
 		"""Attaches light source to a body in simulation
 
 		Parameters
 		----------
-		objectIndex : int, optional
+		body_ID : int, optional
 			The body ID of the body to attach the light to
 
 		Returns
@@ -463,17 +479,17 @@ class PYROSIM:
 			True if successful, False otherwise
 		"""
 
-		outputString = 'LightSource'
+		output_string = 'LightSource'
 
-		outputString = outputString + ' ' + str(objectIndex)
+		output_string = output_string + ' ' + str(body_ID)
 
-		outputString = outputString + '\n'
+		output_string = output_string + '\n'
 
-		self._Send(outputString)
+		self._Send(output_string)
 
 		return True
 
-	def Send_Motor_Neuron(self , neuronID = 0 , jointID = 0 , tau = 1.0 ):
+	def Send_Motor_Neuron(self , neuron_ID = 0 , joint_ID = 0 , tau = 1.0 ):
 		"""Send motor neurons to simulator
 
 		Motor neurons are neurons which connecto to a specified joint and 
@@ -481,9 +497,9 @@ class PYROSIM:
 
 		Parameters
 		----------
-		neuronID : int, optional
+		neuron_ID : int, optional
 			The user specified ID tag of the neuron
-		jointID  : int, optional
+		joint_ID  : int, optional
 			The joint ID tag of the joint we want the neuron to connect to
 		tau      :
 			The 'learning rate' of the neuron. Increasing tau increases
@@ -497,26 +513,26 @@ class PYROSIM:
 			True if successful, False otherwise
 		"""
 
-		outputString = 'MotorNeuron'
+		output_string = 'MotorNeuron'
 
-		outputString = outputString + ' ' + str(neuronID)
+		output_string = output_string + ' ' + str(neuron_ID)
 
-		outputString = outputString + ' ' + str(jointID)
+		output_string = output_string + ' ' + str(joint_ID)
 
-		outputString = outputString + ' ' + str(tau)
+		output_string = output_string + ' ' + str(tau)
 
-		outputString = outputString + '\n'
+		output_string = output_string + '\n'
 
-		self._Send(outputString)
+		self._Send(output_string)
 
-	def Send_Position_Sensor(self, sensorID=0, objectID = 0):
+	def Send_Position_Sensor(self, sensor_ID=0, body_ID = 0):
 		"""Attaches a position sensor to a body in simulation
 
 		Parameters
 		----------
-		sensorID : int, optional
+		sensor_ID : int, optional
 			The user defined ID of the sensor
-		objectID : int, optional
+		body_ID : int, optional
 			The body ID of the body to connect the sensor to
 
 		Returns
@@ -525,19 +541,19 @@ class PYROSIM:
 			True if successful
 		"""
 
-		outputString = 'PositionSensor'
+		output_string = 'PositionSensor'
 
-		outputString = outputString + ' ' + str(sensorID)
+		output_string = output_string + ' ' + str(sensor_ID)
 
-		outputString = outputString + ' ' + str(objectID)
+		output_string = output_string + ' ' + str(body_ID)
 
-		outputString = outputString + '\n'
+		output_string = output_string + '\n'
 
-		self._Send(outputString)
+		self._Send(output_string)
 
-		self.numSensors = self.numSensors + 1
+		self.num_sensors = self.num_sensors + 1
 
-	def Send_Proprioceptive_Sensor(self, sensorID=0, jointID = 0):
+	def Send_Proprioceptive_Sensor(self, sensor_ID=0, joint_ID = 0):
 		"""Attaches a proprioceptive sensor to a joint in simulation
 
 		Proprioceptive sensors returns the angle of the joint at 
@@ -545,9 +561,9 @@ class PYROSIM:
 
 		Parameters
 		----------
-		sensorID : int, optional
+		sensor_ID : int, optional
 			The user defined ID of the sensor
-		jointID : int, optional
+		joint_ID : int, optional
 			The joint ID of the joint to connect the sensor to
 
 		Returns
@@ -556,32 +572,32 @@ class PYROSIM:
 			True if successful
 		"""
 
-		outputString = 'ProprioceptiveSensor'
+		output_string = 'ProprioceptiveSensor'
 
-		outputString = outputString + ' ' + str(sensorID)
+		output_string = output_string + ' ' + str(sensor_ID)
 
-		outputString = outputString + ' ' + str(jointID)
+		output_string = output_string + ' ' + str(joint_ID)
 
-		outputString = outputString + '\n'
+		output_string = output_string + '\n'
 
-		self._Send(outputString)
+		self._Send(output_string)
 
-		self.numSensors = self.numSensors + 1
+		self.num_sensors = self.num_sensors + 1
 
 		return True
 
-	def Send_Sensor_Neuron(self, neuronID=0, sensorID=0, sensorValueIndex=0, tau=1.0 ):
+	def Send_Sensor_Neuron(self, neuron_ID=0, sensor_ID=0, svi=0, tau=1.0 ):
 		"""Sends a sensor neuron to the simulator
 	
 		Sensor neurons are input neurons which take the value of their associated sensor
 
 		Parameters
 		----------
-		neuronID 		 : int, optional
+		neuron_ID 		 : int, optional
 			The user defined ID of the neuron
-		sensorID 		 : int, optional
+		sensor_ID 		 : int, optional
 			The associated sensor ID for the neuron
-		sensorValueIndex : int, optional
+		svi : int, optional
 			The sensor value index is the offset index of the sensor. SVI is used for 
 			sensors which return a vector of values (position, ray sensors, etc.)
 		tau   			 : int, optional
@@ -593,30 +609,30 @@ class PYROSIM:
 			True if successful, False otherwise
 		"""
 
-		outputString = 'SensorNeuron'
+		output_string = 'SensorNeuron'
 
-		outputString = outputString + ' ' + str(neuronID)
+		output_string = output_string + ' ' + str(neuron_ID)
 
-		outputString = outputString + ' ' + str(sensorID)
+		output_string = output_string + ' ' + str(sensor_ID)
 
-		outputString = outputString + ' ' + str(sensorValueIndex)
+		output_string = output_string + ' ' + str(svi)
 
-		outputString = outputString + ' ' + str(tau)
+		output_string = output_string + ' ' + str(tau)
 
-		outputString = outputString + '\n'
+		output_string = output_string + '\n'
 
-		self._Send(outputString)
+		self._Send(output_string)
 
-	def Send_Ray_Sensor(self, sensorID=0, objectID=0, x=0,y=0,z=0, r1=0,r2=0,r3=1):
+	def Send_Ray_Sensor(self, sensor_ID=0, body_ID=0, x=0,y=0,z=0, r1=0,r2=0,r3=1):
 		"""Sends a ray sensor to the simulator connected to a body
 
 		Ray sensors return four values each time step, the distance and color (r,g,b).
 
 		Parameters
 		----------
-		sensorID : int, optional
+		sensor_ID : int, optional
 			The user defined ID tag for the ray sensor
-		objectID : int, optional
+		body_ID : int, optional
 			The body ID of the associated body the ray sensor is connected to. When this
 			body moves the ray sensor moves accordingly
 		x 		 : float, optional
@@ -636,38 +652,38 @@ class PYROSIM:
 			ray sensor is pointing in the time step.
 		"""
 
-		outputString = 'RaySensor'
+		output_string = 'RaySensor'
 
-		outputString = outputString + ' ' + str(sensorID)
+		output_string = output_string + ' ' + str(sensor_ID)
 
-		outputString = outputString + ' ' + str(objectID)
+		output_string = output_string + ' ' + str(body_ID)
 
-		outputString = outputString + ' ' + str(x)
-		outputString = outputString + ' ' + str(y)
-		outputString = outputString + ' ' + str(z)
+		output_string = output_string + ' ' + str(x)
+		output_string = output_string + ' ' + str(y)
+		output_string = output_string + ' ' + str(z)
 
-		outputString = outputString + ' ' + str(r1)
-		outputString = outputString + ' ' + str(r2)
-		outputString = outputString + ' ' + str(r3)
+		output_string = output_string + ' ' + str(r1)
+		output_string = output_string + ' ' + str(r2)
+		output_string = output_string + ' ' + str(r3)
 
-		outputString = outputString + '\n'
+		output_string = output_string + '\n'
 
-		self._Send(outputString)
+		self._Send(output_string)
 
-		self.numSensors = self.numSensors + 1
+		self.num_sensors = self.num_sensors + 1
 
 		return True
 
-	def Send_Synapse(self, sourceNeuronID = 0 , targetNeuronID = 0 , weight = 0.0 ):
+	def Send_Synapse(self, source_neuron_ID = 0 , target_neuron_ID = 0 , weight = 0.0 ):
 		"""Sends a synapse to the simulator
 
 		Synapses are the edge connections between neurons
 
 		Parameters
 		----------
-		sourceNeuronID : int, optional
+		source_neuron_ID : int, optional
 			The ID of the source neuron of the synapse
-		targetNeuronID : int, optional
+		target_neuron_ID : int, optional
 			The ID of the target neuron of the synapse
 		weight		   : float, optional
 			The edge weight of the synapse
@@ -679,78 +695,78 @@ class PYROSIM:
 		"""
 
 
-		return self.Send_Developing_Synapse(sourceNeuronID=sourceNeuronID, targetNeuronID=targetNeuronID,
-										startWeight=weight,endWeight=weight,
-										startTime=0.,endTime=0.)
+		return self.Send_Developing_Synapse(source_neuron_ID=sourceneuron_ID, target_neuron_ID=targetneuron_ID,
+										start_weight=weight,end_weight=weight,
+										start_time=0.,end_time=0.)
 
-	def Send_Developing_Synapse(self, sourceNeuronID=0, targetNeuronID=0, 
-								startWeight=0.0, endWeight=0.0, 
-								startTime=0., endTime=1.0):
+	def Send_Developing_Synapse(self, source_neuron_ID=0, target_neuron_ID=0, 
+								start_weight=0.0, end_weight=0.0, 
+								start_time=0., end_time=1.0):
 		"""Sends a synapse to the simulator
 
 		Developing synapses are synapses which change over time. 
-		The synapse will interpolate between the startWeight and endWeight
-		over the desired time range dictated by startTime and endTime.
-		startTime and endTime are in [0,1] where 0 maps to time step 0
-		and 1 maps to the evalTime of the simulation. Setting startTime
-		equal to endTime results in a discrete change from startWeight
-		to endWeight in the synapse at the specified time step. If
-		startTime >= endTime times are changed such that
-		endTime = startTime.
+		The synapse will interpolate between the start_weight and end_weight
+		over the desired time range dictated by start_time and end_time.
+		start_time and end_time are in [0,1] where 0 maps to time step 0
+		and 1 maps to the eval_time of the simulation. Setting start_time
+		equal to end_time results in a discrete change from start_weight
+		to end_weight in the synapse at the specified time step. If
+		start_time >= end_time times are changed such that
+		end_time = start_time.
 
 		Parameters
 		----------
-		sourceNeuronID : int, optional
+		source_neuron_ID : int, optional
 			The ID of the source neuron of the synapse
-		targetNeuronID : int, optional
+		target_neuron_ID : int, optional
 			The ID of the target neuron of the synapse
-		startWeight	   : float, optional
+		start_weight	   : float, optional
 			The starting edge weight of the synapse
-		endWeight 	   : float, optional
+		end_weight 	   : float, optional
 			The ending edge weight of the synapse
-		startTime	   : float, optional
-			The starting time of development. startTime in [0,1]
-		endTime 	   : float, optional
-			The ending time of development. endTime in [0,1]
+		start_time	   : float, optional
+			The starting time of development. start_time in [0,1]
+		end_time 	   : float, optional
+			The ending time of development. end_time in [0,1]
 		Returns:
 		--------
 		bool
 			True if successful, False otherwise
 		"""
-		if startTime >= endTime:
-			endTime = startTime
+		if start_time >= end_time:
+			end_time = start_time
 
-		startTime = int(startTime * (self.evaluationTime-1))
-		endTime = int(endTime * (self.evaluationTime-1))
+		start_time = int(start_time * (self.eval_time-1))
+		end_time = int(end_time * (self.eval_time-1))
 
-		outputString = 'Synapse'
+		output_string = 'Synapse'
 
-		outputString = outputString + ' ' + str(sourceNeuronID)
+		output_string = output_string + ' ' + str(source_neuron_ID)
 
-		outputString = outputString + ' ' + str(targetNeuronID)
+		output_string = output_string + ' ' + str(target_neuron_ID)
 
-		outputString = outputString + ' ' + str(startWeight)
+		output_string = output_string + ' ' + str(start_weight)
 
-		outputString = outputString + ' ' + str(endWeight)
+		output_string = output_string + ' ' + str(end_weight)
 
-		outputString = outputString + ' ' + str(startTime)
+		output_string = output_string + ' ' + str(start_time)
 
-		outputString = outputString + ' ' + str(endTime)		
+		output_string = output_string + ' ' + str(end_time)		
 
-		outputString = outputString + '\n'
+		output_string = output_string + '\n'
 
-		self._Send(outputString)
+		self._Send(output_string)
 
 		return True
 
-	def Send_Touch_Sensor(self, sensorID=0, objectID=0):
+	def Send_Touch_Sensor(self, sensor_ID=0, body_ID=0):
 		"""Send touch sensor to a body in the simulator
 
 		Parameters
 		----------
-		sensorID : int, optional
+		sensor_ID : int, optional
 			The user defined ID of the sensor
-		objectID : int, optional
+		body_ID : int, optional
 			The body ID of the associated body 
 
 		Returns
@@ -759,30 +775,30 @@ class PYROSIM:
 			True if successful, False otherwise
 		"""
 
-		outputString = 'TouchSensor'
+		output_string = 'TouchSensor'
 
-		outputString = outputString + ' ' + str(sensorID)
+		output_string = output_string + ' ' + str(sensor_ID)
 
-		outputString = outputString + ' ' + str(objectID)
+		output_string = output_string + ' ' + str(body_ID)
 
-		outputString = outputString + '\n'
+		output_string = output_string + '\n'
 
-		self._Send(outputString)
+		self._Send(output_string)
 
-		self.numSensors = self.numSensors + 1
+		self.num_sensors = self.num_sensors + 1
 
 		return True
 
-	def Send_Vestibular_Sensor(self, sensorID=0, objectID = 0):
+	def Send_Vestibular_Sensor(self, sensor_ID=0, body_ID = 0):
 		"""Connects a vestibular sensor to a body
 
 		Vestibular sensors return a bodies orrientation in space
 
 		Parameters
 		----------
-		sensorID : int, optional
+		sensor_ID : int, optional
 			The user defined ID of the sensor
-		objectID : int, optional
+		body_ID : int, optional
 			The body ID of the associated body 
 
 		Returns
@@ -791,33 +807,33 @@ class PYROSIM:
 			True if successful, False otherwise
 		"""
 
-		outputString = 'VestibularSensor'
+		output_string = 'VestibularSensor'
 
-		outputString = outputString + ' ' + str(sensorID)
+		output_string = output_string + ' ' + str(sensor_ID)
 
-		outputString = outputString + ' ' + str(objectID)
+		output_string = output_string + ' ' + str(body_ID)
 
-		outputString = outputString + '\n'
+		output_string = output_string + '\n'
 
-		self._Send(outputString)
+		self._Send(output_string)
 
-		self.numSensors = self.numSensors + 1
+		self.num_sensors = self.num_sensors + 1
 
 		return True
 
 	def Start(self):
 		"""Starts the simulation"""
 
-		commandsToSend = ['./simulator']
+		commandsToSend = [self.pyrosim_path + '/simulator']
 
-		if ( self.playBlind == True ):
+		if ( self.play_blind == True ):
 
 			commandsToSend.append('-blind')
 		else:
-			commandsToSend.append('-notex')
+			if self.use_textures == False:
+				commandsToSend.append('-notex')
 
-		if ( self.playPaused == True ):
-
+		if ( self.play_paused == True ):
 			commandsToSend.append('-pause')
 
 		self.pipe = Popen(commandsToSend, stdout=PIPE, stdin=PIPE, stderr=PIPE)
@@ -839,45 +855,46 @@ class PYROSIM:
 			A matrix of the sensor values for each time step of the simulation
 		"""
 
-		dataFromSimulator = self.pipe.communicate()
+		data_from_simulator = self.pipe.communicate()
 
-		self._Collect_Sensor_Data(dataFromSimulator)
+		self._Collect_Sensor_Data(data_from_simulator)
+		self.evaluated = True
 
-		return self.dataFromPython
+		return self.data
 
 # --------------------- Private methods -----------------------------
 
-	def _Collect_Sensor_Data(self,dataFromSimulator):
+	def _Collect_Sensor_Data(self,data_from_simulator):
 
-		self.dataFromPython = np.zeros([self.numSensors,4,self.evaluationTime],dtype='f')
+		self.data = np.zeros([self.num_sensors,4,self.eval_time],dtype='f')
 
 		if self.debug:
-			print dataFromSimulator[1]
+		 	print data_from_simulator[1]
 
-		dataFromSimulator = dataFromSimulator[0]
+		data_from_simulator = data_from_simulator[0]
 
-		dataFromSimulator = dataFromSimulator.split()
+		data_from_simulator = data_from_simulator.split()
 
 		index = 0
 
-		if ( dataFromSimulator == [] ):
+		if ( data_from_simulator == [] ):
 			return
 
-		while ( dataFromSimulator[index] != 'Done' ):
-			ID = int( dataFromSimulator[index] )
+		while ( data_from_simulator[index] != 'Done' ):
+			ID = int( data_from_simulator[index] )
 			index = index + 1
 
-			numSensorValues = int( dataFromSimulator[index] ) 
+			num_sensor_vals = int( data_from_simulator[index] ) 
 
 			index = index + 1
 
-			for t in range(0,self.evaluationTime):
+			for t in range(0,self.eval_time):
 
-				for s in range(0,numSensorValues):
+				for s in range(0,num_sensor_vals):
 
-					sensorValue = float( dataFromSimulator[index] )
+					sensorValue = float( data_from_simulator[index] )
 
-					self.dataFromPython[ID,s,t] = sensorValue
+					self.data[ID,s,t] = sensorValue
 
 					index = index + 1
 

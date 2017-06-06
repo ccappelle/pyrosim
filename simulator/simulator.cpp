@@ -30,8 +30,12 @@ int runBlind;
 ENVIRONMENT *environment;
 int numberOfBodies = 0;
 float dt = 0.05;
+float gravity = -1.0;
+
 static float xyz[3] = {0.8317f,-0.9817f,0.8000f};
 static float hpr[3] = {121.0000f,-27.5000f,0.0000f};
+
+static char texturePathStr[100];
 
 static dGeomID ground;
 
@@ -128,7 +132,6 @@ static void nearCallback (void *data, dGeomID o1, dGeomID o2)
 static void start()
 {
   dAllocateODEDataForThread(dAllocateMaskAll);
-  dsSetViewpoint (xyz,hpr);
 }
 
 
@@ -151,26 +154,27 @@ static void command (int cmd)
 
 void Simulate_For_One_Time_Step(void) {
 
-	dSpaceCollide (space,0,&nearCallback);
+  dSpaceCollide (space,0,&nearCallback);
 
-        environment->Poll_Sensors(timer);
-	environment->Update_Neural_Network(timer);
+  environment->Poll_Sensors(timer);
+  environment->Update_Neural_Network(timer);
 
-	environment->Actuate_Joints();
+  environment->Actuate_Joints();
 
-        dWorldStep (world, dt);
+  dWorldStep (world, dt);
 
-        dJointGroupEmpty(contactgroup);
+  dJointGroupEmpty(contactgroup);
 
-        timer++;
+  timer++;
 
-        if ( timer==evaluationTime )
-
+  if ( timer==evaluationTime )
         	Terminate();
 }
 
 static void simLoop (int pause)
 {
+  dsSetViewpoint (xyz,hpr);
+  dWorldSetGravity(world,0,0,gravity);
 	if ( !pause )
 
 		Simulate_For_One_Time_Step();
@@ -180,19 +184,10 @@ static void simLoop (int pause)
 
 void Initialize_ODE(void) {
 
-	// setup pointers to drawstuff callback functions
-  	fn.version = DS_VERSION;
-  	fn.start = &start;
-  	fn.step = &simLoop;
-  	fn.command = &command;
-  	fn.stop = 0;
-  	fn.path_to_textures = DRAWSTUFF_TEXTURE_PATH;
-
  	dInitODE2(0);
   	world = dWorldCreate();
   	space = dHashSpaceCreate (0);
   	contactgroup = dJointGroupCreate (0);
-  	dWorldSetGravity (world,0,0,-0.5);
   	ground = dCreatePlane (space,0,0,1,0);
  
 	dGeomSetData(ground,NULL); 
@@ -200,20 +195,27 @@ void Initialize_ODE(void) {
 	timer = 0;
 }
 
+void Initialize_Draw_Stuff(void){
+    // setup pointers to drawstuff callback functions
+    fn.version = DS_VERSION;
+    fn.start = &start;
+    fn.step = &simLoop;
+    fn.command = &command;
+    fn.stop = 0;
+    fn.path_to_textures = texturePathStr;
+}
 void Initialize_Environment(void) {
 
         environment = new ENVIRONMENT();
 }
 
 void Read_From_Python(void) {
-
-	environment->Read_From_Python(world,space,&evaluationTime,&dt,xyz,hpr);
+	environment->Read_From_Python(world,space, texturePathStr, &evaluationTime,&dt,&gravity,xyz,hpr);
 }
 
 void Terminate(void) {
 
 	environment->Write_Sensor_Data(evaluationTime);
-
 	exit(0);
 }
 
@@ -230,20 +232,17 @@ int main (int argc, char **argv)
 	runBlind = false; 
 
 	if ( (argc > 1) && (strcmp(argv[1],"-blind")==0) )
-
 		runBlind = true;
 
-        Initialize_ODE();
-
-        Initialize_Environment();
-
-        Read_From_Python();
+  Initialize_ODE();
+  Initialize_Environment();
+  Read_From_Python();
 
 	if ( runBlind )
-
 		Run_Blind();
-	else
+	else{
+      Initialize_Draw_Stuff();
   		dsSimulationLoop (argc,argv,352*2,288*2,&fn);
-
+    }
   return 0;
 }

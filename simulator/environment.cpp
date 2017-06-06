@@ -41,22 +41,25 @@ void ENVIRONMENT::Draw(void) {
                 objects[i]->Draw();
 }
 
-void ENVIRONMENT::Read_From_Python(dWorldID world,dSpaceID space, int *evaluationTime,
-                                        float *dt, float *xyz, float *hpr) {
+void ENVIRONMENT::Read_From_Python(dWorldID world,dSpaceID space, char *texturePath, int *evaluationTime,
+                                        float *dt, float *gravity, float *xyz, float *hpr) {
 
         char incomingString[100];
 
         std::cin >> incomingString;
 
         while ( strcmp(incomingString,"Done") != 0 ) {
-                //std::cerr << incomingString << "\n";
-                //Simulator timing
+                std::cerr << incomingString << "\n";
+                //Simulator options
                 if ( strcmp(incomingString,"EvaluationTime") == 0 )
 			std::cin >> (*evaluationTime);
 
                 else if ( strcmp(incomingString,"TimeInterval") == 0)
                         std::cin >> (*dt);
-
+                else if ( strcmp(incomingString,"Gravity") == 0)
+                        std::cin >> (*gravity);
+                else if ( strcmp(incomingString,"TexturePath") == 0)
+                        std::cin >> (texturePath);
                 //Camera
                 else if ( strcmp(incomingString,"Camera") == 0)
                 {

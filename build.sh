@@ -6,6 +6,9 @@ MAKEOPTS="-j2"
 #wget https://sourceforge.net/projects/opende/files/ODE/0.12/ode-0.12.tar.bz2 > /tmp/odewget 2>&1 &&
 #echo "done" &&
 
+echo -n "Changing into simulator"
+cd simulator
+
 echo -n "Unpacking ode-0.12.tar.bz2..." &&
 tar -xjf ode-0.12.tar.bz2 &&
 echo "done" &&

@@ -68,9 +68,7 @@ void SYNAPSE::Update_Weight(int time){
 		double startRatio = 1.-(time-startTime)/double(endTime-startTime);
 		double endRatio = 1.-(endTime-time)/double(endTime-startTime);
 		weight = startRatio*startWeight + endRatio*endWeight;
-		std::cerr << startRatio << "," << endRatio << "\n";
 
 	}
-	std::cerr << time << " " << weight << "\n";
 }
 #endif
