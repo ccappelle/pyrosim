@@ -11,6 +11,8 @@ private:
 	int	ID;
 	int	firstObject;
 	int	secondObject;
+	int type; 
+	
 	double	x;
 	double	y;
 	double	z;
@@ -31,7 +33,7 @@ private:
 	NEURON *motorNeuron;
 
 public:
-	JOINT(void);
+	JOINT(int jointType);
 
 	~JOINT(void);
 

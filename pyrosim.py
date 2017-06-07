@@ -6,7 +6,7 @@ import constants
 
 from subprocess import Popen, PIPE
 
-class Simulator:
+class Simulator(object):
 	"""Python interface for ODE simulator
 	
 	Attributes
@@ -43,6 +43,7 @@ class Simulator:
 
 		self.numJoints = 0
 		self.num_sensors = 0
+		self.num_neurons = 0
 
 		self.strings_to_send = []
 
@@ -61,18 +62,23 @@ class Simulator:
 			self.play_paused = False
 
 		#Initial simulator commands
-		self._Send('TexturePath ' + self.pyrosim_path+'/textures'+'\n') 
-		self._Send('EvaluationTime '+str(self.eval_time)+'\n')
-		self._Send('TimeInterval ' + str(self.dt)+'\n')
-		self._Send('Gravity ' + str(self.gravity)+'\n')
+		self._Send('TexturePath ' + self.pyrosim_path+'/textures') 
+		self._Send('EvaluationTime '+str(self.eval_time))
+		self._Send('TimeInterval ' + str(self.dt))
+		self._Send('Gravity ' + str(self.gravity))
 		self.Send_Camera(xyz, hpr)
 
-	def Get_Sensor_Data(self,sensor_ID=0,svi=0):
+	def Get_Data(self):
+		"""Get all sensor data"""
+		assert self.evaluated == True, 'Simulation has not run yet'
+		return self.data
+
+	def Get_Sensor_Data(self,sensor_ID,svi=0):
 		"""Get the post simulation data from a specified sensor
 
 		Parameters
 		----------
-		sensor_ID : int , optional
+		sensor_ID : int
 			the sensors ID tag
 		svi 	 : int , optional
 			The sensor value index. Certain sensors have multiple values 
@@ -85,10 +91,8 @@ class Simulator:
 		list of float
 			Returns the list of sensor values over the simulation.
 		"""
-		if self.evaluated:
-			return self.data[sensor_ID,svi,:]
-		else:
-			return 'No Data'
+		assert self.evaluated==True, 'Simulation has not run yet'
+		return self.data[sensor_ID,svi,:]
 
 	def Send_Bias_Neuron(self, neuron_ID = 0 ):
 		"""Send bias neuron to simulator
@@ -104,10 +108,8 @@ class Simulator:
 			True if successful, False otherwise
 		"""
 
-		output_string = 'BiasNeuron'
-		output_string = output_string + ' ' + str(neuron_ID)
-		output_string = output_string + '\n'
-		self._Send(output_string)
+		self._Send('BiasNeuron',
+					neuron_ID)
 
 		return True
 
@@ -143,25 +145,12 @@ class Simulator:
 			True if successful, False otherwise
 		"""
 
-		output_string = 'Box'
+		self._Send('Box', 
+					body_ID, 
+					x,y,z,
+					length,width,height,
+					r,g,b)
 
-		output_string = output_string + ' ' + str(body_ID)
-
-		output_string = output_string + ' ' + str(x)
-		output_string = output_string + ' ' + str(y)
-		output_string = output_string + ' ' + str(z)
-
-		output_string = output_string + ' ' + str(length)
-		output_string = output_string + ' ' + str(width)
-		output_string = output_string + ' ' + str(height)
-
-		output_string = output_string + ' ' + str(r)
-		output_string = output_string + ' ' + str(g)
-		output_string = output_string + ' ' + str(b)
-
-		output_string = output_string + '\n'
-
-		self._Send(output_string)
 		return True
 
 	def Send_Camera(self,xyz,hpr):
@@ -173,24 +162,19 @@ class Simulator:
 			A length 3 list specifying the x,y,z position of the camera
 			in simulation
 		hpr : list of floats
-			A length 3 list specifying the heading, pitch and roll of the camera
+			A length 3 list specifying the heading, pitch, and roll of the camera
 
 		Returns
 		-------
-		None
+		bool
+			True if successful, False otherwise
 		"""
 		
-		output_string = 'Camera'
-		self.xyz = xyz
-		self.hpr = hpr
+		self._Send('Camera',
+					xyz[0],xyz[1],xyz[2],
+					hpr[0],hpr[1],hpr[2])
 
-		for i in xyz:
-			output_string = output_string + ' ' + str(i)
-		for j in hpr:
-			output_string = output_string + ' ' + str(j)
-
-		output_string = output_string + '\n'
-		self._Send(output_string)
+		return True
 
 	def Send_Cylinder(self, body_ID=0, x=0, y=0, z=0, r1=0, r2=0, r3=1, length=1.0, radius=0.1, r=1, g=1, b=1):
 		"""Send cylinder body to the simulator
@@ -234,31 +218,15 @@ class Simulator:
 			True if successful, False otherwise
 		"""
 
-		output_string = 'Cylinder'
-
-		output_string = output_string + ' ' + str(body_ID)
-
-		output_string = output_string + ' ' + str(x)
-		output_string = output_string + ' ' + str(y)
-		output_string = output_string + ' ' + str(z)
-
-		output_string = output_string + ' ' + str(r1)
-		output_string = output_string + ' ' + str(r2)
-		output_string = output_string + ' ' + str(r3)
-
-		output_string = output_string + ' ' + str(length)
-		output_string = output_string + ' ' + str(radius)
-
-		output_string = output_string + ' ' + str(r)
-		output_string = output_string + ' ' + str(g)
-		output_string = output_string + ' ' + str(b)
-
-		output_string = output_string + '\n'
-
-		self._Send(output_string)
+		self._Send('Cylinder',
+					body_ID,
+					x,y,z,
+					r1,r2,r3,
+					length,radius,
+					r,g,b)
 		return True
 
-	def Send_User_Input_Neuron(self, neuron_ID=0, values=1):
+	def Send_User_Input_Neuron(self, neuron_ID=0, in_values=1):
 		"""Send neuron to the simulator which takes user defined values at each time step
 		
 		Parameters
@@ -275,21 +243,23 @@ class Simulator:
 		bool
 			True if successful, False otherwise
 		"""
-		output_string = 'FunctionNeuron'
 
+		#if in_values is constant
+		#neuron becomes essentially bias with specified value
 		try:
-			iterator = iter(values)
+			iterator = iter(in_values)
 		except TypeError:
-			values = [values]*self.eval_time
-		
-		output_string = output_string + ' ' + str(neuron_ID)
+			in_values = [in_values]*self.eval_time
 
-		for i in range(self.eval_time):
-			index = i%len(values)
-			output_string = output_string + ' ' + str(values[index])
+		#if values is shorter than eval_time repeat until sufficient
+		if len(in_values)<self.eval_time:
+			out_values = [0]*self.eval_time
+			for i in range(self.eval_time):
+				out_values = in_values[i%len(in_values)]
+		else:
+			out_values = in_values
 
-		output_string = output_string + '\n'
-		self._Send(output_string)
+		self._Send('FunctionNeuron', *out_values)
 
 		return True
 
@@ -341,20 +311,12 @@ class Simulator:
 		bool
 			True if successful, False otherwise
 		"""
-
-		output_string = 'HiddenNeuron'
-
-		output_string = output_string + ' ' + str(neuron_ID)
-
-		output_string = output_string + ' ' + str(tau)
-
-		output_string = output_string + '\n'
-
-		self._Send(output_string)
+		self._Send('HiddenNeuron',
+					neuron_ID, tau)
 
 		return True
 
-	def Send_Joint(self, joint_ID=0, first_body_ID=0, second_body_ID=1, x=0, y=0, z=0, n1=0, n2=0, n3=1, 
+	def Send_Hinge_Joint(self, joint_ID=0, first_body_ID=0, second_body_ID=1, x=0, y=0, z=0, n1=0, n2=0, n3=1, 
 					lo=-math.pi/4.0, hi=+math.pi/4.0 , speed=1.0, torque=10.0, pos_control = True):
 		"""Send a hinge joint to the simulator
 
@@ -405,33 +367,14 @@ class Simulator:
 		bool
 			True if successful, False otherwise
 		"""
-
-		output_string = 'Joint'
-
-		output_string = output_string + ' ' + str(joint_ID)
-
-		output_string = output_string + ' ' + str(first_body_ID)
-		output_string = output_string + ' ' + str(second_body_ID)
-
-		output_string = output_string + ' ' + str(x)
-		output_string = output_string + ' ' + str(y)
-		output_string = output_string + ' ' + str(z)
-
-		output_string = output_string + ' ' + str(n1)
-		output_string = output_string + ' ' + str(n2)
-		output_string = output_string + ' ' + str(n3)
-
-		output_string = output_string + ' ' + str(lo)
-		output_string = output_string + ' ' + str(hi)
-
-		output_string = output_string + ' ' + str(speed)
-		output_string = output_string + ' ' + str(torque)
-
-		output_string = output_string + ' ' + str(pos_control)
-
-		output_string = output_string + '\n'
-
-		self._Send(output_string)
+		self._Send('HingeJoint',
+					joint_ID, 
+					first_body_ID, second_body_ID,
+					x, y, z,
+					n1, n2, n3,
+					lo, hi,
+					speed, torque,
+					pos_control)
 
 		return True
 
@@ -451,15 +394,8 @@ class Simulator:
 			True if successful
 		"""
 
-		output_string = 'LightSensor'
-
-		output_string = output_string + ' ' + str(sensor_ID)
-
-		output_string = output_string + ' ' + str(body_ID)
-
-		output_string = output_string + '\n'
-
-		self._Send(output_string)
+		self._Send('LightSensor',
+					sensor_ID, body_ID)
 
 		self.num_sensors = self.num_sensors + 1
 
@@ -479,13 +415,8 @@ class Simulator:
 			True if successful, False otherwise
 		"""
 
-		output_string = 'LightSource'
-
-		output_string = output_string + ' ' + str(body_ID)
-
-		output_string = output_string + '\n'
-
-		self._Send(output_string)
+		self._Send('LightSource',
+					body_ID)
 
 		return True
 
@@ -513,17 +444,9 @@ class Simulator:
 			True if successful, False otherwise
 		"""
 
-		output_string = 'MotorNeuron'
-
-		output_string = output_string + ' ' + str(neuron_ID)
-
-		output_string = output_string + ' ' + str(joint_ID)
-
-		output_string = output_string + ' ' + str(tau)
-
-		output_string = output_string + '\n'
-
-		self._Send(output_string)
+		self._Send('MotorNeuron',
+					neuron_ID,  joint_ID, tau)
+		return True
 
 	def Send_Position_Sensor(self, sensor_ID=0, body_ID = 0):
 		"""Attaches a position sensor to a body in simulation
@@ -540,16 +463,8 @@ class Simulator:
 		bool
 			True if successful
 		"""
-
-		output_string = 'PositionSensor'
-
-		output_string = output_string + ' ' + str(sensor_ID)
-
-		output_string = output_string + ' ' + str(body_ID)
-
-		output_string = output_string + '\n'
-
-		self._Send(output_string)
+		self._Send('PositionSensor',
+					sensor_ID, body_ID)
 
 		self.num_sensors = self.num_sensors + 1
 
@@ -571,16 +486,8 @@ class Simulator:
 		bool
 			True if successful
 		"""
-
-		output_string = 'ProprioceptiveSensor'
-
-		output_string = output_string + ' ' + str(sensor_ID)
-
-		output_string = output_string + ' ' + str(joint_ID)
-
-		output_string = output_string + '\n'
-
-		self._Send(output_string)
+		self._Send('ProprioceptiveSensor',
+					sensor_ID, joint_ID)
 
 		self.num_sensors = self.num_sensors + 1
 
@@ -609,19 +516,11 @@ class Simulator:
 			True if successful, False otherwise
 		"""
 
-		output_string = 'SensorNeuron'
+		self._Send('SensorNeuron',
+					neuron_ID, sensor_ID,
+					svi, tau)
 
-		output_string = output_string + ' ' + str(neuron_ID)
-
-		output_string = output_string + ' ' + str(sensor_ID)
-
-		output_string = output_string + ' ' + str(svi)
-
-		output_string = output_string + ' ' + str(tau)
-
-		output_string = output_string + '\n'
-
-		self._Send(output_string)
+		return True
 
 	def Send_Ray_Sensor(self, sensor_ID=0, body_ID=0, x=0,y=0,z=0, r1=0,r2=0,r3=1):
 		"""Sends a ray sensor to the simulator connected to a body
@@ -652,23 +551,10 @@ class Simulator:
 			ray sensor is pointing in the time step.
 		"""
 
-		output_string = 'RaySensor'
-
-		output_string = output_string + ' ' + str(sensor_ID)
-
-		output_string = output_string + ' ' + str(body_ID)
-
-		output_string = output_string + ' ' + str(x)
-		output_string = output_string + ' ' + str(y)
-		output_string = output_string + ' ' + str(z)
-
-		output_string = output_string + ' ' + str(r1)
-		output_string = output_string + ' ' + str(r2)
-		output_string = output_string + ' ' + str(r3)
-
-		output_string = output_string + '\n'
-
-		self._Send(output_string)
+		self._Send('RaySensor',
+					sensor_ID, body_ID,
+					x,y,z,
+					r1,r2,r3)
 
 		self.num_sensors = self.num_sensors + 1
 
@@ -693,7 +579,6 @@ class Simulator:
 		bool
 			True if successful, False otherwise
 		"""
-
 
 		return self.Send_Developing_Synapse(source_neuron_ID=sourceneuron_ID, target_neuron_ID=targetneuron_ID,
 										start_weight=weight,end_weight=weight,
@@ -733,29 +618,17 @@ class Simulator:
 		bool
 			True if successful, False otherwise
 		"""
+
 		if start_time >= end_time:
 			end_time = start_time
 
 		start_time = int(start_time * (self.eval_time-1))
 		end_time = int(end_time * (self.eval_time-1))
 
-		output_string = 'Synapse'
-
-		output_string = output_string + ' ' + str(source_neuron_ID)
-
-		output_string = output_string + ' ' + str(target_neuron_ID)
-
-		output_string = output_string + ' ' + str(start_weight)
-
-		output_string = output_string + ' ' + str(end_weight)
-
-		output_string = output_string + ' ' + str(start_time)
-
-		output_string = output_string + ' ' + str(end_time)		
-
-		output_string = output_string + '\n'
-
-		self._Send(output_string)
+		self._Send('Synapse',
+					source_neuron_ID, target_neuron_ID,
+					start_weight, end_weight,
+					start_time, end_time)
 
 		return True
 
@@ -774,16 +647,8 @@ class Simulator:
 		bool
 			True if successful, False otherwise
 		"""
-
-		output_string = 'TouchSensor'
-
-		output_string = output_string + ' ' + str(sensor_ID)
-
-		output_string = output_string + ' ' + str(body_ID)
-
-		output_string = output_string + '\n'
-
-		self._Send(output_string)
+		self._Send('TouchSensor',
+					sensor_ID, body_ID)
 
 		self.num_sensors = self.num_sensors + 1
 
@@ -807,15 +672,8 @@ class Simulator:
 			True if successful, False otherwise
 		"""
 
-		output_string = 'VestibularSensor'
-
-		output_string = output_string + ' ' + str(sensor_ID)
-
-		output_string = output_string + ' ' + str(body_ID)
-
-		output_string = output_string + '\n'
-
-		self._Send(output_string)
+		self._Send('VestibularSensor', 
+					sensor_ID, body_ID)
 
 		self.num_sensors = self.num_sensors + 1
 
@@ -824,19 +682,18 @@ class Simulator:
 	def Start(self):
 		"""Starts the simulation"""
 
-		commandsToSend = [self.pyrosim_path + '/simulator']
+		commands = [self.pyrosim_path + '/simulator']
 
 		if ( self.play_blind == True ):
-
-			commandsToSend.append('-blind')
+			commands.append('-blind')
 		else:
 			if self.use_textures == False:
-				commandsToSend.append('-notex')
+				commands.append('-notex')
 
 		if ( self.play_paused == True ):
-			commandsToSend.append('-pause')
+			commands.append('-pause')
 
-		self.pipe = Popen(commandsToSend, stdout=PIPE, stdin=PIPE, stderr=PIPE)
+		self.pipe = Popen(commands, stdout=PIPE, stdin=PIPE, stderr=PIPE)
 
 		#self.Send('Done\n')
 		for string_to_send in self.strings_to_send:
@@ -898,8 +755,12 @@ class Simulator:
 
 					index = index + 1
 
-	def _Send(self,string_to_send):
+	def _Send(self,*args):
+		string_to_send = args[0] #first argument should always be a string
+		for arg in args[1:]:
+			string_to_send += ' ' + str(arg)
+		string_to_send += '\n'
+
 		if self.debug:
 			print string_to_send
 		self.strings_to_send.append(string_to_send)
-		#self.simulator.stdin.write( stringToSend )

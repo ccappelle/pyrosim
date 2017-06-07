@@ -41,7 +41,7 @@ def Send_To_Simulator(sim, weight_matrix):
 		body_ID+=1
 
 		hips[i] = joint_ID
-		sim.Send_Joint(joint_ID=joint_ID,
+		sim.Send_Hinge_Joint(joint_ID=joint_ID,
 						first_body_ID=main_body, second_body_ID=thighs[i],
 						x=x_pos/2.0, y=y_pos/2.0, z=HEIGHT+EPS,
 						n1=-y_pos,n2=x_pos,n3=0,
@@ -63,7 +63,7 @@ def Send_To_Simulator(sim, weight_matrix):
 		body_ID+=1
 
 		knees[i] = joint_ID
-		sim.Send_Joint(joint_ID=joint_ID,
+		sim.Send_Hinge_Joint(joint_ID=joint_ID,
 						first_body_ID=thighs[i], second_body_ID=shins[i],
 						x=x_pos2, y=y_pos2, z=HEIGHT+EPS,
 						n1=-y_pos,n2=x_pos,n3=0,
@@ -118,8 +118,8 @@ def Send_To_Simulator(sim, weight_matrix):
 if __name__=="__main__":
 	import pyrosim
 
-	eval_time = 1000
-	gravity = 0.0
+	eval_time = 100
+	gravity = -1.0
 
 	sim = pyrosim.Simulator(eval_time=eval_time, debug=True, gravity=gravity,play_blind=False, use_textures=True)
 	num_sensors = 5

@@ -13,7 +13,8 @@ private:
 	int numberOfBodies;
 
 	int numberOfJoints;
-
+	int type; 
+	
 	OBJECT **objects;
 
 	JOINT **joints;
@@ -53,13 +54,13 @@ private:
 	
 	void Create_Hidden_Neuron( void );
 
-	void Create_Joint( dWorldID world, dSpaceID space, int index);
+	void Create_Joint( dWorldID world, dSpaceID space, int index, int jointType);
 
 	void Create_Light_Sensor(int evalPeriod);
 
 	void Create_Light_Source(void);
 
-        void Create_Motor_Neuron(void);
+    void Create_Motor_Neuron(void);
 
 	void Create_Neural_Network(void);
 

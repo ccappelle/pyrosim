@@ -81,9 +81,9 @@ void ENVIRONMENT::Read_From_Python(dWorldID world,dSpaceID space, char *textureP
 
 			Create_Object(world,space,numberOfBodies,CYLINDER);
 
-		else if ( strcmp(incomingString,"Joint") == 0 )
+		else if ( strcmp(incomingString,"HingeJoint") == 0 )
 
-			Create_Joint(world,space,numberOfJoints);
+			Create_Joint(world,space,numberOfJoints,0);
 
                 //Sensors
 		else if ( strcmp(incomingString,"PositionSensor") == 0 )
@@ -234,9 +234,9 @@ void ENVIRONMENT::Create_Hidden_Neuron(void) {
 	neuralNetwork->Add_Hidden_Neuron(ID,tau);
 }
 
-void ENVIRONMENT::Create_Joint( dWorldID world, dSpaceID space, int index) {
+void ENVIRONMENT::Create_Joint( dWorldID world, dSpaceID space, int index, int jointType) {
 
-	joints[index] = new JOINT();
+	joints[index] = new JOINT(jointType);
 
 	joints[index]->Read_From_Python();
 

@@ -5,10 +5,9 @@
 
 #include "joint.h"
 
-JOINT::JOINT(void) {
-
+JOINT::JOINT(int jointType) {
+        type = jointType;
         firstObject = 0;
-
         secondObject = 0;
 
         x = 0;
@@ -24,6 +23,7 @@ JOINT::JOINT(void) {
 
     	speed = 0.0;
         torque = 0.0;
+
 
 	positionControl = true;
 
