@@ -1,0 +1,85 @@
+g++ -DHAVE_CONFIG_H -I. -Iode-0.12/ode/src  -Iode-0.12/include -DDRAWSTUFF_TEXTURE_PATH="\"ode-0.12/drawstuff/textures\"" -DdTRIMESH_ENABLED -DdDOUBLE  -g -O2 -MT simulator.o -MD -MP -c -o simulator.o simulator.cpp
+g++ -DHAVE_CONFIG_H -I. -Iode-0.12/ode/src  -Iode-0.12/include -DDRAWSTUFF_TEXTURE_PATH="\"ode-0.12/drawstuff/textures\"" -DdTRIMESH_ENABLED -DdDOUBLE  -g -O2 -MT environment.o -MD -MP -c -o environment.o environment.cpp
+In file included from environment.cpp:4:
+In file included from ./environment.h:4:
+In file included from ode-0.12/include/ode/ode.h:40:
+ode-0.12/include/ode/misc.h:58:70: warning: conversion from string literal to 'char *' is deprecated [-Wc++11-compat-deprecated-writable-strings]
+ODE_API void dPrintMatrix (const dReal *A, int n, int m, char *fmt = "%10.4f ",
+                                                                     ^
+In file included from simulator.cpp:2:
+In file included from ode-0.12/include/ode/ode.h:40:
+ode-0.12/include/ode/misc.h:58:70: warning: conversion from string literal to 'char *' is deprecated [-Wc++11-compat-deprecated-writable-strings]
+ODE_API void dPrintMatrix (const dReal *A, int n, int m, char *fmt = "%10.4f ",
+                                                                     ^
+1 warning generated.
+g++ -DHAVE_CONFIG_H -I. -Iode-0.12/ode/src  -Iode-0.12/include -DDRAWSTUFF_TEXTURE_PATH="\"ode-0.12/drawstuff/textures\"" -DdTRIMESH_ENABLED -DdDOUBLE  -g -O2 -MT object.o -MD -MP -c -o object.o object.cpp
+In file included from object.cpp:5:
+In file included from ./object.h:4:
+In file included from ode-0.12/include/ode/ode.h:40:
+ode-0.12/include/ode/misc.h:58:70: warning: conversion from string literal to 'char *' is deprecated [-Wc++11-compat-deprecated-writable-strings]
+ODE_API void dPrintMatrix (const dReal *A, int n, int m, char *fmt = "%10.4f ",
+                                                                     ^
+1 warning generated.
+g++ -DHAVE_CONFIG_H -I. -Iode-0.12/ode/src  -Iode-0.12/include -DDRAWSTUFF_TEXTURE_PATH="\"ode-0.12/drawstuff/textures\"" -DdTRIMESH_ENABLED -DdDOUBLE  -g -O2 -MT joint.o -MD -MP -c -o joint.o joint.cpp
+In file included from joint.cpp:6:
+In file included from ./joint.h:4:
+In file included from ./object.h:4:
+In file included from ode-0.12/include/ode/ode.h:40:
+ode-0.12/include/ode/misc.h:58:70: warning: conversion from string literal to 'char *' is deprecated [-Wc++11-compat-deprecated-writable-strings]
+ODE_API void dPrintMatrix (const dReal *A, int n, int m, char *fmt = "%10.4f ",
+                                                                     ^
+1 warning generated.
+g++ -DHAVE_CONFIG_H -I. -Iode-0.12/ode/src  -Iode-0.12/include -DDRAWSTUFF_TEXTURE_PATH="\"ode-0.12/drawstuff/textures\"" -DdTRIMESH_ENABLED -DdDOUBLE  -g -O2 -MT positionSensor.o -MD -MP -c -o positionSensor.o positionSensor.cpp
+1 warning generated.
+g++ -DHAVE_CONFIG_H -I. -Iode-0.12/ode/src  -Iode-0.12/include -DDRAWSTUFF_TEXTURE_PATH="\"ode-0.12/drawstuff/textures\"" -DdTRIMESH_ENABLED -DdDOUBLE  -g -O2 -MT proprioceptiveSensor.o -MD -MP -c -o proprioceptiveSensor.o proprioceptiveSensor.cpp
+In file included from positionSensor.cpp:5:
+In file included from ./positionSensor.h:4:
+In file included from ode-0.12/include/ode/ode.h:40:
+ode-0.12/include/ode/misc.h:58:70: warning: conversion from string literal to 'char *' is deprecated [-Wc++11-compat-deprecated-writable-strings]
+ODE_API void dPrintMatrix (const dReal *A, int n, int m, char *fmt = "%10.4f ",
+                                                                     ^
+In file included from proprioceptiveSensor.cpp:6:
+In file included from ./proprioceptiveSensor.h:4:
+In file included from ode-0.12/include/ode/ode.h:40:
+ode-0.12/include/ode/misc.h:58:70: warning: conversion from string literal to 'char *' is deprecated [-Wc++11-compat-deprecated-writable-strings]
+ODE_API void dPrintMatrix (const dReal *A, int n, int m, char *fmt = "%10.4f ",
+                                                                     ^
+1 warning generated.
+g++ -DHAVE_CONFIG_H -I. -Iode-0.12/ode/src  -Iode-0.12/include -DDRAWSTUFF_TEXTURE_PATH="\"ode-0.12/drawstuff/textures\"" -DdTRIMESH_ENABLED -DdDOUBLE  -g -O2 -MT touchSensor.o -MD -MP -c -o touchSensor.o touchSensor.cpp
+1 warning generated.
+g++ -DHAVE_CONFIG_H -I. -Iode-0.12/ode/src  -Iode-0.12/include -DDRAWSTUFF_TEXTURE_PATH="\"ode-0.12/drawstuff/textures\"" -DdTRIMESH_ENABLED -DdDOUBLE  -g -O2 -MT raySensor.o -MD -MP -c -o raySensor.o raySensor.cpp
+In file included from touchSensor.cpp:5:
+In file included from ./touchSensor.h:4:
+In file included from ode-0.12/include/ode/ode.h:40:
+ode-0.12/include/ode/misc.h:58:70: warning: conversion from string literal to 'char *' is deprecated [-Wc++11-compat-deprecated-writable-strings]
+ODE_API void dPrintMatrix (const dReal *A, int n, int m, char *fmt = "%10.4f ",
+                                                                     ^
+In file included from raySensor.cpp:5:
+In file included from ./raySensor.h:4:
+In file included from ode-0.12/include/ode/ode.h:40:
+ode-0.12/include/ode/misc.h:58:70: warning: conversion from string literal to 'char *' is deprecated [-Wc++11-compat-deprecated-writable-strings]
+ODE_API void dPrintMatrix (const dReal *A, int n, int m, char *fmt = "%10.4f ",
+                                                                     ^
+1 warning generated.
+g++ -DHAVE_CONFIG_H -I. -Iode-0.12/ode/src  -Iode-0.12/include -DDRAWSTUFF_TEXTURE_PATH="\"ode-0.12/drawstuff/textures\"" -DdTRIMESH_ENABLED -DdDOUBLE  -g -O2 -MT lightSensor.o -MD -MP -c -o lightSensor.o lightSensor.cpp
+1 warning generated.
+g++ -DHAVE_CONFIG_H -I. -Iode-0.12/ode/src  -Iode-0.12/include -DDRAWSTUFF_TEXTURE_PATH="\"ode-0.12/drawstuff/textures\"" -DdTRIMESH_ENABLED -DdDOUBLE  -g -O2 -MT vestibularSensor.o -MD -MP -c -o vestibularSensor.o vestibularSensor.cpp
+In file included from lightSensor.cpp:5:
+In file included from ./lightSensor.h:4:
+In file included from ode-0.12/include/ode/ode.h:40:
+ode-0.12/include/ode/misc.h:58:70: warning: conversion from string literal to 'char *' is deprecated [-Wc++11-compat-deprecated-writable-strings]
+ODE_API void dPrintMatrix (const dReal *A, int n, int m, char *fmt = "%10.4f ",
+                                                                     ^
+In file included from vestibularSensor.cpp:5:
+In file included from ./vestibularSensor.h:4:
+In file included from ode-0.12/include/ode/ode.h:40:
+ode-0.12/include/ode/misc.h:58:70: warning: conversion from string literal to 'char *' is deprecated [-Wc++11-compat-deprecated-writable-strings]
+ODE_API void dPrintMatrix (const dReal *A, int n, int m, char *fmt = "%10.4f ",
+                                                                     ^
+1 warning generated.
+g++ -DHAVE_CONFIG_H -I. -Iode-0.12/ode/src  -Iode-0.12/include -DDRAWSTUFF_TEXTURE_PATH="\"ode-0.12/drawstuff/textures\"" -DdTRIMESH_ENABLED -DdDOUBLE  -g -O2 -MT neuralNetwork.o -MD -MP -c -o neuralNetwork.o neuralNetwork.cpp
+1 warning generated.
+g++ -DHAVE_CONFIG_H -I. -Iode-0.12/ode/src  -Iode-0.12/include -DDRAWSTUFF_TEXTURE_PATH="\"ode-0.12/drawstuff/textures\"" -DdTRIMESH_ENABLED -DdDOUBLE  -g -O2 -MT neuron.o -MD -MP -c -o neuron.o neuron.cpp
+g++ -DHAVE_CONFIG_H -I. -Iode-0.12/ode/src  -Iode-0.12/include -DDRAWSTUFF_TEXTURE_PATH="\"ode-0.12/drawstuff/textures\"" -DdTRIMESH_ENABLED -DdDOUBLE  -g -O2 -MT synapse.o -MD -MP -c -o synapse.o synapse.cpp
+/bin/bash ode-0.12/libtool --tag=CXX   --mode=link g++  -g -O2   -o simulator simulator.o environment.o object.o joint.o positionSensor.o proprioceptiveSensor.o touchSensor.o raySensor.o lightSensor.o vestibularSensor.o neuralNetwork.o neuron.o synapse.o ode-0.12/drawstuff/src/libdrawstuff.la ode-0.12/ode/src/libode.la -framework OpenGL -framework GLUT -lm -lpthread ""
+libtool: link: g++ -g -O2 -o simulator simulator.o environment.o object.o joint.o positionSensor.o proprioceptiveSensor.o touchSensor.o raySensor.o lightSensor.o vestibularSensor.o neuralNetwork.o neuron.o synapse.o "" -Wl,-bind_at_load  ode-0.12/drawstuff/src/.libs/libdrawstuff.a ode-0.12/ode/src/.libs/libode.a -framework OpenGL -framework GLUT -lm -lpthread

@@ -11,11 +11,8 @@ def Send_To_Simulator(sim, weight_matrix):
 	sensor_ID = 0
 	neuron_ID = 0
 
-	main_body = body_ID
-	sim.Send_Box(body_ID=body_ID, 
-				 x=0, y=0,z=HEIGHT+EPS,
+	main_body = sim.Send_Box(x=0, y=0,z=HEIGHT+EPS,
 				 length=HEIGHT, width=HEIGHT, height=EPS*2.0)
-	body_ID += 1
 
 	thighs = [0]*4
 	shins = [0]*4
@@ -32,64 +29,41 @@ def Send_To_Simulator(sim, weight_matrix):
 		x_pos = math.cos(theta)*HEIGHT
 		y_pos = math.sin(theta)*HEIGHT
 
-		thighs[i] = body_ID
-		sim.Send_Cylinder(body_ID=body_ID, 
-							x=x_pos, y=y_pos, z=HEIGHT+EPS,
+		thighs[i] = sim.Send_Cylinder( x=x_pos, y=y_pos, z=HEIGHT+EPS,
 							r1=x_pos, r2=y_pos, r3=0,
 							length=HEIGHT,radius=EPS
 							)
-		body_ID+=1
 
-		hips[i] = joint_ID
-		sim.Send_Hinge_Joint(joint_ID=joint_ID,
-						first_body_ID=main_body, second_body_ID=thighs[i],
+		hips[i] = sim.Send_Hinge_Joint(first_body_ID=main_body, second_body_ID=thighs[i],
 						x=x_pos/2.0, y=y_pos/2.0, z=HEIGHT+EPS,
 						n1=-y_pos,n2=x_pos,n3=0,
-						lo=-math.pi/4.0, hi=math.pi/4.0)
-		joint_ID+=1
+						lo=-math.pi/4.0, hi=math.pi/4.0,
+						speed=1.0)
 
-		motor_neurons[i] = neuron_ID
-		sim.Send_Motor_Neuron(neuron_ID=neuron_ID, joint_ID=hips[i])
-		neuron_ID += 1
+		motor_neurons[i] = sim.Send_Motor_Neuron( joint_ID=hips[i])
 
 		x_pos2 = math.cos(theta)*1.5*HEIGHT
 		y_pos2 = math.sin(theta)*1.5*HEIGHT
 		
-		shins[i] = body_ID
-		sim.Send_Cylinder(body_ID=body_ID,
-							x=x_pos2, y=y_pos2, z=(HEIGHT+EPS)/2.0,
+		shins[i] = sim.Send_Cylinder(x=x_pos2, y=y_pos2, z=(HEIGHT+EPS)/2.0,
 							r1=0, r2=0, r3=1,
 							length=HEIGHT, radius=EPS)
-		body_ID+=1
 
-		knees[i] = joint_ID
-		sim.Send_Hinge_Joint(joint_ID=joint_ID,
-						first_body_ID=thighs[i], second_body_ID=shins[i],
+		knees[i] = sim.Send_Hinge_Joint( first_body_ID=thighs[i], second_body_ID=shins[i],
 						x=x_pos2, y=y_pos2, z=HEIGHT+EPS,
 						n1=-y_pos,n2=x_pos,n3=0,
 						lo=-math.pi/4.0,hi=math.pi/4.0)
-		joint_ID+=1
 
-		motor_neurons[i+4] = neuron_ID
-		sim.Send_Motor_Neuron(neuron_ID=neuron_ID, joint_ID=knees[i])
-		neuron_ID += 1
+		motor_neurons[i+4] = sim.Send_Motor_Neuron( joint_ID=knees[i])
 
-		foot_sensors[i] = sensor_ID
-		sim.Send_Touch_Sensor(sensor_ID=sensor_ID, body_ID=shins[i])
-		sensor_ID += 1
+		foot_sensors[i] = sim.Send_Touch_Sensor( body_ID=shins[i])
 
-		sensor_neurons[i] = neuron_ID
-		sim.Send_Sensor_Neuron(neuron_ID=neuron_ID, sensor_ID=foot_sensors[i])
-		neuron_ID += 1
+		sensor_neurons[i] = sim.Send_Sensor_Neuron( sensor_ID=foot_sensors[i])
 
 
-	light_sensor = sensor_ID
-	sim.Send_Light_Sensor(sensor_ID=light_sensor, body_ID=main_body)
-	sensor_ID+=1
+	light_sensor = sim.Send_Light_Sensor(body_ID=main_body)
 
-	sensor_neurons[-1] = neuron_ID
-	sim.Send_Sensor_Neuron(neuron_ID=neuron_ID, sensor_ID=light_sensor)
-	neuron_ID += 1
+	sensor_neurons[-1] = sim.Send_Sensor_Neuron( sensor_ID=light_sensor)
 
 	count = 0
 	#sim.Send_Synapse(sourceneuron_ID=2, targetneuron_ID=0, weight=1.0)

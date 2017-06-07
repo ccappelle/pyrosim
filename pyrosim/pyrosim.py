@@ -73,6 +73,22 @@ class Simulator(object):
 		assert self.evaluated == True, 'Simulation has not run yet'
 		return self.data
 
+	def Get_Num_Bodies(self):
+		"""Returns the number of bodies"""
+		return self._num_bodies
+
+	def Get_Num_Joints(self):
+		"""Returns the number of joints"""
+		return self._num_joints
+
+	def Get_Num_Neurons(self):
+		"""Returns the number of neurons"""
+		return self._num_neurons
+		
+	def Get_Num_Sensors(self):
+		"""Returns the number of sensors"""
+		return self._num_sensors
+
 	def Get_Sensor_Data(self,sensor_ID,svi=0):
 		"""Get the post simulation data from a specified sensor
 
@@ -141,6 +157,11 @@ class Simulator(object):
 		int
 			ID tag of the box
 		"""
+		assert length>0, 'Length of Box must be positive'
+		assert width>0 , 'Width of Box must be positive'
+		assert height>0, 'Height of Box must be positive'
+		self._Assert_Color(self, 'Box', r, g,b)
+
 		body_ID = self._num_bodies
 		self._num_bodies += 1
 
@@ -213,6 +234,11 @@ class Simulator(object):
 		int
 			The ID tag of the cylinder
 		"""
+		assert length>0, 'Length of Cylinder must be positive'
+		assert radius>0, 'Radius of Cylinder must be positive'
+		self._Assert_Normalizable('Cylinder',r1,r2,r3)
+		self._Assert_Color('Cylinder',r,g,b)
+
 		body_ID = self._num_bodies
 		self._num_bodies += 1
 
@@ -225,7 +251,7 @@ class Simulator(object):
 
 		return body_ID
 
-	def Send_User_Input_Neuron(self, in_values=1):
+	def Send_User_Input_Neuron(self, in_values):
 		"""Send neuron to the simulator which takes user defined values at each time step
 		
 		Parameters
@@ -240,6 +266,7 @@ class Simulator(object):
 		int
 			The ID tag of the neuron.
 		"""
+
 		try:
 			iterator = iter(in_values)
 		except TypeError:
@@ -249,12 +276,13 @@ class Simulator(object):
 		if len(in_values)<self.eval_time:
 			out_values = [0]*self.eval_time
 			for i in range(self.eval_time):
-				out_values = in_values[i%len(in_values)]
+				out_values[i] = in_values[i%len(in_values)]
 		else:
 			out_values = in_values
 
 		neuron_ID = self._num_neurons
 		self._num_neurons += 1
+
 
 		self._Send('FunctionNeuron', neuron_ID, *out_values)
 
@@ -304,6 +332,7 @@ class Simulator(object):
 		int
 			The ID tag of the neuron
 		"""
+		assert tau>0, 'Tau value of Hidden Neuron must be positive'
 		neuron_ID = self._num_neurons
 		self._num_neurons += 1	
 
@@ -363,6 +392,12 @@ class Simulator(object):
 		int 
 			The ID tag for the hinge joint
 		"""
+		assert first_body_ID<self._num_bodies, 'Body with ID ' + str(first_body_ID)+ ' has not been sent'
+		assert second_body_ID<self._num_bodies, 'Body with ID ' + str(first_body_ID)+ ' has not been sent'
+		assert speed>=0, 'Speed of Hinge Joint must be greater than or equal to zero'
+		assert torque>=0, 'Torque of Hinge Joint must be greater than or equal to zero'
+		self._Assert_Normalizable('Hinge Joint',n1,n2,n3)
+
 		joint_ID = self._num_joints
 		self._num_joints += 1
 
@@ -390,6 +425,8 @@ class Simulator(object):
 		int
 			The ID tag of the sensor
 		"""
+		assert body_ID<self._num_bodies, 'Body ID '+str(body_ID)+' has not been sent'
+
 		sensor_ID = self._num_sensors
 		self._num_sensors += 1
 
@@ -411,13 +448,14 @@ class Simulator(object):
 		int
 			The ID tag of the body the light source is attached to.
 		"""
+		assert body_ID<self._num_bodies, 'Body ID '+str(body_ID)+' has not been sent'
 
 		self._Send('LightSource',
 					body_ID)
 
 		return body_ID
 
-	def Send_Motor_Neuron(self , joint_ID = 0 , tau = 1.0 ):
+	def Send_Motor_Neuron(self , joint_ID=0, tau=1.0):
 		"""Send motor neurons to simulator
 
 		Motor neurons are neurons which connecto to a specified joint and 
@@ -438,6 +476,9 @@ class Simulator(object):
 		int
 			The ID tag of the neuron
 		"""
+		assert tau>=0, 'Tau must be positive'
+		assert joint_ID<self._num_joints, 'Joint with ID '+str(joint_ID)+' has not been sent'
+
 		neuron_ID = self._num_neurons
 		self._num_neurons += 1
 
@@ -459,6 +500,8 @@ class Simulator(object):
 		int
 			The ID tag of the sensor
 		"""
+		assert body_ID<self._num_bodies, 'Body with ID '+str(body_ID)+' has not been sent'
+
 		sensor_ID = self._num_sensors
 		self._num_sensors += 1
 
@@ -483,6 +526,8 @@ class Simulator(object):
 		int
 			The ID tag of the sensor
 		"""
+		assert joint_ID<self._num_joints, 'Joint with ID '+str(joint_ID)+' has not been sent'
+
 		sensor_ID = self._num_sensors
 		self._num_sensors += 1
 
@@ -491,7 +536,7 @@ class Simulator(object):
 
 		return sensor_ID
 
-	def Send_Sensor_Neuron(self, neuron_ID=0, sensor_ID=0, svi=0, tau=1.0 ):
+	def Send_Sensor_Neuron(self,  sensor_ID=0, svi=0, tau=1.0 ):
 		"""Sends a sensor neuron to the simulator
 	
 		Sensor neurons are input neurons which take the value of their associated sensor
@@ -499,7 +544,7 @@ class Simulator(object):
 		Parameters
 		----------
 		sensor_ID 		 : int, optional
-			The associated sensor ID for the neuron
+			The associated sensor ID for the neuron to draw values from.
 		svi : int, optional
 			The sensor value index is the offset index of the sensor. SVI is used for 
 			sensors which return a vector of values (position, ray sensors, etc.)
@@ -511,6 +556,10 @@ class Simulator(object):
 		int
 			The ID tag of the neuron
 		"""
+		assert sensor_ID<self._num_sensors, 'Sensor with ID '+str(sensor_ID)+' has not been sent'
+		assert svi in range(4), 'SVI must be in [0,3]'
+		assert tau>=0, 'Tau must be greater than or equal to zero'
+
 		neuron_ID = self._num_neurons
 		self._num_neurons += 1
 
@@ -546,6 +595,9 @@ class Simulator(object):
 			The z direction of the sensor. The array [r1,r2,r3] is the direction the
 			ray sensor is pointing in the time step.
 		"""
+		assert body_ID<self._num_bodies, 'Body with ID ' + str(body_ID) + ' has not been sent yet'
+		self._Assert_Normalizable('Ray Sensor', r1,r2,r3)
+
 		sensor_ID = self._num_sensors
 		self._num_sensors += 1
 
@@ -575,6 +627,8 @@ class Simulator(object):
 		bool
 			True if successful, False otherwise
 		"""
+		assert source_neuron_ID<self._num_neurons, 'Neuron with ID '+str(source_neuron_ID)+' has not been sent'
+		assert target_neuron_ID<self._num_neurons, 'Neuron with ID '+str(target_neuron_ID)+' has not been sent'
 
 		return self.Send_Developing_Synapse(source_neuron_ID=sourceneuron_ID, target_neuron_ID=targetneuron_ID,
 										start_weight=weight,end_weight=weight,
@@ -614,6 +668,8 @@ class Simulator(object):
 		bool
 			True if successful, False otherwise
 		"""
+		assert source_neuron_ID<self._num_neurons, 'Neuron with ID '+str(source_neuron_ID)+' has not been sent'
+		assert target_neuron_ID<self._num_neurons, 'Neuron with ID '+str(target_neuron_ID)+' has not been sent'
 
 		if start_time >= end_time:
 			end_time = start_time
@@ -641,6 +697,7 @@ class Simulator(object):
 		int
 			The ID tag of the sensor
 		"""
+		assert body_ID<self._num_bodies, 'Body with ID '+body_ID+' has not been sent yet'
 		sensor_ID = self._num_sensors
 		self._num_sensors += 1
 
@@ -664,6 +721,8 @@ class Simulator(object):
 		int
 			The ID tag of the sensor
 		"""
+		assert body_ID<self._num_bodies, 'Body with ID '+body_ID+' has not been sent yet'
+
 		sensor_ID = self._num_sensors
 		self._num_sensors += 1
 
@@ -712,11 +771,24 @@ class Simulator(object):
 		return self.data
 
 # --------------------- Private methods -----------------------------
+	def _Assert_Color(self,name,r,g,b):
+		"""Error checks so color params are between [0,1]"""
+		colors = [r,g,b]
+		for color in colors:
+			assert color>=0 and color<=1, 'Color parameter of ' + name +' must be in [0,1]'
+	def _Assert_Normalizable(self,name,*args):
+		"""Error checxs vectors so they are not equal to zero"""
+		flag = False
+		for arg in args:
+			if arg != 0:
+				flag = True
+
+		assert flag==True, 'Vector parameter of ' + name + ' is not normalizeable'
 
 	def _Collect_Sensor_Data(self,data_from_simulator):
 		"""Get sensor data back from ODE and store it in numpy array"""
 
-		self.data = np.zeros([self.num_sensors,4,self.eval_time],dtype='f')
+		self.data = np.zeros([self._num_sensors,4,self.eval_time],dtype='f')
 
 		debug_output = data_from_simulator[1]
 
@@ -754,3 +826,7 @@ class Simulator(object):
 		if self.debug:
 			print string_to_send
 		self.strings_to_send.append(string_to_send)
+
+	def _Dimension_Check(self,**kwargs):
+		pass
+

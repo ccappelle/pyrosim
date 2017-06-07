@@ -1,0 +1,33 @@
+Making all in include
+Making all in ode
+make[2]: Nothing to be done for `all'.
+Making all in drawstuff
+make[2]: Nothing to be done for `all'.
+make[2]: Nothing to be done for `all-am'.
+Making all in drawstuff
+Making all in src
+make[2]: Nothing to be done for `all'.
+Making all in dstest
+make[2]: Nothing to be done for `all'.
+make[2]: Nothing to be done for `all-am'.
+Making all in OPCODE
+Making all in Ice
+make[2]: Nothing to be done for `all'.
+make[2]: Nothing to be done for `all-am'.
+Making all in ode
+Making all in src
+/Applications/Xcode.app/Contents/Developer/usr/bin/make  all-recursive
+Making all in joints
+make[4]: Nothing to be done for `all'.
+Making all in demo
+make[2]: Nothing to be done for `all'.
+make[2]: Nothing to be done for `all-am'.
+Making all in tests
+Making all in UnitTest++
+Making all in src
+Making all in Posix
+make[4]: Nothing to be done for `all'.
+make[4]: Nothing to be done for `all-am'.
+make[3]: Nothing to be done for `all-am'.
+make[2]: Nothing to be done for `all-am'.
+make[1]: Nothing to be done for `all-am'.
