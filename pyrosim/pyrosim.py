@@ -40,12 +40,12 @@ class Simulator(object):
 					eval_time=constants.evaluation_time,dt=constants.dt, gravity=constants.gravity,
 					xyz=constants.xyz, hpr=constants.hpr, use_textures=False,
 					debug=False):
-
-		self.numJoints = 0
-		self.num_sensors = 0
-		self.num_neurons = 0
-
 		self.strings_to_send = []
+
+		self._num_bodies = 0
+		self._num_joints = 0
+		self._num_sensors = 0
+		self._num_neurons = 0
 
 		self.play_paused = play_paused
 		self.play_blind = play_blind
@@ -94,32 +94,29 @@ class Simulator(object):
 		assert self.evaluated==True, 'Simulation has not run yet'
 		return self.data[sensor_ID,svi,:]
 
-	def Send_Bias_Neuron(self, neuron_ID = 0 ):
-		"""Send bias neuron to simulator
+	def Send_Bias_Neuron(self):
+		"""Send bias neuron to simulator.
 
-		Parameters
-		----------
-		neuron_ID : int, optional
-			User specified ID tag for the neuron
+		Bias neurons emit a constant value of 1.0
 
 		Returns
 		-------
-		bool
-			True if successful, False otherwise
+		int
+			ID tag of the neuron
 		"""
+		neuron_ID = self._num_neurons
+		self._num_neurons += 1
 
 		self._Send('BiasNeuron',
 					neuron_ID)
 
-		return True
+		return neuron_ID
 
-	def Send_Box(self, body_ID=0, x=0, y=0, z=0, length=0.1, width=0.1, height=0.1, r=1, g=1, b=1):
+	def Send_Box(self, x=0, y=0, z=0, length=0.1, width=0.1, height=0.1, r=1, g=1, b=1):
 		"""Send box body to the simulator
 
 		Parameters
 		----------
-		body_ID : int, optional
-			User specified body ID tag for the box
 		x 		 : float, optional
 			The x position coordinate of the center 
 		y		 : float, optional
@@ -141,9 +138,11 @@ class Simulator(object):
 
 		Returns
 		-------
-		bool
-			True if successful, False otherwise
+		int
+			ID tag of the box
 		"""
+		body_ID = self._num_bodies
+		self._num_bodies += 1
 
 		self._Send('Box', 
 					body_ID, 
@@ -151,7 +150,7 @@ class Simulator(object):
 					length,width,height,
 					r,g,b)
 
-		return True
+		return body_ID
 
 	def Send_Camera(self,xyz,hpr):
 		"""Sends camera position to simulator in eulerian coordinates
@@ -168,21 +167,18 @@ class Simulator(object):
 		-------
 		bool
 			True if successful, False otherwise
-		"""
-		
+		"""	
 		self._Send('Camera',
 					xyz[0],xyz[1],xyz[2],
 					hpr[0],hpr[1],hpr[2])
 
 		return True
 
-	def Send_Cylinder(self, body_ID=0, x=0, y=0, z=0, r1=0, r2=0, r3=1, length=1.0, radius=0.1, r=1, g=1, b=1):
+	def Send_Cylinder(self, x=0, y=0, z=0, r1=0, r2=0, r3=1, length=1.0, radius=0.1, r=1, g=1, b=1):
 		"""Send cylinder body to the simulator
 
 		Parameters
 		----------
-		body_ID : int, optional
-			User specified body ID tag for the cylinder (default is 0)
 		x 		 : float, optional
 			The x position coordinate of the center (default is 0)
 		y		 : float, optional
@@ -214,9 +210,11 @@ class Simulator(object):
 
 		Returns
 		-------
-		bool
-			True if successful, False otherwise
+		int
+			The ID tag of the cylinder
 		"""
+		body_ID = self._num_bodies
+		self._num_bodies += 1
 
 		self._Send('Cylinder',
 					body_ID,
@@ -224,15 +222,14 @@ class Simulator(object):
 					r1,r2,r3,
 					length,radius,
 					r,g,b)
-		return True
 
-	def Send_User_Input_Neuron(self, neuron_ID=0, in_values=1):
+		return body_ID
+
+	def Send_User_Input_Neuron(self, in_values=1):
 		"""Send neuron to the simulator which takes user defined values at each time step
 		
 		Parameters
 		----------
-		neuron_ID : int, optional
-			The user specified ID tag of the neuron
 		values   : list of floats or float, optional
 			The user specified values for the neuron. If length of values < the number of
 			time steps, the values are continually looped through until every time step
@@ -240,12 +237,9 @@ class Simulator(object):
 
 		Returns
 		-------
-		bool
-			True if successful, False otherwise
+		int
+			The ID tag of the neuron.
 		"""
-
-		#if in_values is constant
-		#neuron becomes essentially bias with specified value
 		try:
 			iterator = iter(in_values)
 		except TypeError:
@@ -259,11 +253,14 @@ class Simulator(object):
 		else:
 			out_values = in_values
 
-		self._Send('FunctionNeuron', *out_values)
+		neuron_ID = self._num_neurons
+		self._num_neurons += 1
 
-		return True
+		self._Send('FunctionNeuron', neuron_ID, *out_values)
 
-	def Send_Function_Neuron(self, neuron_ID=0, function= math.sin):
+		return neuron_ID
+
+	def Send_Function_Neuron(self, function= math.sin):
 		"""Send neuron to simulator which takes its value from the user defined function
 
 		The function is mapped to the specific time in the simulation based on both 
@@ -272,24 +269,22 @@ class Simulator(object):
 
 		Parameters
 		----------
-		neuron_ID : int, optional
-			The user specified ID tag of the neuron
 		function : function, optional
 			The function which defines the neuron value. Valid functions return
 			a single float value over the time domain.
 
 		Returns
 		-------
-		bool
-			True if successful, False otherwise
+		int
+			The ID tag of the neuron
 		"""
-
 		end_time = self.eval_time*self.dt
 		time_vals = np.arange(0,end_time,self.dt)
 		output_vals = list(map(function,time_vals))
-		return self.Send_User_Input_Neuron( neuron_ID, output_vals)
 
-	def Send_Hidden_Neuron(self, neuron_ID = 0 , tau = 1.0 ):
+		return self.Send_User_Input_Neuron(output_vals)
+
+	def Send_Hidden_Neuron(self, tau = 1.0 ):
 		"""Send a hidden neuron to the simulator
 
 		Hidden neurons are basic neurons which can have inputs and outputs. 
@@ -298,8 +293,6 @@ class Simulator(object):
 
 		Parameters
 		----------
-		neuron_ID : int, optional
-			The user specified ID tag of the neuron
 		tau      : float, optional
 			The 'learning rate' of the neuron. Increasing tau increases
 			how much of value of the neuron at the current time step comes
@@ -308,30 +301,31 @@ class Simulator(object):
 
 		Returns
 		-------
-		bool
-			True if successful, False otherwise
+		int
+			The ID tag of the neuron
 		"""
+		neuron_ID = self._num_neurons
+		self._num_neurons += 1	
+
 		self._Send('HiddenNeuron',
 					neuron_ID, tau)
 
-		return True
+		return neuron_ID
 
-	def Send_Hinge_Joint(self, joint_ID=0, first_body_ID=0, second_body_ID=1, x=0, y=0, z=0, n1=0, n2=0, n3=1, 
+	def Send_Hinge_Joint(self, first_body_ID, second_body_ID, x=0, y=0, z=0, n1=0, n2=0, n3=1, 
 					lo=-math.pi/4.0, hi=+math.pi/4.0 , speed=1.0, torque=10.0, pos_control = True):
 		"""Send a hinge joint to the simulator
 
 		Parameters
 		----------
-		joint_ID 	    : int, optional
-			User specified  ID tag for the joint (default is 0)
-		first_body_ID   : int, optional
+		first_body_ID   : int
 			The body ID of the first body the joint is connected to.
 			If set equal to -1, the joint is connected to a point in
-			space (default is 0)
-		secondbodyID  : int, optional
+			space 
+		secondbodyID  : int
 			The body ID of the second body the joint is connected to.
 			If set equal to -1, the joint is connected to a point in
-			space (default is 1)
+			space 
 		x 		        : float, optional
 			The x position coordinate of the joint (default is 0)
 		y		 	    : float, optional
@@ -356,6 +350,8 @@ class Simulator(object):
 			The upper limit in radians of the joint (default is pi/4)
 		speed           : float, optional
 			The speed of the motor of the joint (default is 1.0)
+		torque 			: float, optional
+			The amount of torque the motor in the joint has (default is 10.0)
 		pos_control : bool, optional
 			True means use position control. This means the motor neuron
 			output is treated as a target angle for the joint to actuate
@@ -364,9 +360,12 @@ class Simulator(object):
 
 		Returns
 		-------
-		bool
-			True if successful, False otherwise
+		int 
+			The ID tag for the hinge joint
 		"""
+		joint_ID = self._num_joints
+		self._num_joints += 1
+
 		self._Send('HingeJoint',
 					joint_ID, 
 					first_body_ID, second_body_ID,
@@ -376,30 +375,28 @@ class Simulator(object):
 					speed, torque,
 					pos_control)
 
-		return True
+		return joint_ID
 
-	def Send_Light_Sensor(self, sensor_ID=0, body_ID = 0 ):
+	def Send_Light_Sensor(self, body_ID = 0 ):
 		"""Attaches a light sensor to a body in simulation
 
 		Parameters
 		----------
-		sensor_ID : int, optional
-			The user defined ID of the sensor
 		body_ID : int, optional
 			The body ID of the body to connect the sensor to
 
 		Returns
 		-------
-		bool
-			True if successful
+		int
+			The ID tag of the sensor
 		"""
+		sensor_ID = self._num_sensors
+		self._num_sensors += 1
 
 		self._Send('LightSensor',
 					sensor_ID, body_ID)
 
-		self.num_sensors = self.num_sensors + 1
-
-		return True
+		return sensor_ID
 
 	def Send_Light_Source(self, body_ID = 0 ):
 		"""Attaches light source to a body in simulation
@@ -411,16 +408,16 @@ class Simulator(object):
 
 		Returns
 		-------
-		bool
-			True if successful, False otherwise
+		int
+			The ID tag of the body the light source is attached to.
 		"""
 
 		self._Send('LightSource',
 					body_ID)
 
-		return True
+		return body_ID
 
-	def Send_Motor_Neuron(self , neuron_ID = 0 , joint_ID = 0 , tau = 1.0 ):
+	def Send_Motor_Neuron(self , joint_ID = 0 , tau = 1.0 ):
 		"""Send motor neurons to simulator
 
 		Motor neurons are neurons which connecto to a specified joint and 
@@ -428,8 +425,6 @@ class Simulator(object):
 
 		Parameters
 		----------
-		neuron_ID : int, optional
-			The user specified ID tag of the neuron
 		joint_ID  : int, optional
 			The joint ID tag of the joint we want the neuron to connect to
 		tau      :
@@ -440,35 +435,39 @@ class Simulator(object):
 
 		Returns
 		-------
-		bool
-			True if successful, False otherwise
+		int
+			The ID tag of the neuron
 		"""
+		neuron_ID = self._num_neurons
+		self._num_neurons += 1
 
 		self._Send('MotorNeuron',
 					neuron_ID,  joint_ID, tau)
-		return True
 
-	def Send_Position_Sensor(self, sensor_ID=0, body_ID = 0):
+		return neuron_ID
+
+	def Send_Position_Sensor(self, body_ID = 0):
 		"""Attaches a position sensor to a body in simulation
 
 		Parameters
 		----------
-		sensor_ID : int, optional
-			The user defined ID of the sensor
 		body_ID : int, optional
 			The body ID of the body to connect the sensor to
 
 		Returns
 		-------
-		bool
-			True if successful
+		int
+			The ID tag of the sensor
 		"""
+		sensor_ID = self._num_sensors
+		self._num_sensors += 1
+
 		self._Send('PositionSensor',
 					sensor_ID, body_ID)
 
-		self.num_sensors = self.num_sensors + 1
+		return sensor_ID
 
-	def Send_Proprioceptive_Sensor(self, sensor_ID=0, joint_ID = 0):
+	def Send_Proprioceptive_Sensor(self, joint_ID = 0):
 		"""Attaches a proprioceptive sensor to a joint in simulation
 
 		Proprioceptive sensors returns the angle of the joint at 
@@ -476,22 +475,21 @@ class Simulator(object):
 
 		Parameters
 		----------
-		sensor_ID : int, optional
-			The user defined ID of the sensor
 		joint_ID : int, optional
 			The joint ID of the joint to connect the sensor to
 
 		Returns
 		-------
-		bool
-			True if successful
+		int
+			The ID tag of the sensor
 		"""
+		sensor_ID = self._num_sensors
+		self._num_sensors += 1
+
 		self._Send('ProprioceptiveSensor',
 					sensor_ID, joint_ID)
 
-		self.num_sensors = self.num_sensors + 1
-
-		return True
+		return sensor_ID
 
 	def Send_Sensor_Neuron(self, neuron_ID=0, sensor_ID=0, svi=0, tau=1.0 ):
 		"""Sends a sensor neuron to the simulator
@@ -500,8 +498,6 @@ class Simulator(object):
 
 		Parameters
 		----------
-		neuron_ID 		 : int, optional
-			The user defined ID of the neuron
 		sensor_ID 		 : int, optional
 			The associated sensor ID for the neuron
 		svi : int, optional
@@ -512,25 +508,25 @@ class Simulator(object):
 
 		Returns
 		-------
-		bool
-			True if successful, False otherwise
+		int
+			The ID tag of the neuron
 		"""
+		neuron_ID = self._num_neurons
+		self._num_neurons += 1
 
 		self._Send('SensorNeuron',
 					neuron_ID, sensor_ID,
 					svi, tau)
 
-		return True
+		return neuron_ID
 
-	def Send_Ray_Sensor(self, sensor_ID=0, body_ID=0, x=0,y=0,z=0, r1=0,r2=0,r3=1):
+	def Send_Ray_Sensor(self, body_ID=0, x=0,y=0,z=0, r1=0,r2=0,r3=1):
 		"""Sends a ray sensor to the simulator connected to a body
 
 		Ray sensors return four values each time step, the distance and color (r,g,b).
 
 		Parameters
 		----------
-		sensor_ID : int, optional
-			The user defined ID tag for the ray sensor
 		body_ID : int, optional
 			The body ID of the associated body the ray sensor is connected to. When this
 			body moves the ray sensor moves accordingly
@@ -550,15 +546,15 @@ class Simulator(object):
 			The z direction of the sensor. The array [r1,r2,r3] is the direction the
 			ray sensor is pointing in the time step.
 		"""
+		sensor_ID = self._num_sensors
+		self._num_sensors += 1
 
 		self._Send('RaySensor',
 					sensor_ID, body_ID,
 					x,y,z,
 					r1,r2,r3)
 
-		self.num_sensors = self.num_sensors + 1
-
-		return True
+		return sensor_ID
 
 	def Send_Synapse(self, source_neuron_ID = 0 , target_neuron_ID = 0 , weight = 0.0 ):
 		"""Sends a synapse to the simulator
@@ -632,52 +628,49 @@ class Simulator(object):
 
 		return True
 
-	def Send_Touch_Sensor(self, sensor_ID=0, body_ID=0):
+	def Send_Touch_Sensor(self, body_ID=0):
 		"""Send touch sensor to a body in the simulator
 
 		Parameters
 		----------
-		sensor_ID : int, optional
-			The user defined ID of the sensor
 		body_ID : int, optional
 			The body ID of the associated body 
 
 		Returns
 		-------
-		bool
-			True if successful, False otherwise
+		int
+			The ID tag of the sensor
 		"""
+		sensor_ID = self._num_sensors
+		self._num_sensors += 1
+
 		self._Send('TouchSensor',
 					sensor_ID, body_ID)
 
-		self.num_sensors = self.num_sensors + 1
+		return sensor_ID
 
-		return True
-
-	def Send_Vestibular_Sensor(self, sensor_ID=0, body_ID = 0):
+	def Send_Vestibular_Sensor(self, body_ID = 0):
 		"""Connects a vestibular sensor to a body
 
 		Vestibular sensors return a bodies orrientation in space
 
 		Parameters
 		----------
-		sensor_ID : int, optional
-			The user defined ID of the sensor
 		body_ID : int, optional
 			The body ID of the associated body 
 
 		Returns
 		-------
-		bool
-			True if successful, False otherwise
+		int
+			The ID tag of the sensor
 		"""
+		sensor_ID = self._num_sensors
+		self._num_sensors += 1
 
 		self._Send('VestibularSensor', 
 					sensor_ID, body_ID)
 
-		self.num_sensors = self.num_sensors + 1
-
-		return True
+		return sensor_ID
 
 	def Start(self):
 		"""Starts the simulation"""
@@ -695,7 +688,6 @@ class Simulator(object):
 
 		self.pipe = Popen(commands, stdout=PIPE, stdin=PIPE, stderr=PIPE)
 
-		#self.Send('Done\n')
 		for string_to_send in self.strings_to_send:
 			self.pipe.stdin.write(string_to_send)
 
@@ -722,42 +714,40 @@ class Simulator(object):
 # --------------------- Private methods -----------------------------
 
 	def _Collect_Sensor_Data(self,data_from_simulator):
+		"""Get sensor data back from ODE and store it in numpy array"""
 
 		self.data = np.zeros([self.num_sensors,4,self.eval_time],dtype='f')
 
+		debug_output = data_from_simulator[1]
+
 		if self.debug:
-		 	print data_from_simulator[1]
+		 	print debug_output
 
 		data_from_simulator = data_from_simulator[0]
-
 		data_from_simulator = data_from_simulator.split()
-
-		index = 0
 
 		if ( data_from_simulator == [] ):
 			return
 
+		index = 0
 		while ( data_from_simulator[index] != 'Done' ):
-			ID = int( data_from_simulator[index] )
+			sensor_ID = int( data_from_simulator[index] )
 			index = index + 1
 
 			num_sensor_vals = int( data_from_simulator[index] ) 
-
 			index = index + 1
 
-			for t in range(0,self.eval_time):
-
-				for s in range(0,num_sensor_vals):
-
-					sensorValue = float( data_from_simulator[index] )
-
-					self.data[ID,s,t] = sensorValue
-
+			for t in range(0,self.eval_time): #time step
+				for s in range(0,num_sensor_vals): #svi
+					sensor_value = float( data_from_simulator[index] )
+					self.data[sensor_ID,s,t] = sensor_value
 					index = index + 1
 
-	def _Send(self,*args):
-		string_to_send = args[0] #first argument should always be a string
-		for arg in args[1:]:
+	def _Send(self,command_string,*args):
+		"""Send a command to the simulator"""
+
+		string_to_send = command_string #first argument should always be a string
+		for arg in args:
 			string_to_send += ' ' + str(arg)
 		string_to_send += '\n'
 

@@ -1,5 +1,5 @@
 *.o
 *.d
 *.pyc
-simulator/simulator
-simulator/ode-0.12/*
+pyrosim/simulator/simulator
+pyrosim/simulator/ode-0.12/*
