@@ -173,8 +173,10 @@ void Simulate_For_One_Time_Step(void) {
 
 static void simLoop (int pause)
 {
-  dsSetViewpoint (xyz,hpr);
-  dWorldSetGravity(world,0,0,gravity);
+  if (timer==0){
+    dWorldSetGravity(world,0,0,gravity);
+    dsSetViewpoint (xyz,hpr);
+  }
 	if ( !pause )
 
 		Simulate_For_One_Time_Step();
@@ -203,11 +205,13 @@ void Initialize_Draw_Stuff(void){
     fn.command = &command;
     fn.stop = 0;
     fn.path_to_textures = texturePathStr;
+    
 }
 void Initialize_Environment(void) {
 
         environment = new ENVIRONMENT();
 }
+
 
 void Read_From_Python(void) {
 	environment->Read_From_Python(world,space, texturePathStr, &evaluationTime,&dt,&gravity,xyz,hpr);

@@ -26,7 +26,8 @@ environments.
   $ cd ~/Desktop/pyrosim
   ```
 
-  Run build.sh:
+  Currently setup.py is not working, so you need to run
+  build.sh:
 
   ```bash
   $ sh build.sh

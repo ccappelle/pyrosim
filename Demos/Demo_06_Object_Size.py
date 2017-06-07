@@ -1,4 +1,4 @@
-from pyrosim import PYROSIM
+import pyrosim
 
 sim = PYROSIM(playPaused = True , evalTime = 1000)
 

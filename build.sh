@@ -7,7 +7,7 @@ MAKEOPTS="-j2"
 #echo "done" &&
 
 echo -n "Changing into simulator"
-cd simulator
+cd ./pyrosim/simulator
 
 echo -n "Unpacking ode-0.12.tar.bz2..." &&
 tar -xjf ode-0.12.tar.bz2 &&

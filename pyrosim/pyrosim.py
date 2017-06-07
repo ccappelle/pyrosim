@@ -160,7 +160,7 @@ class Simulator(object):
 		assert length>0, 'Length of Box must be positive'
 		assert width>0 , 'Width of Box must be positive'
 		assert height>0, 'Height of Box must be positive'
-		self._Assert_Color(self, 'Box', r, g,b)
+		self._Assert_Color( 'Box', r, g,b)
 
 		body_ID = self._num_bodies
 		self._num_bodies += 1

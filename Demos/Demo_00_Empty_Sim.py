@@ -1,6 +1,6 @@
-from pyrosim import PYROSIM
+import pyrosim
 
-
-sim = PYROSIM()
+dir(pyrosim)
+sim = pyrosim.Simulator()
 
 sim.Start()

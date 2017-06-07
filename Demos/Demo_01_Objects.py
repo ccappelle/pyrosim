@@ -1,6 +1,6 @@
-from pyrosim import PYROSIM
+import pyrosim
 
-sim = PYROSIM()
+sim = pyrosim.Simulator()
 
 sim.Send_Cylinder()
 

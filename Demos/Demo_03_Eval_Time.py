@@ -1,6 +1,6 @@
-from pyrosim import PYROSIM
+import pyrosim
 
-sim = PYROSIM(playPaused = True , evalTime = 1000)
+sim = pyrosim.Simulator(play_paused = True , eval_time = 1000)
 
 sim.Send_Cylinder()
 
