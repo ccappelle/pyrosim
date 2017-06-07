@@ -2,6 +2,6 @@ import pyrosim
 
 sim = pyrosim.Simulator()
 
-sim.Send_Cylinder()
+sim.send_cylinder()
 
-sim.Start()
+sim.start()

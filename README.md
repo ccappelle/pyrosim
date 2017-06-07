@@ -55,7 +55,15 @@ environments.
   $ sh build.sh
   ```
 
-  Once you get all three `done' confirmations, test the package by running
+  This installs ODE and compiles the local C++ code on your machine in the 
+  pyrosim/simulator directory. You can now use the package locally by 
+  appending it to your path or, if you have pip installed, cd to the module directory
+  and run
+  ```bash
+  $ pip install -e .
+  ```
+
+  You can test the package by changing to the Demos directory and running
   ```bash
   $ python Demo_00_Empty_Sim.py 
   ```

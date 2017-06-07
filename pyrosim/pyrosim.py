@@ -62,40 +62,40 @@ class Simulator(object):
 			self.play_paused = False
 
 		#Initial simulator commands
-		self._Send('TexturePath ' + self.pyrosim_path+'/textures') 
-		self._Send('EvaluationTime '+str(self.eval_time))
-		self._Send('TimeInterval ' + str(self.dt))
-		self._Send('Gravity ' + str(self.gravity))
-		self.Send_Camera(xyz, hpr)
+		self._send('TexturePath ' + self.pyrosim_path+'/textures') 
+		self._send('EvaluationTime '+str(self.eval_time))
+		self._send('TimeInterval ' + str(self.dt))
+		self._send('Gravity ' + str(self.gravity))
+		self.send_camera(xyz, hpr)
 
-	def Get_Data(self):
+	def get_data(self):
 		"""Get all sensor data"""
 		assert self.evaluated == True, 'Simulation has not run yet'
 		return self.data
 
-	def Get_Num_Bodies(self):
+	def get_num_bodies(self):
 		"""Returns the number of bodies"""
 		return self._num_bodies
 
-	def Get_Num_Joints(self):
+	def get_num_joints(self):
 		"""Returns the number of joints"""
 		return self._num_joints
 
-	def Get_Num_Neurons(self):
+	def get_num_neurons(self):
 		"""Returns the number of neurons"""
 		return self._num_neurons
 		
-	def Get_Num_Sensors(self):
+	def get_num_sensors(self):
 		"""Returns the number of sensors"""
 		return self._num_sensors
 
-	def Get_Sensor_Data(self,sensor_ID,svi=0):
+	def get_sensor_data(self,sensor_id,svi=0):
 		"""Get the post simulation data from a specified sensor
 
 		Parameters
 		----------
-		sensor_ID : int
-			the sensors ID tag
+		sensor_id : int
+			the sensors id tag
 		svi 	 : int , optional
 			The sensor value index. Certain sensors have multiple values 
 			(e.g. the position sensor) and the svi specifies which to 
@@ -108,9 +108,9 @@ class Simulator(object):
 			Returns the list of sensor values over the simulation.
 		"""
 		assert self.evaluated==True, 'Simulation has not run yet'
-		return self.data[sensor_ID,svi,:]
+		return self.data[sensor_id,svi,:]
 
-	def Send_Bias_Neuron(self):
+	def send_bias_neuron(self):
 		"""Send bias neuron to simulator.
 
 		Bias neurons emit a constant value of 1.0
@@ -118,17 +118,17 @@ class Simulator(object):
 		Returns
 		-------
 		int
-			ID tag of the neuron
+			id tag of the neuron
 		"""
-		neuron_ID = self._num_neurons
+		neuron_id = self._num_neurons
 		self._num_neurons += 1
 
-		self._Send('BiasNeuron',
-					neuron_ID)
+		self._send('BiasNeuron',
+					neuron_id)
 
-		return neuron_ID
+		return neuron_id
 
-	def Send_Box(self, x=0, y=0, z=0, length=0.1, width=0.1, height=0.1, r=1, g=1, b=1):
+	def send_box(self, x=0, y=0, z=0, length=0.1, width=0.1, height=0.1, r=1, g=1, b=1):
 		"""Send box body to the simulator
 
 		Parameters
@@ -155,25 +155,25 @@ class Simulator(object):
 		Returns
 		-------
 		int
-			ID tag of the box
+			id tag of the box
 		"""
 		assert length>0, 'Length of Box must be positive'
 		assert width>0 , 'Width of Box must be positive'
 		assert height>0, 'Height of Box must be positive'
-		self._Assert_Color( 'Box', r, g,b)
+		self._assert_color( 'Box', r, g,b)
 
-		body_ID = self._num_bodies
+		body_id = self._num_bodies
 		self._num_bodies += 1
 
-		self._Send('Box', 
-					body_ID, 
+		self._send('Box', 
+					body_id, 
 					x,y,z,
 					length,width,height,
 					r,g,b)
 
-		return body_ID
+		return body_id
 
-	def Send_Camera(self,xyz,hpr):
+	def send_camera(self,xyz,hpr):
 		"""Sends camera position to simulator in eulerian coordinates
 
 		Parameters
@@ -189,13 +189,13 @@ class Simulator(object):
 		bool
 			True if successful, False otherwise
 		"""	
-		self._Send('Camera',
+		self._send('Camera',
 					xyz[0],xyz[1],xyz[2],
 					hpr[0],hpr[1],hpr[2])
 
 		return True
 
-	def Send_Cylinder(self, x=0, y=0, z=0, r1=0, r2=0, r3=1, length=1.0, radius=0.1, r=1, g=1, b=1):
+	def send_cylinder(self, x=0, y=0, z=0, r1=0, r2=0, r3=1, length=1.0, radius=0.1, r=1, g=1, b=1):
 		"""Send cylinder body to the simulator
 
 		Parameters
@@ -232,31 +232,31 @@ class Simulator(object):
 		Returns
 		-------
 		int
-			The ID tag of the cylinder
+			The id tag of the cylinder
 		"""
-		assert length>0, 'Length of Cylinder must be positive'
-		assert radius>0, 'Radius of Cylinder must be positive'
-		self._Assert_Normalizable('Cylinder',r1,r2,r3)
-		self._Assert_Color('Cylinder',r,g,b)
+		assert length>=0, 'Length of Cylinder must be >= 0'
+		assert radius>=0, 'Radius of Cylinder must be >= 0'
+		self._assert_normalizable('Cylinder',r1,r2,r3)
+		self._assert_color('Cylinder',r,g,b)
 
-		body_ID = self._num_bodies
+		body_id = self._num_bodies
 		self._num_bodies += 1
 
-		self._Send('Cylinder',
-					body_ID,
+		self._send('Cylinder',
+					body_id,
 					x,y,z,
 					r1,r2,r3,
 					length,radius,
 					r,g,b)
 
-		return body_ID
+		return body_id
 
-	def Send_User_Input_Neuron(self, in_values):
+	def send_user_input_neuron(self, in_values):
 		"""Send neuron to the simulator which takes user defined values at each time step
 		
 		Parameters
 		----------
-		values   : list of floats or float, optional
+		in_values : list of floats or float, optional
 			The user specified values for the neuron. If length of values < the number of
 			time steps, the values are continually looped through until every time step
 			has a corresponding value
@@ -264,7 +264,7 @@ class Simulator(object):
 		Returns
 		-------
 		int
-			The ID tag of the neuron.
+			The id tag of the neuron.
 		"""
 
 		try:
@@ -280,15 +280,15 @@ class Simulator(object):
 		else:
 			out_values = in_values
 
-		neuron_ID = self._num_neurons
+		neuron_id = self._num_neurons
 		self._num_neurons += 1
 
 
-		self._Send('FunctionNeuron', neuron_ID, *out_values)
+		self._send('FunctionNeuron', neuron_id, *out_values)
 
-		return neuron_ID
+		return neuron_id
 
-	def Send_Function_Neuron(self, function= math.sin):
+	def send_function_neuron(self, function= math.sin):
 		"""Send neuron to simulator which takes its value from the user defined function
 
 		The function is mapped to the specific time in the simulation based on both 
@@ -304,15 +304,15 @@ class Simulator(object):
 		Returns
 		-------
 		int
-			The ID tag of the neuron
+			The id tag of the neuron
 		"""
 		end_time = self.eval_time*self.dt
 		time_vals = np.arange(0,end_time,self.dt)
 		output_vals = list(map(function,time_vals))
 
-		return self.Send_User_Input_Neuron(output_vals)
+		return self.send_user_input_neuron(output_vals)
 
-	def Send_Hidden_Neuron(self, tau = 1.0 ):
+	def send_hidden_neuron(self, tau=1.0):
 		"""Send a hidden neuron to the simulator
 
 		Hidden neurons are basic neurons which can have inputs and outputs. 
@@ -330,29 +330,29 @@ class Simulator(object):
 		Returns
 		-------
 		int
-			The ID tag of the neuron
+			The id tag of the neuron
 		"""
 		assert tau>0, 'Tau value of Hidden Neuron must be positive'
-		neuron_ID = self._num_neurons
+		neuron_id = self._num_neurons
 		self._num_neurons += 1	
 
-		self._Send('HiddenNeuron',
-					neuron_ID, tau)
+		self._send('HiddenNeuron',
+					neuron_id, tau)
 
-		return neuron_ID
+		return neuron_id
 
-	def Send_Hinge_Joint(self, first_body_ID, second_body_ID, x=0, y=0, z=0, n1=0, n2=0, n3=1, 
-					lo=-math.pi/4.0, hi=+math.pi/4.0 , speed=1.0, torque=10.0, pos_control = True):
+	def send_hinge_joint(self, first_body_id, second_body_id, x=0, y=0, z=0, n1=0, n2=0, n3=1, 
+					lo=-math.pi/4.0, hi=+math.pi/4.0 , speed=1.0, torque=10.0, position_control = True):
 		"""Send a hinge joint to the simulator
 
 		Parameters
 		----------
-		first_body_ID   : int
-			The body ID of the first body the joint is connected to.
+		first_body_id   : int
+			The body id of the first body the joint is connected to.
 			If set equal to -1, the joint is connected to a point in
 			space 
-		secondbodyID  : int
-			The body ID of the second body the joint is connected to.
+		secondbodyid  : int
+			The body id of the second body the joint is connected to.
 			If set equal to -1, the joint is connected to a point in
 			space 
 		x 		        : float, optional
@@ -381,7 +381,7 @@ class Simulator(object):
 			The speed of the motor of the joint (default is 1.0)
 		torque 			: float, optional
 			The amount of torque the motor in the joint has (default is 10.0)
-		pos_control : bool, optional
+		position_control : bool, optional
 			True means use position control. This means the motor neuron
 			output is treated as a target angle for the joint to actuate
 			to. False means the motor neuron output is treated as a target
@@ -390,72 +390,72 @@ class Simulator(object):
 		Returns
 		-------
 		int 
-			The ID tag for the hinge joint
+			The id tag for the hinge joint
 		"""
-		assert first_body_ID<self._num_bodies, 'Body with ID ' + str(first_body_ID)+ ' has not been sent'
-		assert second_body_ID<self._num_bodies, 'Body with ID ' + str(first_body_ID)+ ' has not been sent'
+		assert first_body_id<self._num_bodies, 'Body with id ' + str(first_body_id)+ ' has not been sent'
+		assert second_body_id<self._num_bodies, 'Body with id ' + str(first_body_id)+ ' has not been sent'
 		assert speed>=0, 'Speed of Hinge Joint must be greater than or equal to zero'
 		assert torque>=0, 'Torque of Hinge Joint must be greater than or equal to zero'
-		self._Assert_Normalizable('Hinge Joint',n1,n2,n3)
+		self._assert_normalizable('Hinge Joint',n1,n2,n3)
 
-		joint_ID = self._num_joints
+		joint_id = self._num_joints
 		self._num_joints += 1
 
-		self._Send('HingeJoint',
-					joint_ID, 
-					first_body_ID, second_body_ID,
+		self._send('HingeJoint',
+					joint_id, 
+					first_body_id, second_body_id,
 					x, y, z,
 					n1, n2, n3,
 					lo, hi,
 					speed, torque,
-					pos_control)
+					position_control)
 
-		return joint_ID
+		return joint_id
 
-	def Send_Light_Sensor(self, body_ID = 0 ):
+	def send_light_sensor(self, body_id = 0 ):
 		"""Attaches a light sensor to a body in simulation
 
 		Parameters
 		----------
-		body_ID : int, optional
-			The body ID of the body to connect the sensor to
+		body_id : int, optional
+			The body id of the body to connect the sensor to
 
 		Returns
 		-------
 		int
-			The ID tag of the sensor
+			The id tag of the sensor
 		"""
-		assert body_ID<self._num_bodies, 'Body ID '+str(body_ID)+' has not been sent'
+		assert body_id<self._num_bodies, 'Body id '+str(body_id)+' has not been sent'
 
-		sensor_ID = self._num_sensors
+		sensor_id = self._num_sensors
 		self._num_sensors += 1
 
-		self._Send('LightSensor',
-					sensor_ID, body_ID)
+		self._send('LightSensor',
+					sensor_id, body_id)
 
-		return sensor_ID
+		return sensor_id
 
-	def Send_Light_Source(self, body_ID = 0 ):
+	def send_light_source(self, body_id=0):
 		"""Attaches light source to a body in simulation
 
 		Parameters
 		----------
-		body_ID : int, optional
-			The body ID of the body to attach the light to
+		body_id : int, optional
+			The body id of the body to attach the light to
 
 		Returns
 		-------
 		int
-			The ID tag of the body the light source is attached to.
+			The id tag of the body the light source is attached to.
 		"""
-		assert body_ID<self._num_bodies, 'Body ID '+str(body_ID)+' has not been sent'
+		assert body_id<self._num_bodies, 'Body id '+str(body_id)+' has not been sent'
 
-		self._Send('LightSource',
-					body_ID)
+		self._send('LightSource',
+					body_id)
 
-		return body_ID
+		return body_id
 
-	def Send_Motor_Neuron(self , joint_ID=0, tau=1.0):
+	def send_motor_neuron(self , joint_id=0, tau=1.0):
 		"""Send motor neurons to simulator
 
 		Motor neurons are neurons which connecto to a specified joint and 
@@ -463,8 +463,8 @@ class Simulator(object):
 
 		Parameters
 		----------
-		joint_ID  : int, optional
-			The joint ID tag of the joint we want the neuron to connect to
+		joint_id  : int, optional
+			The joint id tag of the joint we want the neuron to connect to
 		tau      :
 			The 'learning rate' of the neuron. Increasing tau increases
 			how much of value of the neuron at the current time step comes
@@ -474,43 +474,43 @@ class Simulator(object):
 		Returns
 		-------
 		int
-			The ID tag of the neuron
+			The id tag of the neuron
 		"""
 		assert tau>=0, 'Tau must be positive'
-		assert joint_ID<self._num_joints, 'Joint with ID '+str(joint_ID)+' has not been sent'
+		assert joint_id<self._num_joints, 'Joint with id '+str(joint_id)+' has not been sent'
 
-		neuron_ID = self._num_neurons
+		neuron_id = self._num_neurons
 		self._num_neurons += 1
 
-		self._Send('MotorNeuron',
-					neuron_ID,  joint_ID, tau)
+		self._send('MotorNeuron',
+					neuron_id,  joint_id, tau)
 
-		return neuron_ID
+		return neuron_id
 
-	def Send_Position_Sensor(self, body_ID = 0):
+	def send_position_sensor(self, body_id=0):
 		"""Attaches a position sensor to a body in simulation
 
 		Parameters
 		----------
-		body_ID : int, optional
-			The body ID of the body to connect the sensor to
+		body_id : int, optional
+			The body id of the body to connect the sensor to
 
 		Returns
 		-------
 		int
-			The ID tag of the sensor
+			The id tag of the sensor
 		"""
-		assert body_ID<self._num_bodies, 'Body with ID '+str(body_ID)+' has not been sent'
+		assert body_id<self._num_bodies, 'Body with id '+str(body_id)+' has not been sent'
 
-		sensor_ID = self._num_sensors
+		sensor_id = self._num_sensors
 		self._num_sensors += 1
 
-		self._Send('PositionSensor',
-					sensor_ID, body_ID)
+		self._send('PositionSensor',
+					sensor_id, body_id)
 
-		return sensor_ID
+		return sensor_id
 
-	def Send_Proprioceptive_Sensor(self, joint_ID = 0):
+	def send_proprioceptive_sensor(self, joint_id=0):
 		"""Attaches a proprioceptive sensor to a joint in simulation
 
 		Proprioceptive sensors returns the angle of the joint at 
@@ -518,33 +518,33 @@ class Simulator(object):
 
 		Parameters
 		----------
-		joint_ID : int, optional
-			The joint ID of the joint to connect the sensor to
+		joint_id : int, optional
+			The joint id of the joint to connect the sensor to
 
 		Returns
 		-------
 		int
-			The ID tag of the sensor
+			The id tag of the sensor
 		"""
-		assert joint_ID<self._num_joints, 'Joint with ID '+str(joint_ID)+' has not been sent'
+		assert joint_id<self._num_joints, 'Joint with id '+str(joint_id)+' has not been sent'
 
-		sensor_ID = self._num_sensors
+		sensor_id = self._num_sensors
 		self._num_sensors += 1
 
-		self._Send('ProprioceptiveSensor',
-					sensor_ID, joint_ID)
+		self._send('ProprioceptiveSensor',
+					sensor_id, joint_id)
 
-		return sensor_ID
+		return sensor_id
 
-	def Send_Sensor_Neuron(self,  sensor_ID=0, svi=0, tau=1.0 ):
+	def send_sensor_neuron(self, sensor_id=0, svi=0, tau=1.0):
 		"""Sends a sensor neuron to the simulator
 	
 		Sensor neurons are input neurons which take the value of their associated sensor
 
 		Parameters
 		----------
-		sensor_ID 		 : int, optional
-			The associated sensor ID for the neuron to draw values from.
+		sensor_id 		 : int, optional
+			The associated sensor id for the neuron to draw values from.
 		svi : int, optional
 			The sensor value index is the offset index of the sensor. SVI is used for 
 			sensors which return a vector of values (position, ray sensors, etc.)
@@ -554,30 +554,30 @@ class Simulator(object):
 		Returns
 		-------
 		int
-			The ID tag of the neuron
+			The id tag of the neuron
 		"""
-		assert sensor_ID<self._num_sensors, 'Sensor with ID '+str(sensor_ID)+' has not been sent'
+		assert sensor_id<self._num_sensors, 'Sensor with id '+str(sensor_id)+' has not been sent'
 		assert svi in range(4), 'SVI must be in [0,3]'
 		assert tau>=0, 'Tau must be greater than or equal to zero'
 
-		neuron_ID = self._num_neurons
+		neuron_id = self._num_neurons
 		self._num_neurons += 1
 
-		self._Send('SensorNeuron',
-					neuron_ID, sensor_ID,
+		self._send('SensorNeuron',
+					neuron_id, sensor_id,
 					svi, tau)
 
-		return neuron_ID
+		return neuron_id
 
-	def Send_Ray_Sensor(self, body_ID=0, x=0,y=0,z=0, r1=0,r2=0,r3=1):
+	def send_ray_sensor(self, body_id=0, x=0,y=0,z=0, r1=0,r2=0,r3=1):
 		"""Sends a ray sensor to the simulator connected to a body
 
 		Ray sensors return four values each time step, the distance and color (r,g,b).
 
 		Parameters
 		----------
-		body_ID : int, optional
-			The body ID of the associated body the ray sensor is connected to. When this
+		body_id : int, optional
+			The body id of the associated body the ray sensor is connected to. When this
 			body moves the ray sensor moves accordingly
 		x 		 : float, optional
 			The x position of the sensor
@@ -595,30 +595,30 @@ class Simulator(object):
 			The z direction of the sensor. The array [r1,r2,r3] is the direction the
 			ray sensor is pointing in the time step.
 		"""
-		assert body_ID<self._num_bodies, 'Body with ID ' + str(body_ID) + ' has not been sent yet'
-		self._Assert_Normalizable('Ray Sensor', r1,r2,r3)
+		assert body_id<self._num_bodies, 'Body with id ' + str(body_id) + ' has not been sent yet'
+		self._assert_normalizable('Ray Sensor', r1,r2,r3)
 
-		sensor_ID = self._num_sensors
+		sensor_id = self._num_sensors
 		self._num_sensors += 1
 
-		self._Send('RaySensor',
-					sensor_ID, body_ID,
+		self._send('RaySensor',
+					sensor_id, body_id,
 					x,y,z,
 					r1,r2,r3)
 
-		return sensor_ID
+		return sensor_id
 
-	def Send_Synapse(self, source_neuron_ID = 0 , target_neuron_ID = 0 , weight = 0.0 ):
+	def send_synapse(self, source_neuron_id = 0 , target_neuron_id = 0 , weight = 0.0 ):
 		"""Sends a synapse to the simulator
 
 		Synapses are the edge connections between neurons
 
 		Parameters
 		----------
-		source_neuron_ID : int, optional
-			The ID of the source neuron of the synapse
-		target_neuron_ID : int, optional
-			The ID of the target neuron of the synapse
+		source_neuron_id : int, optional
+			The id of the source neuron of the synapse
+		target_neuron_id : int, optional
+			The id of the target neuron of the synapse
 		weight		   : float, optional
 			The edge weight of the synapse
 
@@ -627,14 +627,14 @@ class Simulator(object):
 		bool
 			True if successful, False otherwise
 		"""
-		assert source_neuron_ID<self._num_neurons, 'Neuron with ID '+str(source_neuron_ID)+' has not been sent'
-		assert target_neuron_ID<self._num_neurons, 'Neuron with ID '+str(target_neuron_ID)+' has not been sent'
+		assert source_neuron_id<self._num_neurons, 'Neuron with id '+str(source_neuron_id)+' has not been sent'
+		assert target_neuron_id<self._num_neurons, 'Neuron with id '+str(target_neuron_id)+' has not been sent'
 
-		return self.Send_Developing_Synapse(source_neuron_ID=sourceneuron_ID, target_neuron_ID=targetneuron_ID,
+		return self.send_developing_synapse(source_neuron_id=source_neuron_id, target_neuron_id=target_neuron_id,
 										start_weight=weight,end_weight=weight,
 										start_time=0.,end_time=0.)
 
-	def Send_Developing_Synapse(self, source_neuron_ID=0, target_neuron_ID=0, 
+	def send_developing_synapse(self, source_neuron_id=0, target_neuron_id=0, 
 								start_weight=0.0, end_weight=0.0, 
 								start_time=0., end_time=1.0):
 		"""Sends a synapse to the simulator
@@ -651,10 +651,10 @@ class Simulator(object):
 
 		Parameters
 		----------
-		source_neuron_ID : int, optional
-			The ID of the source neuron of the synapse
-		target_neuron_ID : int, optional
-			The ID of the target neuron of the synapse
+		source_neuron_id : int, optional
+			The id of the source neuron of the synapse
+		target_neuron_id : int, optional
+			The id of the target neuron of the synapse
 		start_weight	   : float, optional
 			The starting edge weight of the synapse
 		end_weight 	   : float, optional
@@ -668,8 +668,8 @@ class Simulator(object):
 		bool
 			True if successful, False otherwise
 		"""
-		assert source_neuron_ID<self._num_neurons, 'Neuron with ID '+str(source_neuron_ID)+' has not been sent'
-		assert target_neuron_ID<self._num_neurons, 'Neuron with ID '+str(target_neuron_ID)+' has not been sent'
+		assert source_neuron_id<self._num_neurons, 'Neuron with id '+str(source_neuron_id)+' has not been sent'
+		assert target_neuron_id<self._num_neurons, 'Neuron with id '+str(target_neuron_id)+' has not been sent'
 
 		if start_time >= end_time:
 			end_time = start_time
@@ -677,61 +677,61 @@ class Simulator(object):
 		start_time = int(start_time * (self.eval_time-1))
 		end_time = int(end_time * (self.eval_time-1))
 
-		self._Send('Synapse',
-					source_neuron_ID, target_neuron_ID,
+		self._send('Synapse',
+					source_neuron_id, target_neuron_id,
 					start_weight, end_weight,
 					start_time, end_time)
 
 		return True
 
-	def Send_Touch_Sensor(self, body_ID=0):
+	def send_touch_sensor(self, body_id=0):
 		"""Send touch sensor to a body in the simulator
 
 		Parameters
 		----------
-		body_ID : int, optional
-			The body ID of the associated body 
+		body_id : int, optional
+			The body id of the associated body 
 
 		Returns
 		-------
 		int
-			The ID tag of the sensor
+			The id tag of the sensor
 		"""
-		assert body_ID<self._num_bodies, 'Body with ID '+body_ID+' has not been sent yet'
-		sensor_ID = self._num_sensors
+		assert body_id<self._num_bodies, 'Body with id '+body_id+' has not been sent yet'
+		sensor_id = self._num_sensors
 		self._num_sensors += 1
 
-		self._Send('TouchSensor',
-					sensor_ID, body_ID)
+		self._send('TouchSensor',
+					sensor_id, body_id)
 
-		return sensor_ID
+		return sensor_id
 
-	def Send_Vestibular_Sensor(self, body_ID = 0):
+	def send_vestibular_sensor(self, body_id = 0):
 		"""Connects a vestibular sensor to a body
 
 		Vestibular sensors return a bodies orrientation in space
 
 		Parameters
 		----------
-		body_ID : int, optional
-			The body ID of the associated body 
+		body_id : int, optional
+			The body id of the associated body 
 
 		Returns
 		-------
 		int
-			The ID tag of the sensor
+			The id tag of the sensor
 		"""
-		assert body_ID<self._num_bodies, 'Body with ID '+body_ID+' has not been sent yet'
+		assert body_id<self._num_bodies, 'Body with id '+body_id+' has not been sent yet'
 
-		sensor_ID = self._num_sensors
+		sensor_id = self._num_sensors
 		self._num_sensors += 1
 
-		self._Send('VestibularSensor', 
-					sensor_ID, body_ID)
+		self._send('VestibularSensor', 
+					sensor_id, body_id)
 
-		return sensor_ID
+		return sensor_id
 
-	def Start(self):
+	def start(self):
 		"""Starts the simulation"""
 
 		commands = [self.pyrosim_path + '/simulator']
@@ -754,7 +754,7 @@ class Simulator(object):
 
 		return True
 
-	def Wait_To_Finish(self):
+	def wait_to_finish(self):
 		"""Waits to for the simulation to finish and collects data
 
 		Returns
@@ -765,18 +765,18 @@ class Simulator(object):
 
 		data_from_simulator = self.pipe.communicate()
 
-		self._Collect_Sensor_Data(data_from_simulator)
+		self._collect_sensor_data(data_from_simulator)
 		self.evaluated = True
 
 		return self.data
 
 # --------------------- Private methods -----------------------------
-	def _Assert_Color(self,name,r,g,b):
+	def _assert_color(self,name,r,g,b):
 		"""Error checks so color params are between [0,1]"""
 		colors = [r,g,b]
 		for color in colors:
 			assert color>=0 and color<=1, 'Color parameter of ' + name +' must be in [0,1]'
-	def _Assert_Normalizable(self,name,*args):
+	def _assert_normalizable(self,name,*args):
 		"""Error checxs vectors so they are not equal to zero"""
 		flag = False
 		for arg in args:
@@ -785,7 +785,7 @@ class Simulator(object):
 
 		assert flag==True, 'Vector parameter of ' + name + ' is not normalizeable'
 
-	def _Collect_Sensor_Data(self,data_from_simulator):
+	def _collect_sensor_data(self,data_from_simulator):
 		"""Get sensor data back from ODE and store it in numpy array"""
 
 		self.data = np.zeros([self._num_sensors,4,self.eval_time],dtype='f')
@@ -803,7 +803,7 @@ class Simulator(object):
 
 		index = 0
 		while ( data_from_simulator[index] != 'Done' ):
-			sensor_ID = int( data_from_simulator[index] )
+			sensor_id = int( data_from_simulator[index] )
 			index = index + 1
 
 			num_sensor_vals = int( data_from_simulator[index] ) 
@@ -812,10 +812,10 @@ class Simulator(object):
 			for t in range(0,self.eval_time): #time step
 				for s in range(0,num_sensor_vals): #svi
 					sensor_value = float( data_from_simulator[index] )
-					self.data[sensor_ID,s,t] = sensor_value
+					self.data[sensor_id,s,t] = sensor_value
 					index = index + 1
 
-	def _Send(self,command_string,*args):
+	def _send(self,command_string,*args):
 		"""Send a command to the simulator"""
 
 		string_to_send = command_string #first argument should always be a string
@@ -826,7 +826,3 @@ class Simulator(object):
 		if self.debug:
 			print string_to_send
 		self.strings_to_send.append(string_to_send)
-
-	def _Dimension_Check(self,**kwargs):
-		pass
-

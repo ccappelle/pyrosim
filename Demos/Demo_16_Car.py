@@ -1,23 +1,24 @@
-from pyrosim import PYROSIM
+import pyrosim
 
 WHEEL_RADIUS = 0.1
 
-sim = PYROSIM(playPaused = False , evalTime = 1000)
+sim = pyrosim.Simulator(play_paused=False, eval_time=1000)
 
-sim.Send_Cylinder(objectID = 0 , x=-2*WHEEL_RADIUS, y=-2*WHEEL_RADIUS, z=WHEEL_RADIUS, length=0, radius=WHEEL_RADIUS)
+wheel = sim.send_cylinder(x=-2*WHEEL_RADIUS, y=-2*WHEEL_RADIUS, z=WHEEL_RADIUS, length=0, radius=WHEEL_RADIUS)
 
-sim.Send_Box(     objectID = 1,  x=0,               y=0,               z=WHEEL_RADIUS, length=4*WHEEL_RADIUS, width=4*WHEEL_RADIUS, height=WHEEL_RADIUS)
+box = sim.send_box(x=0,y=0,z=WHEEL_RADIUS, length=4*WHEEL_RADIUS, width=4*WHEEL_RADIUS, height=WHEEL_RADIUS)
 
-sim.Send_Joint(   jointID  = 0, firstObjectID=0, secondObjectID=1, x=-2*WHEEL_RADIUS, y=-2*WHEEL_RADIUS, z=WHEEL_RADIUS, n1=1, n2=0, n3=0, lo=-3.14159/4.0, hi=+3.14159/4.0, positionControl = False)
+#position_control = False -> continuous range of motion
+axle = sim.send_hinge_joint(first_body_id=wheel, second_body_id=box, x=-2*WHEEL_RADIUS, 
+						y=-2*WHEEL_RADIUS, z=WHEEL_RADIUS, n1=1, n2=0, n3=0, lo=-3.14159/4.0, hi=+3.14159/4.0, 
+						position_control = False)
 
-sim.Send_Touch_Sensor(sensorID = 0 , objectID = 0)
+touch = sim.send_touch_sensor(body_id=wheel)
 
-sim.Send_Sensor_Neuron(neuronID=0, sensorID=0 )
+sneuron = sim.send_sensor_neuron(sensor_id=touch)
 
-sim.Send_Motor_Neuron(neuronID=1 , jointID=0 )
+mneuron = sim.send_motor_neuron(joint_id=axle)
 
-sim.Send_Synapse(sourceNeuronID = 0 , targetNeuronID = 1 , weight = 1.0 )
+sim.send_synapse(source_neuron_id=sneuron, target_neuron_id=mneuron, weight=1.0)
 
-sim.Start()
-
-#sim.Collect_Sensor_Data()
+sim.start()
