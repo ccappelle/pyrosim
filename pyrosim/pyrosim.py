@@ -30,7 +30,7 @@ class Simulator(object):
 		The xyz position of the camera (default is [0.8317,-0.9817,0.8000])
 	hpr
 		The heading, pitch, and roll of the camera (default is [121,-27.5,0.0])
-	use_textures: bool, optional
+	use_textures : bool, optional
 		Draw default ODE textures or not during simulation. (default is False)
 	debug	    : bool, optional
 		If True print out every string command sent through the pipe to the simulator
@@ -69,7 +69,7 @@ class Simulator(object):
 		self.send_camera(xyz, hpr)
 
 	def get_data(self):
-		"""Get all sensor data"""
+		"""Get all sensor data back as numpy matrix"""
 		assert self.evaluated == True, 'Simulation has not run yet'
 		return self.data
 
@@ -594,6 +594,11 @@ class Simulator(object):
 		r3       : float, optional
 			The z direction of the sensor. The array [r1,r2,r3] is the direction the
 			ray sensor is pointing in the time step.
+		
+		Returns
+		-------
+		int
+			The id tag of the sensor
 		"""
 		assert body_id<self._num_bodies, 'Body with id ' + str(body_id) + ' has not been sent yet'
 		self._assert_normalizable('Ray Sensor', r1,r2,r3)
@@ -622,8 +627,8 @@ class Simulator(object):
 		weight		   : float, optional
 			The edge weight of the synapse
 
-		Returns:
-		--------
+		Returns
+		-------
 		bool
 			True if successful, False otherwise
 		"""
@@ -663,8 +668,8 @@ class Simulator(object):
 			The starting time of development. start_time in [0,1]
 		end_time 	   : float, optional
 			The ending time of development. end_time in [0,1]
-		Returns:
-		--------
+		Returns
+		-------
 		bool
 			True if successful, False otherwise
 		"""

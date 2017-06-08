@@ -1,0 +1,929 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>Auto Generated Documentation &#8212; pyrosim 0.1.1 documentation</title>
+    
+    <link rel="stylesheet" href="_static/classic.css" type="text/css" />
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    './',
+        VERSION:     '0.1.1',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="_static/jquery.js"></script>
+    <script type="text/javascript" src="_static/underscore.js"></script>
+    <script type="text/javascript" src="_static/doctools.js"></script>
+    <link rel="top" title="pyrosim 0.1.1 documentation" href="index.html" />
+    <link rel="prev" title="Welcome to pyrosim’s documentation!" href="index.html" /> 
+  </head>
+  <body role="document">
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="index.html" title="Welcome to pyrosim’s documentation!"
+             accesskey="P">previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="index.html">pyrosim 0.1.1 documentation</a> &#187;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <div class="section" id="module-pyrosim">
+<span id="auto-generated-documentation"></span><h1>Auto Generated Documentation<a class="headerlink" href="#module-pyrosim" title="Permalink to this headline">¶</a></h1>
+<dl class="class">
+<dt id="pyrosim.Simulator">
+<em class="property">class </em><code class="descclassname">pyrosim.</code><code class="descname">Simulator</code><span class="sig-paren">(</span><em>play_blind=False, play_paused=False, eval_time=100, dt=0.05, gravity=-1.0, xyz=[0.8317, -0.9817, 0.8], hpr=[121, -27.5, 0.0], use_textures=False, debug=False</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pyrosim.html#Simulator"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyrosim.Simulator" title="Permalink to this definition">¶</a></dt>
+<dd><p>Python interface for ODE simulator</p>
+<p class="rubric">Attributes</p>
+<table border="1" class="docutils">
+<colgroup>
+<col width="6%" />
+<col width="94%" />
+</colgroup>
+<tbody valign="top">
+<tr class="row-odd"><td>play_blind</td>
+<td>(bool, optional) If True the simulation runs without graphics (headless) else if False the simulation runs with graphics (the default is False)</td>
+</tr>
+<tr class="row-even"><td>play_paused</td>
+<td>(bool, optional) If True the simulation starts paused else if False the simulation starts running. With simulation window in focus use Ctrl-p to toggle pausing the simulation. (the default is False)</td>
+</tr>
+<tr class="row-odd"><td>eval_time</td>
+<td>(int, optional) The number of discrete steps in the simulation (the default is 100)</td>
+</tr>
+<tr class="row-even"><td>dt</td>
+<td>(float, optional) The time in seconds between physics world steps. Larger dt values create more unstable physics. (the default is 0.05)</td>
+</tr>
+<tr class="row-odd"><td>gravity</td>
+<td>(float, optional) The gravity in the system. Negative values implie normal downward force of gravity. (default is -1.0)</td>
+</tr>
+<tr class="row-even"><td>xyz</td>
+<td>(list of 3 floats) The xyz position of the camera (default is [0.8317,-0.9817,0.8000])</td>
+</tr>
+<tr class="row-odd"><td>hpr</td>
+<td>The heading, pitch, and roll of the camera (default is [121,-27.5,0.0])</td>
+</tr>
+<tr class="row-even"><td>use_textures</td>
+<td>(bool, optional) Draw default ODE textures or not during simulation. (default is False)</td>
+</tr>
+<tr class="row-odd"><td>debug</td>
+<td>(bool, optional) If True print out every string command sent through the pipe to the simulator (the default is False)</td>
+</tr>
+</tbody>
+</table>
+<p class="rubric">Methods</p>
+<dl class="method">
+<dt id="pyrosim.Simulator.get_data">
+<code class="descname">get_data</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/pyrosim.html#Simulator.get_data"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyrosim.Simulator.get_data" title="Permalink to this definition">¶</a></dt>
+<dd><p>Get all sensor data back as numpy matrix</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="pyrosim.Simulator.get_num_bodies">
+<code class="descname">get_num_bodies</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/pyrosim.html#Simulator.get_num_bodies"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyrosim.Simulator.get_num_bodies" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns the number of bodies</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="pyrosim.Simulator.get_num_joints">
+<code class="descname">get_num_joints</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/pyrosim.html#Simulator.get_num_joints"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyrosim.Simulator.get_num_joints" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns the number of joints</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="pyrosim.Simulator.get_num_neurons">
+<code class="descname">get_num_neurons</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/pyrosim.html#Simulator.get_num_neurons"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyrosim.Simulator.get_num_neurons" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns the number of neurons</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="pyrosim.Simulator.get_num_sensors">
+<code class="descname">get_num_sensors</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/pyrosim.html#Simulator.get_num_sensors"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyrosim.Simulator.get_num_sensors" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns the number of sensors</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="pyrosim.Simulator.get_sensor_data">
+<code class="descname">get_sensor_data</code><span class="sig-paren">(</span><em>sensor_id</em>, <em>svi=0</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pyrosim.html#Simulator.get_sensor_data"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyrosim.Simulator.get_sensor_data" title="Permalink to this definition">¶</a></dt>
+<dd><p>Get the post simulation data from a specified sensor</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>sensor_id</strong> : int</p>
+<blockquote>
+<div><p>the sensors id tag</p>
+</div></blockquote>
+<p><strong>svi</strong> : int , optional</p>
+<blockquote>
+<div><p>The sensor value index. Certain sensors have multiple values 
+(e.g. the position sensor) and the svi specifies which to 
+access (e.g. for a position sensor, svi=0 corresponds to the
+x value of that sensor)</p>
+</div></blockquote>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first">list of float</p>
+<blockquote class="last">
+<div><p>Returns the list of sensor values over the simulation.</p>
+</div></blockquote>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="pyrosim.Simulator.send_bias_neuron">
+<code class="descname">send_bias_neuron</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/pyrosim.html#Simulator.send_bias_neuron"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyrosim.Simulator.send_bias_neuron" title="Permalink to this definition">¶</a></dt>
+<dd><p>Send bias neuron to simulator.</p>
+<p>Bias neurons emit a constant value of 1.0</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body"><p class="first">int</p>
+<blockquote class="last">
+<div><p>id tag of the neuron</p>
+</div></blockquote>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="pyrosim.Simulator.send_box">
+<code class="descname">send_box</code><span class="sig-paren">(</span><em>x=0</em>, <em>y=0</em>, <em>z=0</em>, <em>length=0.1</em>, <em>width=0.1</em>, <em>height=0.1</em>, <em>r=1</em>, <em>g=1</em>, <em>b=1</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pyrosim.html#Simulator.send_box"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyrosim.Simulator.send_box" title="Permalink to this definition">¶</a></dt>
+<dd><p>Send box body to the simulator</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>x</strong> : float, optional</p>
+<blockquote>
+<div><p>The x position coordinate of the center</p>
+</div></blockquote>
+<p><strong>y</strong> : float, optional</p>
+<blockquote>
+<div><p>The y position coordinate of the center</p>
+</div></blockquote>
+<p><strong>z</strong> : float, optional</p>
+<blockquote>
+<div><p>The z position coordinate of the center</p>
+</div></blockquote>
+<p><strong>length</strong> : float, optional</p>
+<blockquote>
+<div><p>The length of the box</p>
+</div></blockquote>
+<p><strong>width</strong> : float, optional</p>
+<blockquote>
+<div><p>The width of the box</p>
+</div></blockquote>
+<p><strong>height</strong> : float, optional</p>
+<blockquote>
+<div><p>The height of the box</p>
+</div></blockquote>
+<p><strong>r</strong> : float, optional</p>
+<blockquote>
+<div><p>The amount of the color red in the box (r in [0,1])</p>
+</div></blockquote>
+<p><strong>g</strong> : float, optional</p>
+<blockquote>
+<div><p>The amount of the color green in the box (g in [0,1])</p>
+</div></blockquote>
+<p><strong>b</strong> : float, optional</p>
+<blockquote>
+<div><p>The amount of the color blue in the box (b in [0,1])</p>
+</div></blockquote>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first">int</p>
+<blockquote class="last">
+<div><p>id tag of the box</p>
+</div></blockquote>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="pyrosim.Simulator.send_camera">
+<code class="descname">send_camera</code><span class="sig-paren">(</span><em>xyz</em>, <em>hpr</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pyrosim.html#Simulator.send_camera"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyrosim.Simulator.send_camera" title="Permalink to this definition">¶</a></dt>
+<dd><p>Sends camera position to simulator in eulerian coordinates</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>xyz</strong> : list of floats</p>
+<blockquote>
+<div><p>A length 3 list specifying the x,y,z position of the camera
+in simulation</p>
+</div></blockquote>
+<p><strong>hpr</strong> : list of floats</p>
+<blockquote>
+<div><p>A length 3 list specifying the heading, pitch, and roll of the camera</p>
+</div></blockquote>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first">bool</p>
+<blockquote class="last">
+<div><p>True if successful, False otherwise</p>
+</div></blockquote>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="pyrosim.Simulator.send_cylinder">
+<code class="descname">send_cylinder</code><span class="sig-paren">(</span><em>x=0</em>, <em>y=0</em>, <em>z=0</em>, <em>r1=0</em>, <em>r2=0</em>, <em>r3=1</em>, <em>length=1.0</em>, <em>radius=0.1</em>, <em>r=1</em>, <em>g=1</em>, <em>b=1</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pyrosim.html#Simulator.send_cylinder"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyrosim.Simulator.send_cylinder" title="Permalink to this definition">¶</a></dt>
+<dd><p>Send cylinder body to the simulator</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>x</strong> : float, optional</p>
+<blockquote>
+<div><p>The x position coordinate of the center (default is 0)</p>
+</div></blockquote>
+<p><strong>y</strong> : float, optional</p>
+<blockquote>
+<div><p>The y position coordinate of the center (default is 0)</p>
+</div></blockquote>
+<p><strong>z</strong> : float, optional</p>
+<blockquote>
+<div><p>The z position coordinate of the center (default is 0)</p>
+</div></blockquote>
+<p><strong>r1</strong> : float, optional</p>
+<blockquote>
+<div><p>The orientation along the x axis. The vector [r1,r2,r3]
+specify the direction of the long axis of the cylinder.
+(default is 0)</p>
+</div></blockquote>
+<p><strong>r2</strong> : float, optional</p>
+<blockquote>
+<div><p>The orientation along the y axis. The vector [r1,r2,r3]
+specify the direction of the long axis of the cylinder.
+(default is 0)</p>
+</div></blockquote>
+<p><strong>r3</strong> : float, optional</p>
+<blockquote>
+<div><p>The orientation along the z axis. The vector [r1,r2,r3]
+specify the direction of the long axis of the cylinder.
+(default is 1)</p>
+</div></blockquote>
+<p><strong>length</strong> : float, optional</p>
+<blockquote>
+<div><p>The length of long axis of the cylinder (default is 1.0)</p>
+</div></blockquote>
+<p><strong>radius</strong> : float, optional</p>
+<blockquote>
+<div><p>The radius of the short axis of the cylinder (default is 0.1)</p>
+</div></blockquote>
+<p><strong>r</strong> : float, optional</p>
+<blockquote>
+<div><p>The amount of the color red in the box (r in [0,1])</p>
+</div></blockquote>
+<p><strong>g</strong> : float, optional</p>
+<blockquote>
+<div><p>The amount of the color green in the box (g in [0,1])</p>
+</div></blockquote>
+<p><strong>b</strong> : float, optional</p>
+<blockquote>
+<div><p>The amount of the color blue in the box (b in [0,1])</p>
+</div></blockquote>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first">int</p>
+<blockquote class="last">
+<div><p>The id tag of the cylinder</p>
+</div></blockquote>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="pyrosim.Simulator.send_developing_synapse">
+<code class="descname">send_developing_synapse</code><span class="sig-paren">(</span><em>source_neuron_id=0</em>, <em>target_neuron_id=0</em>, <em>start_weight=0.0</em>, <em>end_weight=0.0</em>, <em>start_time=0.0</em>, <em>end_time=1.0</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pyrosim.html#Simulator.send_developing_synapse"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyrosim.Simulator.send_developing_synapse" title="Permalink to this definition">¶</a></dt>
+<dd><p>Sends a synapse to the simulator</p>
+<p>Developing synapses are synapses which change over time. 
+The synapse will interpolate between the start_weight and end_weight
+over the desired time range dictated by start_time and end_time.
+start_time and end_time are in [0,1] where 0 maps to time step 0
+and 1 maps to the eval_time of the simulation. Setting start_time
+equal to end_time results in a discrete change from start_weight
+to end_weight in the synapse at the specified time step. If
+start_time &gt;= end_time times are changed such that
+end_time = start_time.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>source_neuron_id</strong> : int, optional</p>
+<blockquote>
+<div><p>The id of the source neuron of the synapse</p>
+</div></blockquote>
+<p><strong>target_neuron_id</strong> : int, optional</p>
+<blockquote>
+<div><p>The id of the target neuron of the synapse</p>
+</div></blockquote>
+<p><strong>start_weight</strong> : float, optional</p>
+<blockquote>
+<div><p>The starting edge weight of the synapse</p>
+</div></blockquote>
+<p><strong>end_weight</strong> : float, optional</p>
+<blockquote>
+<div><p>The ending edge weight of the synapse</p>
+</div></blockquote>
+<p><strong>start_time</strong> : float, optional</p>
+<blockquote>
+<div><p>The starting time of development. start_time in [0,1]</p>
+</div></blockquote>
+<p><strong>end_time</strong> : float, optional</p>
+<blockquote>
+<div><p>The ending time of development. end_time in [0,1]</p>
+</div></blockquote>
+<p><strong>Returns</strong></p>
+<p><strong>&#8212;&#8212;-</strong></p>
+<p><strong>bool</strong></p>
+<blockquote class="last">
+<div><p>True if successful, False otherwise</p>
+</div></blockquote>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="pyrosim.Simulator.send_function_neuron">
+<code class="descname">send_function_neuron</code><span class="sig-paren">(</span><em>function=&lt;built-in function sin&gt;</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pyrosim.html#Simulator.send_function_neuron"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyrosim.Simulator.send_function_neuron" title="Permalink to this definition">¶</a></dt>
+<dd><p>Send neuron to simulator which takes its value from the user defined function</p>
+<p>The function is mapped to the specific time in the simulation based on both 
+the discrete evaluation time and the dt space between time steps. For example
+if evalTime=100 and dt=0.05 the function will be evaluated at [0,0.05,...,5]</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>function</strong> : function, optional</p>
+<blockquote>
+<div><p>The function which defines the neuron value. Valid functions return
+a single float value over the time domain.</p>
+</div></blockquote>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first">int</p>
+<blockquote class="last">
+<div><p>The id tag of the neuron</p>
+</div></blockquote>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="pyrosim.Simulator.send_hidden_neuron">
+<code class="descname">send_hidden_neuron</code><span class="sig-paren">(</span><em>tau=1.0</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pyrosim.html#Simulator.send_hidden_neuron"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyrosim.Simulator.send_hidden_neuron" title="Permalink to this definition">¶</a></dt>
+<dd><p>Send a hidden neuron to the simulator</p>
+<p>Hidden neurons are basic neurons which can have inputs and outputs. 
+They &#8216;hidden&#8217; between input neurons (sensors, bias, function) and 
+output neurons (motors)</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>tau</strong> : float, optional</p>
+<blockquote>
+<div><p>The &#8216;learning rate&#8217; of the neuron. Increasing tau increases
+how much of value of the neuron at the current time step comes
+from external inputs vs. the value of the neuron at the previous
+time step</p>
+</div></blockquote>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first">int</p>
+<blockquote class="last">
+<div><p>The id tag of the neuron</p>
+</div></blockquote>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="pyrosim.Simulator.send_hinge_joint">
+<code class="descname">send_hinge_joint</code><span class="sig-paren">(</span><em>first_body_id</em>, <em>second_body_id</em>, <em>x=0</em>, <em>y=0</em>, <em>z=0</em>, <em>n1=0</em>, <em>n2=0</em>, <em>n3=1</em>, <em>lo=-0.7853981633974483</em>, <em>hi=0.7853981633974483</em>, <em>speed=1.0</em>, <em>torque=10.0</em>, <em>position_control=True</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pyrosim.html#Simulator.send_hinge_joint"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyrosim.Simulator.send_hinge_joint" title="Permalink to this definition">¶</a></dt>
+<dd><p>Send a hinge joint to the simulator</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>first_body_id</strong> : int</p>
+<blockquote>
+<div><p>The body id of the first body the joint is connected to.
+If set equal to -1, the joint is connected to a point in
+space</p>
+</div></blockquote>
+<p><strong>secondbodyid</strong> : int</p>
+<blockquote>
+<div><p>The body id of the second body the joint is connected to.
+If set equal to -1, the joint is connected to a point in
+space</p>
+</div></blockquote>
+<p><strong>x</strong> : float, optional</p>
+<blockquote>
+<div><p>The x position coordinate of the joint (default is 0)</p>
+</div></blockquote>
+<p><strong>y</strong> : float, optional</p>
+<blockquote>
+<div><p>The y position coordinate of the joint (default is 0)</p>
+</div></blockquote>
+<p><strong>z</strong> : float, optional</p>
+<blockquote>
+<div><p>The z position coordinate of the joint (default is 0)</p>
+</div></blockquote>
+<p><strong>n1</strong> : float, optional</p>
+<blockquote>
+<div><p>The orientation along the x axis. The vector [n1,n2,n3]
+specifies the axis about which the joint rotates
+(default is 0)</p>
+</div></blockquote>
+<p><strong>n2</strong> : float, optional</p>
+<blockquote>
+<div><p>The orientation along the y axis. The vector [n1,n2,n3]
+specifies the axis about which the joint rotates
+(default is 0)</p>
+</div></blockquote>
+<p><strong>n3</strong> : float, optional</p>
+<blockquote>
+<div><p>The orientation along the z axis. The vector [n1,n2,n3]
+specifies the axis about which the joint rotates
+(default is 1)</p>
+</div></blockquote>
+<p><strong>lo</strong> : float, optional</p>
+<blockquote>
+<div><p>The lower limit in radians of the joint (default is -pi/4)</p>
+</div></blockquote>
+<p><strong>hi</strong> : float, optional</p>
+<blockquote>
+<div><p>The upper limit in radians of the joint (default is pi/4)</p>
+</div></blockquote>
+<p><strong>speed</strong> : float, optional</p>
+<blockquote>
+<div><p>The speed of the motor of the joint (default is 1.0)</p>
+</div></blockquote>
+<p><strong>torque</strong> : float, optional</p>
+<blockquote>
+<div><p>The amount of torque the motor in the joint has (default is 10.0)</p>
+</div></blockquote>
+<p><strong>position_control</strong> : bool, optional</p>
+<blockquote>
+<div><p>True means use position control. This means the motor neuron
+output is treated as a target angle for the joint to actuate
+to. False means the motor neuron output is treated as a target
+actuation rate.</p>
+</div></blockquote>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first">int</p>
+<blockquote class="last">
+<div><p>The id tag for the hinge joint</p>
+</div></blockquote>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="pyrosim.Simulator.send_light_sensor">
+<code class="descname">send_light_sensor</code><span class="sig-paren">(</span><em>body_id=0</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pyrosim.html#Simulator.send_light_sensor"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyrosim.Simulator.send_light_sensor" title="Permalink to this definition">¶</a></dt>
+<dd><p>Attaches a light sensor to a body in simulation</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>body_id</strong> : int, optional</p>
+<blockquote>
+<div><p>The body id of the body to connect the sensor to</p>
+</div></blockquote>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first">int</p>
+<blockquote class="last">
+<div><p>The id tag of the sensor</p>
+</div></blockquote>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="pyrosim.Simulator.send_light_source">
+<code class="descname">send_light_source</code><span class="sig-paren">(</span><em>body_id=0</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pyrosim.html#Simulator.send_light_source"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyrosim.Simulator.send_light_source" title="Permalink to this definition">¶</a></dt>
+<dd><p>Attaches light source to a body in simulation</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>body_id</strong> : int, optional</p>
+<blockquote>
+<div><p>The body id of the body to attach the light to</p>
+</div></blockquote>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first">int</p>
+<blockquote class="last">
+<div><p>The id tag of the body the light source is attached to.</p>
+</div></blockquote>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="pyrosim.Simulator.send_motor_neuron">
+<code class="descname">send_motor_neuron</code><span class="sig-paren">(</span><em>joint_id=0</em>, <em>tau=1.0</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pyrosim.html#Simulator.send_motor_neuron"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyrosim.Simulator.send_motor_neuron" title="Permalink to this definition">¶</a></dt>
+<dd><p>Send motor neurons to simulator</p>
+<p>Motor neurons are neurons which connecto to a specified joint and 
+determine how the joint moves every time step of simulation</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>joint_id</strong> : int, optional</p>
+<blockquote>
+<div><p>The joint id tag of the joint we want the neuron to connect to</p>
+</div></blockquote>
+<p><strong>tau      :</strong></p>
+<blockquote>
+<div><p>The &#8216;learning rate&#8217; of the neuron. Increasing tau increases
+how much of value of the neuron at the current time step comes
+from external inputs vs. the value of the neuron at the previous
+time step</p>
+</div></blockquote>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first">int</p>
+<blockquote class="last">
+<div><p>The id tag of the neuron</p>
+</div></blockquote>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="pyrosim.Simulator.send_position_sensor">
+<code class="descname">send_position_sensor</code><span class="sig-paren">(</span><em>body_id=0</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pyrosim.html#Simulator.send_position_sensor"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyrosim.Simulator.send_position_sensor" title="Permalink to this definition">¶</a></dt>
+<dd><p>Attaches a position sensor to a body in simulation</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>body_id</strong> : int, optional</p>
+<blockquote>
+<div><p>The body id of the body to connect the sensor to</p>
+</div></blockquote>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first">int</p>
+<blockquote class="last">
+<div><p>The id tag of the sensor</p>
+</div></blockquote>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="pyrosim.Simulator.send_proprioceptive_sensor">
+<code class="descname">send_proprioceptive_sensor</code><span class="sig-paren">(</span><em>joint_id=0</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pyrosim.html#Simulator.send_proprioceptive_sensor"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyrosim.Simulator.send_proprioceptive_sensor" title="Permalink to this definition">¶</a></dt>
+<dd><p>Attaches a proprioceptive sensor to a joint in simulation</p>
+<p>Proprioceptive sensors returns the angle of the joint at 
+each time step</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>joint_id</strong> : int, optional</p>
+<blockquote>
+<div><p>The joint id of the joint to connect the sensor to</p>
+</div></blockquote>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first">int</p>
+<blockquote class="last">
+<div><p>The id tag of the sensor</p>
+</div></blockquote>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="pyrosim.Simulator.send_ray_sensor">
+<code class="descname">send_ray_sensor</code><span class="sig-paren">(</span><em>body_id=0</em>, <em>x=0</em>, <em>y=0</em>, <em>z=0</em>, <em>r1=0</em>, <em>r2=0</em>, <em>r3=1</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pyrosim.html#Simulator.send_ray_sensor"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyrosim.Simulator.send_ray_sensor" title="Permalink to this definition">¶</a></dt>
+<dd><p>Sends a ray sensor to the simulator connected to a body</p>
+<p>Ray sensors return four values each time step, the distance and color (r,g,b).</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>body_id</strong> : int, optional</p>
+<blockquote>
+<div><p>The body id of the associated body the ray sensor is connected to. When this
+body moves the ray sensor moves accordingly</p>
+</div></blockquote>
+<p><strong>x</strong> : float, optional</p>
+<blockquote>
+<div><p>The x position of the sensor</p>
+</div></blockquote>
+<p><strong>y</strong> : float, optional</p>
+<blockquote>
+<div><p>The y position of the sensor</p>
+</div></blockquote>
+<p><strong>z</strong> : float, optional</p>
+<blockquote>
+<div><p>The z position of the sensor</p>
+</div></blockquote>
+<p><strong>r1</strong> : float, optional</p>
+<blockquote>
+<div><p>The x direction of the sensor. The array [r1,r2,r3] is the direction the
+ray sensor is pointing in the time step.</p>
+</div></blockquote>
+<p><strong>r2</strong> : float, optional</p>
+<blockquote>
+<div><p>The y direction of the sensor. The array [r1,r2,r3] is the direction the
+ray sensor is pointing in the time step.</p>
+</div></blockquote>
+<p><strong>r3</strong> : float, optional</p>
+<blockquote>
+<div><p>The z direction of the sensor. The array [r1,r2,r3] is the direction the
+ray sensor is pointing in the time step.</p>
+</div></blockquote>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first">int</p>
+<blockquote class="last">
+<div><p>The id tag of the sensor</p>
+</div></blockquote>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="pyrosim.Simulator.send_sensor_neuron">
+<code class="descname">send_sensor_neuron</code><span class="sig-paren">(</span><em>sensor_id=0</em>, <em>svi=0</em>, <em>tau=1.0</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pyrosim.html#Simulator.send_sensor_neuron"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyrosim.Simulator.send_sensor_neuron" title="Permalink to this definition">¶</a></dt>
+<dd><p>Sends a sensor neuron to the simulator</p>
+<p>Sensor neurons are input neurons which take the value of their associated sensor</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>sensor_id</strong> : int, optional</p>
+<blockquote>
+<div><p>The associated sensor id for the neuron to draw values from.</p>
+</div></blockquote>
+<p><strong>svi</strong> : int, optional</p>
+<blockquote>
+<div><p>The sensor value index is the offset index of the sensor. SVI is used for 
+sensors which return a vector of values (position, ray sensors, etc.)</p>
+</div></blockquote>
+<p><strong>tau</strong> : int, optional</p>
+<blockquote>
+<div><p>not used for sensor neurons</p>
+</div></blockquote>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first">int</p>
+<blockquote class="last">
+<div><p>The id tag of the neuron</p>
+</div></blockquote>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="pyrosim.Simulator.send_synapse">
+<code class="descname">send_synapse</code><span class="sig-paren">(</span><em>source_neuron_id=0</em>, <em>target_neuron_id=0</em>, <em>weight=0.0</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pyrosim.html#Simulator.send_synapse"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyrosim.Simulator.send_synapse" title="Permalink to this definition">¶</a></dt>
+<dd><p>Sends a synapse to the simulator</p>
+<p>Synapses are the edge connections between neurons</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>source_neuron_id</strong> : int, optional</p>
+<blockquote>
+<div><p>The id of the source neuron of the synapse</p>
+</div></blockquote>
+<p><strong>target_neuron_id</strong> : int, optional</p>
+<blockquote>
+<div><p>The id of the target neuron of the synapse</p>
+</div></blockquote>
+<p><strong>weight</strong> : float, optional</p>
+<blockquote>
+<div><p>The edge weight of the synapse</p>
+</div></blockquote>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first">bool</p>
+<blockquote class="last">
+<div><p>True if successful, False otherwise</p>
+</div></blockquote>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="pyrosim.Simulator.send_touch_sensor">
+<code class="descname">send_touch_sensor</code><span class="sig-paren">(</span><em>body_id=0</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pyrosim.html#Simulator.send_touch_sensor"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyrosim.Simulator.send_touch_sensor" title="Permalink to this definition">¶</a></dt>
+<dd><p>Send touch sensor to a body in the simulator</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>body_id</strong> : int, optional</p>
+<blockquote>
+<div><p>The body id of the associated body</p>
+</div></blockquote>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first">int</p>
+<blockquote class="last">
+<div><p>The id tag of the sensor</p>
+</div></blockquote>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="pyrosim.Simulator.send_user_input_neuron">
+<code class="descname">send_user_input_neuron</code><span class="sig-paren">(</span><em>in_values</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pyrosim.html#Simulator.send_user_input_neuron"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyrosim.Simulator.send_user_input_neuron" title="Permalink to this definition">¶</a></dt>
+<dd><p>Send neuron to the simulator which takes user defined values at each time step</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>in_values</strong> : list of floats or float, optional</p>
+<blockquote>
+<div><p>The user specified values for the neuron. If length of values &lt; the number of
+time steps, the values are continually looped through until every time step
+has a corresponding value</p>
+</div></blockquote>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first">int</p>
+<blockquote class="last">
+<div><p>The id tag of the neuron.</p>
+</div></blockquote>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="pyrosim.Simulator.send_vestibular_sensor">
+<code class="descname">send_vestibular_sensor</code><span class="sig-paren">(</span><em>body_id=0</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pyrosim.html#Simulator.send_vestibular_sensor"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyrosim.Simulator.send_vestibular_sensor" title="Permalink to this definition">¶</a></dt>
+<dd><p>Connects a vestibular sensor to a body</p>
+<p>Vestibular sensors return a bodies orrientation in space</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>body_id</strong> : int, optional</p>
+<blockquote>
+<div><p>The body id of the associated body</p>
+</div></blockquote>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first">int</p>
+<blockquote class="last">
+<div><p>The id tag of the sensor</p>
+</div></blockquote>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="pyrosim.Simulator.start">
+<code class="descname">start</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/pyrosim.html#Simulator.start"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyrosim.Simulator.start" title="Permalink to this definition">¶</a></dt>
+<dd><p>Starts the simulation</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="pyrosim.Simulator.wait_to_finish">
+<code class="descname">wait_to_finish</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/pyrosim.html#Simulator.wait_to_finish"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyrosim.Simulator.wait_to_finish" title="Permalink to this definition">¶</a></dt>
+<dd><p>Waits to for the simulation to finish and collects data</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body"><p class="first">numpy matrix</p>
+<blockquote class="last">
+<div><p>A matrix of the sensor values for each time step of the simulation</p>
+</div></blockquote>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+</dd></dl>
+
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="index.html"
+                        title="previous chapter">Welcome to pyrosim&#8217;s documentation!</a></p>
+  <div role="note" aria-label="source link">
+    <h3>This Page</h3>
+    <ul class="this-page-menu">
+      <li><a href="_sources/code.txt"
+            rel="nofollow">Show Source</a></li>
+    </ul>
+   </div>
+<div id="searchbox" style="display: none" role="search">
+  <h3>Quick search</h3>
+    <form class="search" action="search.html" method="get">
+      <div><input type="text" name="q" /></div>
+      <div><input type="submit" value="Go" /></div>
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="index.html" title="Welcome to pyrosim’s documentation!"
+             >previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="index.html">pyrosim 0.1.1 documentation</a> &#187;</li> 
+      </ul>
+    </div>
+    <div class="footer" role="contentinfo">
+        &#169; Copyright 2017, Josh Bongard, Collin Cappelle, UVM MECL.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.4.6.
+    </div>
+  </body>
+</html>
