@@ -1,6 +1,8 @@
 #!/usr/bin/env python
 
 from setuptools import setup
+from setuptools.command.install import install
+import subprocess
 
 setup(name='pyrosim',
 		version='0.1.1',

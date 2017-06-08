@@ -1,6 +1,5 @@
 # pyrosim: A python robot simulator. 
 
-
 Pyrosim enables the creation of robots with arbitrary body plans
 and neural controllers, and the optimization of them in arbitrary simulated
 environments.
@@ -25,8 +24,15 @@ environments.
   ```bash
   $ cd ~/Desktop/pyrosim
   ```
+  If you are installing from Linux make sure you have build-essential and
+  freeglut3 installed 
 
-  Currently setup.py is not working, so you need to run
+  ```
+  $ sudo apt-get install build-essential
+  $ sudo apt-get install freeglut3-dev
+  ```
+
+  To build the underlying physics engine, ODE, run
   build.sh:
 
   ```bash
@@ -41,27 +47,17 @@ environments.
   Building simulator...done
   ```
 
-  If you are installing from Linux and you do not get the third
-  `done' confirmation, install these additional packages
-
-  ```
-  $ sudo apt-get install build-essential
-  $ sudo apt-get install freeglut3-dev
-  ```
-
-  then re-install Pyrosim:
-
-  ```
-  $ sh build.sh
-  ```
-
   This installs ODE and compiles the local C++ code on your machine in the 
-  pyrosim/simulator directory. You can now install the package using the command
+  pyrosim/simulator directory. 
+
+  You can now use the package locally or install it using the command
   ```bash
-  $ python setup.py -install
+  $ python setup.py install
   ```
 
-  You can test the package by changing to the Demos directory and running
+  After installation you can test the package by changing to the Demos directory and running
+  any one of the provided demos. 
+  For example to play the first demo run
   ```bash
   $ python Demo_00_Empty_Sim.py 
   ```
