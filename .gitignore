@@ -1,7 +1,7 @@
 *.o
 *.d
 *.pyc
-*.egg
+*.egg*
 dist/
 build/
 log
