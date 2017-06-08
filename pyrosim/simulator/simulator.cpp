@@ -26,11 +26,15 @@ dsFunctions fn;
 int timer;
 int evaluationTime = 100;
 int runBlind;
+int debug;
+int followBody = -1;
+int trackBody = -1;
 
 ENVIRONMENT *environment;
 int numberOfBodies = 0;
 float dt = 0.05;
 float gravity = -1.0;
+
 
 static float xyz[3] = {0.8317f,-0.9817f,0.8000f};
 static float hpr[3] = {121.0000f,-27.5000f,0.0000f};
@@ -177,11 +181,50 @@ static void simLoop (int pause)
     dWorldSetGravity(world,0,0,gravity);
     dsSetViewpoint (xyz,hpr);
   }
+  if (followBody>=0){
+    float updated_xyz[3];
+    environment->Get_Object_Position(updated_xyz, followBody);
+
+    updated_xyz[0] += xyz[0];
+    updated_xyz[1] += xyz[1];
+    updated_xyz[2] = xyz[2]; //no movement in x direction
+
+    dsSetViewpoint(updated_xyz,hpr);
+  }
+  if (trackBody>=0){
+    float dirVector[3];
+    environment->Get_Object_Position(dirVector, trackBody);
+
+    dirVector[0] -= xyz[0];
+    dirVector[1] -= xyz[1];
+    dirVector[2] -= xyz[2];
+
+    if (!(dirVector[0]==0 and dirVector[1]==0 and dirVector[2]==0)){
+        float normalizer = sqrt(pow(dirVector[0],2)+ pow(dirVector[1],2)+pow(dirVector[2],2));
+        dirVector[0] = dirVector[0]/normalizer;
+        dirVector[1] = dirVector[1]/normalizer;
+        dirVector[2] = dirVector[2]/normalizer;
+
+        float heading = -atan2(dirVector[0],dirVector[1]) * 180.0 / 3.14159+90.;
+
+        float update_hpr[3];
+
+        update_hpr[0] = heading;
+        update_hpr[1] = hpr[1];
+        update_hpr[2] = hpr[2];
+
+        dsSetViewpoint(xyz, update_hpr);
+    }
+  }
+  
+
+
 	if ( !pause )
 
 		Simulate_For_One_Time_Step();
 
-	environment->Draw();
+	environment->Draw(debug);
+
 }
 
 void Initialize_ODE(void) {
@@ -214,7 +257,7 @@ void Initialize_Environment(void) {
 
 
 void Read_From_Python(void) {
-	environment->Read_From_Python(world,space, texturePathStr, &evaluationTime,&dt,&gravity,xyz,hpr);
+	environment->Read_From_Python(world,space, texturePathStr, &evaluationTime,&dt,&gravity,xyz,hpr,&debug,&followBody,&trackBody);
 }
 
 void Terminate(void) {

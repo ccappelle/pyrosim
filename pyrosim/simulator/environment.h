@@ -28,12 +28,14 @@ public:
 
 	void Actuate_Joints(void);
 
-	void Draw(void);
+	void Draw(int debug=0);
+
+	void Get_Object_Position(float *xyz, int bodyID);
 
         void Poll_Sensors(int timeStep);
 
 	void Read_From_Python(dWorldID world,dSpaceID space, char *texturePath, int *evaluationTime, float *dt,
-								float *gravity, float *xyz, float *hpr);
+								float *gravity, float *xyz, float *hpr, int *debug, int *followBody, int *trackBody);
 
 	void Update_Neural_Network(int timeStep);
 

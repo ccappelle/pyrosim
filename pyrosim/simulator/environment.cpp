@@ -6,6 +6,7 @@
 
 extern int BOX;
 extern int CYLINDER;
+extern int SPHERE;
 
 extern int MAX_OBJECTS;
 extern int MAX_JOINTS;
@@ -34,15 +35,29 @@ void ENVIRONMENT::Actuate_Joints(void) {
                 joints[j]->Actuate();
 }
 
-void ENVIRONMENT::Draw(void) {
+void ENVIRONMENT::Draw(int debug) {
 
         for (int i=0;i<numberOfBodies;i++)
 
                 objects[i]->Draw();
+
+        if (debug){
+                for (int j=0; j<numberOfJoints; j++)
+                        joints[j]->Draw();
+        }
+
+}
+
+void ENVIRONMENT::Get_Object_Position(float *xyz, int bodyID){
+        const dReal *pos = dBodyGetPosition(objects[bodyID]->Get_Body());
+        xyz[0] = pos[0];
+        xyz[1] = pos[1];
+        xyz[2] = pos[2];
 }
 
 void ENVIRONMENT::Read_From_Python(dWorldID world,dSpaceID space, char *texturePath, int *evaluationTime,
-                                        float *dt, float *gravity, float *xyz, float *hpr) {
+                                        float *dt, float *gravity, float *xyz, float *hpr, int *debug,
+                                        int *followBody, int *trackBody) {
 
         char incomingString[100];
 
@@ -60,6 +75,8 @@ void ENVIRONMENT::Read_From_Python(dWorldID world,dSpaceID space, char *textureP
                         std::cin >> (*gravity);
                 else if ( strcmp(incomingString,"TexturePath") == 0)
                         std::cin >> (texturePath);
+                else if ( strcmp(incomingString,"Debug") == 0)
+                        std::cin >> (*debug);
                 //Camera
                 else if ( strcmp(incomingString,"Camera") == 0)
                 {
@@ -72,6 +89,10 @@ void ENVIRONMENT::Read_From_Python(dWorldID world,dSpaceID space, char *textureP
                         std::cin >> hpr[2];
                 }
 
+                else if ( strcmp(incomingString,"FollowBody")==0)
+                        std::cin >> (*followBody);
+                else if ( strcmp(incomingString,"TrackBody")==0)
+                        std::cin >> (*trackBody);
                 //Bodies
                 else if ( strcmp(incomingString,"Box") == 0 )
 
@@ -81,6 +102,10 @@ void ENVIRONMENT::Read_From_Python(dWorldID world,dSpaceID space, char *textureP
 
 			Create_Object(world,space,numberOfBodies,CYLINDER);
 
+                else if ( strcmp(incomingString,"Sphere") == 0)
+                        Create_Object(world,space,numberOfBodies, SPHERE);
+
+                //Joints
 		else if ( strcmp(incomingString,"HingeJoint") == 0 )
 
 			Create_Joint(world,space,numberOfJoints,0);
@@ -115,13 +140,12 @@ void ENVIRONMENT::Read_From_Python(dWorldID world,dSpaceID space, char *textureP
 			Create_Light_Source();
 
                 //Neurons
-		else if ( strcmp(incomingString,"SensorNeuron") == 0 )
-
-			Create_Sensor_Neuron();
-
                 else if ( strcmp(incomingString,"BiasNeuron") == 0 )
 
                         Create_Bias_Neuron();
+		else if ( strcmp(incomingString,"SensorNeuron") == 0 )
+
+			Create_Sensor_Neuron();
 
 		else if ( strcmp(incomingString,"HiddenNeuron") == 0 )
 

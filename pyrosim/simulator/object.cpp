@@ -126,8 +126,10 @@ void OBJECT::Draw(void) {
 	if ( myShape == BOX )
 
 		DrawBox();
-	else
+	else if (myShape == CYLINDER)
 		DrawCylinder();
+	else
+		DrawSphere();
 }
 
 void OBJECT::Draw_Ray_Sensor(double x, double y, double z, int t) {
@@ -212,7 +214,7 @@ void OBJECT::Read_From_Python(dWorldID world, dSpaceID space, int shape) {
 
 		CreateBox(world,space, x,y,z, length,width,height);
 	}
-	else {
+	else if (myShape == CYLINDER) {
 
 		std::cin >> r1;
 
@@ -231,6 +233,15 @@ void OBJECT::Read_From_Python(dWorldID world, dSpaceID space, int shape) {
                 std::cin >> b;
 
                 CreateCylinder(world,space, x,y,z, r1,r2,r3, length,radius);
+	}
+	else {
+		std::cin >> radius;
+
+		std::cin >> r;
+		std::cin >> g;
+		std::cin >> b;
+
+		CreateSphere(world,space,x,y,z,radius);
 	}
 }
 
@@ -343,6 +354,23 @@ void OBJECT::CreateCylinder(dWorldID world, dSpaceID space,
 	dGeomSetData(geom,this);
 }
 
+void OBJECT::CreateSphere(dWorldID world, dSpaceID space, 
+							double x, double y, double z,
+							double radius){
+	dMass m;
+
+	body = dBodyCreate(world);
+	dBodySetPosition(body, x,y,z);
+
+	dMassSetSphere(&m,1,radius);
+	dMassAdjust(&m,1);
+	dBodySetMass(body,&m);
+	geom = dCreateSphere(space,radius);
+	dGeomSetBody(geom,body);
+
+	dGeomSetData(geom,this);
+}
+
 double OBJECT::Distance_To(OBJECT *otherObject) {
 
 	const dReal *myPos = dBodyGetPosition( body );
@@ -374,6 +402,9 @@ void OBJECT::DrawCylinder(void) {
 	dsDrawCapsule(dBodyGetPosition(body),dBodyGetRotation(body),length,radius);
 }
 
+void OBJECT::DrawSphere(void){
+	dsDrawSphere(dBodyGetPosition(body),dBodyGetRotation(body),radius);
+}
 OBJECT* OBJECT::Find_Closest_Light_Source(int numObjects, OBJECT **objects) {
 
 	double distance = 1000.0;

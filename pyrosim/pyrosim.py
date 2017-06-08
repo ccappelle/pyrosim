@@ -58,6 +58,11 @@ class Simulator(object):
 
 		self.pyrosim_path =  os.path.dirname(os.path.abspath(__file__))+'/simulator'
 
+		self.body_to_follow= -1
+
+		if debug:
+			print self.pyrosim_path
+
 		if (self.play_paused == True and self.play_blind == True):
 			self.play_paused = False
 
@@ -66,7 +71,43 @@ class Simulator(object):
 		self._send('EvaluationTime '+str(self.eval_time))
 		self._send('TimeInterval ' + str(self.dt))
 		self._send('Gravity ' + str(self.gravity))
+		if (self.debug):
+			self._send('Debug '+str(1))
+		else:
+			self._send('Debug '+str(0))
 		self.send_camera(xyz, hpr)
+
+	def film_body(self, body_id, method='follow'):
+		"""Sets the camera to film a body
+		
+		Camera has two modes: 'follow' moves the camera's position based on where the body is moving
+		and 'track' rotates the camera to look at the body
+
+		Parameters
+		----------
+		body_id : int
+			The id tag of the body to be filmed
+		method  : str, optional
+			The way the camera should move to film the body. Either 'follow' or 'track' 
+			(default is 'follow')
+
+		Returns
+		-------
+		bool
+			True if successful, False otherwise
+		"""
+		assert body_id<self._num_bodies, 'Body with id ' + str(body_id) + ' has not been sent'
+		assert self.body_to_follow==-1, 'Body with id ' + str(body_id) +' has already been assigned to be filmed'
+		assert (method=='follow' or method=='track'), 'Method must be `follow` or `track`'
+
+		if method == 'follow':
+			self._send('FollowBody', body_id)
+		elif method == 'track':
+			self._send('TrackBody', body_id)
+
+		self.body_to_follow = body_id
+
+		return True
 
 	def get_data(self):
 		"""Get all sensor data back as numpy matrix"""
@@ -568,6 +609,45 @@ class Simulator(object):
 					svi, tau)
 
 		return neuron_id
+
+	def send_sphere(self, x=0,y=0,z=0,radius=0.5, r=1,g=1,b=1):
+		"""Sends a sphere to the simulator
+
+		Parameters
+		----------
+		x 		 : float, optional
+			The x position of the center
+		y		 : float, optional
+			The y position of the center
+		z 		 : float, optional
+			The z position of the center
+		radius   : float, optional
+			The radius of the sphere (default is 0.5)
+		r       : float, optional
+			The amount of the color red in the box (r in [0,1])
+		g       : float, optional
+			The amount of the color green in the box (g in [0,1])
+		b       : float, optional
+			The amount of the color blue in the box (b in [0,1])
+
+		Returns
+		-------
+		int     
+			The id tag of the sphere
+		"""
+		assert radius>=0, 'Radius of Sphere must be >= 0'
+		self._assert_color( 'Sphere', r, g,b)
+
+		body_id = self._num_bodies
+		self._num_bodies += 1
+
+		self._send('Sphere',
+					body_id, 
+					x,y,z,
+					radius,
+					r,g,b)
+
+		return body_id
 
 	def send_ray_sensor(self, body_id=0, x=0,y=0,z=0, r1=0,r2=0,r3=1):
 		"""Sends a ray sensor to the simulator connected to a body

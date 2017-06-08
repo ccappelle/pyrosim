@@ -104,9 +104,14 @@ private:
                                                 double x, double y, double z,
                                                 double r1, double r2, double r3,
                                                 double length, double radius);
-	void DrawBox(void);
 
+	void CreateSphere(dWorldID world, dSpaceID space, 
+							double x, double y, double z,
+							double radius);
+
+	void DrawBox(void);
 	void DrawCylinder(void);
+	void DrawSphere(void);
 
 	OBJECT *Find_Closest_Light_Source(int numObjects, OBJECT **objects);
 

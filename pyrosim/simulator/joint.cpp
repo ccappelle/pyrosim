@@ -5,6 +5,17 @@
 
 #include "joint.h"
 
+#include <drawstuff/drawstuff.h>
+#include "texturepath.h"
+
+#ifdef dDOUBLE
+#define dsDrawLine dsDrawLineD
+#define dsDrawBox dsDrawBoxD
+#define dsDrawSphere dsDrawSphereD
+#define dsDrawCylinder dsDrawCylinderD
+#define dsDrawCapsule dsDrawCapsuleD
+#endif
+
 JOINT::JOINT(int jointType) {
         type = jointType;
         firstObject = 0;
@@ -55,14 +66,17 @@ void JOINT::Actuate(void) {
 	double currentTarget;
 
 	if ( positionControl )
-
-        	currentTarget = dJointGetHingeAngle(joint);
+    {
+      currentTarget = dJointGetHingeAngle(joint); 
+      diff = desiredTarget - currentTarget;
+      dJointSetHingeParam(joint,dParamVel, speed * diff);
+    }
+        	
 	else
+    {
 		currentTarget = dJointGetHingeAngleRate(joint);
-
-    diff = desiredTarget - currentTarget;
-
-	dJointSetHingeParam(joint,dParamVel, speed * diff);
+        dJointSetHingeParam(joint,dParamVel, speed*desiredTarget);
+    }
 
 	dJointSetHingeParam(joint,dParamFMax, torque);
 }
@@ -101,6 +115,38 @@ void JOINT::Create_In_Simulator(dWorldID world, OBJECT *firstObject, OBJECT *sec
 void JOINT::Create_Proprioceptive_Sensor(int myID, int evalPeriod) {
 
         proprioceptiveSensor = new PROPRIOCEPTIVE_SENSOR(myID,evalPeriod);
+}
+
+void JOINT::Draw(){
+    dVector3 jointPosition;
+    dVector3 jointAxis;
+    dVector3 jointRotation;
+    dMatrix3 rotation;
+    dReal jointAngle;
+
+    float r = 1.;
+    float g = .3;
+    float b = .3;
+    dReal radius = .025;
+    dReal length = .3;
+
+    dsSetColorAlpha(r,g,b,1.0);
+
+    dJointGetHingeAnchor(joint,jointPosition);
+    dJointGetHingeAxis(joint,jointAxis);
+    jointAngle = dJointGetHingeAngle(joint);
+    
+
+    //Make a rotation matrix from a z-aligned cylinder to target
+    //i.e. take cross product between the two vectors (0,0,1) and
+    //jointAxis. Then rotate by angle between z-aligned and jointAxis
+    float angle = acos( jointAxis[2]);
+    dRFromAxisAndAngle(rotation,
+                        jointAxis[1],
+                        -jointAxis[0],                   
+                        0.,
+                        -angle);
+    dsDrawCylinder(jointPosition,rotation,length,radius);
 }
 
 int JOINT::Get_First_Object_Index(void) {
