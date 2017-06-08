@@ -56,11 +56,9 @@ environments.
   ```
 
   This installs ODE and compiles the local C++ code on your machine in the 
-  pyrosim/simulator directory. You can now use the package locally by 
-  appending it to your path or, if you have pip installed, cd to the module directory
-  and run
+  pyrosim/simulator directory. You can now install the package using the command
   ```bash
-  $ pip install -e .
+  $ python setup.py -install
   ```
 
   You can test the package by changing to the Demos directory and running
