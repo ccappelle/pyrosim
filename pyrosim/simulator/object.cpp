@@ -198,6 +198,10 @@ void OBJECT::Read_From_Python(dWorldID world, dSpaceID space, int shape) {
 
 	std::cin >> z;
 
+	std::cin >> density;
+
+	// std::cin >> mass;
+
 	if ( myShape == BOX ) {
 
 		std::cin >> length;
@@ -212,7 +216,8 @@ void OBJECT::Read_From_Python(dWorldID world, dSpaceID space, int shape) {
 
                 std::cin >> b;
 
-		CreateBox(world,space, x,y,z, length,width,height);
+		//CreateBox(world,space, x,y,z, length,width,height);
+        CreateBox(world,space);
 	}
 	else if (myShape == CYLINDER) {
 
@@ -232,7 +237,8 @@ void OBJECT::Read_From_Python(dWorldID world, dSpaceID space, int shape) {
 
                 std::cin >> b;
 
-                CreateCylinder(world,space, x,y,z, r1,r2,r3, length,radius);
+               // CreateCylinder(world,space, x,y,z, r1,r2,r3, length,radius);
+               CreateCylinder(world, space);
 	}
 	else {
 		std::cin >> radius;
@@ -241,7 +247,8 @@ void OBJECT::Read_From_Python(dWorldID world, dSpaceID space, int shape) {
 		std::cin >> g;
 		std::cin >> b;
 
-		CreateSphere(world,space,x,y,z,radius);
+		CreateSphere(world, space);
+		//CreateSphere(world,space,x,y,z,radius);
 	}
 }
 
@@ -312,27 +319,23 @@ int OBJECT::Contains_A_Light_Source(void) {
 	return containsLightSource;
 }
 
-void OBJECT::CreateBox(dWorldID world, dSpaceID space,
-                                double x, double y, double z,
-                                double length, double width, double height) {
-
+void OBJECT::CreateBox(dWorldID world, dSpaceID space){
         dMass m;
 
         body = dBodyCreate (world);
         dBodySetPosition (body,x,y,z);
-        dMassSetBox (&m,1,length,width,height);
-        dMassAdjust (&m,1);
+        dMassSetBox (&m,density,length,width,height);
+
         dBodySetMass (body,&m);
+
         geom = dCreateBox(space,length,width,height);
         dGeomSetBody (geom,body);
 
         dGeomSetData(geom,this);
 }
 
-void OBJECT::CreateCylinder(dWorldID world, dSpaceID space,
-                                                double x, double y, double z,
-                                                double r1, double r2, double r3,
-                                                double length, double radius) {
+void OBJECT::CreateCylinder(dWorldID world, dSpaceID space)
+{
 
         dMass m;
 
@@ -343,27 +346,26 @@ void OBJECT::CreateCylinder(dWorldID world, dSpaceID space,
         dRFromZAxis(R,r1,r2,r3);
     	dBodySetRotation(body,R);
 
-        // dMassSetSphere (&m,1,radius);
-	dMassSetCapsule(&m,1,1,radius,length);
-        dMassAdjust (&m,1);
+		dMassSetCapsule(&m,density,1,radius,length);
+		dMassRotate(&m, R);
+
         dBodySetMass (body,&m);
-        // geom = dCreateCylinder(space,radius,length);
+
         geom = dCreateCapsule(space,radius,length);
         dGeomSetBody (geom,body);
 
 	dGeomSetData(geom,this);
 }
 
-void OBJECT::CreateSphere(dWorldID world, dSpaceID space, 
-							double x, double y, double z,
-							double radius){
+void OBJECT::CreateSphere(dWorldID world, dSpaceID space)
+{
 	dMass m;
 
 	body = dBodyCreate(world);
 	dBodySetPosition(body, x,y,z);
 
-	dMassSetSphere(&m,1,radius);
-	dMassAdjust(&m,1);
+	dMassSetSphere(&m,density,radius);
+
 	dBodySetMass(body,&m);
 	geom = dCreateSphere(space,radius);
 	dGeomSetBody(geom,body);

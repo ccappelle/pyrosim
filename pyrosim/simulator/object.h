@@ -24,6 +24,8 @@ private:
 
 	double x,y,z;
 
+	double density;
+	
 	double r1,r2,r3;
 
 	double length,width,height;
@@ -96,18 +98,9 @@ private:
 
 	double Distance_To(OBJECT *otherObject);
 
-	void CreateBox(dWorldID world, dSpaceID space,
-                                double x, double y, double z,
-                                double length, double width, double height);
-
-	void CreateCylinder(dWorldID world, dSpaceID space,
-                                                double x, double y, double z,
-                                                double r1, double r2, double r3,
-                                                double length, double radius);
-
-	void CreateSphere(dWorldID world, dSpaceID space, 
-							double x, double y, double z,
-							double radius);
+	void CreateBox(dWorldID world, dSpaceID space);
+	void CreateCylinder(dWorldID world, dSpaceID space);
+	void CreateSphere(dWorldID world, dSpaceID space);
 
 	void DrawBox(void);
 	void DrawCylinder(void);

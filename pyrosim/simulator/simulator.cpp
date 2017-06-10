@@ -1,6 +1,10 @@
 #include "iostream"
+
+//ode headers
 #include <ode/ode.h>
 #include <drawstuff/drawstuff.h>
+
+//custom headers
 #include "texturepath.h"
 #include "environment.h"
 #include "datastruct.h"
@@ -9,8 +13,6 @@
 #pragma warning(disable:4244 4305)  // for VC++, no precision loss complaints
 #endif
 
-#include <drawstuff/drawstuff.h>
-#include "texturepath.h"
 #ifdef dDOUBLE
 #define dsDrawLine dsDrawLineD
 #define dsDrawBox dsDrawBoxD
@@ -31,7 +33,7 @@ int numberOfBodies = 0;
 
 static dGeomID ground;
 
-Data data;
+Data data;//struct which keeps all user input values for various parameterss. see datastruct.h
 
 void Draw_Distance_Sensor(dGeomID myGeom, dGeomID thisGeom);
 

@@ -12,7 +12,7 @@ def send_to_simulator(sim, weight_matrix):
 	neuron_id = 0
 
 	main_body = sim.send_box(x=0, y=0,z=HEIGHT+EPS,
-				 length=HEIGHT, width=HEIGHT, height=EPS*2.0)
+				 length=HEIGHT, width=HEIGHT, height=EPS*2.0, density=1)
 
 	thighs = [0]*4
 	shins = [0]*4
@@ -47,7 +47,8 @@ def send_to_simulator(sim, weight_matrix):
 		
 		shins[i] = sim.send_cylinder(x=x_pos2, y=y_pos2, z=(HEIGHT+EPS)/2.0,
 							r1=0, r2=0, r3=1,
-							length=HEIGHT, radius=EPS)
+							length=HEIGHT, radius=EPS,
+							density=1)
 
 		knees[i] = sim.send_hinge_joint( first_body_id=thighs[i], second_body_id=shins[i],
 						x=x_pos2, y=y_pos2, z=HEIGHT+EPS,
