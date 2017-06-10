@@ -836,7 +836,7 @@ class Simulator(object):
 			self.pipe.stdin.write(string_to_send)
 
 		self.pipe.stdin.write('Done\n')
-
+		#self.pipe.stdin.write('textuer2\n')
 		return True
 
 	def wait_to_finish(self):
@@ -867,7 +867,7 @@ class Simulator(object):
 		for arg in args:
 			if arg != 0:
 				flag = True
-
+				
 		assert flag==True, 'Vector parameter of ' + name + ' is not normalizeable'
 
 	def _collect_sensor_data(self,data_from_simulator):

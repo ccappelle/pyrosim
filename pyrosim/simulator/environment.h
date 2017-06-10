@@ -5,6 +5,7 @@
 #include "joint.h"
 #include "object.h"
 #include "neuralNetwork.h"
+#include "datastruct.h"
 
 class ENVIRONMENT {
 
@@ -34,8 +35,7 @@ public:
 
         void Poll_Sensors(int timeStep);
 
-	void Read_From_Python(dWorldID world,dSpaceID space, char *texturePath, int *evaluationTime, float *dt,
-								float *gravity, float *xyz, float *hpr, int *debug, int *followBody, int *trackBody);
+    void Read_From_Python(dWorldID world, dSpaceID space, Data *data);
 
 	void Update_Neural_Network(int timeStep);
 

@@ -4,6 +4,8 @@
 #include "environment.h"
 #include "iostream"
 
+
+
 extern int BOX;
 extern int CYLINDER;
 extern int SPHERE;
@@ -55,11 +57,9 @@ void ENVIRONMENT::Get_Object_Position(float *xyz, int bodyID){
         xyz[2] = pos[2];
 }
 
-void ENVIRONMENT::Read_From_Python(dWorldID world,dSpaceID space, char *texturePath, int *evaluationTime,
-                                        float *dt, float *gravity, float *xyz, float *hpr, int *debug,
-                                        int *followBody, int *trackBody) {
-
-        char incomingString[100];
+void ENVIRONMENT::Read_From_Python(dWorldID world, dSpaceID space, Data *data)
+{
+       char incomingString[100];
 
         std::cin >> incomingString;
 
@@ -67,99 +67,99 @@ void ENVIRONMENT::Read_From_Python(dWorldID world,dSpaceID space, char *textureP
                 std::cerr << incomingString << "\n";
                 //Simulator options
                 if ( strcmp(incomingString,"EvaluationTime") == 0 )
-			std::cin >> (*evaluationTime);
+                        std::cin >> (data->evaluationTime);
 
                 else if ( strcmp(incomingString,"TimeInterval") == 0)
-                        std::cin >> (*dt);
+                        std::cin >> data->dt;
                 else if ( strcmp(incomingString,"Gravity") == 0)
-                        std::cin >> (*gravity);
+                        std::cin >> data->gravity;
                 else if ( strcmp(incomingString,"TexturePath") == 0)
-                        std::cin >> (texturePath);
+                        std::cin >> data->texturePathStr;
                 else if ( strcmp(incomingString,"Debug") == 0)
-                        std::cin >> (*debug);
+                        std::cin >> data->debug;
                 //Camera
                 else if ( strcmp(incomingString,"Camera") == 0)
                 {
-                        std::cin >> xyz[0];
-                        std::cin >> xyz[1];
-                        std::cin >> xyz[2];
+                        std::cin >> data->xyz[0];
+                        std::cin >> data->xyz[1];
+                        std::cin >> data->xyz[2];
 
-                        std::cin >> hpr[0];
-                        std::cin >> hpr[1];
-                        std::cin >> hpr[2];
+                        std::cin >> data->hpr[0];
+                        std::cin >> data->hpr[1];
+                        std::cin >> data->hpr[2];
                 }
 
                 else if ( strcmp(incomingString,"FollowBody")==0)
-                        std::cin >> (*followBody);
+                        std::cin >> data->followBody;
                 else if ( strcmp(incomingString,"TrackBody")==0)
-                        std::cin >> (*trackBody);
+                        std::cin >> data->trackBody;
                 //Bodies
                 else if ( strcmp(incomingString,"Box") == 0 )
 
-			Create_Object(world,space,numberOfBodies,BOX);
+                        Create_Object(world,space,numberOfBodies,BOX);
 
-		else if ( strcmp(incomingString,"Cylinder") == 0 )
+                else if ( strcmp(incomingString,"Cylinder") == 0 )
 
-			Create_Object(world,space,numberOfBodies,CYLINDER);
+                        Create_Object(world,space,numberOfBodies,CYLINDER);
 
                 else if ( strcmp(incomingString,"Sphere") == 0)
                         Create_Object(world,space,numberOfBodies, SPHERE);
 
                 //Joints
-		else if ( strcmp(incomingString,"HingeJoint") == 0 )
+                else if ( strcmp(incomingString,"HingeJoint") == 0 )
 
-			Create_Joint(world,space,numberOfJoints,0);
+                        Create_Joint(world,space,numberOfJoints,0);
 
                 //Sensors
-		else if ( strcmp(incomingString,"PositionSensor") == 0 )
+                else if ( strcmp(incomingString,"PositionSensor") == 0 )
 
-			Create_Position_Sensor(*evaluationTime);
+                        Create_Position_Sensor(data->evaluationTime);
 
                 else if ( strcmp(incomingString,"TouchSensor") == 0 )
 
-                        Create_Touch_Sensor(*evaluationTime);
+                        Create_Touch_Sensor(data->evaluationTime);
 
                 else if ( strcmp(incomingString,"RaySensor") == 0 )
 
-                        Create_Ray_Sensor(space,*evaluationTime);
+                        Create_Ray_Sensor(space,data->evaluationTime);
 
                 else if ( strcmp(incomingString,"ProprioceptiveSensor") == 0 )
 
-			Create_Proprioceptive_Sensor(*evaluationTime);
+                        Create_Proprioceptive_Sensor(data->evaluationTime);
 
                 else if ( strcmp(incomingString,"LightSensor") == 0 )
 
-                        Create_Light_Sensor(*evaluationTime);
+                        Create_Light_Sensor(data->evaluationTime);
 
                 else if ( strcmp(incomingString,"VestibularSensor") == 0 )
 
-                        Create_Vestibular_Sensor(*evaluationTime);
+                        Create_Vestibular_Sensor(data->evaluationTime);
 
-		else if ( strcmp(incomingString,"LightSource") == 0 )
+                else if ( strcmp(incomingString,"LightSource") == 0 )
 
-			Create_Light_Source();
+                        Create_Light_Source();
 
                 //Neurons
                 else if ( strcmp(incomingString,"BiasNeuron") == 0 )
 
                         Create_Bias_Neuron();
-		else if ( strcmp(incomingString,"SensorNeuron") == 0 )
+                else if ( strcmp(incomingString,"SensorNeuron") == 0 )
 
-			Create_Sensor_Neuron();
+                        Create_Sensor_Neuron();
 
-		else if ( strcmp(incomingString,"HiddenNeuron") == 0 )
+                else if ( strcmp(incomingString,"HiddenNeuron") == 0 )
 
-			Create_Hidden_Neuron();
+                        Create_Hidden_Neuron();
 
                 else if ( strcmp(incomingString,"MotorNeuron") == 0 )
 
                         Create_Motor_Neuron();
 
                 else if ( strcmp(incomingString,"FunctionNeuron") == 0)
-                        Create_Function_Neuron(*evaluationTime);
+                        Create_Function_Neuron(data->evaluationTime);
                 //Synapse
-		else
-			Create_Synapse();
+                else
+                        Create_Synapse();
 
                 std::cin >> incomingString;
         }

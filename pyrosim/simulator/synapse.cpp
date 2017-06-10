@@ -20,6 +20,8 @@ SYNAPSE::SYNAPSE(void) {
 	std::cin >> endTime;
 
 	weight = startWeight;
+
+	//std::cerr << sourceNeuronIndex<< " " << targetNeuronIndex << " " << startWeight << " " << endWeight << " " << startTime << " " << endTime << "\n";
 }
 
 SYNAPSE::~SYNAPSE(void) {

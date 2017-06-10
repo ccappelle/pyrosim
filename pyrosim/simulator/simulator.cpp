@@ -3,6 +3,7 @@
 #include <drawstuff/drawstuff.h>
 #include "texturepath.h"
 #include "environment.h"
+#include "datastruct.h"
 
 #ifdef _MSC_VER
 #pragma warning(disable:4244 4305)  // for VC++, no precision loss complaints
@@ -24,26 +25,15 @@ static dJointGroupID contactgroup;
 dsFunctions fn;
 
 int timer;
-int evaluationTime = 100;
-int runBlind;
-int debug;
-int followBody = -1;
-int trackBody = -1;
 
 ENVIRONMENT *environment;
 int numberOfBodies = 0;
-float dt = 0.05;
-float gravity = -1.0;
-
-
-static float xyz[3] = {0.8317f,-0.9817f,0.8000f};
-static float hpr[3] = {121.0000f,-27.5000f,0.0000f};
-
-static char texturePathStr[100];
 
 static dGeomID ground;
 
-void Draw_Distance_Sensor(dGeomID myGeom, dGeomID hisGeom);
+Data data;
+
+void Draw_Distance_Sensor(dGeomID myGeom, dGeomID thisGeom);
 
 void Read_From_Python(void);
 
@@ -65,7 +55,7 @@ void Handle_Ray_Sensor(dGeomID o1, dGeomID o2) {
 
                 	obj->Set_Ray_Sensor(contact.geom.depth,(OBJECT*)dGeomGetData(o2),timer);
 
-                	if ( runBlind == false )
+                	if ( data.runBlind == false )
 
 				obj->Draw_Ray_Sensor(contact.geom.pos[0],contact.geom.pos[1],contact.geom.pos[2],timer);
 		}
@@ -79,7 +69,7 @@ void Handle_Ray_Sensors(dGeomID o1, dGeomID o2) {
 	Handle_Ray_Sensor(o2,o1);
 }
 
-static void nearCallback (void *data, dGeomID o1, dGeomID o2)
+static void nearCallback (void *callbakData, dGeomID o1, dGeomID o2)
 {
   int i,n;
 
@@ -165,39 +155,39 @@ void Simulate_For_One_Time_Step(void) {
 
   environment->Actuate_Joints();
 
-  dWorldStep (world, dt);
+  dWorldStep (world, data.dt);
 
   dJointGroupEmpty(contactgroup);
 
   timer++;
 
-  if ( timer==evaluationTime )
+  if ( timer==data.evaluationTime )
         	Terminate();
 }
 
 static void simLoop (int pause)
 {
   if (timer==0){
-    dWorldSetGravity(world,0,0,gravity);
-    dsSetViewpoint (xyz,hpr);
+    dWorldSetGravity(world,0,0,data.gravity);
+    dsSetViewpoint (data.xyz,data.hpr);
   }
-  if (followBody>=0){
+  if (data.followBody>=0){
     float updated_xyz[3];
-    environment->Get_Object_Position(updated_xyz, followBody);
+    environment->Get_Object_Position(updated_xyz, data.followBody);
 
-    updated_xyz[0] += xyz[0];
-    updated_xyz[1] += xyz[1];
-    updated_xyz[2] = xyz[2]; //no movement in x direction
+    updated_xyz[0] += data.xyz[0];
+    updated_xyz[1] += data.xyz[1];
+    updated_xyz[2] = data.xyz[2]; //no movement in x direction
 
-    dsSetViewpoint(updated_xyz,hpr);
+    dsSetViewpoint(updated_xyz,data.hpr);
   }
-  if (trackBody>=0){
+  if (data.trackBody>=0){
     float dirVector[3];
-    environment->Get_Object_Position(dirVector, trackBody);
+    environment->Get_Object_Position(dirVector, data.trackBody);
 
-    dirVector[0] -= xyz[0];
-    dirVector[1] -= xyz[1];
-    dirVector[2] -= xyz[2];
+    dirVector[0] -= data.xyz[0];
+    dirVector[1] -= data.xyz[1];
+    dirVector[2] -= data.xyz[2];
 
     if (!(dirVector[0]==0 and dirVector[1]==0 and dirVector[2]==0)){
         float normalizer = sqrt(pow(dirVector[0],2)+ pow(dirVector[1],2)+pow(dirVector[2],2));
@@ -210,10 +200,10 @@ static void simLoop (int pause)
         float update_hpr[3];
 
         update_hpr[0] = heading;
-        update_hpr[1] = hpr[1];
-        update_hpr[2] = hpr[2];
+        update_hpr[1] = data.hpr[1];
+        update_hpr[2] = data.hpr[2];
 
-        dsSetViewpoint(xyz, update_hpr);
+        dsSetViewpoint(data.xyz, update_hpr);
     }
   }
   
@@ -223,7 +213,7 @@ static void simLoop (int pause)
 
 		Simulate_For_One_Time_Step();
 
-	environment->Draw(debug);
+	environment->Draw(data.debug);
 
 }
 
@@ -247,22 +237,24 @@ void Initialize_Draw_Stuff(void){
     fn.step = &simLoop;
     fn.command = &command;
     fn.stop = 0;
-    fn.path_to_textures = texturePathStr;
+    fn.path_to_textures = data.texturePathStr;
     
 }
 void Initialize_Environment(void) {
-
         environment = new ENVIRONMENT();
+        data.followBody = -1;
+        data.trackBody = -1;
 }
 
 
 void Read_From_Python(void) {
-	environment->Read_From_Python(world,space, texturePathStr, &evaluationTime,&dt,&gravity,xyz,hpr,&debug,&followBody,&trackBody);
+	//environment->Read_From_Python(world,space, texturePathStr, &evaluationTime,&dt,&gravity,xyz,hpr,&debug,&followBody,&trackBody);
+  environment->Read_From_Python(world,space,&data);
 }
 
 void Terminate(void) {
 
-	environment->Write_Sensor_Data(evaluationTime);
+	environment->Write_Sensor_Data(data.evaluationTime);
 	exit(0);
 }
 
@@ -275,17 +267,16 @@ void Run_Blind(void) {
 
 int main (int argc, char **argv)
 {
-
-	runBlind = false; 
+	data.runBlind = false; 
 
 	if ( (argc > 1) && (strcmp(argv[1],"-blind")==0) )
-		runBlind = true;
+		data.runBlind = true;
 
   Initialize_ODE();
   Initialize_Environment();
   Read_From_Python();
 
-	if ( runBlind )
+	if ( data.runBlind )
 		Run_Blind();
 	else{
       Initialize_Draw_Stuff();
