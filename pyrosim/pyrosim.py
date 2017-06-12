@@ -178,7 +178,7 @@ class Simulator(object):
 
         return neuron_id
 
-    def send_box(self, x=0, y=0, z=0, density=1.0,
+    def send_box(self, x=0, y=0, z=0, mass=1.0,
                  length=0.1, width=0.1, height=0.1,
                  r=1, g=1, b=1):
         """Send box body to the simulator
@@ -191,8 +191,8 @@ class Simulator(object):
                 The y position coordinate of the center (default 0)
         z		 : float, optional
                 The z position coordinate of the center (default 0)
-        density  : float, optional 
-                The density of the body (default is 1.0)
+        mass  : float, optional 
+                The mass of the body (default is 1.0)
         length   : float, optional
                 The length of the box
         width   : float, optional
@@ -222,7 +222,7 @@ class Simulator(object):
         self._send('Box',
                    body_id,
                    x, y, z,
-                   density,
+                   mass,
                    length, width, height,
                    r, g, b)
 
@@ -251,7 +251,7 @@ class Simulator(object):
 
         return True
 
-    def send_cylinder(self, x=0, y=0, z=0, density=1.0,
+    def send_cylinder(self, x=0, y=0, z=0, mass=1.0,
                       r1=0, r2=0, r3=1, length=1.0,
                       radius=0.1, r=1, g=1, b=1):
         """Send cylinder body to the simulator
@@ -264,8 +264,8 @@ class Simulator(object):
                 The y position coordinate of the center (default is 0)
         z		 : float, optional
                 The z position coordinate of the center (default is 0)
-                        density  : float, optional 
-                The density of the body (default is 1.0)
+        mass  : float, optional 
+                The mass of the body (default is 1.0)
         r1		 : float, optional
                 The orientation along the x axis. The vector [r1,r2,r3]
                 specify the direction of the long axis of the cylinder.
@@ -305,7 +305,7 @@ class Simulator(object):
         self._send('Cylinder',
                    body_id,
                    x, y, z,
-                   density,
+                   mass,
                    r1, r2, r3,
                    length, radius,
                    r, g, b)
@@ -541,7 +541,7 @@ class Simulator(object):
                             'than or equal to zero')
         assert torque >= 0, ('Torque of Hinge Joint must be greater'
                              'than or equal to zero')
-        
+
         joint_id = self._num_joints
         self._num_joints += 1
 
@@ -721,7 +721,7 @@ class Simulator(object):
 
         return neuron_id
 
-    def send_sphere(self, x=0, y=0, z=0, density=1.0, radius=0.5,
+    def send_sphere(self, x=0, y=0, z=0, mass=1.0, radius=0.5,
                     r=1, g=1, b=1):
         """Sends a sphere to the simulator
 
@@ -733,8 +733,8 @@ class Simulator(object):
                 The y position of the center
         z 		 : float, optional
                 The z position of the center
-        density  : float, optional 
-                The density of the body (default is 1.0)
+        mass  : float, optional 
+                The mass of the body (default is 1.0)
         radius   : float, optional
                 The radius of the sphere (default is 0.5)
         r       : float, optional

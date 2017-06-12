@@ -24,7 +24,7 @@ private:
 
 	double x,y,z;
 
-	double density;
+	double mass;
 	
 	double r1,r2,r3;
 

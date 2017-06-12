@@ -13,7 +13,7 @@ def send_to_simulator(sim, weight_matrix):
     neuron_id = 0
 
     main_body = sim.send_box(x=0, y=0, z=HEIGHT+EPS,
-                             length=HEIGHT, width=HEIGHT, height=EPS*2.0, density=1)
+                             length=HEIGHT, width=HEIGHT, height=EPS*2.0, mass=1)
 
     thighs = [0]*4
     shins = [0]*4
@@ -49,7 +49,7 @@ def send_to_simulator(sim, weight_matrix):
         shins[i] = sim.send_cylinder(x=x_pos2, y=y_pos2, z=(HEIGHT+EPS)/2.0,
                                      r1=0, r2=0, r3=1,
                                      length=HEIGHT, radius=EPS,
-                                     density=1)
+                                     mass=1.)
 
         knees[i] = sim.send_hinge_joint(first_body_id=thighs[i], second_body_id=shins[i],
                                         x=x_pos2, y=y_pos2, z=HEIGHT+EPS,
@@ -67,7 +67,7 @@ def send_to_simulator(sim, weight_matrix):
     sensor_neurons[-1] = sim.send_sensor_neuron(sensor_id=light_sensor)
 
     count = 0
-    #sim.Send_Synapse(sourceneuron_id=2, targetneuron_id=0, weight=1.0)
+
     for source_id in sensor_neurons:
         for target_id in motor_neurons:
             count += 1
@@ -93,7 +93,7 @@ def send_to_simulator(sim, weight_matrix):
 if __name__ == "__main__":
     import pyrosim
 
-    eval_time = 100
+    eval_time = 1000
     gravity = -1.0
 
     sim = pyrosim.Simulator(eval_time=eval_time, debug=True,

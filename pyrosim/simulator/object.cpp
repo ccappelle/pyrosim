@@ -198,7 +198,7 @@ void OBJECT::Read_From_Python(dWorldID world, dSpaceID space, int shape) {
 
 	std::cin >> z;
 
-	std::cin >> density;
+	std::cin >> mass;
 
 	// std::cin >> mass;
 
@@ -324,7 +324,7 @@ void OBJECT::CreateBox(dWorldID world, dSpaceID space){
 
         body = dBodyCreate (world);
         dBodySetPosition (body,x,y,z);
-        dMassSetBox (&m,density,length,width,height);
+        dMassSetBoxTotal (&m,mass,length,width,height);
 
         dBodySetMass (body,&m);
 
@@ -346,7 +346,7 @@ void OBJECT::CreateCylinder(dWorldID world, dSpaceID space)
         dRFromZAxis(R,r1,r2,r3);
     	dBodySetRotation(body,R);
 
-		dMassSetCapsule(&m,density,1,radius,length);
+        dMassSetCapsuleTotal(&m, mass, 3, radius, length);
 		dMassRotate(&m, R);
 
         dBodySetMass (body,&m);
@@ -364,7 +364,7 @@ void OBJECT::CreateSphere(dWorldID world, dSpaceID space)
 	body = dBodyCreate(world);
 	dBodySetPosition(body, x,y,z);
 
-	dMassSetSphere(&m,density,radius);
+	dMassSetSphereTotal(&m,mass,radius);
 
 	dBodySetMass(body,&m);
 	geom = dCreateSphere(space,radius);
