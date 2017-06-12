@@ -606,7 +606,12 @@ class Simulator(object):
 
         Motor neurons are neurons which connecto to a specified joint and 
         determine how the joint moves every time step of simulation
-
+		WARNING: Sending a motor neuron to a joint whose starting position
+		is not in the middle of the 'hi' & 'lo' cutoffs will most likely cause
+		instabilities in the simulation. For example creating a joint with
+		either 'hi' or 'lo' to 0 and attaching a motor neuron to this joint
+		will cause the joint to break. 
+		
         Parameters
         ----------
         joint_id  : int, optional

@@ -74,7 +74,6 @@ def send_to_simulator(sim, weight_matrix):
             start_weight = weight_matrix[source_id, target_id, 0]
             end_weight = weight_matrix[source_id, target_id, 1]
             time = weight_matrix[source_id, target_id, 2]
-            #time = .5
             sim.send_developing_synapse(source_neuron_id=source_id, target_neuron_id=target_id,
                                         start_weight=start_weight, end_weight=end_weight,
                                         start_time=time, end_time=time)
