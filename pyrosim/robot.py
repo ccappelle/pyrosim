@@ -1,25 +1,25 @@
 
 class Robot(object):
-	"""docstring for Robot"""
-	def __init__(self):
-		self.bodies = []
-		self.joints = []
-		self.sensors = []
+    """docstring for Robot"""
 
-		self.network = None
+    def __init__(self):
+        self.bodies = []
+        self.joints = []
+        self.sensors = []
 
-		
-	def add_cylinder(**kwargs):
-		pass
+        self.network = None
 
-	def add_body(body):
-		self.bodies.append(body)
+    def add_cylinder(**kwargs):
+        pass
 
-	def add_box(**kwargs):
-		pass
+    def add_body(body):
+        self.bodies.append(body)
 
-	def add_sphere(**kwargs):
-		pass
+    def add_box(**kwargs):
+        pass
 
-	def add_joint(**kwargs):
-		pass
+    def add_sphere(**kwargs):
+        pass
+
+    def add_joint(**kwargs):
+        pass

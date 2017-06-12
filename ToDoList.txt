@@ -1,24 +1,24 @@
 to do:
 
-comments and make api
+#completed comments and make api
 
 change ludobots pyrosim link to point to old version
 
 webpage
   - videos, highlight reel
 
-logo
+#completed logo
 
-directory
+#completed directory
 
 windows
   - virtual machine
   - linux partition
   - figure out pipes
 
-check ids
+#completed check ids
 
-motar strength
+#completed motor strength
 
 #completed 2017-05-31 ---- input function
 
@@ -35,5 +35,5 @@ demos
   
 impulse forces
 
-debug mode (draw joints etc.)
+#completed debug mode (draw joints etc.)
 

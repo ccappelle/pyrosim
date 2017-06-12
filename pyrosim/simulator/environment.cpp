@@ -5,6 +5,8 @@
 #include "iostream"
 
 
+extern int HINGE;
+extern int SLIDER;
 
 extern int BOX;
 extern int CYLINDER;
@@ -107,9 +109,10 @@ void ENVIRONMENT::Read_From_Python(dWorldID world, dSpaceID space, Data *data)
 
                 //Joints
                 else if ( strcmp(incomingString,"HingeJoint") == 0 )
+                        Create_Joint(world,space,numberOfJoints,HINGE);
 
-                        Create_Joint(world,space,numberOfJoints,0);
-
+                else if ( strcmp(incomingString,"SliderJoint") == 0)
+                        Create_Joint(world,space,numberOfJoints,SLIDER);
                 //Sensors
                 else if ( strcmp(incomingString,"PositionSensor") == 0 )
 
@@ -263,7 +266,6 @@ void ENVIRONMENT::Create_Joint( dWorldID world, dSpaceID space, int index, int j
 	joints[index] = new JOINT(jointType);
 
 	joints[index]->Read_From_Python();
-
 	int firstObjectID = joints[index]->Get_First_Object_Index();
 
 	int secondObjectID = joints[index]->Get_Second_Object_Index();
@@ -274,7 +276,7 @@ void ENVIRONMENT::Create_Joint( dWorldID world, dSpaceID space, int index, int j
 
 		firstObject = objects[ firstObjectID ];
 
-        OBJECT *secondObject = NULL;
+    OBJECT *secondObject = NULL;
 
 	if ( secondObjectID >= 0 )
 

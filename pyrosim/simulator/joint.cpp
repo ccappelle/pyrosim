@@ -7,6 +7,7 @@
 
 #include <drawstuff/drawstuff.h>
 #include "texturepath.h"
+//#include "constants.h"
 
 #ifdef dDOUBLE
 #define dsDrawLine dsDrawLineD
@@ -15,6 +16,9 @@
 #define dsDrawCylinder dsDrawCylinderD
 #define dsDrawCapsule dsDrawCapsuleD
 #endif
+
+extern int HINGE;
+extern int SLIDER;
 
 JOINT::JOINT(int jointType) {
         type = jointType;
@@ -61,24 +65,35 @@ void JOINT::Actuate(void) {
 
 	double diff;
 
-        double desiredTarget = zeroToOne * ( highStop - lowStop ) + lowStop;
+    double desiredTarget = zeroToOne * ( highStop - lowStop ) + lowStop;
 
 	double currentTarget;
-
-	if ( positionControl )
-    {
-      currentTarget = dJointGetHingeAngle(joint); 
-      diff = desiredTarget - currentTarget;
-      dJointSetHingeParam(joint,dParamVel, speed * diff);
+    if (type==HINGE){
+	   if ( positionControl )
+     {
+          currentTarget = dJointGetHingeAngle(joint); 
+          diff = desiredTarget - currentTarget;
+          dJointSetHingeParam(joint,dParamVel, speed * diff);
+    
+       }       	
+    	else
+      {
+            dJointSetHingeParam(joint,dParamVel, speed*desiredTarget);
+        }
+	   dJointSetHingeParam(joint,dParamFMax, torque);
     }
-        	
-	else
-    {
-		currentTarget = dJointGetHingeAngleRate(joint);
-        dJointSetHingeParam(joint,dParamVel, speed*desiredTarget);
-    }
+    else{
+        if (positionControl){
+            currentTarget = dJointGetSliderPosition(joint);
 
-	dJointSetHingeParam(joint,dParamFMax, torque);
+            diff = desiredTarget - currentTarget;
+            dJointSetSliderParam(joint,dParamVel, speed*diff);
+        }
+        else {
+            dJointSetSliderParam(joint,dParamVel, speed*desiredTarget);
+        }
+        dJointSetSliderParam(joint,dParamFMax, torque);   
+    }
 }
 
 int JOINT::Connect_Sensor_To_Sensor_Neuron(int sensorID , NEURON *sensorNeuron) {
@@ -108,8 +123,10 @@ int  JOINT::Connect_To_Motor_Neuron(int jointID, NEURON *mNeuron) {
 }
 
 void JOINT::Create_In_Simulator(dWorldID world, OBJECT *firstObject, OBJECT *secondObject) {
-
-    Create_Hinge_Joint_In_Simulator(world,firstObject,secondObject);
+    if(type ==HINGE)
+        Create_Hinge_Joint_In_Simulator(world,firstObject,secondObject);
+    else 
+        Create_Slider_Joint_In_Simulator(world,firstObject,secondObject);
 }
 
 void JOINT::Create_Proprioceptive_Sensor(int myID, int evalPeriod) {
@@ -118,35 +135,37 @@ void JOINT::Create_Proprioceptive_Sensor(int myID, int evalPeriod) {
 }
 
 void JOINT::Draw(){
-    dVector3 jointPosition;
-    dVector3 jointAxis;
-    dVector3 jointRotation;
-    dMatrix3 rotation;
-    dReal jointAngle;
+    if( type==HINGE){
+        dVector3 jointPosition;
+        dVector3 jointAxis;
+        dVector3 jointRotation;
+        dMatrix3 rotation;
+        dReal jointAngle;
 
-    float r = 1.;
-    float g = .3;
-    float b = .3;
-    dReal radius = .025;
-    dReal length = .3;
+        float r = 1.;
+        float g = .3;
+        float b = .3;
+        dReal radius = .025;
+        dReal length = .3;
 
-    dsSetColorAlpha(r,g,b,1.0);
+        dsSetColorAlpha(r,g,b,1.0);
 
-    dJointGetHingeAnchor(joint,jointPosition);
-    dJointGetHingeAxis(joint,jointAxis);
-    jointAngle = dJointGetHingeAngle(joint);
-    
+        dJointGetHingeAnchor(joint,jointPosition);
+        dJointGetHingeAxis(joint,jointAxis);
+        jointAngle = dJointGetHingeAngle(joint);
+        
 
-    //Make a rotation matrix from a z-aligned cylinder to target
-    //i.e. take cross product between the two vectors (0,0,1) and
-    //jointAxis. Then rotate by angle between z-aligned and jointAxis
-    float angle = acos( jointAxis[2]);
-    dRFromAxisAndAngle(rotation,
-                        jointAxis[1],
-                        -jointAxis[0],                   
-                        0.,
-                        -angle);
-    dsDrawCylinder(jointPosition,rotation,length,radius);
+        //Make a rotation matrix from a z-aligned cylinder to target
+        //i.e. take cross product between the two vectors (0,0,1) and
+        //jointAxis. Then rotate by angle between z-aligned and jointAxis
+        float angle = acos( jointAxis[2]);
+        dRFromAxisAndAngle(rotation,
+                            jointAxis[1],
+                            -jointAxis[0],                   
+                            0.,
+                            -angle);
+        dsDrawCylinder(jointPosition,rotation,length,radius);
+    }
 }
 
 int JOINT::Get_First_Object_Index(void) {
@@ -238,12 +257,29 @@ void JOINT::Create_Hinge_Joint_In_Simulator(dWorldID world, OBJECT *firstObject,
         dJointSetHingeAxis(joint,normalX,normalY,normalZ);
 
         if ( positionControl == true ) {
-
                 dJointSetHingeParam(joint,dParamLoStop,lowStop);
-
                 dJointSetHingeParam(joint,dParamHiStop,highStop);
         }
 }
 
+void JOINT::Create_Slider_Joint_In_Simulator(dWorldID world, OBJECT *firstObject, OBJECT *secondObject){
+
+        joint = dJointCreateSlider(world,0);
+        if (firstObject == NULL)
+            dJointAttach( joint , 0 , secondObject->Get_Body() );
+        else if(secondObject == NULL)
+            dJointAttach( joint , firstObject->Get_Body() , 0 );
+        else
+            dJointAttach( joint , firstObject->Get_Body() , secondObject->Get_Body() );
+
+        //dJointSetHingeAnchor(joint,x,y,z);
+
+        dJointSetSliderAxis(joint,normalX,normalY,normalZ);
+
+        if ( positionControl == true ) {
+                dJointSetSliderParam(joint,dParamLoStop,lowStop);
+                dJointSetSliderParam(joint,dParamHiStop,highStop);
+        }
+}
 
 #endif
