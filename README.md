@@ -2,7 +2,7 @@
 
 Pyrosim enables the creation of robots with arbitrary body plans
 and neural controllers, and the optimization of them in arbitrary simulated
-environments.
+environments. [Read the Docs](https://ccappelle.github.io/pyrosim)
 
 ## Installation instructions.
 
