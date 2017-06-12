@@ -94,17 +94,27 @@ if __name__ == "__main__":
 
     eval_time = 1000
     gravity = -1.0
+    NUM = 1
+    if NUM == 1:
+      BLIND = False
+    else:
+      BLIND = True
 
-    sim = pyrosim.Simulator(eval_time=eval_time, debug=True,
-                            gravity=gravity, play_blind=False, use_textures=True)
-    num_sensors = 5
-    num_motors = 8
+    sim = [0]*1
+    for j in range(NUM):
+      for i in range(NUM):
+        sim[i] = pyrosim.Simulator(eval_time=eval_time, debug=False,
+                                gravity=gravity, play_blind=BLIND, use_textures=True)
+        num_sensors = 5
+        num_motors = 8
 
-    weight_matrix = np.random.rand(
-        num_sensors+num_motors, num_sensors+num_motors, 3)
-    weight_matrix[:, :, 0:1] = weight_matrix[:, :, 0:1]*2.-1.
-    time_matrix = np.random.rand(num_sensors+num_motors)
+        weight_matrix = np.random.rand(
+            num_sensors+num_motors, num_sensors+num_motors, 3)
+        weight_matrix[:, :, 0:1] = weight_matrix[:, :, 0:1]*2.-1.
+        time_matrix = np.random.rand(num_sensors+num_motors)
 
-    layout = send_to_simulator(sim, weight_matrix=weight_matrix)
-    sim.start()
-    results = sim.wait_to_finish()
+        layout = send_to_simulator(sim[i], weight_matrix=weight_matrix)
+        sim[i].start()
+      for i in range(NUM):
+        results = sim[i].wait_to_finish()
+        print i,j
