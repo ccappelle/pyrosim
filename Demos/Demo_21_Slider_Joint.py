@@ -13,16 +13,16 @@ cyl2 = sim.send_cylinder(x=0, y=ARM_LENGTH/2.0, z=ARM_LENGTH + ARM_RADIUS,
                          length=ARM_LENGTH, radius=ARM_RADIUS)
 
 joint = sim.send_slider_joint(first_body_id=cyl1, second_body_id=cyl2,
-                              x_dir=1, y_dir=0, z_dir=0,
+                              x_dir=1, y_dir=0, z_dir=0,lo=-.1,hi=.1,
                               position_control=True)
-fixed = sim.send_slider_joint(first_body_id=cyl1, second_body_id=-1,
-                              lo=0, hi=0)
+#fixed = sim.send_slider_joint(first_body_id=cyl1, second_body_id=-1,
+#                              lo=0, hi=0)
 
 touch1 = sim.send_touch_sensor(body_id=cyl1)
 touch2 = sim.send_touch_sensor(body_id=cyl1)
 
-#fneuron = sim.send_function_neuron()
-fneuron = sim.send_bias_neuron()
+fneuron = sim.send_function_neuron()
+#fneuron = sim.send_bias_neuron()
 
 mneuron = sim.send_motor_neuron(joint_id=joint)
 

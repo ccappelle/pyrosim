@@ -21,13 +21,13 @@ class Simulator(object):
             toggle pausing the simulation. (the default is False)
     eval_time    : int, optional
             The number of discrete steps in the simulation (the default is 100)
-    dt 		    : float, optional
+    dt          : float, optional
             The time in seconds between physics world steps. Larger dt values 
             create more unstable physics. (the default is 0.05)
     gravity     : float, optional
             The gravity in the system. Negative values implie normal downward 
             force of gravity. (default is -1.0)
-    xyz		    : list of 3 floats
+    xyz         : list of 3 floats
             The xyz position of the camera (default is [0.8317,-0.9817,0.8000])
     hpr
             The heading, pitch, and roll of the camera 
@@ -35,7 +35,7 @@ class Simulator(object):
     use_textures : bool, optional
             Draw default ODE textures or not during simulation. 
             (default is False)
-    debug	    : bool, optional
+    debug       : bool, optional
             If True print out every string command sent through the pipe to 
             the simulator (the default is False)
     """
@@ -149,7 +149,7 @@ class Simulator(object):
         ----------
         sensor_id : int
                 the sensors id tag
-        svi 	 : int , optional
+        svi      : int , optional
                 The sensor value index. Certain sensors have multiple values 
                 (e.g. the position sensor) and the svi specifies which to 
                 access (e.g. for a position sensor, svi=0 corresponds to the
@@ -189,11 +189,11 @@ class Simulator(object):
 
         Parameters
         ----------
-        x 		 : float, optional
+        x        : float, optional
                 The x position coordinate of the center (default 0)
-        y		 : float, optional
+        y        : float, optional
                 The y position coordinate of the center (default 0)
-        z		 : float, optional
+        z        : float, optional
                 The z position coordinate of the center (default 0)
         mass  : float, optional 
                 The mass of the body (default is 1.0)
@@ -262,9 +262,9 @@ class Simulator(object):
 
         return True
 
-    def send_collision_matrix(self,matrix='standard'):
+    def send_collision_matrix(self, matrix='standard'):
         """Sends a matrix which defines which collision groups collide
-        
+
         If element [i,j] of the matrix equals 1, then bodies in groups
         i and j collide. If element [i,j] equals 0, then the collision
         is ignored between the groups. 
@@ -274,26 +274,34 @@ class Simulator(object):
             This command should be sent after all bodies have been sent
             and collision groups have been determined
 
+        Parameters
+        ----------
         matrix : square symmetric matrix, optional
                 The matrix which defines which groups collide. The
                 'standard' setting means intragroup collisions are
                 ignored (i.e. [i,i]=0) and intergroup collisions
                 occur (i.e. [i,j]=1 for all i not equal to j).
                 (the default is 'standard')
+
+        Returns
+        -------
+        bool
+            True if successful, False otherwise
         """
         assert not self.collision_matrix_sent, ('Collision matrix has already'
                                                 'been sent')
         self.collision_matrix_sent = True
 
-        if matrix == 'standard':
-            matrix = (np.eye(self._max_collision_group,dtype='int32')+1 
-                       -2*np.eye(self._max_collision_group,dtype='int32'))
+        if isinstance(matrix, str):
+            if matrix == 'standard':
+                matrix = (np.eye(self._max_collision_group, dtype='int32')+1
+                          - 2*np.eye(self._max_collision_group, dtype='int32'))
 
         send_string = []
 
         for i in range(self._max_collision_group):
-            for j in range(i,self._max_collision_group):
-                send_string.append(matrix[i,j])
+            for j in range(i, self._max_collision_group):
+                send_string.append(int(matrix[i, j]))
 
         self._send('CollisionMatrix', self._max_collision_group, *send_string)
         return True
@@ -306,23 +314,23 @@ class Simulator(object):
 
         Parameters
         ----------
-        x 		 : float, optional
+        x        : float, optional
                 The x position coordinate of the center (default is 0)
-        y		 : float, optional
+        y        : float, optional
                 The y position coordinate of the center (default is 0)
-        z		 : float, optional
+        z        : float, optional
                 The z position coordinate of the center (default is 0)
         mass  : float, optional 
                 The mass of the body (default is 1.0)
-        r1		 : float, optional
+        r1       : float, optional
                 The orientation along the x axis. The vector [r1,r2,r3]
                 specify the direction of the long axis of the cylinder.
                 (default is 0)
-        r2		 : float, optional
+        r2       : float, optional
                 The orientation along the y axis. The vector [r1,r2,r3]
                 specify the direction of the long axis of the cylinder.
                 (default is 0)
-        r3		 : float, optional
+        r3       : float, optional
                 The orientation along the z axis. The vector [r1,r2,r3]
                 specify the direction of the long axis of the cylinder.
                 (default is 1)
@@ -477,21 +485,21 @@ class Simulator(object):
                 The body id of the second body the joint is connected to.
                 If set equal to -1, the joint is connected to a point in
                 space 
-        x 		        : float, optional
+        x               : float, optional
                 The x position coordinate of the joint (default is 0)
-        y		 	    : float, optional
+        y               : float, optional
                 The y position coordinate of the joint (default is 0)
-        z		        : float, optional
+        z               : float, optional
                 The z position coordinate of the joint (default is 0)
-        n1		        : float, optional
+        n1              : float, optional
                 The orientation along the x axis. The vector [n1,n2,n3]
                 specifies the axis about which the joint rotates
                 (default is 0)
-        n2		 	    : float, optional
+        n2              : float, optional
                 The orientation along the y axis. The vector [n1,n2,n3]
                 specifies the axis about which the joint rotates
                 (default is 0)
-        n3		        : float, optional
+        n3              : float, optional
                 The orientation along the z axis. The vector [n1,n2,n3]
                 specifies the axis about which the joint rotates
                 (default is 1)
@@ -501,7 +509,7 @@ class Simulator(object):
                 The upper limit in radians of the joint (default is pi/4)
         speed           : float, optional
                 The speed of the motor of the joint (default is 1.0)
-        torque 			: float, optional
+        torque          : float, optional
                 The maximum amount torque the motor in the joint can use
                 (default is 1.0)
         position_control : bool, optional
@@ -558,13 +566,13 @@ class Simulator(object):
                 The body id of the second body the joint is connected to.
                 If set equal to -1, the joint is connected to a point in
                 space 
-        x_dir	        : float, optional
+        x_dir           : float, optional
                 The orientation along the x axis.
                 (default is 0)
-        y_dir		 	: float, optional
+        y_dir           : float, optional
                 The orientation along the y axis. 
                 (default is 0)
-        z_dir		    : float, optional
+        z_dir           : float, optional
                 The orientation along the z axis. 
                 (default is 1)
         lo              : float, optional
@@ -575,7 +583,7 @@ class Simulator(object):
                 (default is 1.0)
         speed           : float, optional
                 The speed of the motor of the joint (default is 1.0)
-        torque 			: float, optional
+        torque          : float, optional
                 The maximum amount of torque the motor in the joint can use
                 (default is 1.0)
         position_control : bool, optional
@@ -662,12 +670,12 @@ class Simulator(object):
 
         Motor neurons are neurons which connecto to a specified joint and 
         determine how the joint moves every time step of simulation
-		WARNING: Sending a motor neuron to a joint whose starting position
-		is not in the middle of the 'hi' & 'lo' cutoffs will most likely cause
-		instabilities in the simulation. For example creating a joint with
-		either 'hi' or 'lo' to 0 and attaching a motor neuron to this joint
-		will cause the joint to break. 
-		
+                WARNING: Sending a motor neuron to a joint whose starting position
+                is not in the middle of the 'hi' & 'lo' cutoffs will most likely cause
+                instabilities in the simulation. For example creating a joint with
+                either 'hi' or 'lo' to 0 and attaching a motor neuron to this joint
+                will cause the joint to break. 
+
         Parameters
         ----------
         joint_id  : int, optional
@@ -754,13 +762,13 @@ class Simulator(object):
 
         Parameters
         ----------
-        sensor_id 		 : int, optional
+        sensor_id        : int, optional
                 The associated sensor id for the neuron to draw values from.
         svi : int, optional
                 The sensor value index is the offset index of the sensor. 
                 SVI is used for sensors which return a vector of values 
                 (position, ray sensors, etc.)
-        tau   			 : int, optional
+        tau              : int, optional
                 not used for sensor neurons
 
         Returns
@@ -788,11 +796,11 @@ class Simulator(object):
 
         Parameters
         ----------
-        x 		 : float, optional
+        x        : float, optional
                 The x position of the center
-        y		 : float, optional
+        y        : float, optional
                 The y position of the center
-        z 		 : float, optional
+        z        : float, optional
                 The z position of the center
         mass  : float, optional 
                 The mass of the body (default is 1.0)
@@ -843,11 +851,11 @@ class Simulator(object):
         body_id : int, optional
                 The body id of the associated body the ray sensor is connected 
                 to. When this body moves the ray sensor moves accordingly
-        x 		 : float, optional
+        x        : float, optional
                 The x position of the sensor
-        y		 : float, optional
+        y        : float, optional
                 The y position of the sensor
-        z 		 : float, optional
+        z        : float, optional
                 The z position of the sensor
         r1       : float, optional
                 The x direction of the sensor. The array [r1,r2,r3] is the 
@@ -890,7 +898,7 @@ class Simulator(object):
                 The id of the source neuron of the synapse
         target_neuron_id : int, optional
                 The id of the target neuron of the synapse
-        weight		   : float, optional
+        weight         : float, optional
                 The edge weight of the synapse
 
         Returns
@@ -931,13 +939,13 @@ class Simulator(object):
                 The id of the source neuron of the synapse
         target_neuron_id : int, optional
                 The id of the target neuron of the synapse
-        start_weight	   : float, optional
+        start_weight       : float, optional
                 The starting edge weight of the synapse
-        end_weight 	   : float, optional
+        end_weight     : float, optional
                 The ending edge weight of the synapse
-        start_time	   : float, optional
+        start_time     : float, optional
                 The starting time of development. start_time in [0,1]
-        end_time 	   : float, optional
+        end_time       : float, optional
                 The ending time of development. end_time in [0,1]
         Returns
         -------
@@ -1059,7 +1067,7 @@ class Simulator(object):
 # --------------------- Private methods -----------------------------
     def _assert_color(self, name, r, g, b):
         """Error checks so color params are between [0,1]"""
-        
+
         colors = [r, g, b]
         for color in colors:
             assert color >= 0 and color <= 1, 'Color parameter of ' + \
@@ -1073,8 +1081,8 @@ class Simulator(object):
             if arg != 0:
                 flag = True
 
-        assert flag == True, ('Vector parameters of ' +name +
-                                ' cannot be all zeros')
+        assert flag == True, ('Vector parameters of ' + name +
+                              ' cannot be all zeros')
 
     def _collect_sensor_data(self, data_from_simulator):
         """Get sensor data back from ODE and store it in numpy array"""
