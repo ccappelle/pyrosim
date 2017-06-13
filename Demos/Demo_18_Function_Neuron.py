@@ -5,7 +5,7 @@ import math
 ARM_LENGTH = 0.5
 ARM_RADIUS = ARM_LENGTH / 10.0
 
-sim = pyrosim.Simulator(play_paused=False, eval_time=1000)
+sim = pyrosim.Simulator(play_paused=False, eval_time=1000, debug=True)
 
 cyl1 = sim.send_cylinder(x=0, y=0, z=ARM_LENGTH/2.0 + 2*ARM_RADIUS,
                          r1=0, r2=0, r3=1,
@@ -27,4 +27,5 @@ mneuron = sim.send_motor_neuron(joint_id=joint1)
 
 sim.send_synapse(source_neuron_id=fneuron,
                  target_neuron_id=mneuron, weight=1.0)
+sim.film_body(1)
 sim.start()

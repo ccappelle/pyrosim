@@ -5,10 +5,13 @@ import math
 ARM_LENGTH = 0.75
 ARM_RADIUS = ARM_LENGTH / 10.0
 
-for torque in [0.1, 1.0]:
-    for speed in [0.1, 10.0]:
+TORQUES  = [1.0];
+SPEEDS = [10.0];
+
+for torque in TORQUES:
+    for speed in SPEEDS:
         sim = pyrosim.Simulator(
-            play_paused=False, eval_time=500, debug=False, hpr=[121, 15, 0])
+            play_paused=True, eval_time=500, debug=True, xyz=[1,-1,2],hpr=[121, -10., 0])
 
         cyl = sim.send_cylinder(x=0, y=0, z=2.0*ARM_LENGTH,
                                 r1=0, r2=0, r3=1,
@@ -32,5 +35,6 @@ for torque in [0.1, 1.0]:
         sim.send_synapse(source_neuron_id=fneuron,
                          target_neuron_id=mneuron, weight=1.0)
 
+        sim.film_body(box, 'track')
         sim.start()
         sim.wait_to_finish()
