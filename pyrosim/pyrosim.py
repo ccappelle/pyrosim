@@ -51,6 +51,7 @@ class Simulator(object):
         self._num_joints = 0
         self._num_sensors = 0
         self._num_neurons = 0
+        self._max_collision_group = 1
 
         self.play_paused = play_paused
         self.play_blind = play_blind
@@ -59,7 +60,9 @@ class Simulator(object):
         self.gravity = gravity
         self.debug = debug
         self.use_textures = use_textures
+
         self.evaluated = False
+        self.collision_matrix_sent = False
 
         self.pyrosim_path = os.path.dirname(
             os.path.abspath(__file__))+'/simulator'
@@ -180,6 +183,7 @@ class Simulator(object):
 
     def send_box(self, x=0, y=0, z=0, mass=1.0,
                  length=0.1, width=0.1, height=0.1,
+                 collision_group=0,
                  r=1, g=1, b=1):
         """Send box body to the simulator
 
@@ -199,12 +203,15 @@ class Simulator(object):
                 The width of the box
         height  : float, optional
                 The height of the box
+        collision_group : int, optional
+                The collision group the body is assigned to. Bodies within
+                the same collision group do not collide.
         r       : float, optional
-                The amount of the color red in the box (r in [0,1])
+                The amount of the color red in the body (r in [0,1])
         g       : float, optional
-                The amount of the color green in the box (g in [0,1])
+                The amount of the color green in the body (g in [0,1])
         b       : float, optional
-                The amount of the color blue in the box (b in [0,1])
+                The amount of the color blue in the body (b in [0,1])
 
         Returns
         -------
@@ -216,6 +223,9 @@ class Simulator(object):
         assert height > 0, 'Height of Box must be positive'
         self._assert_color('Box', r, g, b)
 
+        if collision_group+1 > self._max_collision_group:
+            self._max_collision_group = collision_group+1
+
         body_id = self._num_bodies
         self._num_bodies += 1
 
@@ -224,6 +234,7 @@ class Simulator(object):
                    x, y, z,
                    mass,
                    length, width, height,
+                   collision_group,
                    r, g, b)
 
         return body_id
@@ -251,9 +262,46 @@ class Simulator(object):
 
         return True
 
+    def send_collision_matrix(self,matrix='standard'):
+        """Sends a matrix which defines which collision groups collide
+        
+        If element [i,j] of the matrix equals 1, then bodies in groups
+        i and j collide. If element [i,j] equals 0, then the collision
+        is ignored between the groups. 
+
+        Notes
+        -----
+            This command should be sent after all bodies have been sent
+            and collision groups have been determined
+
+        matrix : square symmetric matrix, optional
+                The matrix which defines which groups collide. The
+                'standard' setting means intragroup collisions are
+                ignored (i.e. [i,i]=0) and intergroup collisions
+                occur (i.e. [i,j]=1 for all i not equal to j).
+                (the default is 'standard')
+        """
+        assert not self.collision_matrix_sent, ('Collision matrix has already'
+                                                'been sent')
+        self.collision_matrix_sent = True
+
+        if matrix == 'standard':
+            matrix = (np.eye(self._max_collision_group,dtype='int32')+1 
+                       -2*np.eye(self._max_collision_group,dtype='int32'))
+
+        send_string = []
+
+        for i in range(self._max_collision_group):
+            for j in range(i,self._max_collision_group):
+                send_string.append(matrix[i,j])
+
+        self._send('CollisionMatrix', self._max_collision_group, *send_string)
+        return True
+
     def send_cylinder(self, x=0, y=0, z=0, mass=1.0,
                       r1=0, r2=0, r3=1, length=1.0,
-                      radius=0.1, r=1, g=1, b=1):
+                      radius=0.1, collision_group=0,
+                      r=1, g=1, b=1):
         """Send cylinder body to the simulator
 
         Parameters
@@ -283,11 +331,15 @@ class Simulator(object):
         radius   : float, optional
                 The radius of the short axis of the cylinder (default is 0.1)
         r       : float, optional
-                The amount of the color red in the box (r in [0,1])
+        collision_group : int, optional
+                The collision group the body is assigned to. Bodies within
+                the same collision group do not collide.
+        r       : float, optional
+                The amount of the color red in the body (r in [0,1])
         g       : float, optional
-                The amount of the color green in the box (g in [0,1])
+                The amount of the color green in the body (g in [0,1])
         b       : float, optional
-                The amount of the color blue in the box (b in [0,1])
+                The amount of the color blue in the body (b in [0,1])
 
         Returns
         -------
@@ -299,6 +351,9 @@ class Simulator(object):
         self._assert_normalizable('Cylinder', r1, r2, r3)
         self._assert_color('Cylinder', r, g, b)
 
+        if collision_group+1 > self._max_collision_group:
+            self._max_collision_group = collision_group+1
+
         body_id = self._num_bodies
         self._num_bodies += 1
 
@@ -308,6 +363,7 @@ class Simulator(object):
                    mass,
                    r1, r2, r3,
                    length, radius,
+                   collision_group,
                    r, g, b)
 
         return body_id
@@ -727,7 +783,7 @@ class Simulator(object):
         return neuron_id
 
     def send_sphere(self, x=0, y=0, z=0, mass=1.0, radius=0.5,
-                    r=1, g=1, b=1):
+                    collision_group=0, r=1, g=1, b=1):
         """Sends a sphere to the simulator
 
         Parameters
@@ -742,12 +798,15 @@ class Simulator(object):
                 The mass of the body (default is 1.0)
         radius   : float, optional
                 The radius of the sphere (default is 0.5)
+        collision_group : int, optional
+                The collision group the body is assigned to. Bodies within
+                the same collision group do not collide.
         r       : float, optional
-                The amount of the color red in the box (r in [0,1])
+                The amount of the color red in the body (r in [0,1])
         g       : float, optional
-                The amount of the color green in the box (g in [0,1])
+                The amount of the color green in the body (g in [0,1])
         b       : float, optional
-                The amount of the color blue in the box (b in [0,1])
+                The amount of the color blue in the body (b in [0,1])
 
         Returns
         -------
@@ -757,13 +816,18 @@ class Simulator(object):
         assert radius >= 0, 'Radius of Sphere must be >= 0'
         self._assert_color('Sphere', r, g, b)
 
+        if collision_group+1 > self._max_collision_group:
+            self._max_collision_group = collision_group+1
+
         body_id = self._num_bodies
         self._num_bodies += 1
 
         self._send('Sphere',
                    body_id,
                    x, y, z,
+                   mass,
                    radius,
+                   collision_group,
                    r, g, b)
 
         return body_id
@@ -952,6 +1016,9 @@ class Simulator(object):
     def start(self):
         """Starts the simulation"""
 
+        if (not self.collision_matrix_sent):
+            self.send_collision_matrix('standard')
+            pass
         commands = [self.pyrosim_path + '/simulator']
 
         if (self.play_blind == True):
@@ -992,6 +1059,7 @@ class Simulator(object):
 # --------------------- Private methods -----------------------------
     def _assert_color(self, name, r, g, b):
         """Error checks so color params are between [0,1]"""
+        
         colors = [r, g, b]
         for color in colors:
             assert color >= 0 and color <= 1, 'Color parameter of ' + \
@@ -999,13 +1067,14 @@ class Simulator(object):
 
     def _assert_normalizable(self, name, *args):
         """Error checxs vectors so they are not equal to zero"""
+
         flag = False
         for arg in args:
             if arg != 0:
                 flag = True
 
-        assert flag == True, ('Vector parameter of ' + name + ' is not'
-                              ' normalizeable')
+        assert flag == True, ('Vector parameters of ' +name +
+                                ' cannot be all zeros')
 
     def _collect_sensor_data(self, data_from_simulator):
         """Get sensor data back from ODE and store it in numpy array"""

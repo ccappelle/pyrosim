@@ -32,6 +32,8 @@ private:
 	
 	double radius;
 
+	int collisionGroup;
+
 	double r,g,b;
 
         LIGHT_SENSOR *lightSensor;
@@ -74,8 +76,10 @@ public:
 	dBodyID Get_Body(void);
 
         double Get_Green_Component(void);
-
+    int Get_Group(void);
+    
 	double Get_Length(void);
+
 
 	double Get_Radius(void);
 
@@ -98,6 +102,7 @@ private:
 
 	double Distance_To(OBJECT *otherObject);
 
+	void CreateBody(dWorldID world, dSpaceID space);
 	void CreateBox(dWorldID world, dSpaceID space);
 	void CreateCylinder(dWorldID world, dSpaceID space);
 	void CreateSphere(dWorldID world, dSpaceID space);

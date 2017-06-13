@@ -1,6 +1,7 @@
 #ifndef DATASTRUCT_H
 #define DATASTRUCT_H
 
+const int MAX_GROUPS = 1000;
 struct Data
 {
   char texturePathStr[100];
@@ -16,6 +17,8 @@ struct Data
   float hpr[3];
   int trackBody;
   int followBody;
+  int collisionMatrix[MAX_GROUPS][MAX_GROUPS];
+  int numCollisionGroups;
 };
 
 #endif

@@ -11,7 +11,8 @@ SPEEDS = [10.0];
 for torque in TORQUES:
     for speed in SPEEDS:
         sim = pyrosim.Simulator(
-            play_paused=True, eval_time=500, debug=True, xyz=[1,-1,2],hpr=[121, -10., 0])
+            play_paused=True, eval_time=500, debug=True, 
+            xyz=[1,-1,2],hpr=[121, -10., 0])
 
         cyl = sim.send_cylinder(x=0, y=0, z=2.0*ARM_LENGTH,
                                 r1=0, r2=0, r3=1,

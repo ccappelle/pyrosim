@@ -153,6 +153,10 @@ double OBJECT::Get_Green_Component(void) {
 
         return g;
 }
+
+int OBJECT::Get_Group(void){
+    return collisionGroup;
+}
 double OBJECT::Get_Length(void) {
 
 	return length;
@@ -193,9 +197,7 @@ void OBJECT::Read_From_Python(dWorldID world, dSpaceID space, int shape) {
 	std::cin >> ID;
 
 	std::cin >> x;
-
 	std::cin >> y;
-
 	std::cin >> z;
 
 	std::cin >> mass;
@@ -203,48 +205,25 @@ void OBJECT::Read_From_Python(dWorldID world, dSpaceID space, int shape) {
 	if ( myShape == BOX ) {
 
 		std::cin >> length;
-
 		std::cin >> width;
-
 		std::cin >> height;
-
-		std::cin >> r;
-
-                std::cin >> g;
-
-                std::cin >> b;
-
-        CreateBox(world,space);
 	}
-	else if (myShape == CYLINDER) {
-
+	else if (myShape == CYLINDER) { //cylinder specific
 		std::cin >> r1;
-
-                std::cin >> r2;
-
-                std::cin >> r3;
-
+        std::cin >> r2;
+        std::cin >> r3;
 		std::cin >> length; 
-
-                std::cin >> radius; 
-
-                std::cin >> r;
-
-                std::cin >> g;
-
-                std::cin >> b;
-
-               CreateCylinder(world, space);
+        std::cin >> radius; 
 	}
-	else {
+	else { //sphere specific
 		std::cin >> radius;
-
-		std::cin >> r;
-		std::cin >> g;
-		std::cin >> b;
-
-		CreateSphere(world, space);
 	}
+    std::cin >> collisionGroup;
+    std::cin >> r;
+    std::cin >> g;
+    std::cin >> b;
+    CreateBody(world, space);
+
 }
 
 void OBJECT::Set_Ray_Sensor(double distance, OBJECT *objectThatWasHit, int t) {
@@ -314,6 +293,16 @@ int OBJECT::Contains_A_Light_Source(void) {
 	return containsLightSource;
 }
 
+void OBJECT::CreateBody(dWorldID world, dSpaceID space){
+    if(myShape==BOX)
+        CreateBox(world,space);
+    else if(myShape==CYLINDER)
+        CreateCylinder(world,space);
+    else
+        CreateSphere(world,space);
+
+}
+
 void OBJECT::CreateBox(dWorldID world, dSpaceID space){
         dMass m;
 
@@ -376,9 +365,9 @@ double OBJECT::Distance_To(OBJECT *otherObject) {
 
 	double xDiff = myPos[0] - hisPos[0];
 
-        double yDiff = myPos[1] - hisPos[1];
+    double yDiff = myPos[1] - hisPos[1];
 
-        double zDiff = myPos[2] - hisPos[2];
+    double zDiff = myPos[2] - hisPos[2];
 
 	return sqrt( pow(xDiff,2.0) + pow(yDiff,2.0) + pow(zDiff,2.0) );
 }

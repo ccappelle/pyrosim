@@ -95,6 +95,18 @@ void ENVIRONMENT::Read_From_Python(dWorldID world, dSpaceID space, Data *data)
                         std::cin >> data->followBody;
                 else if ( strcmp(incomingString,"TrackBody")==0)
                         std::cin >> data->trackBody;
+                //Collision data
+                else if ( strcmp(incomingString,"CollisionMatrix")==0){
+                        std::cin >> data->numCollisionGroups;
+                        for(int i=0;i<data->numCollisionGroups;i++){
+                          for(int j=i;j<data->numCollisionGroups;j++){
+                                data->collisionMatrix[i][j]=0;
+                                data->collisionMatrix[j][i]=0;
+                                std::cin >> data->collisionMatrix[i][j];
+                                data->collisionMatrix[j][i] = data->collisionMatrix[i][j];
+                         }
+                        }
+                }
                 //Bodies
                 else if ( strcmp(incomingString,"Box") == 0 )
 

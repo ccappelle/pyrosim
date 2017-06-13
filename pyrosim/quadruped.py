@@ -93,7 +93,7 @@ if __name__ == "__main__":
     import pyrosim
 
     eval_time = 1000
-    gravity = -1.0
+    gravity = -0.01
     NUM = 1
     if NUM == 1:
       BLIND = False
@@ -103,7 +103,7 @@ if __name__ == "__main__":
     sim = [0]*1
     for j in range(NUM):
       for i in range(NUM):
-        sim[i] = pyrosim.Simulator(eval_time=eval_time, debug=False,
+        sim[i] = pyrosim.Simulator(eval_time=eval_time, debug=True,dt=0.045,
                                 gravity=gravity, play_blind=BLIND, use_textures=True)
         num_sensors = 5
         num_motors = 8
@@ -114,6 +114,7 @@ if __name__ == "__main__":
         time_matrix = np.random.rand(num_sensors+num_motors)
 
         layout = send_to_simulator(sim[i], weight_matrix=weight_matrix)
+        sim[i].film_body(0)
         sim[i].start()
       for i in range(NUM):
         results = sim[i].wait_to_finish()

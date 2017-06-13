@@ -30,10 +30,13 @@ int timer;
 
 ENVIRONMENT *environment;
 int numberOfBodies = 0;
-
+bool initialized = false;
 static dGeomID ground;
 
 Data data;//struct which keeps all user input values for various parameterss. see datastruct.h
+static float updated_xyz[3];
+int LAGSIZE = 20;
+static float average_z[20];
 
 void Draw_Distance_Sensor(dGeomID myGeom, dGeomID thisGeom);
 
@@ -87,9 +90,15 @@ static void nearCallback (void *callbakData, dGeomID o1, dGeomID o2)
 
         OBJECT *d2 = (OBJECT *)dGeomGetData(o2);
 
-	if ( d1 && d2 ) // Cancel collisions between objects. 
-
-		return;
+  // if (d1 && d2)
+  //   return;
+	if ( d1 && d2 ){ // Cancel collisions between objects. 
+    int d1Group = d1->Get_Group();
+    int d2Group = d2->Get_Group();
+   if(!data.collisionMatrix[d1Group][d2Group]){
+      return; //no collision between groups where matrix[i][j]=0
+    }
+  }
 
 	if ( d1 )
 		d1->Touch_Sensor_Fires(timer);
@@ -169,54 +178,62 @@ void Simulate_For_One_Time_Step(void) {
 
 static void simLoop (int pause)
 {
-  if (timer==0){
+  if (!initialized){
     dWorldSetGravity(world,0,0,data.gravity);
     dsSetViewpoint (data.xyz,data.hpr);
+    if(data.followBody>=0){
+      environment->Get_Object_Position(updated_xyz, data.followBody);
+      for(int i=0;i<LAGSIZE;i++)
+        average_z[i] = updated_xyz[2];
+    }
+    initialized = true;
   }
-  if (data.followBody>=0){
-    float updated_xyz[3];
+
+
+	if ( !pause ){
+
+		Simulate_For_One_Time_Step();
+
+    if (data.followBody>=0){
+
     environment->Get_Object_Position(updated_xyz, data.followBody);
+
+    average_z[timer%LAGSIZE] = updated_xyz[2];
 
     updated_xyz[0] += data.xyz[0];
     updated_xyz[1] += data.xyz[1];
-    updated_xyz[2] = data.xyz[2]; //no movement in x direction
+    updated_xyz[2] = data.xyz[2];
+    for(int i=0;i<LAGSIZE;i++)
+          updated_xyz[2] +=  average_z[i]/float(LAGSIZE); //lag movement
 
     dsSetViewpoint(updated_xyz,data.hpr);
   }
   if (data.trackBody>=0){
     float dirVector[3];
     environment->Get_Object_Position(dirVector, data.trackBody);
-
-    dirVector[0] -= data.xyz[0];
-    dirVector[1] -= data.xyz[1];
-    dirVector[2] -= data.xyz[2];
+    
+    for(int i=0;i<3;i++)
+      dirVector[i] -= data.xyz[i];
 
     if (!(dirVector[0]==0 and dirVector[1]==0 and dirVector[2]==0)){
-        float normalizer = sqrt(pow(dirVector[0],2)+ pow(dirVector[1],2)+pow(dirVector[2],2));
-        dirVector[0] = dirVector[0]/normalizer;
-        dirVector[1] = dirVector[1]/normalizer;
-        dirVector[2] = dirVector[2]/normalizer;
+        float zDrop = dirVector[2];
+        float magnitude = sqrt(pow(dirVector[0],2)+ pow(dirVector[1],2)+pow(dirVector[2],2));
+        for(int i=0;i<3;i++)
+          dirVector[i] = dirVector[i]/magnitude;
 
         float heading = -atan2(dirVector[0],dirVector[1]) * 180.0 / 3.14159+90.;
-
+        float pitch = asin(zDrop/magnitude) * 180.0 / 3.14159;
         float update_hpr[3];
 
         update_hpr[0] = heading;
-        update_hpr[1] = data.hpr[1];
+        update_hpr[1] = pitch;
         update_hpr[2] = data.hpr[2];
 
         dsSetViewpoint(data.xyz, update_hpr);
     }
   }
-  
-
-
-	if ( !pause )
-
-		Simulate_For_One_Time_Step();
-
+  }
 	environment->Draw(data.debug);
-
 }
 
 void Initialize_ODE(void) {
