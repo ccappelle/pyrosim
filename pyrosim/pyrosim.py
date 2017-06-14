@@ -86,41 +86,7 @@ class Simulator(object):
             self._send('Debug '+str(0))
         self.send_camera(xyz, hpr)
 
-    def film_body(self, body_id, method='follow'):
-        """Sets the camera to film a body
-
-        Camera has two modes: 'follow' moves the camera's position based on where
-        the body is moving and 'track' rotates the camera to look at the body
-
-        Parameters
-        ----------
-        body_id : int
-                The id tag of the body to be filmed
-        method  : str, optional
-                The way the camera should move to film the body. 
-                Either 'follow' or 'track' (default is 'follow')
-
-        Returns
-        -------
-        bool
-                True if successful, False otherwise
-        """
-        assert body_id < self._num_bodies, 'Body with id ' + \
-            str(body_id) + ' has not been sent'
-        assert self.body_to_follow == -1, 'Body with id ' + \
-            str(body_id) + ' has already been assigned to be filmed'
-        assert (method == 'follow' or method ==
-                'track'), 'Method must be `follow` or `track`'
-
-        if method == 'follow':
-            self._send('FollowBody', body_id)
-        elif method == 'track':
-            self._send('TrackBody', body_id)
-
-        self.body_to_follow = body_id
-
-        return True
-
+# ------Getters-------------------------
     def get_data(self):
         """Get all sensor data back as numpy matrix"""
         assert self.evaluated == True, 'Simulation has not run yet'
@@ -163,24 +129,66 @@ class Simulator(object):
         assert self.evaluated == True, 'Simulation has not run yet'
         return self.data[sensor_id, svi, :]
 
-    def send_bias_neuron(self):
-        """Send bias neuron to simulator.
+# -----Camera---------------------------
+    def send_camera(self, xyz, hpr):
+        """Sends camera position to simulator in eulerian coordinates
 
-        Bias neurons emit a constant value of 1.0
+        Parameters
+        ----------
+        xyz : list of floats
+                A length 3 list specifying the x,y,z position of the camera
+                in simulation
+        hpr : list of floats
+                A length 3 list specifying the heading, pitch, 
+                and roll of the camera
 
         Returns
         -------
-        int
-                id tag of the neuron
+        bool
+                True if successful, False otherwise
         """
-        neuron_id = self._num_neurons
-        self._num_neurons += 1
+        self._send('Camera',
+                   xyz[0], xyz[1], xyz[2],
+                   hpr[0], hpr[1], hpr[2])
 
-        self._send('BiasNeuron',
-                   neuron_id)
+        return True
 
-        return neuron_id
+    def film_body(self, body_id, method='follow'):
+        """Sets the camera to film a body
 
+        Camera has two modes: 'follow' moves the camera's position based on where
+        the body is moving and 'track' rotates the camera to look at the body
+
+        Parameters
+        ----------
+        body_id : int
+                The id tag of the body to be filmed
+        method  : str, optional
+                The way the camera should move to film the body. 
+                Either 'follow' or 'track' (default is 'follow')
+
+        Returns
+        -------
+        bool
+                True if successful, False otherwise
+        """
+        assert body_id < self._num_bodies, 'Body with id ' + \
+            str(body_id) + ' has not been sent'
+        assert self.body_to_follow == -1, 'Body with id ' + \
+            str(body_id) + ' has already been assigned to be filmed'
+        assert (method == 'follow' or method ==
+                'track'), 'Method must be `follow` or `track`'
+
+        if method == 'follow':
+            self._send('FollowBody', body_id)
+        elif method == 'track':
+            self._send('TrackBody', body_id)
+
+        self.body_to_follow = body_id
+
+        return True
+
+# -----Bodies----------------------------------
     def send_box(self, x=0, y=0, z=0, mass=1.0,
                  length=0.1, width=0.1, height=0.1,
                  collision_group=0,
@@ -239,72 +247,55 @@ class Simulator(object):
 
         return body_id
 
-    def send_camera(self, xyz, hpr):
-        """Sends camera position to simulator in eulerian coordinates
+    def send_sphere(self, x=0, y=0, z=0, mass=1.0, radius=0.5,
+                    collision_group=0, r=1, g=1, b=1):
+        """Sends a sphere to the simulator
 
         Parameters
         ----------
-        xyz : list of floats
-                A length 3 list specifying the x,y,z position of the camera
-                in simulation
-        hpr : list of floats
-                A length 3 list specifying the heading, pitch, 
-                and roll of the camera
+        x        : float, optional
+                The x position of the center
+        y        : float, optional
+                The y position of the center
+        z        : float, optional
+                The z position of the center
+        mass  : float, optional 
+                The mass of the body (default is 1.0)
+        radius   : float, optional
+                The radius of the sphere (default is 0.5)
+        collision_group : int, optional
+                The collision group the body is assigned to. Bodies within
+                the same collision group do not collide.
+        r       : float, optional
+                The amount of the color red in the body (r in [0,1])
+        g       : float, optional
+                The amount of the color green in the body (g in [0,1])
+        b       : float, optional
+                The amount of the color blue in the body (b in [0,1])
 
         Returns
         -------
-        bool
-                True if successful, False otherwise
+        int     
+                The id tag of the sphere
         """
-        self._send('Camera',
-                   xyz[0], xyz[1], xyz[2],
-                   hpr[0], hpr[1], hpr[2])
+        assert radius >= 0, 'Radius of Sphere must be >= 0'
+        self._assert_color('Sphere', r, g, b)
 
-        return True
+        if collision_group+1 > self._max_collision_group:
+            self._max_collision_group = collision_group+1
 
-    def send_collision_matrix(self, matrix='standard'):
-        """Sends a matrix which defines which collision groups collide
+        body_id = self._num_bodies
+        self._num_bodies += 1
 
-        If element [i,j] of the matrix equals 1, then bodies in groups
-        i and j collide. If element [i,j] equals 0, then the collision
-        is ignored between the groups. 
+        self._send('Sphere',
+                   body_id,
+                   x, y, z,
+                   mass,
+                   radius,
+                   collision_group,
+                   r, g, b)
 
-        Notes
-        -----
-            This command should be sent after all bodies have been sent
-            and collision groups have been determined
-
-        Parameters
-        ----------
-        matrix : square symmetric matrix, optional
-                The matrix which defines which groups collide. The
-                'standard' setting means intragroup collisions are
-                ignored (i.e. [i,i]=0) and intergroup collisions
-                occur (i.e. [i,j]=1 for all i not equal to j).
-                (the default is 'standard')
-
-        Returns
-        -------
-        bool
-            True if successful, False otherwise
-        """
-        assert not self.collision_matrix_sent, ('Collision matrix has already'
-                                                'been sent')
-        self.collision_matrix_sent = True
-
-        if isinstance(matrix, str):
-            if matrix == 'standard':
-                matrix = (np.eye(self._max_collision_group, dtype='int32')+1
-                          - 2*np.eye(self._max_collision_group, dtype='int32'))
-
-        send_string = []
-
-        for i in range(self._max_collision_group):
-            for j in range(i, self._max_collision_group):
-                send_string.append(int(matrix[i, j]))
-
-        self._send('CollisionMatrix', self._max_collision_group, *send_string)
-        return True
+        return body_id
 
     def send_cylinder(self, x=0, y=0, z=0, mass=1.0,
                       r1=0, r2=0, r3=1, length=1.0,
@@ -375,6 +366,253 @@ class Simulator(object):
                    r, g, b)
 
         return body_id
+
+# --------Joints------------------------------
+    def send_hinge_joint(self, first_body_id, second_body_id, x=0, y=0, z=0,
+                         n1=0, n2=0, n3=1,
+                         lo=-math.pi/4.0, hi=+math.pi/4.0,
+                         speed=1.0, torque=1.0, position_control=True):
+        """Send a hinge joint to the simulator
+
+                Hinge joints rotate around the axis specified by [n1,n2,n3]
+
+        Parameters
+        ----------
+        first_body_id   : int
+                The body id of the first body the joint is connected to.
+                If set equal to -1, the joint is connected to a point in
+                space 
+        second_body_id  : int
+                The body id of the second body the joint is connected to.
+                If set equal to -1, the joint is connected to a point in
+                space 
+        x               : float, optional
+                The x position coordinate of the joint (default is 0)
+        y               : float, optional
+                The y position coordinate of the joint (default is 0)
+        z               : float, optional
+                The z position coordinate of the joint (default is 0)
+        n1              : float, optional
+                The orientation along the x axis. The vector [n1,n2,n3]
+                specifies the axis about which the joint rotates
+                (default is 0)
+        n2              : float, optional
+                The orientation along the y axis. The vector [n1,n2,n3]
+                specifies the axis about which the joint rotates
+                (default is 0)
+        n3              : float, optional
+                The orientation along the z axis. The vector [n1,n2,n3]
+                specifies the axis about which the joint rotates
+                (default is 1)
+        lo              : float, optional
+                The lower limit in radians of the joint (default is -pi/4)
+        hi              : float, optional
+                The upper limit in radians of the joint (default is pi/4)
+        speed           : float, optional
+                The speed of the motor of the joint (default is 1.0)
+        torque          : float, optional
+                The maximum amount torque the motor in the joint can use
+                (default is 1.0)
+        position_control : bool, optional
+                True means use position control. This means the motor neuron
+                output is treated as a target angle for the joint to actuate
+                to. False means the motor neuron output is treated as a target
+                actuation rate.
+
+        Returns
+        -------
+        int 
+                The id tag for the hinge joint
+        """
+        assert first_body_id < self._num_bodies, 'Body with id ' + \
+            str(first_body_id) + ' has not been sent'
+        assert second_body_id < self._num_bodies, 'Body with id ' + \
+            str(first_body_id) + ' has not been sent'
+        assert speed >= 0, ('Speed of Hinge Joint must be greater'
+                            'than or equal to zero')
+        assert torque >= 0, ('Torque of Hinge Joint must be greater'
+                             'than or equal to zero')
+        self._assert_normalizable('Hinge Joint', n1, n2, n3)
+
+        joint_id = self._num_joints
+        self._num_joints += 1
+
+        self._send('HingeJoint',
+                   joint_id,
+                   first_body_id, second_body_id,
+                   x, y, z,
+                   n1, n2, n3,
+                   lo, hi,
+                   speed/(self.dt*20), torque,
+                   position_control)
+
+        return joint_id
+
+    def send_slider_joint(self, first_body_id, second_body_id,
+                          x=0, y=0, z=1,
+                          lo=-1.0, hi=+1.0,
+                          speed=1.0, torque=1.0, position_control=True):
+        """Send a slider joint to the simulator
+
+                Slider joints push and pull two bodies along the axis defined
+                by [x_dir,y_dir,z_dir]
+
+        Parameters
+        ----------
+        first_body_id   : int
+                The body id of the first body the joint is connected to.
+                If set equal to -1, the joint is connected to a point in
+                space 
+        second_body_id  : int
+                The body id of the second body the joint is connected to.
+                If set equal to -1, the joint is connected to a point in
+                space 
+        x          : float, optional
+                The orientation along the x axis.
+                (default is 0)
+        y           : float, optional
+                The orientation along the y axis. 
+                (default is 0)
+        z          : float, optional
+                The orientation along the z axis. 
+                (default is 1)
+        lo              : float, optional
+                The lower limit in simulator units of the joint
+                (default is -1.0)
+        hi              : float, optional
+                The upper limit in simulator units of the joint 
+                (default is 1.0)
+        speed           : float, optional
+                The speed of the motor of the joint (default is 1.0)
+        torque          : float, optional
+                The maximum amount of torque the motor in the joint can use
+                (default is 1.0)
+        position_control : bool, optional
+                True means use position control. This means the motor neuron
+                output is treated as a position for the joint to actuate
+                to. False means the motor neuron output is treated as a target
+                actuation rate.
+
+        Returns
+        -------
+        int 
+                The id tag for the hinge joint
+        """
+        assert first_body_id < self._num_bodies, 'Body with id ' + \
+            str(first_body_id) + ' has not been sent'
+        assert second_body_id < self._num_bodies, 'Body with id ' + \
+            str(first_body_id) + ' has not been sent'
+        assert speed >= 0, ('Speed of Hinge Joint must be greater'
+                            'than or equal to zero')
+        assert torque >= 0, ('Torque of Hinge Joint must be greater'
+                             'than or equal to zero')
+
+        joint_id = self._num_joints
+        self._num_joints += 1
+
+        self._send('SliderJoint',
+                   joint_id,
+                   first_body_id, second_body_id,
+                   0, 0, 0,
+                   x, y, z,
+                   lo, hi,
+                   speed/(self.dt*20), torque,
+                   position_control)
+
+        return joint_id
+
+# -----------Neurons----------------------
+    def send_bias_neuron(self):
+        """Send bias neuron to simulator.
+
+        Bias neurons emit a constant value of 1.0
+
+        Returns
+        -------
+        int
+                id tag of the neuron
+        """
+        neuron_id = self._num_neurons
+        self._num_neurons += 1
+
+        self._send('BiasNeuron',
+                   neuron_id)
+
+        return neuron_id
+
+    def send_motor_neuron(self, joint_id=0, tau=1.0):
+        """Send motor neurons to simulator
+
+        Motor neurons are neurons which connecto to a specified joint and 
+        determine how the joint moves every time step of simulation
+                WARNING: Sending a motor neuron to a joint whose starting position
+                is not in the middle of the 'hi' & 'lo' cutoffs will most likely cause
+                instabilities in the simulation. For example creating a joint with
+                either 'hi' or 'lo' to 0 and attaching a motor neuron to this joint
+                will cause the joint to break. 
+
+        Parameters
+        ----------
+        joint_id  : int, optional
+                The joint id tag of the joint we want the neuron to connect to
+        tau      :
+                The 'learning rate' of the neuron. Increasing tau increases
+                how much of value of the neuron at the current time step comes
+                from external inputs vs. the value of the neuron at the 
+                previous time step
+
+        Returns
+        -------
+        int
+                The id tag of the neuron
+        """
+        assert tau >= 0, 'Tau must be positive'
+        assert joint_id < self._num_joints, 'Joint with id ' + \
+            str(joint_id)+' has not been sent'
+
+        neuron_id = self._num_neurons
+        self._num_neurons += 1
+
+        self._send('MotorNeuron',
+                   neuron_id,  joint_id, tau)
+
+        return neuron_id
+
+    def send_sensor_neuron(self, sensor_id=0, svi=0, tau=1.0):
+        """Sends a sensor neuron to the simulator
+
+        Sensor neurons are input neurons which take the value of their 
+        associated sensor
+
+        Parameters
+        ----------
+        sensor_id        : int, optional
+                The associated sensor id for the neuron to draw values from.
+        svi : int, optional
+                The sensor value index is the offset index of the sensor. 
+                SVI is used for sensors which return a vector of values 
+                (position, ray sensors, etc.)
+        tau              : int, optional
+                not used for sensor neurons
+
+        Returns
+        -------
+        int
+                The id tag of the neuron
+        """
+        assert sensor_id < self._num_sensors, 'Sensor with id ' + \
+            str(sensor_id)+' has not been sent'
+        assert svi in range(4), 'SVI must be in [0,3]'
+        assert tau >= 0, 'Tau must be greater than or equal to zero'
+
+        neuron_id = self._num_neurons
+        self._num_neurons += 1
+
+        self._send('SensorNeuron',
+                   neuron_id, sensor_id,
+                   svi, tau)
+
+        return neuron_id
 
     def send_user_input_neuron(self, in_values):
         """Send neuron to the simulator which takes user defined values
@@ -467,159 +705,104 @@ class Simulator(object):
 
         return neuron_id
 
-    def send_hinge_joint(self, first_body_id, second_body_id, x=0, y=0, z=0,
-                         n1=0, n2=0, n3=1,
-                         lo=-math.pi/4.0, hi=+math.pi/4.0,
-                         speed=1.0, torque=1.0, position_control=True):
-        """Send a hinge joint to the simulator
+# ---------PhysicalProperties--------------------
+    def send_collision_matrix(self, matrix='standard'):
+        """Sends a matrix which defines which collision groups collide
 
-                Hinge joints rotate around the axis specified by [n1,n2,n3]
+        If element [i,j] of the matrix equals 1, then bodies in groups
+        i and j collide. If element [i,j] equals 0, then the collision
+        is ignored between the groups. 
 
-        Parameters
-        ----------
-        first_body_id   : int
-                The body id of the first body the joint is connected to.
-                If set equal to -1, the joint is connected to a point in
-                space 
-        second_body_id  : int
-                The body id of the second body the joint is connected to.
-                If set equal to -1, the joint is connected to a point in
-                space 
-        x               : float, optional
-                The x position coordinate of the joint (default is 0)
-        y               : float, optional
-                The y position coordinate of the joint (default is 0)
-        z               : float, optional
-                The z position coordinate of the joint (default is 0)
-        n1              : float, optional
-                The orientation along the x axis. The vector [n1,n2,n3]
-                specifies the axis about which the joint rotates
-                (default is 0)
-        n2              : float, optional
-                The orientation along the y axis. The vector [n1,n2,n3]
-                specifies the axis about which the joint rotates
-                (default is 0)
-        n3              : float, optional
-                The orientation along the z axis. The vector [n1,n2,n3]
-                specifies the axis about which the joint rotates
-                (default is 1)
-        lo              : float, optional
-                The lower limit in radians of the joint (default is -pi/4)
-        hi              : float, optional
-                The upper limit in radians of the joint (default is pi/4)
-        speed           : float, optional
-                The speed of the motor of the joint (default is 1.0)
-        torque          : float, optional
-                The maximum amount torque the motor in the joint can use
-                (default is 1.0)
-        position_control : bool, optional
-                True means use position control. This means the motor neuron
-                output is treated as a target angle for the joint to actuate
-                to. False means the motor neuron output is treated as a target
-                actuation rate.
-
-        Returns
-        -------
-        int 
-                The id tag for the hinge joint
-        """
-        assert first_body_id < self._num_bodies, 'Body with id ' + \
-            str(first_body_id) + ' has not been sent'
-        assert second_body_id < self._num_bodies, 'Body with id ' + \
-            str(first_body_id) + ' has not been sent'
-        assert speed >= 0, ('Speed of Hinge Joint must be greater'
-                            'than or equal to zero')
-        assert torque >= 0, ('Torque of Hinge Joint must be greater'
-                             'than or equal to zero')
-        self._assert_normalizable('Hinge Joint', n1, n2, n3)
-
-        joint_id = self._num_joints
-        self._num_joints += 1
-
-        self._send('HingeJoint',
-                   joint_id,
-                   first_body_id, second_body_id,
-                   x, y, z,
-                   n1, n2, n3,
-                   lo, hi,
-                   speed, torque,
-                   position_control)
-
-        return joint_id
-
-    def send_slider_joint(self, first_body_id, second_body_id,
-                          x_dir=0, y_dir=0, z_dir=1,
-                          lo=-1.0, hi=+1.0,
-                          speed=1.0, torque=1.0, position_control=True):
-        """Send a slider joint to the simulator
-
-                Slider joints push and pull two bodies along the axis defined
-                by [x_dir,y_dir,z_dir]
+        Notes
+        -----
+            This command should be sent after all bodies have been sent
+            and collision groups have been determined
 
         Parameters
         ----------
-        first_body_id   : int
-                The body id of the first body the joint is connected to.
-                If set equal to -1, the joint is connected to a point in
-                space 
-        second_body_id  : int
-                The body id of the second body the joint is connected to.
-                If set equal to -1, the joint is connected to a point in
-                space 
-        x_dir           : float, optional
-                The orientation along the x axis.
-                (default is 0)
-        y_dir           : float, optional
-                The orientation along the y axis. 
-                (default is 0)
-        z_dir           : float, optional
-                The orientation along the z axis. 
-                (default is 1)
-        lo              : float, optional
-                The lower limit in simulator units of the joint
-                (default is -1.0)
-        hi              : float, optional
-                The upper limit in simulator units of the joint 
-                (default is 1.0)
-        speed           : float, optional
-                The speed of the motor of the joint (default is 1.0)
-        torque          : float, optional
-                The maximum amount of torque the motor in the joint can use
-                (default is 1.0)
-        position_control : bool, optional
-                True means use position control. This means the motor neuron
-                output is treated as a position for the joint to actuate
-                to. False means the motor neuron output is treated as a target
-                actuation rate.
+        matrix : square symmetric matrix, optional
+                The matrix which defines which groups collide. The
+                'standard' setting means intragroup collisions are
+                ignored (i.e. [i,i]=0) and intergroup collisions
+                occur (i.e. [i,j]=1 for all i not equal to j).
+                (the default is 'standard')
 
         Returns
         -------
-        int 
-                The id tag for the hinge joint
+        bool
+            True if successful, False otherwise
         """
-        assert first_body_id < self._num_bodies, 'Body with id ' + \
-            str(first_body_id) + ' has not been sent'
-        assert second_body_id < self._num_bodies, 'Body with id ' + \
-            str(first_body_id) + ' has not been sent'
-        assert speed >= 0, ('Speed of Hinge Joint must be greater'
-                            'than or equal to zero')
-        assert torque >= 0, ('Torque of Hinge Joint must be greater'
-                             'than or equal to zero')
+        assert not self.collision_matrix_sent, ('Collision matrix has already'
+                                                'been sent')
+        self.collision_matrix_sent = True
 
-        joint_id = self._num_joints
-        self._num_joints += 1
+        if isinstance(matrix, str):
+            if matrix == 'standard':
+                matrix = (np.eye(self._max_collision_group, dtype='int32')+1
+                          - 2*np.eye(self._max_collision_group, dtype='int32'))
 
-        self._send('SliderJoint',
-                   joint_id,
-                   first_body_id, second_body_id,
-                   0, 0, 0,
-                   x_dir, y_dir, z_dir,
-                   lo, hi,
-                   speed, torque,
-                   position_control)
+        send_string = []
 
-        return joint_id
+        for i in range(self._max_collision_group):
+            for j in range(i, self._max_collision_group):
+                send_string.append(int(matrix[i, j]))
 
+        self._send('CollisionMatrix', self._max_collision_group, *send_string)
+        return True
+
+    def send_external_force(self, body_id, x, y, z, time=0):
+        """Sends a directed force to a body at a specific time
+
+        Parameters
+        ----------
+        body_id : int
+            The body to apply the force to
+        x       : float
+            The amount of force in the x direction
+        y       : float
+            The amount of force in the y direction
+        z       : float
+            The amount of force in the z direction
+        time    : float, optional
+            When the force should be applied. (default is 0)
+
+        Returns
+        -------
+        bool
+            True if successful, False otherwise
+        """
+        assert body_id < self._num_bodies, ('Body with id ' +
+                                            body_id+' has not been sent')
+        assert time >= 0 and time <= self.eval_time, (
+            'Time step must be within eval time')
+        self._assert_normalizable('Force', x, y, z)
+
+        self._send('ExternalForce', body_id, x, y, z, time)
+
+        return True
+
+    def send_light_source(self, body_id=0):
+        """Attaches light source to a body in simulation
+
+        Parameters
+        ----------
+        body_id : int, optional
+                The body id of the body to attach the light to
+
+        Returns
+        -------
+        int
+                The id tag of the body the light source is attached to.
+        """
+        assert body_id < self._num_bodies, 'Body id ' + \
+            str(body_id)+' has not been sent'
+
+        self._send('LightSource',
+                   body_id)
+
+        return body_id
+
+# ----------Sensors----------------------
     def send_light_sensor(self, body_id=0):
         """Attaches a light sensor to a body in simulation
 
@@ -643,65 +826,6 @@ class Simulator(object):
                    sensor_id, body_id)
 
         return sensor_id
-
-    def send_light_source(self, body_id=0):
-        """Attaches light source to a body in simulation
-
-        Parameters
-        ----------
-        body_id : int, optional
-                The body id of the body to attach the light to
-
-        Returns
-        -------
-        int
-                The id tag of the body the light source is attached to.
-        """
-        assert body_id < self._num_bodies, 'Body id ' + \
-            str(body_id)+' has not been sent'
-
-        self._send('LightSource',
-                   body_id)
-
-        return body_id
-
-    def send_motor_neuron(self, joint_id=0, tau=1.0):
-        """Send motor neurons to simulator
-
-        Motor neurons are neurons which connecto to a specified joint and 
-        determine how the joint moves every time step of simulation
-                WARNING: Sending a motor neuron to a joint whose starting position
-                is not in the middle of the 'hi' & 'lo' cutoffs will most likely cause
-                instabilities in the simulation. For example creating a joint with
-                either 'hi' or 'lo' to 0 and attaching a motor neuron to this joint
-                will cause the joint to break. 
-
-        Parameters
-        ----------
-        joint_id  : int, optional
-                The joint id tag of the joint we want the neuron to connect to
-        tau      :
-                The 'learning rate' of the neuron. Increasing tau increases
-                how much of value of the neuron at the current time step comes
-                from external inputs vs. the value of the neuron at the 
-                previous time step
-
-        Returns
-        -------
-        int
-                The id tag of the neuron
-        """
-        assert tau >= 0, 'Tau must be positive'
-        assert joint_id < self._num_joints, 'Joint with id ' + \
-            str(joint_id)+' has not been sent'
-
-        neuron_id = self._num_neurons
-        self._num_neurons += 1
-
-        self._send('MotorNeuron',
-                   neuron_id,  joint_id, tau)
-
-        return neuron_id
 
     def send_position_sensor(self, body_id=0):
         """Attaches a position sensor to a body in simulation
@@ -754,92 +878,6 @@ class Simulator(object):
 
         return sensor_id
 
-    def send_sensor_neuron(self, sensor_id=0, svi=0, tau=1.0):
-        """Sends a sensor neuron to the simulator
-
-        Sensor neurons are input neurons which take the value of their 
-        associated sensor
-
-        Parameters
-        ----------
-        sensor_id        : int, optional
-                The associated sensor id for the neuron to draw values from.
-        svi : int, optional
-                The sensor value index is the offset index of the sensor. 
-                SVI is used for sensors which return a vector of values 
-                (position, ray sensors, etc.)
-        tau              : int, optional
-                not used for sensor neurons
-
-        Returns
-        -------
-        int
-                The id tag of the neuron
-        """
-        assert sensor_id < self._num_sensors, 'Sensor with id ' + \
-            str(sensor_id)+' has not been sent'
-        assert svi in range(4), 'SVI must be in [0,3]'
-        assert tau >= 0, 'Tau must be greater than or equal to zero'
-
-        neuron_id = self._num_neurons
-        self._num_neurons += 1
-
-        self._send('SensorNeuron',
-                   neuron_id, sensor_id,
-                   svi, tau)
-
-        return neuron_id
-
-    def send_sphere(self, x=0, y=0, z=0, mass=1.0, radius=0.5,
-                    collision_group=0, r=1, g=1, b=1):
-        """Sends a sphere to the simulator
-
-        Parameters
-        ----------
-        x        : float, optional
-                The x position of the center
-        y        : float, optional
-                The y position of the center
-        z        : float, optional
-                The z position of the center
-        mass  : float, optional 
-                The mass of the body (default is 1.0)
-        radius   : float, optional
-                The radius of the sphere (default is 0.5)
-        collision_group : int, optional
-                The collision group the body is assigned to. Bodies within
-                the same collision group do not collide.
-        r       : float, optional
-                The amount of the color red in the body (r in [0,1])
-        g       : float, optional
-                The amount of the color green in the body (g in [0,1])
-        b       : float, optional
-                The amount of the color blue in the body (b in [0,1])
-
-        Returns
-        -------
-        int     
-                The id tag of the sphere
-        """
-        assert radius >= 0, 'Radius of Sphere must be >= 0'
-        self._assert_color('Sphere', r, g, b)
-
-        if collision_group+1 > self._max_collision_group:
-            self._max_collision_group = collision_group+1
-
-        body_id = self._num_bodies
-        self._num_bodies += 1
-
-        self._send('Sphere',
-                   body_id,
-                   x, y, z,
-                   mass,
-                   radius,
-                   collision_group,
-                   r, g, b)
-
-        return body_id
-
     def send_ray_sensor(self, body_id=0, x=0, y=0, z=0, r1=0, r2=0, r3=1):
         """Sends a ray sensor to the simulator connected to a body
 
@@ -886,6 +924,58 @@ class Simulator(object):
 
         return sensor_id
 
+    def send_touch_sensor(self, body_id=0):
+        """Send touch sensor to a body in the simulator
+
+        Parameters
+        ----------
+        body_id : int, optional
+                The body id of the associated body 
+
+        Returns
+        -------
+        int
+                The id tag of the sensor
+        """
+        assert body_id < self._num_bodies, ('Body with id '+body_id+' has'
+                                            ' not been sent'
+                                            )
+        sensor_id = self._num_sensors
+        self._num_sensors += 1
+
+        self._send('TouchSensor',
+                   sensor_id, body_id)
+
+        return sensor_id
+
+    def send_vestibular_sensor(self, body_id=0):
+        """Connects a vestibular sensor to a body
+
+        Vestibular sensors return a bodies orrientation in space
+
+        Parameters
+        ----------
+        body_id : int, optional
+                The body id of the associated body 
+
+        Returns
+        -------
+        int
+                The id tag of the sensor
+        """
+        assert body_id < self._num_bodies, ('Body with id '+body_id+' has'
+                                            ' not been sent'
+                                            )
+
+        sensor_id = self._num_sensors
+        self._num_sensors += 1
+
+        self._send('VestibularSensor',
+                   sensor_id, body_id)
+
+        return sensor_id
+
+# ------Synapses------------------------------
     def send_synapse(self, source_neuron_id=0, target_neuron_id=0,
                      weight=0.0):
         """Sends a synapse to the simulator
@@ -969,57 +1059,6 @@ class Simulator(object):
                    start_time, end_time)
 
         return True
-
-    def send_touch_sensor(self, body_id=0):
-        """Send touch sensor to a body in the simulator
-
-        Parameters
-        ----------
-        body_id : int, optional
-                The body id of the associated body 
-
-        Returns
-        -------
-        int
-                The id tag of the sensor
-        """
-        assert body_id < self._num_bodies, ('Body with id '+body_id+' has'
-                                            ' not been sent'
-                                            )
-        sensor_id = self._num_sensors
-        self._num_sensors += 1
-
-        self._send('TouchSensor',
-                   sensor_id, body_id)
-
-        return sensor_id
-
-    def send_vestibular_sensor(self, body_id=0):
-        """Connects a vestibular sensor to a body
-
-        Vestibular sensors return a bodies orrientation in space
-
-        Parameters
-        ----------
-        body_id : int, optional
-                The body id of the associated body 
-
-        Returns
-        -------
-        int
-                The id tag of the sensor
-        """
-        assert body_id < self._num_bodies, ('Body with id '+body_id+' has'
-                                            ' not been sent'
-                                            )
-
-        sensor_id = self._num_sensors
-        self._num_sensors += 1
-
-        self._send('VestibularSensor',
-                   sensor_id, body_id)
-
-        return sensor_id
 
     def start(self):
         """Starts the simulation"""

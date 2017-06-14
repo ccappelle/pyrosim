@@ -7,6 +7,11 @@
 #include "positionSensor.h"
 #include "touchSensor.h"
 #include "vestibularSensor.h"
+#include <map>
+#include <string>
+#include <utility>
+
+typedef std::array<int,3> Triple;
 
 class NEURON;
 
@@ -48,10 +53,18 @@ private:
 
 	int	containsLightSource;
 
+	std::map<int, float> xForces;
+	std::map<int, float> yForces;
+	std::map<int, float> zForces;
+
 public:
 	OBJECT();
 
 	~OBJECT(void);
+
+	void Add_External_Force(float x, float y, float z, int timeStep);
+
+	void Apply_Stored_Forces(int timeStep);
 
 	int  Connect_Sensor_To_Sensor_Neuron(int sensorID , NEURON *sensorNeuron);
 
@@ -77,7 +90,7 @@ public:
 
         double Get_Green_Component(void);
     int Get_Group(void);
-    
+
 	double Get_Length(void);
 
 

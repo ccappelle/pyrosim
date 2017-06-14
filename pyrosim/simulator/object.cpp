@@ -8,6 +8,7 @@
 #include <drawstuff/drawstuff.h>
 #include "texturepath.h"
 
+
 #ifdef dDOUBLE
 #define dsDrawLine dsDrawLineD
 #define dsDrawBox dsDrawBoxD
@@ -15,6 +16,7 @@
 #define dsDrawCylinder dsDrawCylinderD
 #define dsDrawCapsule dsDrawCapsuleD
 #endif
+
 
 OBJECT::OBJECT(void) {
 
@@ -31,10 +33,31 @@ OBJECT::OBJECT(void) {
 	vestibularSensor = NULL;
 
 	containsLightSource = false; 
+
 }
 
 OBJECT::~OBJECT(void) {
 
+}
+
+void OBJECT::Add_External_Force(float x, float y, float z, int timeStep){
+    std::cerr<< "\n UGHHHHH \n";
+    xForces.insert(std::make_pair(timeStep,x));
+    yForces.insert(std::make_pair(timeStep,y));
+    zForces.insert(std::make_pair(timeStep,z));
+    //std::cerr<<xForces[timeStep]<< "," << yForces[timeStep] << ","<<zForces[timeStep]<<"\n";
+}
+
+void OBJECT::Apply_Stored_Forces(int timeStep){
+
+    if( xForces.find(timeStep)!= xForces.end()){
+         dBodyAddForce(body, xForces[timeStep],
+                yForces[timeStep],
+                zForces[timeStep]);
+       std::cerr << xForces[timeStep]<< " , " <<
+                yForces[timeStep] << " , " <<
+                zForces[timeStep] << "\n";
+    }
 }
 
 int OBJECT::Connect_Sensor_To_Sensor_Neuron(int sensorID , NEURON *sensorNeuron) {

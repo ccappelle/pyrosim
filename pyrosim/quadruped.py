@@ -1,5 +1,6 @@
 import math
 import numpy as np
+import math
 
 HEIGHT = 0.3
 EPS = 0.05
@@ -74,9 +75,9 @@ def send_to_simulator(sim, weight_matrix):
             start_weight = weight_matrix[source_id, target_id, 0]
             end_weight = weight_matrix[source_id, target_id, 1]
             time = weight_matrix[source_id, target_id, 2]
-            sim.send_developing_synapse(source_neuron_id=source_id, target_neuron_id=target_id,
-                                        start_weight=start_weight, end_weight=end_weight,
-                                        start_time=time, end_time=time)
+            # sim.send_developing_synapse(source_neuron_id=source_id, target_neuron_id=target_id,
+            #                             start_weight=start_weight, end_weight=end_weight,
+            #                             start_time=time, end_time=time)
 
     layout = {'thighs': thighs,
               'shins': shins,
@@ -87,23 +88,33 @@ def send_to_simulator(sim, weight_matrix):
               'sensor_neurons': sensor_neurons,
               'motor_neurons': motor_neurons}
 
+    env_box = sim.send_box(x=2,y=-2,z=HEIGHT/2.0,length=HEIGHT,width=HEIGHT,height=HEIGHT,collision_group=1,
+                            mass=10.)
+    sim.send_external_force(env_box, x=0, y=0, z=10.*20.,time=300)
+    sim.send_external_force(env_box, x=-70.*10.,y=70.*10.,z=0,time=320)
+    # for t in range(1000):
+    #   x = math.cos(0.045*t)
+    #   y = math.sin(0.045*t)
+    #   if t%2==0:
+    #     sim.send_external_force(main_body,x=x,y=y, z=0, time=t)
+
     return layout
 
 if __name__ == "__main__":
     import pyrosim
 
     eval_time = 1000
-    gravity = -0.01
+    gravity = -1.0
     NUM = 1
     if NUM == 1:
       BLIND = False
     else:
       BLIND = True
 
-    sim = [0]*1
+    sim = [0]*NUM
     for j in range(NUM):
       for i in range(NUM):
-        sim[i] = pyrosim.Simulator(eval_time=eval_time, debug=True,dt=0.045,
+        sim[i] = pyrosim.Simulator(eval_time=eval_time, debug=True,dt=0.045,play_paused=True,
                                 gravity=gravity, play_blind=BLIND, use_textures=True)
         num_sensors = 5
         num_motors = 8
@@ -114,7 +125,7 @@ if __name__ == "__main__":
         time_matrix = np.random.rand(num_sensors+num_motors)
 
         layout = send_to_simulator(sim[i], weight_matrix=weight_matrix)
-        sim[i].film_body(0)
+        #sim[i].film_body(0)
         sim[i].start()
       for i in range(NUM):
         results = sim[i].wait_to_finish()

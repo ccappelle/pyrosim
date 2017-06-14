@@ -8,7 +8,7 @@
 #include "datastruct.h"
 
 class ENVIRONMENT {
-
+ 
 private:
 
 	int numberOfBodies;
@@ -38,6 +38,8 @@ public:
     void Read_From_Python(dWorldID world, dSpaceID space, Data *data);
 
 	void Update_Neural_Network(int timeStep);
+
+	void Update_Forces(int timeStep);
 
 	void Write_Sensor_Data(int evalPeriod);
 

@@ -163,8 +163,8 @@ void Simulate_For_One_Time_Step(void) {
 
   environment->Poll_Sensors(timer);
   environment->Update_Neural_Network(timer);
-
   environment->Actuate_Joints();
+  environment->Update_Forces(timer);
 
   dWorldStep (world, data.dt);
 

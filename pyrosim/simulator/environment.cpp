@@ -79,6 +79,19 @@ void ENVIRONMENT::Read_From_Python(dWorldID world, dSpaceID space, Data *data)
                         std::cin >> data->texturePathStr;
                 else if ( strcmp(incomingString,"Debug") == 0)
                         std::cin >> data->debug;
+                else if ( strcmp(incomingString,"ExternalForce") == 0){
+                        int bodyID;
+                        float x,y,z;
+                        int time;
+                        std::cin >> bodyID;
+                        std::cin >> x;
+                        std::cin >> y;
+                        std::cin >> z;
+                        std::cin >> time;
+                        std::cerr<< bodyID << " " << x << " " << y << " " << z << " " << time << "\n";
+                        objects[bodyID]->Add_External_Force(x,y,z,time);
+                }
+
                 //Camera
                 else if ( strcmp(incomingString,"Camera") == 0)
                 {
@@ -199,6 +212,11 @@ void ENVIRONMENT::Update_Neural_Network(int timeStep) {
 		neuralNetwork->Update(timeStep);
 }
 
+void ENVIRONMENT::Update_Forces(int timeStep){
+    for(int i=0;i<numberOfBodies;i++){
+        objects[i]->Apply_Stored_Forces(timeStep);
+    }
+}
 void ENVIRONMENT::Write_Sensor_Data(int evalPeriod) {
 
 	for (int i=0;i<numberOfBodies;i++)
@@ -256,19 +274,18 @@ void ENVIRONMENT::Create_Function_Neuron(int evalPeriod){
 
         neuralNetwork->Add_Function_Neuron(ID, timeValues);
 }
-void ENVIRONMENT::Create_Hidden_Neuron(void) {
+void ENVIRONMENT::Create_Hidden_Neuron(void) 
+{
 
-        int ID;
-
-        std::cin >> ID;
+    int ID;
+    std::cin >> ID;
 
 	double tau;
 
 	std::cin >> tau;
 
-        if ( neuralNetwork == NULL )
-
-                Create_Neural_Network();
+    if ( neuralNetwork == NULL )
+        Create_Neural_Network();
 
 	neuralNetwork->Add_Hidden_Neuron(ID,tau);
 }
@@ -323,23 +340,22 @@ void ENVIRONMENT::Create_Light_Source(void) {
 
 void ENVIRONMENT::Create_Motor_Neuron(void) {
 
-        int ID;
+    int ID;
 
-        std::cin >> ID;
+    std::cin >> ID;
 
-        int jointID;
+    int jointID;
 
-        std::cin >> jointID;
+    std::cin >> jointID;
 
-	double tau;
+    double tau;
 
-	std::cin >> tau;
+    std::cin >> tau;
 
-        if ( neuralNetwork == NULL )
+    if ( neuralNetwork == NULL )
+        Create_Neural_Network();
 
-                Create_Neural_Network();
-
-        Add_Motor_Neuron(ID,jointID,tau);
+    Add_Motor_Neuron(ID,jointID,tau);
 }
 
 void ENVIRONMENT::Create_Neural_Network(void) {
@@ -349,7 +365,7 @@ void ENVIRONMENT::Create_Neural_Network(void) {
 
 void ENVIRONMENT::Create_Object(dWorldID world, dSpaceID space, int index, int shape) {
 
-        objects[index] = new OBJECT();
+    objects[index] = new OBJECT();
 
 	objects[index]->Read_From_Python(world,space,shape);
 
@@ -358,52 +374,52 @@ void ENVIRONMENT::Create_Object(dWorldID world, dSpaceID space, int index, int s
 
 void ENVIRONMENT::Create_Ray_Sensor(dSpaceID space, int evalPeriod) {
 
-        int objectIndex;
+    int objectIndex;
 
-	int ID;
+    int ID;
 
-	std::cin >> ID;
+    std::cin >> ID;
 
-        std::cin >> objectIndex;
+    std::cin >> objectIndex;
 
-        objects[objectIndex]->Create_Ray_Sensor(space,ID,evalPeriod);
+    objects[objectIndex]->Create_Ray_Sensor(space,ID,evalPeriod);
 }
 
 void ENVIRONMENT::Create_Position_Sensor(int evalPeriod) {
 
-	int objectIndex;
+    int objectIndex;
 
-	int ID;
+    int ID;
 
-	std::cin >> ID;
+    std::cin >> ID;
 
-        std::cin >> objectIndex; 
+    std::cin >> objectIndex; 
 
-	objects[objectIndex]->Create_Position_Sensor(ID,evalPeriod);	
+    objects[objectIndex]->Create_Position_Sensor(ID,evalPeriod);	
 }
 
 void ENVIRONMENT::Create_Proprioceptive_Sensor(int evalPeriod) {
 
-        int jointIndex;
+    int jointIndex;
 
-	int ID;
+    int ID;
 
-	std::cin >> ID;
+    std::cin >> ID;
 
-        std::cin >> jointIndex;
+    std::cin >> jointIndex;
 
-        joints[jointIndex]->Create_Proprioceptive_Sensor(ID,evalPeriod);
+    joints[jointIndex]->Create_Proprioceptive_Sensor(ID,evalPeriod);
 }
 
 void ENVIRONMENT::Connect_Motor_Neuron_to_Joint( int jointID, NEURON *motorNeuron ) {
 
-        int done = false;
+    int done = false;
 
-        int jointIndex = 0;
+    int jointIndex = 0;
 
-        while ( (done == false) && (jointIndex < numberOfJoints) )
+    while ( (done == false) && (jointIndex < numberOfJoints) )
 
-                done = joints[jointIndex++]->Connect_To_Motor_Neuron( jointID , motorNeuron );
+        done = joints[jointIndex++]->Connect_To_Motor_Neuron( jointID , motorNeuron );
 }
 
 void ENVIRONMENT::Connect_Sensor_To_Sensor_Neuron( int sensorID , NEURON *sensorNeuron ) {
@@ -459,15 +475,15 @@ void ENVIRONMENT::Create_Synapse(void) {
 
 void ENVIRONMENT::Create_Touch_Sensor(int evalPeriod) {
 
-        int objectIndex;
+    int objectIndex;
 
-	int ID;
+    int ID;
 
-	std::cin >> ID;
+    std::cin >> ID;
 
-        std::cin >> objectIndex;
+    std::cin >> objectIndex;
 
-        objects[objectIndex]->Create_Touch_Sensor(ID,evalPeriod);
+    objects[objectIndex]->Create_Touch_Sensor(ID,evalPeriod);
 }
 
 void ENVIRONMENT::Create_Vestibular_Sensor(int evalPeriod) {
