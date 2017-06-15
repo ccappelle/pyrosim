@@ -10,7 +10,7 @@
 #include <map>
 #include <string>
 #include <utility>
-
+#include <array>
 
 class NEURON;
 
@@ -55,7 +55,8 @@ private:
 	std::map<int, float> xForces;
 	std::map<int, float> yForces;
 	std::map<int, float> zForces;
-
+	std::map< int, std::array<float,3> > forces; 
+	float vec[3];
 public:
 	OBJECT();
 

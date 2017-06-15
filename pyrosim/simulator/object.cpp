@@ -34,6 +34,9 @@ OBJECT::OBJECT(void) {
 
 	containsLightSource = false; 
 
+    vec[0] = 0.;
+    vec[1] = 0.;
+    vec[2] = 0.;
 }
 
 OBJECT::~OBJECT(void) {
@@ -41,22 +44,34 @@ OBJECT::~OBJECT(void) {
 }
 
 void OBJECT::Add_External_Force(float x, float y, float z, int timeStep){
-    //std::cerr<< "\n UGHHHHH \n";
+    vec[0] = x;
+    vec[1] = y;
+    vec[2] = z;
+
     xForces.insert(std::make_pair(timeStep,x));
     yForces.insert(std::make_pair(timeStep,y));
     zForces.insert(std::make_pair(timeStep,z));
-    //std::cerr<<xForces[timeStep]<< "," << yForces[timeStep] << ","<<zForces[timeStep]<<"\n";
+
+
+    //forces[vec] = timeStep;
+    forces[timeStep][0] = x;
+    forces[timeStep][1] = y;
+    forces[timeStep][2] = z;
+    std::cerr << x<< "\n";
+    std::cerr<<xForces[timeStep]<< "," << yForces[timeStep] << ","<<zForces[timeStep]<<"\n";
+    std::cerr<<forces[timeStep][0] << "," << forces[timeStep][1] << "," << forces[timeStep][2]<<"\n";
 }
 
 void OBJECT::Apply_Stored_Forces(int timeStep){
 
-    if( xForces.find(timeStep)!= xForces.end()){
-         dBodyAddForce(body, xForces[timeStep],
-                yForces[timeStep],
-                zForces[timeStep]);
-       std::cerr << xForces[timeStep]<< " , " <<
-                yForces[timeStep] << " , " <<
-                zForces[timeStep] << "\n";
+    // if( xForces.find(timeStep)!= xForces.end()){
+    //      dBodyAddForce(body, xForces[timeStep],
+    //             yForces[timeStep],
+    //             zForces[timeStep]);
+    // }
+    
+    if (forces.find(timeStep)!= forces.end()){
+        dBodyAddForce(body, forces[timeStep][0],forces[timeStep][1], forces[timeStep][2]);
     }
 }
 

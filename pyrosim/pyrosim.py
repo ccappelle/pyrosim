@@ -1145,11 +1145,18 @@ class Simulator(object):
         debug_output = data_from_simulator[1]
 
         if self.debug:
-            print debug_output[:-637]
+            chop_start = debug_output.find('Simulation test environment')
+            chop_end = debug_output.find('sideways and up')+15
+            if chop_start >0:
+                print debug_output[:chop_start], debug_output[chop_end:-1]
+            else:
+                print debug_output
 
         data_from_simulator = data_from_simulator[0]
+        print data_from_simulator
         data_from_simulator = data_from_simulator.split()
-
+        print data_from_simulator
+        
         if (data_from_simulator == []):
             return
 

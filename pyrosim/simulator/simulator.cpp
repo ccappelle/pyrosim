@@ -60,11 +60,10 @@ void Handle_Ray_Sensor(dGeomID o1, dGeomID o2) {
 
                 	obj->Set_Ray_Sensor(contact.geom.depth,(OBJECT*)dGeomGetData(o2),timer);
 
-                	if ( data.runBlind == false )
-
+      if ( data.runBlind == false )
 				obj->Draw_Ray_Sensor(contact.geom.pos[0],contact.geom.pos[1],contact.geom.pos[2],timer);
 		}
-        }
+  }
 }
 
 void Handle_Ray_Sensors(dGeomID o1, dGeomID o2) {
@@ -179,7 +178,6 @@ void Simulate_For_One_Time_Step(void) {
 static void simLoop (int pause)
 {
   if (!initialized){
-    dWorldSetGravity(world,0,0,data.gravity);
     dsSetViewpoint (data.xyz,data.hpr);
     if(data.followBody>=0){
       environment->Get_Object_Position(updated_xyz, data.followBody);
@@ -191,10 +189,9 @@ static void simLoop (int pause)
 
 
 	if ( !pause ){
-
 		Simulate_For_One_Time_Step();
 
-    if (data.followBody>=0){
+  if (data.followBody>=0){
 
     environment->Get_Object_Position(updated_xyz, data.followBody);
 
@@ -294,6 +291,7 @@ int main (int argc, char **argv)
   Initialize_ODE();
   Initialize_Environment();
   Read_From_Python();
+  dWorldSetGravity(world,0,0,data.gravity);
 
 	if ( data.runBlind )
 		Run_Blind();
