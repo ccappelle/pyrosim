@@ -191,45 +191,44 @@ static void simLoop (int pause)
 	if ( !pause ){
 		Simulate_For_One_Time_Step();
 
-  if (data.followBody>=0){
+    if (data.followBody>=0){
+      environment->Get_Object_Position(updated_xyz, data.followBody);
 
-    environment->Get_Object_Position(updated_xyz, data.followBody);
+      average_z[timer%LAGSIZE] = updated_xyz[2];
 
-    average_z[timer%LAGSIZE] = updated_xyz[2];
+      updated_xyz[0] += data.xyz[0];
+      updated_xyz[1] += data.xyz[1];
+      updated_xyz[2] = data.xyz[2];
+      for(int i=0;i<LAGSIZE;i++)
+            updated_xyz[2] +=  average_z[i]/float(LAGSIZE); //lag movement
 
-    updated_xyz[0] += data.xyz[0];
-    updated_xyz[1] += data.xyz[1];
-    updated_xyz[2] = data.xyz[2];
-    for(int i=0;i<LAGSIZE;i++)
-          updated_xyz[2] +=  average_z[i]/float(LAGSIZE); //lag movement
-
-    dsSetViewpoint(updated_xyz,data.hpr);
-  }
-  if (data.trackBody>=0){
-    float dirVector[3];
-    environment->Get_Object_Position(dirVector, data.trackBody);
-    
-    for(int i=0;i<3;i++)
-      dirVector[i] -= data.xyz[i];
-
-    if (!(dirVector[0]==0 and dirVector[1]==0 and dirVector[2]==0)){
-        float zDrop = dirVector[2];
-        float magnitude = sqrt(pow(dirVector[0],2)+ pow(dirVector[1],2)+pow(dirVector[2],2));
-        for(int i=0;i<3;i++)
-          dirVector[i] = dirVector[i]/magnitude;
-
-        float heading = -atan2(dirVector[0],dirVector[1]) * 180.0 / 3.14159+90.;
-        float pitch = asin(zDrop/magnitude) * 180.0 / 3.14159;
-        float update_hpr[3];
-
-        update_hpr[0] = heading;
-        update_hpr[1] = pitch;
-        update_hpr[2] = data.hpr[2];
-
-        dsSetViewpoint(data.xyz, update_hpr);
+      dsSetViewpoint(updated_xyz,data.hpr);
     }
+    if (data.trackBody>=0){
+      float dirVector[3];
+      environment->Get_Object_Position(dirVector, data.trackBody);
+      
+      for(int i=0;i<3;i++)
+        dirVector[i] -= data.xyz[i];
+
+      if (!(dirVector[0]==0 and dirVector[1]==0 and dirVector[2]==0)){
+          float zDrop = dirVector[2];
+          float magnitude = sqrt(pow(dirVector[0],2)+ pow(dirVector[1],2)+pow(dirVector[2],2));
+          for(int i=0;i<3;i++)
+            dirVector[i] = dirVector[i]/magnitude;
+
+          float heading = -atan2(dirVector[0],dirVector[1]) * 180.0 / 3.14159+90.;
+          float pitch = asin(zDrop/magnitude) * 180.0 / 3.14159;
+          float update_hpr[3];
+
+          update_hpr[0] = heading;
+          update_hpr[1] = pitch;
+          update_hpr[2] = data.hpr[2];
+
+          dsSetViewpoint(data.xyz, update_hpr);
+      }
   }
-  }
+}
 	environment->Draw(data.debug);
 }
 

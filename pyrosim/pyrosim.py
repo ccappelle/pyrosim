@@ -1153,10 +1153,8 @@ class Simulator(object):
                 print debug_output
 
         data_from_simulator = data_from_simulator[0]
-        print data_from_simulator
         data_from_simulator = data_from_simulator.split()
-        print data_from_simulator
-        
+
         if (data_from_simulator == []):
             return
 

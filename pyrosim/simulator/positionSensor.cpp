@@ -40,8 +40,7 @@ void POSITION_SENSOR::Poll(dBodyID body, int t) {
 
         pos = dBodyGetPosition(body);
 
-        std::cerr <<"Got pos" << pos[0] << ", " << pos[1]<< ", "<<pos[2]<< "\n";
-        
+
 	x[t] = pos[0];
 
 	y[t] = pos[1];
@@ -72,7 +71,6 @@ void POSITION_SENSOR::Write_To_Python(int evalPeriod) {
 
         for ( int  t = 0 ; t < evalPeriod ; t++ ) {
                 sprintf(outString,"%s %f %f %f ",outString,x[t],y[t],z[t]);
-                std::cerr << x[t] << ","<<y[t]<<","<<z[t] <<"\n";
         }
 
         sprintf(outString,"%s \n",outString);
