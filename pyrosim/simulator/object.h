@@ -11,7 +11,6 @@
 #include <string>
 #include <utility>
 
-typedef std::array<int,3> Triple;
 
 class NEURON;
 
