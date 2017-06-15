@@ -41,7 +41,7 @@ OBJECT::~OBJECT(void) {
 }
 
 void OBJECT::Add_External_Force(float x, float y, float z, int timeStep){
-    std::cerr<< "\n UGHHHHH \n";
+    //std::cerr<< "\n UGHHHHH \n";
     xForces.insert(std::make_pair(timeStep,x));
     yForces.insert(std::make_pair(timeStep,y));
     zForces.insert(std::make_pair(timeStep,z));
