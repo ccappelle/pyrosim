@@ -6,6 +6,10 @@
 Welcome to pyrosim's documentation!
 ===================================
 
+.. image:: img/pyrosim-logo.png
+    :alt: (py)thon (ro)bot (sim)ulator
+    :align: center
+
 (Py)thon (Ro)bot (Sim)ulator is a python interface for ODE, primarily focused on neurally controlled robots.
 With it you can send bodies (cylinders, boxes, etc.), joints, and neural networks. 
 Pyrosim is developed and maintained by the members of the MEC-Lab at The University of Vermont.

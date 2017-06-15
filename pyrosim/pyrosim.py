@@ -40,6 +40,8 @@ class Simulator(object):
             the simulator (the default is False)
     """
 
+    WORLD = -1
+
     def __init__(self, play_blind=False, play_paused=False,
                  eval_time=constants.evaluation_time, dt=constants.dt,
                  gravity=constants.gravity,
@@ -70,7 +72,8 @@ class Simulator(object):
         self.body_to_follow = -1
 
         if debug:
-            print self.pyrosim_path
+            print 'Simulator exec location ', self.pyrosim_path, '\n'
+            print 'Python send commands: '
 
         if (self.play_paused == True and self.play_blind == True):
             self.play_paused = False
@@ -451,7 +454,7 @@ class Simulator(object):
     def send_slider_joint(self, first_body_id, second_body_id,
                           x=0, y=0, z=1,
                           lo=-1.0, hi=+1.0,
-                          speed=1.0, torque=1.0, position_control=True):
+                          speed=1.0, strength=1.0, position_control=True):
         """Send a slider joint to the simulator
 
                 Slider joints push and pull two bodies along the axis defined
@@ -484,8 +487,8 @@ class Simulator(object):
                 (default is 1.0)
         speed           : float, optional
                 The speed of the motor of the joint (default is 1.0)
-        torque          : float, optional
-                The maximum amount of torque the motor in the joint can use
+        strength          : float, optional
+                The maximum amount of force the motor in the joint can use
                 (default is 1.0)
         position_control : bool, optional
                 True means use position control. This means the motor neuron
@@ -504,7 +507,7 @@ class Simulator(object):
             str(first_body_id) + ' has not been sent'
         assert speed >= 0, ('Speed of Hinge Joint must be greater'
                             'than or equal to zero')
-        assert torque >= 0, ('Torque of Hinge Joint must be greater'
+        assert strength >= 0, ('Torque of Hinge Joint must be greater'
                              'than or equal to zero')
 
         joint_id = self._num_joints
@@ -516,7 +519,7 @@ class Simulator(object):
                    0, 0, 0,
                    x, y, z,
                    lo, hi,
-                   speed/(self.dt*20), torque,
+                   speed/(self.dt*20), strength,
                    position_control)
 
         return joint_id
@@ -1037,15 +1040,16 @@ class Simulator(object):
                 The starting time of development. start_time in [0,1]
         end_time       : float, optional
                 The ending time of development. end_time in [0,1]
+
         Returns
         -------
         bool
                 True if successful, False otherwise
         """
-        assert source_neuron_id < self._num_neurons, 'Neuron with id ' + \
-            str(source_neuron_id)+' has not been sent'
-        assert target_neuron_id < self._num_neurons, 'Neuron with id ' + \
-            str(target_neuron_id)+' has not been sent'
+        assert source_neuron_id < self._num_neurons, ('Neuron with id ' + 
+            str(source_neuron_id)+' has not been sent')
+        assert target_neuron_id < self._num_neurons, ('Neuron with id ' + 
+            str(target_neuron_id)+' has not been sent')
 
         if start_time >= end_time:
             end_time = start_time
@@ -1063,11 +1067,15 @@ class Simulator(object):
     def start(self):
         """Starts the simulation"""
 
+        assert self.evaluated == False, (
+            'Simulation has already been evaluated')
+
         if (not self.collision_matrix_sent):
             self.send_collision_matrix('standard')
             pass
-        commands = [self.pyrosim_path + '/simulator']
 
+        #build initial commands
+        commands = [self.pyrosim_path + '/simulator']
         if (self.play_blind == True):
             commands.append('-blind')
         else:
@@ -1083,7 +1091,12 @@ class Simulator(object):
             self.pipe.stdin.write(string_to_send)
 
         self.pipe.stdin.write('Done\n')
-        # self.pipe.stdin.write('textuer2\n')
+        if self.debug:
+            print 'Done \n'
+            print 'Pipe open with commands: ', commands
+            print 'Starting simulation \n'
+            print 'C++ recieve commands: '
+
         return True
 
     def wait_to_finish(self):
@@ -1132,7 +1145,7 @@ class Simulator(object):
         debug_output = data_from_simulator[1]
 
         if self.debug:
-            print debug_output
+            print debug_output[:-637]
 
         data_from_simulator = data_from_simulator[0]
         data_from_simulator = data_from_simulator.split()
@@ -1164,5 +1177,5 @@ class Simulator(object):
         string_to_send += '\n'
 
         if self.debug:
-            print string_to_send
+            print string_to_send,
         self.strings_to_send.append(string_to_send)
