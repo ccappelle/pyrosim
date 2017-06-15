@@ -45,6 +45,7 @@ def run(test):
         print 'Touch sensor 2:'
         print sim.get_sensor_data(sensor2, svi=0)
 
+
 if __name__ == "__main__":
     if len(sys.argv) > 1 and sys.argv[1] == 'test':
         run(True)

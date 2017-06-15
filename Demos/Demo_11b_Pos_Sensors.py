@@ -7,9 +7,9 @@ import pyrosim
 def run(test):
 
     if test:
-        kwargs = {'debug': True, 'play_blind': True, 'eval_time': 10}
+        kwargs = {'debug': False, 'play_blind': True, 'eval_time': 500}
     else:
-        kwargs = {'debug': True, 'play_blind': False, 'eval_time': 10}
+        kwargs = {'debug': True, 'play_blind': False, 'eval_time': 500}
 
     ARM_LENGTH = 0.5
     ARM_RADIUS = ARM_LENGTH / 10.0
@@ -42,11 +42,17 @@ def run(test):
     y_data = sim.get_sensor_data(position, svi=1)
     z_data = sim.get_sensor_data(position, svi=2)
 
-    if True:
+    if not test:
         for t in range(kwargs['eval_time']):
             print 'xyz position at time ', t,
             print ' : ', x_data[t], y_data[t], z_data[t]
-
+    else:
+        assert abs(x_data[-1]-0.193812) < 10**(-6), (
+            'last x = ' + str(x_data[-1]) + ' should equal 0.193812')
+        assert abs(y_data[-1]-0.322152) < 10**(-6), (
+            'last y = ' + str(y_data[-1]) + ' should equal 0.322152')
+        assert abs(z_data[-1]-0.206516) < 10**(-6), (
+            'last z = ' + str(z_data[-1]) + ' should equal 0.206516')
 
 if __name__ == "__main__":
     if len(sys.argv) > 1 and sys.argv[1] == 'test':

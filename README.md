@@ -64,6 +64,21 @@ environments. [Read the Docs](https://ccappelle.github.io/pyrosim)
   This should bring up an OpenGL window displaying an empty, virtual world.
   The window will close on its own after a few seconds.
 
+
+### Notes
+  
+  If you already have pyrosim installed and want the latest update from the repository,
+  change into the modules root directory (contains setup.py) and pull 
+  ```bash
+  $ git pull
+  ```
+  The C++ code is likely to have changed so  you have to recompile it by going int the simulator directory and typing make
+  ```bash
+  $ cd pyrosim/simulator
+  $ make
+  ```
+  The simulator directory contains all of the C++ code used in pyrosim.
+  
 ### Next steps.
 
 Now you can start making robots [here](https://www.reddit.com/r/ludobots/wiki/pyrosim/simulation), starting at step #3.
