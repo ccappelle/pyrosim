@@ -215,8 +215,8 @@ class Simulator(object):
         height  : float, optional
                 The height of the box
         collision_group : int, optional
-                The collision group the body is assigned to. Bodies within
-                the same collision group do not collide.
+                The collision group the body is assigned to. The collision
+                group determines how the body collides with other bodies.
         r       : float, optional
                 The amount of the color red in the body (r in [0,1])
         g       : float, optional
@@ -267,8 +267,8 @@ class Simulator(object):
         radius   : float, optional
                 The radius of the sphere (default is 0.5)
         collision_group : int, optional
-                The collision group the body is assigned to. Bodies within
-                the same collision group do not collide.
+                The collision group the body is assigned to. The collision
+                group determines how the body collides with other bodies.
         r       : float, optional
                 The amount of the color red in the body (r in [0,1])
         g       : float, optional
@@ -334,8 +334,8 @@ class Simulator(object):
                 The radius of the short axis of the cylinder (default is 0.1)
         r       : float, optional
         collision_group : int, optional
-                The collision group the body is assigned to. Bodies within
-                the same collision group do not collide.
+                The collision group the body is assigned to. The collision
+                group determines how the body collides with other bodies.
         r       : float, optional
                 The amount of the color red in the body (r in [0,1])
         g       : float, optional
@@ -709,7 +709,7 @@ class Simulator(object):
         return neuron_id
 
 # ---------PhysicalProperties--------------------
-    def send_collision_matrix(self, matrix='standard'):
+    def send_collision_matrix(self, matrix='none'):
         """Sends a matrix which defines which collision groups collide
 
         If element [i,j] of the matrix equals 1, then bodies in groups
@@ -727,10 +727,10 @@ class Simulator(object):
         ----------
         matrix : square symmetric matrix, optional
                 The matrix which defines which groups collide. The
-                'standard' setting means intragroup collisions are
-                ignored (i.e. [i,i]=0) and intergroup collisions
-                occur (i.e. [i,j]=1 for all i not equal to j).
-                (the default is 'standard')
+                'none' setting means all collisions are ignored.
+                The 'all' setting means both intragroup ([i,i]) and 
+                intergroup ([i,j]) collisions are enabled
+                (the default is 'none')
 
         Returns
         -------
@@ -742,11 +742,14 @@ class Simulator(object):
         self.collision_matrix_sent = True
 
         if isinstance(matrix, str):
-            if matrix == 'standard':
-                matrix = (np.eye(self._max_collision_group, dtype='int32')+1
-                          - 2*np.eye(self._max_collision_group, dtype='int32'))
+            if matrix == 'none':
+                matrix = np.zeros((self._max_collision_group,
+                        self._max_collision_group), dtype='int32')
+
+            elif matrix == 'all':
                 matrix = np.ones((self._max_collision_group,
-                            self._max_collision_group), dtype='int32')
+                        self._max_collision_group), dtype='int32')
+
         send_string = []
 
         for i in range(self._max_collision_group):
