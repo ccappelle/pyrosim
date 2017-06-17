@@ -92,6 +92,7 @@ def send_to_simulator(sim, weight_matrix):
                             mass=10.)
     sim.send_external_force(env_box, x=0, y=0, z=10.*20.,time=300)
     sim.send_external_force(env_box, x=-70.*10.,y=70.*10.,z=0,time=320)
+    sim.send_collision_matrix('all')
     # for t in range(1000):
     #   x = math.cos(0.045*t)
     #   y = math.sin(0.045*t)

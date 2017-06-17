@@ -350,7 +350,7 @@ class Simulator(object):
         """
         assert length >= 0, 'Length of Cylinder must be >= 0'
         assert radius >= 0, 'Radius of Cylinder must be >= 0'
-        self._assert_normalizable('Cylinder', r1, r2, r3)
+        self._assert_non_zero('Cylinder', r1, r2, r3)
         self._assert_color('Cylinder', r, g, b)
 
         if collision_group+1 > self._max_collision_group:
@@ -435,7 +435,7 @@ class Simulator(object):
                             'than or equal to zero')
         assert torque >= 0, ('Torque of Hinge Joint must be greater'
                              'than or equal to zero')
-        self._assert_normalizable('Hinge Joint', n1, n2, n3)
+        self._assert_non_zero('Hinge Joint', n1, n2, n3)
 
         joint_id = self._num_joints
         self._num_joints += 1
@@ -508,7 +508,7 @@ class Simulator(object):
         assert speed >= 0, ('Speed of Hinge Joint must be greater'
                             'than or equal to zero')
         assert strength >= 0, ('Torque of Hinge Joint must be greater'
-                             'than or equal to zero')
+                               'than or equal to zero')
 
         joint_id = self._num_joints
         self._num_joints += 1
@@ -744,11 +744,11 @@ class Simulator(object):
         if isinstance(matrix, str):
             if matrix == 'none':
                 matrix = np.zeros((self._max_collision_group,
-                        self._max_collision_group), dtype='int32')
+                                   self._max_collision_group), dtype='int32')
 
             elif matrix == 'all':
                 matrix = np.ones((self._max_collision_group,
-                        self._max_collision_group), dtype='int32')
+                                  self._max_collision_group), dtype='int32')
 
         send_string = []
 
@@ -784,7 +784,7 @@ class Simulator(object):
                                             body_id+' has not been sent')
         assert time >= 0 and time <= self.eval_time, (
             'Time step must be within eval time')
-        self._assert_normalizable('Force', x, y, z)
+        self._assert_non_zero('Force', x, y, z)
 
         self._send('ExternalForce', body_id, x, y, z, time)
 
@@ -921,7 +921,7 @@ class Simulator(object):
         """
         assert body_id < self._num_bodies, 'Body with id ' + \
             str(body_id) + ' has not been sent yet'
-        self._assert_normalizable('Ray Sensor', r1, r2, r3)
+        self._assert_non_zero('Ray Sensor', r1, r2, r3)
 
         sensor_id = self._num_sensors
         self._num_sensors += 1
@@ -1052,10 +1052,12 @@ class Simulator(object):
         bool
                 True if successful, False otherwise
         """
-        assert source_neuron_id < self._num_neurons, ('Neuron with id ' + 
-            str(source_neuron_id)+' has not been sent')
-        assert target_neuron_id < self._num_neurons, ('Neuron with id ' + 
-            str(target_neuron_id)+' has not been sent')
+        assert source_neuron_id < self._num_neurons, ('Neuron with id ' +
+                                                      str(source_neuron_id) +
+                                                      ' has not been sent')
+        assert target_neuron_id < self._num_neurons, ('Neuron with id ' +
+                                                      str(target_neuron_id) +
+                                                      ' has not been sent')
 
         if start_time >= end_time:
             end_time = start_time
@@ -1077,10 +1079,10 @@ class Simulator(object):
             'Simulation has already been evaluated')
 
         if (not self.collision_matrix_sent):
-            self.send_collision_matrix('standard')
+            self.send_collision_matrix()
             pass
 
-        #build initial commands
+        # build initial commands
         commands = [self.pyrosim_path + '/simulator']
         if (self.play_blind == True):
             commands.append('-blind')
@@ -1131,8 +1133,8 @@ class Simulator(object):
             assert color >= 0 and color <= 1, 'Color parameter of ' + \
                 name + ' must be in [0,1]'
 
-    def _assert_normalizable(self, name, *args):
-        """Error checxs vectors so they are not equal to zero"""
+    def _assert_non_zero(self, name, *args):
+        """Error checks vectors so they are not equal to zero"""
 
         flag = False
         for arg in args:
@@ -1153,7 +1155,7 @@ class Simulator(object):
         if self.debug:
             chop_start = debug_output.find('Simulation test environment')
             chop_end = debug_output.find('sideways and up')+15
-            if chop_start >0:
+            if chop_start > 0:
                 print debug_output[:chop_start], debug_output[chop_end:-1]
             else:
                 print debug_output
@@ -1182,6 +1184,7 @@ class Simulator(object):
         """Send a command to the simulator"""
 
         # first argument should be a string
+        assert isinstance(command_string, str), ('Command must be string')
         string_to_send = command_string
         for arg in args:
             string_to_send += ' ' + str(arg)
