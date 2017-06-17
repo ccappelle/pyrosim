@@ -25,11 +25,11 @@ class Simulator(object):
             The time in seconds between physics world steps. Larger dt values 
             create more unstable physics. (the default is 0.05)
     gravity     : float, optional
-            The gravity in the system. Negative values implie normal downward 
+            The gravity in the system. Negative values implies normal downward 
             force of gravity. (default is -1.0)
     xyz         : list of 3 floats
             The xyz position of the camera (default is [0.8317,-0.9817,0.8000])
-    hpr
+    hpr         : float, optional
             The heading, pitch, and roll of the camera 
             (default is [121,-27.5,0.0])
     use_textures : bool, optional
@@ -250,7 +250,7 @@ class Simulator(object):
 
         return body_id
 
-    def send_sphere(self, x=0, y=0, z=0, mass=1.0, radius=0.5,
+    def send_sphere(self, x=0, y=0, z=0, mass=1.0, radius=0.1,
                     collision_group=0, r=1, g=1, b=1):
         """Sends a sphere to the simulator
 
@@ -548,11 +548,11 @@ class Simulator(object):
 
         Motor neurons are neurons which connecto to a specified joint and 
         determine how the joint moves every time step of simulation
-                WARNING: Sending a motor neuron to a joint whose starting position
-                is not in the middle of the 'hi' & 'lo' cutoffs will most likely cause
-                instabilities in the simulation. For example creating a joint with
-                either 'hi' or 'lo' to 0 and attaching a motor neuron to this joint
-                will cause the joint to break. 
+        WARNING: Sending a motor neuron to a joint whose starting position
+        is not in the middle of the 'hi' & 'lo' cutoffs will most likely cause
+        instabilities in the simulation. For example creating a joint with
+        either 'hi' or 'lo' to 0 and attaching a motor neuron to this joint
+        will cause the joint to break. 
 
         Parameters
         ----------
@@ -633,7 +633,6 @@ class Simulator(object):
         int
                 The id tag of the neuron.
         """
-
         try:
             iter(in_values)
         except TypeError:
@@ -688,23 +687,22 @@ class Simulator(object):
 
         Parameters
         ----------
-        tau      : float, optional
-                The 'learning rate' of the neuron. Increasing tau increases
-                how much of value of the neuron at the current time step comes
-                from external inputs vs. the value of the neuron at the 
-                previous time step
+        tau : float, optional
+            The 'learning rate' of the neuron. Increasing tau increases
+            how much of value of the neuron at the current time step comes
+            from external inputs vs. the value of the neuron at the 
+            previous time step.
 
         Returns
         -------
         int
-                The id tag of the neuron
+            The id tag of the neuron
         """
         assert tau > 0, 'Tau value of Hidden Neuron must be positive'
         neuron_id = self._num_neurons
         self._num_neurons += 1
 
-        self._send('HiddenNeuron',
-                   neuron_id, tau)
+        self._send('HiddenNeuron', neuron_id, tau)
 
         return neuron_id
 

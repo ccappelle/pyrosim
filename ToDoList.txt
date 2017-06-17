@@ -4,8 +4,8 @@ to do:
 
 change ludobots pyrosim link to point to old version
 
-webpage
-  - videos, highlight reel
+# completed webpage
+#  - videos, highlight reel
 
 #completed logo
 
@@ -22,18 +22,18 @@ windows
 
 #completed 2017-05-31 ---- input function
 
-different joint types
+#completed different joint types
 
-collision detection
-  - collision pair
+#completed collision detection
+#  - collision pair
   
-demos 
-  slow strong motor
-  slow weak motor
-  fast strong motor
-  fast weak motor
+#completed demos 
+#  slow strong motor
+#  slow weak motor
+#  fast strong motor
+#  fast weak motor
   
-impulse forces
+#completed impulse forces
 
 #completed debug mode (draw joints etc.)
 

@@ -1,3 +1,5 @@
+..  _code:
+
 Simulator Documentation
 =======================
 
@@ -12,4 +14,4 @@ You can send various objects and parameters using the send methods.
     sim.start()
 
 .. automodule:: pyrosim
-	:members:
+    :members:

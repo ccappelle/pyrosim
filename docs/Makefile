@@ -48,7 +48,9 @@ help:
 
 .PHONY: clean
 clean:
-	rm -rf $(BUILDDIR)/*
+	rm -rf $(BUILDDIR)/*.html $(BUILDDIR)/.buildinfo $(BUILDDIR)/*.inv $(BUILDDIR)/*.js
+	rm -rf $(BUILDDIR)/_*
+	rm -rf $(PDF)
 
 .PHONY: html
 html:
