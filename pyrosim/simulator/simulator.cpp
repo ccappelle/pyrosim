@@ -48,86 +48,77 @@ void Terminate(void);
 
 void Handle_Ray_Sensor(dGeomID o1, dGeomID o2) {
 
-	if ( dGeomGetClass(o1) == dRayClass ) {
+    if ( dGeomGetClass(o1) == dRayClass ) {
 
-        	dContact contact;
+        dContact contact;
 
-        	int n = dCollide(o1,o2,1,&contact.geom,sizeof(dContact));
+        int n = dCollide(o1,o2,1,&contact.geom,sizeof(dContact));
 
-        	if ( n>0 ) {
+        if ( n>0 ) {
 
-        		OBJECT *obj = (OBJECT *)dGeomGetData(o1);
+            OBJECT *obj = (OBJECT *)dGeomGetData(o1);
 
-                	obj->Set_Ray_Sensor(contact.geom.depth,(OBJECT*)dGeomGetData(o2),timer);
+            obj->Set_Ray_Sensor(contact.geom.depth,(OBJECT*)dGeomGetData(o2),timer);
 
-      if ( data.runBlind == false )
-				obj->Draw_Ray_Sensor(contact.geom.pos[0],contact.geom.pos[1],contact.geom.pos[2],timer);
-		}
-  }
+            if ( data.runBlind == false )
+                obj->Draw_Ray_Sensor(contact.geom.pos[0],contact.geom.pos[1],contact.geom.pos[2],timer);
+        }
+    }
 }
 
 void Handle_Ray_Sensors(dGeomID o1, dGeomID o2) {
 
-	Handle_Ray_Sensor(o1,o2);
+    Handle_Ray_Sensor(o1,o2);
 
-	Handle_Ray_Sensor(o2,o1);
+    Handle_Ray_Sensor(o2,o1);
 }
 
 static void nearCallback (void *callbakData, dGeomID o1, dGeomID o2)
 {
   int i,n;
 
-	Handle_Ray_Sensors(o1,o2);
+  Handle_Ray_Sensors(o1,o2);
+    // Cancel collisions between distance sensors and other objects.
+  if ( (dGeomGetClass(o1) == dRayClass) || (dGeomGetClass(o2) == dRayClass) ) return;
 
-	if ( (dGeomGetClass(o1) == dRayClass) || (dGeomGetClass(o2) == dRayClass) )
-	
-	// Cancel collisions between distance sensors and other objects.
 
-		return;
+  OBJECT *d1 = (OBJECT *)dGeomGetData(o1);
 
-        OBJECT *d1 = (OBJECT *)dGeomGetData(o1);
-
-        OBJECT *d2 = (OBJECT *)dGeomGetData(o2);
+  OBJECT *d2 = (OBJECT *)dGeomGetData(o2);
 
   // if (d1 && d2)
   //   return;
-	if ( d1 && d2 ){ // Cancel collisions between objects. 
-    int d1Group = d1->Get_Group();
-    int d2Group = d2->Get_Group();
-   if(!data.collisionMatrix[d1Group][d2Group]){
-      return; //no collision between groups where matrix[i][j]=0
+  if ( d1 && d2 ){
+        if (dAreConnected (d1->Get_Body(),d2->Get_Body())) return; //no collision between joint connected bodies
+        int d1Group = d1->Get_Group();
+        int d2Group = d2->Get_Group();
+        if(!data.collisionMatrix[d1Group][d2Group]) return; //no collision between groups where matrix[i][j]=0
     }
-  }
 
-	if ( d1 )
-		d1->Touch_Sensor_Fires(timer);
+    if ( d1 )
+        d1->Touch_Sensor_Fires(timer);
 
-	if ( d2 )
-		d2->Touch_Sensor_Fires(timer);
-	
-  // only collide things with the ground
-  // int g1 = (o1 == ground );
-  // int g2 = (o2 == ground );
-  // if (!(g1 ^ g2)) return;
+    if ( d2 )
+        d2->Touch_Sensor_Fires(timer);
 
-  const int N = 10;
-  dContact contact[N];
-  n = dCollide (o1,o2,N,&contact[0].geom,sizeof(dContact));
-  if (n > 0) {
-    for (i=0; i<n; i++) {
+    const int N = 10;
+    dContact contact[N];
+    n = dCollide (o1,o2,N,&contact[0].geom,sizeof(dContact));
+    if (n > 0) {
+        for (i=0; i<n; i++) {
 
-	contact[i].surface.mode = dContactSlip1 | dContactSlip2 | dContactApprox1;
+            contact[i].surface.mode = dContactSlip1 | dContactSlip2 | dContactApprox1;
 
-	contact[i].surface.mu = dInfinity;
-	contact[i].surface.slip1 = 0.01;
-	contact[i].surface.slip2 = 0.01;
+            contact[i].surface.mu = dInfinity;
+            contact[i].surface.slip1 = 0.01;
+            contact[i].surface.slip2 = 0.01;
 
-	dJointID c = dJointCreateContact (world,contactgroup,&contact[i]);
-	dJointAttach (c,
-		    dGeomGetBody(contact[i].geom.g1),
-		    dGeomGetBody(contact[i].geom.g2));
+            dJointID c = dJointCreateContact (world,contactgroup,&contact[i]);
+            dJointAttach (c,
+                dGeomGetBody(contact[i].geom.g1),
+                dGeomGetBody(contact[i].geom.g2));
+        }
     }
-  }
 }
 
 
@@ -144,14 +135,14 @@ static void start()
 static void command (int cmd)
 {
   switch (cmd) {
-  case '1': {
-      FILE *f = fopen ("state.dif","wt");
-      if (f) {
-        dWorldExportDIF (world,f,"");
-        fclose (f);
-      }
+      case '1': {
+          FILE *f = fopen ("state.dif","wt");
+          if (f) {
+            dWorldExportDIF (world,f,"");
+            fclose (f);
+        }
     }
-  }
+}
 }
 
 // simulation loop
@@ -172,7 +163,7 @@ void Simulate_For_One_Time_Step(void) {
   timer++;
 
   if ( timer==data.evaluationTime )
-        	Terminate();
+    Terminate();
 }
 
 static void simLoop (int pause)
@@ -183,13 +174,13 @@ static void simLoop (int pause)
       environment->Get_Object_Position(updated_xyz, data.followBody);
       for(int i=0;i<LAGSIZE;i++)
         average_z[i] = updated_xyz[2];
-    }
-    initialized = true;
-  }
+}
+initialized = true;
+}
 
 
-	if ( !pause ){
-		Simulate_For_One_Time_Step();
+if ( !pause ){
+    Simulate_For_One_Time_Step();
 
     if (data.followBody>=0){
       environment->Get_Object_Position(updated_xyz, data.followBody);
@@ -202,7 +193,7 @@ static void simLoop (int pause)
       for(int i=0;i<LAGSIZE;i++)
             updated_xyz[2] +=  average_z[i]/float(LAGSIZE); //lag movement
 
-      dsSetViewpoint(updated_xyz,data.hpr);
+        dsSetViewpoint(updated_xyz,data.hpr);
     }
     if (data.trackBody>=0){
       float dirVector[3];
@@ -211,38 +202,38 @@ static void simLoop (int pause)
       for(int i=0;i<3;i++)
         dirVector[i] -= data.xyz[i];
 
-      if (!(dirVector[0]==0 and dirVector[1]==0 and dirVector[2]==0)){
-          float zDrop = dirVector[2];
-          float magnitude = sqrt(pow(dirVector[0],2)+ pow(dirVector[1],2)+pow(dirVector[2],2));
-          for(int i=0;i<3;i++)
-            dirVector[i] = dirVector[i]/magnitude;
+    if (!(dirVector[0]==0 and dirVector[1]==0 and dirVector[2]==0)){
+      float zDrop = dirVector[2];
+      float magnitude = sqrt(pow(dirVector[0],2)+ pow(dirVector[1],2)+pow(dirVector[2],2));
+      for(int i=0;i<3;i++)
+        dirVector[i] = dirVector[i]/magnitude;
 
-          float heading = -atan2(dirVector[0],dirVector[1]) * 180.0 / 3.14159+90.;
-          float pitch = asin(zDrop/magnitude) * 180.0 / 3.14159;
-          float update_hpr[3];
+    float heading = -atan2(dirVector[0],dirVector[1]) * 180.0 / 3.14159+90.;
+    float pitch = asin(zDrop/magnitude) * 180.0 / 3.14159;
+    float update_hpr[3];
 
-          update_hpr[0] = heading;
-          update_hpr[1] = pitch;
-          update_hpr[2] = data.hpr[2];
+    update_hpr[0] = heading;
+    update_hpr[1] = pitch;
+    update_hpr[2] = data.hpr[2];
 
-          dsSetViewpoint(data.xyz, update_hpr);
-      }
-  }
+    dsSetViewpoint(data.xyz, update_hpr);
 }
-	environment->Draw(data.debug);
+}
+}
+environment->Draw(data.debug);
 }
 
 void Initialize_ODE(void) {
 
- 	dInitODE2(0);
-  	world = dWorldCreate();
-  	space = dHashSpaceCreate (0);
-  	contactgroup = dJointGroupCreate (0);
-  	ground = dCreatePlane (space,0,0,1,0);
- 
-	dGeomSetData(ground,NULL); 
+    dInitODE2(0);
+    world = dWorldCreate();
+    space = dHashSpaceCreate (0);
+    contactgroup = dJointGroupCreate (0);
+    ground = dCreatePlane (space,0,0,1,0);
 
-	timer = 0;
+    dGeomSetData(ground,NULL); 
+
+    timer = 0;
 }
 
 void Initialize_Draw_Stuff(void){
@@ -256,47 +247,47 @@ void Initialize_Draw_Stuff(void){
     
 }
 void Initialize_Environment(void) {
-        environment = new ENVIRONMENT();
-        data.followBody = -1;
-        data.trackBody = -1;
+    environment = new ENVIRONMENT();
+    data.followBody = -1;
+    data.trackBody = -1;
 }
 
 
 void Read_From_Python(void) {
-	//environment->Read_From_Python(world,space, texturePathStr, &evaluationTime,&dt,&gravity,xyz,hpr,&debug,&followBody,&trackBody);
+    //environment->Read_From_Python(world,space, texturePathStr, &evaluationTime,&dt,&gravity,xyz,hpr,&debug,&followBody,&trackBody);
   environment->Read_From_Python(world,space,&data);
 }
 
 void Terminate(void) {
 
-	environment->Write_Sensor_Data(data.evaluationTime);
-	exit(0);
+    environment->Write_Sensor_Data(data.evaluationTime);
+    exit(0);
 }
 
 void Run_Blind(void) {
 
-	while ( 1 )
+    while ( 1 )
 
-		Simulate_For_One_Time_Step();
+        Simulate_For_One_Time_Step();
 }
 
 int main (int argc, char **argv)
 {
-	data.runBlind = false; 
+    data.runBlind = false; 
 
-	if ( (argc > 1) && (strcmp(argv[1],"-blind")==0) )
-		data.runBlind = true;
+    if ( (argc > 1) && (strcmp(argv[1],"-blind")==0) )
+        data.runBlind = true;
 
-  Initialize_ODE();
-  Initialize_Environment();
-  Read_From_Python();
-  dWorldSetGravity(world,0,0,data.gravity);
+    Initialize_ODE();
+    Initialize_Environment();
+    Read_From_Python();
+    dWorldSetGravity(world,0,0,data.gravity);
 
-	if ( data.runBlind )
-		Run_Blind();
-	else{
+    if ( data.runBlind )
+        Run_Blind();
+    else{
       Initialize_Draw_Stuff();
-  		dsSimulationLoop (argc,argv,352*2,288*2,&fn);
-    }
+      dsSimulationLoop (argc,argv,352*2,288*2,&fn);
+  }
   return 0;
 }

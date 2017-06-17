@@ -714,7 +714,9 @@ class Simulator(object):
 
         If element [i,j] of the matrix equals 1, then bodies in groups
         i and j collide. If element [i,j] equals 0, then the collision
-        is ignored between the groups. 
+        is ignored between the groups. Bodies connected with joints
+        do not collide with eachother so there is no need to take that
+        into account within the collision matrix.
 
         Notes
         -----
@@ -743,7 +745,8 @@ class Simulator(object):
             if matrix == 'standard':
                 matrix = (np.eye(self._max_collision_group, dtype='int32')+1
                           - 2*np.eye(self._max_collision_group, dtype='int32'))
-
+                matrix = np.ones((self._max_collision_group,
+                            self._max_collision_group), dtype='int32')
         send_string = []
 
         for i in range(self._max_collision_group):

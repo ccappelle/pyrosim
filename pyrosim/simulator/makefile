@@ -14,15 +14,16 @@ BIN=simulator
 
 SRC=$(wildcard *.cpp)
 OBJ=$(SRC:%.cpp=%.o)
-PREOPTS=/bin/bash ode-0.12/libtool --tag=CXX --mode=link
-POSTOPTS=ode-0.12/drawstuff/src/libdrawstuff.la ode-0.12/ode/src/libode.la -framework OpenGL -framework GLUT -lm -lpthread ${openglopts}
+LIBTOOLOPTS=/bin/bash ode-0.12/libtool --tag=CXX --mode=link
+DSFRAMEWORK=ode-0.12/drawstuff/src/libdrawstuff.la ode-0.12/ode/src/libode.la -framework OpenGL -framework GLUT -lm -lpthread ${openglopts}
 
 all: $(OBJ)
-	$(PREOPTS) $(CXX) -g -O2 -o $(BIN) $(OBJ) $(POSTOPTS)
+	$(LIBTOOLOPTS) $(CXX) -g -O2 -o $(BIN) $(OBJ) $(DSFRAMEWORK)
 
 %.o: %.cpp
 	$(CXX) $(CXXFLAGS) -c -o $@ $< 
 
+.PHONY: clean
 clean:
 	rm -f *.o
 	rm $(BIN)
