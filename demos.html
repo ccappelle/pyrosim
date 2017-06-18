@@ -1,0 +1,281 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>Demos &mdash; pyrosim 0.1.1 documentation</title>
+  
+
+  
+  
+  
+  
+
+  
+
+  
+  
+    
+
+  
+
+  
+  
+    <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
+  
+
+  
+
+  
+    <link rel="top" title="pyrosim 0.1.1 documentation" href="index.html"/>
+        <link rel="next" title="Simulator Settings" href="demos/00_empty.html"/>
+        <link rel="prev" title="Welcome to pyrosim’s documentation!" href="index.html"/> 
+
+  
+  <script src="_static/js/modernizr.min.js"></script>
+
+</head>
+
+<body class="wy-body-for-nav" role="document">
+
+   
+  <div class="wy-grid-for-nav">
+
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search">
+          
+
+          
+            <a href="index.html" class="icon icon-home"> pyrosim
+          
+
+          
+          </a>
+
+          
+            
+            
+              <div class="version">
+                0.1.1
+              </div>
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <ul class="current">
+<li class="toctree-l1 current"><a class="current reference internal" href="#">Demos</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="demos/00_empty.html">Simulator Settings</a></li>
+<li class="toctree-l2"><a class="reference internal" href="demos/01_body.html">Bodies</a></li>
+<li class="toctree-l2"><a class="reference internal" href="demos/02_joints.html">Joints</a></li>
+<li class="toctree-l2"><a class="reference internal" href="demos/03_sensors.html">Sensors</a></li>
+<li class="toctree-l2"><a class="reference internal" href="demos/04_networks.html">Neural Network</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="code.html">Simulator Documentation</a></li>
+</ul>
+
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" role="navigation" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="index.html">pyrosim</a>
+        
+      </nav>
+
+
+      
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="index.html">Docs</a> &raquo;</li>
+        
+      <li>Demos</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+            
+            <a href="_sources/demos.txt" rel="nofollow"> View page source</a>
+          
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <div class="section" id="demos">
+<h1>Demos<a class="headerlink" href="#demos" title="Permalink to this headline">¶</a></h1>
+<p>The following demos provide a background in the different features and options in pyrosim.
+All demos assume you have imported pyrosim correctly. If you have installed pyrosim using
+the pip method in the pyrosim root directory:</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span>$ pip install -e .
+</pre></div>
+</div>
+<p>you should be able to simply use</p>
+<div class="highlight-python"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">pyrosim</span>
+</pre></div>
+</div>
+<p>If you do not want to use pip you will have to append the root directory of pyrosim to your
+path before importing it (the root directory contains the setup.py file).
+This can simply be done by using</p>
+<div class="highlight-python"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">sys</span>
+<span class="n">sys</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">insert</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="s1">&#39;path/to/pyrosim/root&#39;</span><span class="p">)</span>
+<span class="kn">import</span> <span class="nn">pyrosim</span>
+</pre></div>
+</div>
+<div class="toctree-wrapper compound">
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="demos/00_empty.html">Simulator Settings</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="demos/00_empty.html#empty-simulator">Empty Simulator</a></li>
+<li class="toctree-l2"><a class="reference internal" href="demos/00_empty.html#running-headless">Running Headless</a></li>
+<li class="toctree-l2"><a class="reference internal" href="demos/00_empty.html#timing-parameters">Timing Parameters</a></li>
+<li class="toctree-l2"><a class="reference internal" href="demos/00_empty.html#camera-parameters">Camera Parameters</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="demos/01_body.html">Bodies</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="demos/01_body.html#sending-bodies">Sending bodies</a></li>
+<li class="toctree-l2"><a class="reference internal" href="demos/01_body.html#body-position">Body Position</a></li>
+<li class="toctree-l2"><a class="reference internal" href="demos/01_body.html#body-dimensions">Body Dimensions</a></li>
+<li class="toctree-l2"><a class="reference internal" href="demos/01_body.html#body-ids">Body IDs</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="demos/02_joints.html">Joints</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="demos/02_joints.html#double-pendulum">Double Pendulum</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="demos/03_sensors.html">Sensors</a></li>
+<li class="toctree-l1"><a class="reference internal" href="demos/04_networks.html">Neural Network</a></li>
+</ul>
+</div>
+</div>
+
+
+           </div>
+           <div class="articleComments">
+            
+           </div>
+          </div>
+          <footer>
+  
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+      
+        <a href="demos/00_empty.html" class="btn btn-neutral float-right" title="Simulator Settings" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
+      
+      
+        <a href="index.html" class="btn btn-neutral" title="Welcome to pyrosim’s documentation!" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+      
+    </div>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2017, Josh Bongard, Collin Cappelle, UVM MECL.
+
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/snide/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  
+
+    <script type="text/javascript">
+        var DOCUMENTATION_OPTIONS = {
+            URL_ROOT:'./',
+            VERSION:'0.1.1',
+            COLLAPSE_INDEX:false,
+            FILE_SUFFIX:'.html',
+            HAS_SOURCE:  true,
+            SOURCELINK_SUFFIX: ''
+        };
+    </script>
+      <script type="text/javascript" src="_static/jquery.js"></script>
+      <script type="text/javascript" src="_static/underscore.js"></script>
+      <script type="text/javascript" src="_static/doctools.js"></script>
+
+  
+
+  
+  
+    <script type="text/javascript" src="_static/js/theme.js"></script>
+  
+
+  
+  
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.StickyNav.enable();
+      });
+  </script>
+   
+
+</body>
+</html>
