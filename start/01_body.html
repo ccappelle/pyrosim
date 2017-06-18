@@ -1,0 +1,317 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>Bodies &mdash; pyrosim 0.1.1 documentation</title>
+  
+
+  
+  
+  
+  
+
+  
+
+  
+  
+    
+
+  
+
+  
+  
+    <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
+  
+
+  
+
+  
+    <link rel="top" title="pyrosim 0.1.1 documentation" href="../index.html"/>
+        <link rel="up" title="Get Started" href="../demos.html"/>
+        <link rel="next" title="Joints" href="02_joints.html"/>
+        <link rel="prev" title="Simulator Settings" href="00_empty.html"/> 
+
+  
+  <script src="../_static/js/modernizr.min.js"></script>
+
+</head>
+
+<body class="wy-body-for-nav" role="document">
+
+   
+  <div class="wy-grid-for-nav">
+
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search">
+          
+
+          
+            <a href="../index.html" class="icon icon-home"> pyrosim
+          
+
+          
+          </a>
+
+          
+            
+            
+              <div class="version">
+                0.1.1
+              </div>
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <ul class="current">
+<li class="toctree-l1 current"><a class="reference internal" href="../demos.html">Get Started</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="00_empty.html">Simulator Settings</a></li>
+<li class="toctree-l2 current"><a class="current reference internal" href="#">Bodies</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#sending-bodies">Sending bodies</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#body-position">Body Position</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#body-dimensions">Body Dimensions</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#body-ids">Body IDs</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="02_joints.html">Joints</a></li>
+<li class="toctree-l2"><a class="reference internal" href="03_sensors.html">Sensors</a></li>
+<li class="toctree-l2"><a class="reference internal" href="04_networks.html">Neural Network</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../code.html">Simulator Documentation</a></li>
+</ul>
+
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" role="navigation" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../index.html">pyrosim</a>
+        
+      </nav>
+
+
+      
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../index.html">Docs</a> &raquo;</li>
+        
+          <li><a href="../demos.html">Get Started</a> &raquo;</li>
+        
+      <li>Bodies</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+            
+            <a href="../_sources/start/01_body.txt" rel="nofollow"> View page source</a>
+          
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <div class="section" id="bodies">
+<span id="id1"></span><h1>Bodies<a class="headerlink" href="#bodies" title="Permalink to this headline">¶</a></h1>
+<p>Pyrosim uses ODE to simulate rigid bodies. Rigid bodies cannot
+bend or deform and make hard contacts when they collide.
+Currently there are three types of rigid bodies in pyrosim:</p>
+<ol class="arabic simple">
+<li>Boxes</li>
+<li>Cylinders</li>
+<li>Spheres</li>
+</ol>
+<p>This demo provides a quick introduction on the different bodies
+and how they are used in pyrosim.</p>
+<div class="section" id="sending-bodies">
+<h2>Sending bodies<a class="headerlink" href="#sending-bodies" title="Permalink to this headline">¶</a></h2>
+<p>The following code sends the default of each body shape
+at different x-coordinate positions.</p>
+<div class="highlight-python"><div class="highlight"><pre><span></span><span class="n">sim</span> <span class="o">=</span> <span class="n">pyrosim</span><span class="o">.</span><span class="n">Simulator</span><span class="p">(</span><span class="n">play_paused</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>
+
+<span class="n">sim</span><span class="o">.</span><span class="n">send_cylinder</span><span class="p">(</span><span class="n">x</span><span class="o">=-</span><span class="mi">1</span><span class="p">)</span>
+<span class="n">sim</span><span class="o">.</span><span class="n">send_box</span><span class="p">(</span><span class="n">x</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
+<span class="n">sim</span><span class="o">.</span><span class="n">send_sphere</span><span class="p">(</span><span class="n">x</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+
+<span class="n">sim</span><span class="o">.</span><span class="n">start</span><span class="p">()</span>
+</pre></div>
+</div>
+<a class="reference internal image-reference" href="../_images/bodies-init.png"><img alt="Empty simulation" class="align-center" src="../_images/bodies-init.png" style="width: 300px; height: 300px;" /></a>
+<p>Note that when you play the simulation, because the bodies are embedded
+in the ground initially, they will shoot up. To rectify this we must
+change the objects z-coordinate.</p>
+</div>
+<div class="section" id="body-position">
+<h2>Body Position<a class="headerlink" href="#body-position" title="Permalink to this headline">¶</a></h2>
+<p>We can also easily send multiple objects
+by using loops.</p>
+<div class="highlight-python"><div class="highlight"><pre><span></span><span class="n">sim</span> <span class="o">=</span> <span class="n">pyrosim</span><span class="o">.</span><span class="n">Simulator</span><span class="p">(</span><span class="n">play_paused</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>
+
+<span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">3</span><span class="p">):</span>
+    <span class="n">sim</span><span class="o">.</span><span class="n">send_cylinder</span><span class="p">(</span><span class="n">x</span><span class="o">=-</span><span class="mi">1</span><span class="p">,</span> <span class="n">y</span><span class="o">=</span><span class="n">i</span><span class="p">,</span> <span class="n">z</span><span class="o">=.</span><span class="mi">6</span><span class="p">,</span><span class="n">length</span><span class="o">=</span><span class="n">i</span><span class="p">)</span>
+    <span class="n">sim</span><span class="o">.</span><span class="n">send_box</span><span class="p">(</span><span class="n">x</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">y</span><span class="o">=</span><span class="n">i</span><span class="p">,</span> <span class="n">z</span><span class="o">=</span><span class="mf">0.05</span><span class="p">)</span>
+    <span class="n">sim</span><span class="o">.</span><span class="n">send_sphere</span><span class="p">(</span><span class="n">x</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">y</span><span class="o">=</span><span class="n">i</span><span class="p">,</span> <span class="n">z</span><span class="o">=</span><span class="mf">0.1</span><span class="p">)</span>
+
+<span class="n">sim</span><span class="o">.</span><span class="n">start</span><span class="p">()</span>
+</pre></div>
+</div>
+<a class="reference internal image-reference" href="../_images/bodies-multiple.png"><img alt="Empty simulation" class="align-center" src="../_images/bodies-multiple.png" style="width: 300px; height: 300px;" /></a>
+</div>
+<div class="section" id="body-dimensions">
+<h2>Body Dimensions<a class="headerlink" href="#body-dimensions" title="Permalink to this headline">¶</a></h2>
+<p>Object dimensions can be set using the natural dimension parameters
+of each body.</p>
+<div class="highlight-python"><div class="highlight"><pre><span></span><span class="n">sim</span> <span class="o">=</span> <span class="n">pyrosim</span><span class="o">.</span><span class="n">Simulator</span><span class="p">(</span><span class="n">play_paused</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>
+
+<span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">3</span><span class="p">):</span>
+    <span class="n">size</span> <span class="o">=</span> <span class="p">(</span><span class="n">i</span><span class="o">+</span><span class="mi">1</span><span class="p">)</span><span class="o">/</span><span class="mf">6.0</span>
+    <span class="n">z</span> <span class="o">=</span> <span class="n">size</span><span class="o">/</span><span class="mf">2.0</span><span class="o">+</span><span class="mf">0.1</span>
+    <span class="n">sim</span><span class="o">.</span><span class="n">send_cylinder</span><span class="p">(</span><span class="n">x</span><span class="o">=-</span><span class="mi">1</span><span class="p">,</span> <span class="n">y</span><span class="o">=</span><span class="n">i</span><span class="p">,</span> <span class="n">z</span><span class="o">=</span><span class="n">z</span><span class="p">,</span><span class="n">length</span><span class="o">=</span><span class="n">size</span><span class="p">)</span>
+    <span class="n">sim</span><span class="o">.</span><span class="n">send_box</span><span class="p">(</span><span class="n">x</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">y</span><span class="o">=</span><span class="n">i</span><span class="p">,</span> <span class="n">z</span><span class="o">=</span><span class="n">z</span><span class="p">,</span> <span class="n">height</span><span class="o">=</span><span class="n">size</span><span class="p">)</span>
+    <span class="n">sim</span><span class="o">.</span><span class="n">send_sphere</span><span class="p">(</span><span class="n">x</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">y</span><span class="o">=</span><span class="n">i</span><span class="p">,</span> <span class="n">z</span><span class="o">=</span><span class="n">z</span><span class="p">,</span> <span class="n">radius</span><span class="o">=</span><span class="n">size</span><span class="o">/</span><span class="mf">2.0</span><span class="p">)</span>
+
+<span class="n">sim</span><span class="o">.</span><span class="n">start</span><span class="p">()</span>
+</pre></div>
+</div>
+<a class="reference internal image-reference" href="../_images/bodies-size.png"><img alt="Empty simulation" class="align-center" src="../_images/bodies-size.png" style="width: 300px; height: 300px;" /></a>
+<p>A more complete list of the different body parameters can be found in the <a class="reference internal" href="../code.html#code"><span class="std std-ref">Simulator Documentation</span></a></p>
+</div>
+<div class="section" id="body-ids">
+<h2>Body IDs<a class="headerlink" href="#body-ids" title="Permalink to this headline">¶</a></h2>
+<p>Every time a body is sent to the simulator, an integeger ID tag is returned.
+This ID is used as a handle for the body when connecting joints and sensors
+which are covered in later demos.</p>
+</div>
+</div>
+
+
+           </div>
+           <div class="articleComments">
+            
+           </div>
+          </div>
+          <footer>
+  
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+      
+        <a href="02_joints.html" class="btn btn-neutral float-right" title="Joints" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
+      
+      
+        <a href="00_empty.html" class="btn btn-neutral" title="Simulator Settings" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+      
+    </div>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2017, Josh Bongard, Collin Cappelle, UVM MECL.
+
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/snide/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  
+
+    <script type="text/javascript">
+        var DOCUMENTATION_OPTIONS = {
+            URL_ROOT:'../',
+            VERSION:'0.1.1',
+            COLLAPSE_INDEX:false,
+            FILE_SUFFIX:'.html',
+            HAS_SOURCE:  true,
+            SOURCELINK_SUFFIX: ''
+        };
+    </script>
+      <script type="text/javascript" src="../_static/jquery.js"></script>
+      <script type="text/javascript" src="../_static/underscore.js"></script>
+      <script type="text/javascript" src="../_static/doctools.js"></script>
+
+  
+
+  
+  
+    <script type="text/javascript" src="../_static/js/theme.js"></script>
+  
+
+  
+  
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.StickyNav.enable();
+      });
+  </script>
+   
+
+</body>
+</html>

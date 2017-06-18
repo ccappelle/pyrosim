@@ -1,0 +1,310 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>Simulator Settings &mdash; pyrosim 0.1.1 documentation</title>
+  
+
+  
+  
+  
+  
+
+  
+
+  
+  
+    
+
+  
+
+  
+  
+    <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
+  
+
+  
+
+  
+    <link rel="top" title="pyrosim 0.1.1 documentation" href="../index.html"/>
+        <link rel="up" title="Get Started" href="../demos.html"/>
+        <link rel="next" title="Bodies" href="01_body.html"/>
+        <link rel="prev" title="Get Started" href="../demos.html"/> 
+
+  
+  <script src="../_static/js/modernizr.min.js"></script>
+
+</head>
+
+<body class="wy-body-for-nav" role="document">
+
+   
+  <div class="wy-grid-for-nav">
+
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search">
+          
+
+          
+            <a href="../index.html" class="icon icon-home"> pyrosim
+          
+
+          
+          </a>
+
+          
+            
+            
+              <div class="version">
+                0.1.1
+              </div>
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <ul class="current">
+<li class="toctree-l1 current"><a class="reference internal" href="../demos.html">Get Started</a><ul class="current">
+<li class="toctree-l2 current"><a class="current reference internal" href="#">Simulator Settings</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#empty-simulator">Empty Simulator</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#running-headless">Running Headless</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#timing-parameters">Timing Parameters</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#camera-parameters">Camera Parameters</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="01_body.html">Bodies</a></li>
+<li class="toctree-l2"><a class="reference internal" href="02_joints.html">Joints</a></li>
+<li class="toctree-l2"><a class="reference internal" href="03_sensors.html">Sensors</a></li>
+<li class="toctree-l2"><a class="reference internal" href="04_networks.html">Neural Network</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../code.html">Simulator Documentation</a></li>
+</ul>
+
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" role="navigation" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../index.html">pyrosim</a>
+        
+      </nav>
+
+
+      
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../index.html">Docs</a> &raquo;</li>
+        
+          <li><a href="../demos.html">Get Started</a> &raquo;</li>
+        
+      <li>Simulator Settings</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+            
+            <a href="../_sources/start/00_empty.txt" rel="nofollow"> View page source</a>
+          
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <div class="section" id="simulator-settings">
+<span id="simulator"></span><h1>Simulator Settings<a class="headerlink" href="#simulator-settings" title="Permalink to this headline">¶</a></h1>
+<div class="section" id="empty-simulator">
+<h2>Empty Simulator<a class="headerlink" href="#empty-simulator" title="Permalink to this headline">¶</a></h2>
+<p>Let&#8217;s start by just making an empty simulation.
+The following python code opens up an empty simulation and
+runs it for a few seconds before exiting.</p>
+<div class="highlight-python"><div class="highlight"><pre><span></span><span class="c1">#creates simulator object</span>
+<span class="n">sim</span> <span class="o">=</span> <span class="n">pyrosim</span><span class="o">.</span><span class="n">Simulator</span><span class="p">()</span>
+
+<span class="c1">#starts simulation</span>
+<span class="n">sim</span><span class="o">.</span><span class="n">start</span><span class="p">()</span>
+</pre></div>
+</div>
+<p>This is what the simulator looks like when it is empty.</p>
+<a class="reference internal image-reference" href="../_images/empty.png"><img alt="Empty simulation" class="align-center" src="../_images/empty.png" style="width: 300px; height: 300px;" /></a>
+</div>
+<div class="section" id="running-headless">
+<h2>Running Headless<a class="headerlink" href="#running-headless" title="Permalink to this headline">¶</a></h2>
+<p>Headless running means the physics will run. but the graphics will not
+render. This means simulation will finish much faster. You can run
+headless by setting <em>play_blind</em> to True.</p>
+<div class="highlight-python"><div class="highlight"><pre><span></span><span class="n">sim</span> <span class="o">=</span> <span class="n">pyrosim</span><span class="o">.</span><span class="n">Simulator</span><span class="p">(</span><span class="n">play_blind</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>
+<span class="n">sim</span><span class="o">.</span><span class="n">start</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="timing-parameters">
+<h2>Timing Parameters<a class="headerlink" href="#timing-parameters" title="Permalink to this headline">¶</a></h2>
+<p>By default, the simulation runs for 100 discrete times steps
+with a time step interval <em>dt=0.05</em> seconds. We can increase
+or decrease the number of time steps by changing the parameter
+<em>eval_time</em>. The following code runs the same empty simulation
+but for 1,000 time steps at half the time step interval.</p>
+<div class="highlight-python"><div class="highlight"><pre><span></span><span class="n">sim</span> <span class="o">=</span> <span class="n">pyrosim</span><span class="o">.</span><span class="n">Simulator</span><span class="p">(</span><span class="n">eval_time</span><span class="o">=</span><span class="mi">1000</span><span class="p">,</span> <span class="n">dt</span><span class="o">=</span><span class="mf">0.025</span><span class="p">)</span>
+<span class="n">sim</span><span class="o">.</span><span class="n">start</span><span class="p">()</span>
+</pre></div>
+</div>
+<p>The simulator should now run longer because there are now 10x more
+frames being drawn and the current rendering system waits a fixed
+time before rendering the frame.</p>
+<p><strong>NOTE:</strong> When running actual robots, changing <em>dt</em> will most likely change the
+outcome of the simulation. In general, a lower <em>dt</em> provides a more
+stable, yet slower, simulation.</p>
+</div>
+<div class="section" id="camera-parameters">
+<h2>Camera Parameters<a class="headerlink" href="#camera-parameters" title="Permalink to this headline">¶</a></h2>
+<p>You can set the initial camera position of the simulation by changing
+its position (<em>xyz</em>) and its heading (also called yaw), pitch, and roll (<em>hpr</em>).
+<em>hpr</em> values are in degrees.
+ODE uses a Z-up coordinate system. This means the z axis is in the &#8216;up&#8217; direction.</p>
+<a class="reference internal image-reference" href="../_images/hpr-camera.png"><img alt="../_images/hpr-camera.png" class="align-center" src="../_images/hpr-camera.png" style="width: 300px; height: 300px;" /></a>
+<p>The following sets the camera at position (0,0,5) looking straight at the ground
+(0,-90,0). You can also use the default textures provided by ODE&#8217;s rendering package
+by altering <em>use_textures</em></p>
+<div class="highlight-python"><div class="highlight"><pre><span></span><span class="n">sim</span> <span class="o">=</span> <span class="n">pyrosim</span><span class="o">.</span><span class="n">Simulator</span><span class="p">(</span><span class="n">xyz</span><span class="o">=</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">5</span><span class="p">],</span> <span class="n">hpr</span><span class="o">=</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span><span class="o">-</span><span class="mi">90</span><span class="p">,</span><span class="mi">0</span><span class="p">],</span> <span class="n">use_textures</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>
+<span class="n">sim</span><span class="o">.</span><span class="n">start</span><span class="p">()</span>
+</pre></div>
+</div>
+<p>This should return an initial view that looks like this:</p>
+<a class="reference internal image-reference" href="../_images/camera-down.png"><img alt="../_images/camera-down.png" class="align-center" src="../_images/camera-down.png" style="width: 300px; height: 300px;" /></a>
+<p>The red dot (top of the image) is in the <em>+x</em> direction and the blue dot (left side of the image)
+is in the <em>+y</em> direction.</p>
+</div>
+</div>
+
+
+           </div>
+           <div class="articleComments">
+            
+           </div>
+          </div>
+          <footer>
+  
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+      
+        <a href="01_body.html" class="btn btn-neutral float-right" title="Bodies" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
+      
+      
+        <a href="../demos.html" class="btn btn-neutral" title="Get Started" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+      
+    </div>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2017, Josh Bongard, Collin Cappelle, UVM MECL.
+
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/snide/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  
+
+    <script type="text/javascript">
+        var DOCUMENTATION_OPTIONS = {
+            URL_ROOT:'../',
+            VERSION:'0.1.1',
+            COLLAPSE_INDEX:false,
+            FILE_SUFFIX:'.html',
+            HAS_SOURCE:  true,
+            SOURCELINK_SUFFIX: ''
+        };
+    </script>
+      <script type="text/javascript" src="../_static/jquery.js"></script>
+      <script type="text/javascript" src="../_static/underscore.js"></script>
+      <script type="text/javascript" src="../_static/doctools.js"></script>
+
+  
+
+  
+  
+    <script type="text/javascript" src="../_static/js/theme.js"></script>
+  
+
+  
+  
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.StickyNav.enable();
+      });
+  </script>
+   
+
+</body>
+</html>
