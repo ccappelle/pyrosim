@@ -1,3 +1,5 @@
+.. _simulator:
+
 Simulator Settings
 ==================
 

@@ -1,3 +1,5 @@
+.. _bodies:
+
 Bodies
 ======
 
@@ -89,3 +91,11 @@ of each body.
     :height: 300 px
 
 A more complete list of the different body parameters can be found in the :ref:`code`
+
+Body IDs
+--------
+
+Every time a body is sent to the simulator, an integeger ID tag is returned.
+This ID is used as a handle for the body when connecting joints and sensors 
+which are covered in later demos. 
+

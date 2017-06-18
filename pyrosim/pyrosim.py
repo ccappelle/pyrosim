@@ -453,7 +453,7 @@ class Simulator(object):
 
     def send_slider_joint(self, first_body_id, second_body_id,
                           x=0, y=0, z=1,
-                          lo=-1.0, hi=+1.0,
+                          lo=-.25, hi=+.25,
                           speed=1.0, strength=1.0, position_control=True):
         """Send a slider joint to the simulator
 
