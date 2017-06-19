@@ -3,13 +3,16 @@
 Bodies
 ======
 
+Basics
+------
+
 Pyrosim uses ODE to simulate rigid bodies. Rigid bodies cannot
 bend or deform and make hard contacts when they collide.
 Currently there are three types of rigid bodies in pyrosim:
 
-1. Boxes
-2. Cylinders
-3. Spheres
+#. Boxes
+#. Cylinders
+#. Spheres
 
 This demo provides a quick introduction on the different bodies
 and how they are used in pyrosim.

@@ -13,6 +13,8 @@
 
   
   
+    <link rel="shortcut icon" href="../_static/icon32-scaled.ico"/>
+  
   
   
 
@@ -33,7 +35,7 @@
 
   
     <link rel="top" title="pyrosim 0.1.1 documentation" href="../index.html"/>
-        <link rel="up" title="Get Started" href="../demos.html"/>
+        <link rel="up" title="Getting Started" href="../start.html"/>
         <link rel="next" title="Sensors" href="03_sensors.html"/>
         <link rel="prev" title="Bodies" href="01_body.html"/> 
 
@@ -89,10 +91,11 @@
             
             
               <ul class="current">
-<li class="toctree-l1 current"><a class="reference internal" href="../demos.html">Get Started</a><ul class="current">
+<li class="toctree-l1 current"><a class="reference internal" href="../start.html">Getting Started</a><ul class="current">
 <li class="toctree-l2"><a class="reference internal" href="00_empty.html">Simulator Settings</a></li>
 <li class="toctree-l2"><a class="reference internal" href="01_body.html">Bodies</a></li>
 <li class="toctree-l2 current"><a class="current reference internal" href="#">Joints</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#basics">Basics</a></li>
 <li class="toctree-l3"><a class="reference internal" href="#double-pendulum">Double Pendulum</a></li>
 </ul>
 </li>
@@ -100,6 +103,7 @@
 <li class="toctree-l2"><a class="reference internal" href="04_networks.html">Neural Network</a></li>
 </ul>
 </li>
+<li class="toctree-l1"><a class="reference internal" href="../videos.html">Videos</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../code.html">Simulator Documentation</a></li>
 </ul>
 
@@ -145,7 +149,7 @@
     
       <li><a href="../index.html">Docs</a> &raquo;</li>
         
-          <li><a href="../demos.html">Get Started</a> &raquo;</li>
+          <li><a href="../start.html">Getting Started</a> &raquo;</li>
         
       <li>Joints</li>
     
@@ -153,8 +157,6 @@
       <li class="wy-breadcrumbs-aside">
         
             
-            <a href="../_sources/start/02_joints.txt" rel="nofollow"> View page source</a>
-          
         
       </li>
     
@@ -168,6 +170,8 @@
             
   <div class="section" id="joints">
 <span id="id1"></span><h1>Joints<a class="headerlink" href="#joints" title="Permalink to this headline">¶</a></h1>
+<div class="section" id="basics">
+<h2>Basics<a class="headerlink" href="#basics" title="Permalink to this headline">¶</a></h2>
 <p>Pyrosim makes use of 2 different types of joints:</p>
 <ol class="arabic simple">
 <li>Hinge Joints</li>
@@ -177,6 +181,7 @@
 slider joints slide along the direction of a joint axis.</p>
 <a class="reference internal image-reference" href="../_images/hinge.jpg"><img alt="hinge" class="align-center" src="../_images/hinge.jpg" style="width: 300px; height: 300px;" /></a>
 <a class="reference internal image-reference" href="../_images/slider.jpg"><img alt="slider" class="align-center" src="../_images/slider.jpg" style="width: 300px; height: 300px;" /></a>
+</div>
 <div class="section" id="double-pendulum">
 <h2>Double Pendulum<a class="headerlink" href="#double-pendulum" title="Permalink to this headline">¶</a></h2>
 <p>This example creates a weighted double pendulum with a slider joint connecting
@@ -204,27 +209,27 @@ normals. Currently slider joints are not drawn.</p>
 <span class="c1"># hinge connects body to the world</span>
 <span class="c1"># (x,y,z) refers to the anchor position</span>
 <span class="c1"># (n1,n2,n3) refers to the joint axis</span>
-<span class="n">sim</span><span class="o">.</span><span class="n">send_hinge_joint</span><span class="p">(</span><span class="n">first_body_id</span><span class="o">=</span><span class="n">pyrosim</span><span class="o">.</span><span class="n">Simulator</span><span class="o">.</span><span class="n">WORLD</span><span class="p">,</span>
-                     <span class="n">second_body_id</span><span class="o">=</span><span class="n">cyl_1</span><span class="p">,</span>
-                     <span class="n">x</span><span class="o">=</span><span class="mf">0.0</span><span class="p">,</span> <span class="n">y</span><span class="o">=</span><span class="mf">0.0</span><span class="p">,</span> <span class="n">z</span><span class="o">=</span><span class="mf">2.0</span><span class="p">,</span>
-                     <span class="n">n1</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">n2</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">n3</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span>
-                     <span class="n">lo</span><span class="o">=-</span><span class="n">math</span><span class="o">.</span><span class="n">pi</span><span class="p">,</span> <span class="n">hi</span><span class="o">=</span><span class="n">math</span><span class="o">.</span><span class="n">pi</span><span class="p">)</span>
+<span class="n">world_joint</span> <span class="o">=</span> <span class="n">sim</span><span class="o">.</span><span class="n">send_hinge_joint</span><span class="p">(</span><span class="n">first_body_id</span><span class="o">=</span><span class="n">pyrosim</span><span class="o">.</span><span class="n">Simulator</span><span class="o">.</span><span class="n">WORLD</span><span class="p">,</span>
+                                     <span class="n">second_body_id</span><span class="o">=</span><span class="n">cyl_1</span><span class="p">,</span>
+                                     <span class="n">x</span><span class="o">=</span><span class="mf">0.0</span><span class="p">,</span> <span class="n">y</span><span class="o">=</span><span class="mf">0.0</span><span class="p">,</span> <span class="n">z</span><span class="o">=</span><span class="mf">2.0</span><span class="p">,</span>
+                                     <span class="n">n1</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">n2</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">n3</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span>
+                                     <span class="n">lo</span><span class="o">=-</span><span class="n">math</span><span class="o">.</span><span class="n">pi</span><span class="p">,</span> <span class="n">hi</span><span class="o">=</span><span class="n">math</span><span class="o">.</span><span class="n">pi</span><span class="p">)</span>
 
 <span class="c1"># hinge connects cylinders together</span>
-<span class="n">sim</span><span class="o">.</span><span class="n">send_hinge_joint</span><span class="p">(</span><span class="n">first_body_id</span><span class="o">=</span><span class="n">cyl_1</span><span class="p">,</span>
-                     <span class="n">second_body_id</span><span class="o">=</span><span class="n">cyl_2</span><span class="p">,</span>
-                     <span class="n">x</span><span class="o">=-</span><span class="mf">0.5</span><span class="p">,</span> <span class="n">y</span><span class="o">=</span><span class="mf">0.0</span><span class="p">,</span> <span class="n">z</span><span class="o">=</span><span class="mf">2.0</span><span class="p">,</span>
-                     <span class="n">n1</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">n2</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">n3</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span>
-                     <span class="n">lo</span><span class="o">=-</span><span class="n">math</span><span class="o">.</span><span class="n">pi</span><span class="p">,</span> <span class="n">hi</span><span class="o">=</span><span class="n">math</span><span class="o">.</span><span class="n">pi</span><span class="p">)</span>
+<span class="n">hinge_joint</span> <span class="o">=</span> <span class="n">sim</span><span class="o">.</span><span class="n">send_hinge_joint</span><span class="p">(</span><span class="n">first_body_id</span><span class="o">=</span><span class="n">cyl_1</span><span class="p">,</span>
+                                     <span class="n">second_body_id</span><span class="o">=</span><span class="n">cyl_2</span><span class="p">,</span>
+                                     <span class="n">x</span><span class="o">=-</span><span class="mf">0.5</span><span class="p">,</span> <span class="n">y</span><span class="o">=</span><span class="mf">0.0</span><span class="p">,</span> <span class="n">z</span><span class="o">=</span><span class="mf">2.0</span><span class="p">,</span>
+                                     <span class="n">n1</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">n2</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">n3</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span>
+                                     <span class="n">lo</span><span class="o">=-</span><span class="n">math</span><span class="o">.</span><span class="n">pi</span><span class="p">,</span> <span class="n">hi</span><span class="o">=</span><span class="n">math</span><span class="o">.</span><span class="n">pi</span><span class="p">)</span>
 
 <span class="c1"># slider joint joins second cylinder and box</span>
 <span class="c1"># contrary to the hinge joint, in the slider</span>
 <span class="c1"># joint (x,y,z) refers to the direction of</span>
 <span class="c1"># the joint axis</span>
-<span class="n">sim</span><span class="o">.</span><span class="n">send_slider_joint</span><span class="p">(</span><span class="n">first_body_id</span><span class="o">=</span><span class="n">cyl_2</span><span class="p">,</span>
-                      <span class="n">second_body_id</span><span class="o">=</span><span class="n">box</span><span class="p">,</span>
-                      <span class="n">x</span><span class="o">=</span><span class="mf">1.0</span><span class="p">,</span> <span class="n">y</span><span class="o">=</span><span class="mf">0.0</span><span class="p">,</span> <span class="n">z</span><span class="o">=</span><span class="mf">0.0</span><span class="p">,</span>
-                      <span class="n">lo</span><span class="o">=-</span><span class="mf">0.5</span><span class="p">,</span><span class="n">hi</span><span class="o">=</span><span class="mf">0.5</span><span class="p">)</span>
+<span class="n">slider_joint</span> <span class="o">=</span> <span class="n">sim</span><span class="o">.</span><span class="n">send_slider_joint</span><span class="p">(</span><span class="n">first_body_id</span><span class="o">=</span><span class="n">cyl_2</span><span class="p">,</span>
+                                      <span class="n">second_body_id</span><span class="o">=</span><span class="n">box</span><span class="p">,</span>
+                                      <span class="n">x</span><span class="o">=</span><span class="mf">1.0</span><span class="p">,</span> <span class="n">y</span><span class="o">=</span><span class="mf">0.0</span><span class="p">,</span> <span class="n">z</span><span class="o">=</span><span class="mf">0.0</span><span class="p">,</span>
+                                      <span class="n">lo</span><span class="o">=-</span><span class="mf">0.5</span><span class="p">,</span><span class="n">hi</span><span class="o">=</span><span class="mf">0.5</span><span class="p">)</span>
 
 <span class="n">sim</span><span class="o">.</span><span class="n">start</span><span class="p">()</span>
 </pre></div>

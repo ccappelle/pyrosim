@@ -3,10 +3,13 @@
 Joints
 ======
 
+Basics
+------
+
 Pyrosim makes use of 2 different types of joints:
 
-1. Hinge Joints
-2. Slider Joints
+#. Hinge Joints
+#. Slider Joints
 
 Hinge joints rotate around a joint axis at an anchor whereas 
 slider joints slide along the direction of a joint axis.
@@ -54,27 +57,27 @@ normals. Currently slider joints are not drawn.
     # hinge connects body to the world
     # (x,y,z) refers to the anchor position
     # (n1,n2,n3) refers to the joint axis
-    sim.send_hinge_joint(first_body_id=pyrosim.Simulator.WORLD,
-                         second_body_id=cyl_1,
-                         x=0.0, y=0.0, z=2.0,
-                         n1=0, n2=1, n3=0,
-                         lo=-math.pi, hi=math.pi)
+    world_joint = sim.send_hinge_joint(first_body_id=pyrosim.Simulator.WORLD,
+                                         second_body_id=cyl_1,
+                                         x=0.0, y=0.0, z=2.0,
+                                         n1=0, n2=1, n3=0,
+                                         lo=-math.pi, hi=math.pi)
 
     # hinge connects cylinders together
-    sim.send_hinge_joint(first_body_id=cyl_1,
-                         second_body_id=cyl_2,
-                         x=-0.5, y=0.0, z=2.0,
-                         n1=0, n2=1, n3=0,
-                         lo=-math.pi, hi=math.pi)
+    hinge_joint = sim.send_hinge_joint(first_body_id=cyl_1,
+                                         second_body_id=cyl_2,
+                                         x=-0.5, y=0.0, z=2.0,
+                                         n1=0, n2=1, n3=0,
+                                         lo=-math.pi, hi=math.pi)
 
     # slider joint joins second cylinder and box
     # contrary to the hinge joint, in the slider
     # joint (x,y,z) refers to the direction of 
     # the joint axis
-    sim.send_slider_joint(first_body_id=cyl_2,
-                          second_body_id=box,
-                          x=1.0, y=0.0, z=0.0,
-                          lo=-0.5,hi=0.5)
+    slider_joint = sim.send_slider_joint(first_body_id=cyl_2,
+                                          second_body_id=box,
+                                          x=1.0, y=0.0, z=0.0,
+                                          lo=-0.5,hi=0.5)
 
     sim.start()
 

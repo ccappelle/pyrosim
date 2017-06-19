@@ -13,6 +13,8 @@
 
   
   
+    <link rel="shortcut icon" href="../_static/icon32-scaled.ico"/>
+  
   
   
 
@@ -33,7 +35,7 @@
 
   
     <link rel="top" title="pyrosim 0.1.1 documentation" href="../index.html"/>
-        <link rel="up" title="Get Started" href="../demos.html"/>
+        <link rel="up" title="Getting Started" href="../start.html"/>
         <link rel="next" title="Joints" href="02_joints.html"/>
         <link rel="prev" title="Simulator Settings" href="00_empty.html"/> 
 
@@ -89,9 +91,10 @@
             
             
               <ul class="current">
-<li class="toctree-l1 current"><a class="reference internal" href="../demos.html">Get Started</a><ul class="current">
+<li class="toctree-l1 current"><a class="reference internal" href="../start.html">Getting Started</a><ul class="current">
 <li class="toctree-l2"><a class="reference internal" href="00_empty.html">Simulator Settings</a></li>
 <li class="toctree-l2 current"><a class="current reference internal" href="#">Bodies</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#basics">Basics</a></li>
 <li class="toctree-l3"><a class="reference internal" href="#sending-bodies">Sending bodies</a></li>
 <li class="toctree-l3"><a class="reference internal" href="#body-position">Body Position</a></li>
 <li class="toctree-l3"><a class="reference internal" href="#body-dimensions">Body Dimensions</a></li>
@@ -103,6 +106,7 @@
 <li class="toctree-l2"><a class="reference internal" href="04_networks.html">Neural Network</a></li>
 </ul>
 </li>
+<li class="toctree-l1"><a class="reference internal" href="../videos.html">Videos</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../code.html">Simulator Documentation</a></li>
 </ul>
 
@@ -148,7 +152,7 @@
     
       <li><a href="../index.html">Docs</a> &raquo;</li>
         
-          <li><a href="../demos.html">Get Started</a> &raquo;</li>
+          <li><a href="../start.html">Getting Started</a> &raquo;</li>
         
       <li>Bodies</li>
     
@@ -156,8 +160,6 @@
       <li class="wy-breadcrumbs-aside">
         
             
-            <a href="../_sources/start/01_body.txt" rel="nofollow"> View page source</a>
-          
         
       </li>
     
@@ -171,6 +173,8 @@
             
   <div class="section" id="bodies">
 <span id="id1"></span><h1>Bodies<a class="headerlink" href="#bodies" title="Permalink to this headline">¶</a></h1>
+<div class="section" id="basics">
+<h2>Basics<a class="headerlink" href="#basics" title="Permalink to this headline">¶</a></h2>
 <p>Pyrosim uses ODE to simulate rigid bodies. Rigid bodies cannot
 bend or deform and make hard contacts when they collide.
 Currently there are three types of rigid bodies in pyrosim:</p>
@@ -181,6 +185,7 @@ Currently there are three types of rigid bodies in pyrosim:</p>
 </ol>
 <p>This demo provides a quick introduction on the different bodies
 and how they are used in pyrosim.</p>
+</div>
 <div class="section" id="sending-bodies">
 <h2>Sending bodies<a class="headerlink" href="#sending-bodies" title="Permalink to this headline">¶</a></h2>
 <p>The following code sends the default of each body shape
