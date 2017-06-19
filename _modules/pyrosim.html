@@ -211,7 +211,7 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">_num_joints</span> <span class="o">=</span> <span class="mi">0</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_num_sensors</span> <span class="o">=</span> <span class="mi">0</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_num_neurons</span> <span class="o">=</span> <span class="mi">0</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">_max_collision_group</span> <span class="o">=</span> <span class="mi">1</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_collision_groups</span> <span class="o">=</span> <span class="p">[]</span>
 
         <span class="bp">self</span><span class="o">.</span><span class="n">play_paused</span> <span class="o">=</span> <span class="n">play_paused</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">play_blind</span> <span class="o">=</span> <span class="n">play_blind</span>
@@ -237,14 +237,14 @@
             <span class="bp">self</span><span class="o">.</span><span class="n">play_paused</span> <span class="o">=</span> <span class="kc">False</span>
 
         <span class="c1"># Initial simulator commands</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">_send</span><span class="p">(</span><span class="s1">&#39;TexturePath &#39;</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">pyrosim_path</span><span class="o">+</span><span class="s1">&#39;/textures&#39;</span><span class="p">)</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">_send</span><span class="p">(</span><span class="s1">&#39;EvaluationTime &#39;</span><span class="o">+</span><span class="nb">str</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">eval_time</span><span class="p">))</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">_send</span><span class="p">(</span><span class="s1">&#39;TimeInterval &#39;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">dt</span><span class="p">))</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">_send</span><span class="p">(</span><span class="s1">&#39;Gravity &#39;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">gravity</span><span class="p">))</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_send</span><span class="p">(</span><span class="s1">&#39;TexturePath&#39;</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">pyrosim_path</span><span class="o">+</span><span class="s1">&#39;/textures&#39;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_send</span><span class="p">(</span><span class="s1">&#39;EvaluationTime&#39;</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">eval_time</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_send</span><span class="p">(</span><span class="s1">&#39;TimeInterval&#39;</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">dt</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_send</span><span class="p">(</span><span class="s1">&#39;Gravity&#39;</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">gravity</span><span class="p">)</span>
         <span class="k">if</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">debug</span><span class="p">):</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">_send</span><span class="p">(</span><span class="s1">&#39;Debug &#39;</span><span class="o">+</span><span class="nb">str</span><span class="p">(</span><span class="mi">1</span><span class="p">))</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_send</span><span class="p">(</span><span class="s1">&#39;Debug&#39;</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
         <span class="k">else</span><span class="p">:</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">_send</span><span class="p">(</span><span class="s1">&#39;Debug &#39;</span><span class="o">+</span><span class="nb">str</span><span class="p">(</span><span class="mi">0</span><span class="p">))</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_send</span><span class="p">(</span><span class="s1">&#39;Debug&#39;</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">send_camera</span><span class="p">(</span><span class="n">xyz</span><span class="p">,</span> <span class="n">hpr</span><span class="p">)</span>
 
 <span class="c1"># ------Getters-------------------------</span>
@@ -253,9 +253,25 @@
         <span class="k">assert</span> <span class="bp">self</span><span class="o">.</span><span class="n">evaluated</span> <span class="o">==</span> <span class="kc">True</span><span class="p">,</span> <span class="s1">&#39;Simulation has not run yet&#39;</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">data</span></div>
 
+<div class="viewcode-block" id="Simulator.get_group_id"><a class="viewcode-back" href="../code.html#pyrosim.Simulator.get_group_id">[docs]</a>    <span class="k">def</span> <span class="nf">get_group_id</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">group</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Returns the id of the collision group&quot;&quot;&quot;</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="n">index</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_collision_groups</span><span class="o">.</span><span class="n">index</span><span class="p">(</span><span class="n">group</span><span class="p">)</span>
+        <span class="k">except</span> <span class="ne">ValueError</span><span class="p">:</span>
+            <span class="n">index</span> <span class="o">=</span> <span class="o">-</span><span class="mi">1</span>
+        <span class="k">return</span> <span class="n">index</span></div>
+
+<div class="viewcode-block" id="Simulator.get_group_names"><a class="viewcode-back" href="../code.html#pyrosim.Simulator.get_group_names">[docs]</a>    <span class="k">def</span> <span class="nf">get_group_names</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Returns a list containing the collision groups names&quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="nb">list</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_collision_groups</span><span class="p">)</span></div>
+
 <div class="viewcode-block" id="Simulator.get_num_bodies"><a class="viewcode-back" href="../code.html#pyrosim.Simulator.get_num_bodies">[docs]</a>    <span class="k">def</span> <span class="nf">get_num_bodies</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;Returns the number of bodies&quot;&quot;&quot;</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_num_bodies</span></div>
+
+<div class="viewcode-block" id="Simulator.get_num_groups"><a class="viewcode-back" href="../code.html#pyrosim.Simulator.get_num_groups">[docs]</a>    <span class="k">def</span> <span class="nf">get_num_groups</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Returns the number of collision groups&quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_collision_groups</span><span class="p">)</span></div>
 
 <div class="viewcode-block" id="Simulator.get_num_joints"><a class="viewcode-back" href="../code.html#pyrosim.Simulator.get_num_joints">[docs]</a>    <span class="k">def</span> <span class="nf">get_num_joints</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;Returns the number of joints&quot;&quot;&quot;</span>
@@ -352,7 +368,7 @@
 <span class="c1"># -----Bodies----------------------------------</span>
 <div class="viewcode-block" id="Simulator.send_box"><a class="viewcode-back" href="../code.html#pyrosim.Simulator.send_box">[docs]</a>    <span class="k">def</span> <span class="nf">send_box</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">x</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">y</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">z</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">mass</span><span class="o">=</span><span class="mf">1.0</span><span class="p">,</span>
                  <span class="n">length</span><span class="o">=</span><span class="mf">0.1</span><span class="p">,</span> <span class="n">width</span><span class="o">=</span><span class="mf">0.1</span><span class="p">,</span> <span class="n">height</span><span class="o">=</span><span class="mf">0.1</span><span class="p">,</span>
-                 <span class="n">collision_group</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span>
+                 <span class="n">collision_group</span><span class="o">=</span><span class="s1">&#39;default&#39;</span><span class="p">,</span>
                  <span class="n">r</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">g</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">b</span><span class="o">=</span><span class="mi">1</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;Send box body to the simulator</span>
 
@@ -372,9 +388,10 @@
 <span class="sd">                The width of the box</span>
 <span class="sd">        height  : float, optional</span>
 <span class="sd">                The height of the box</span>
-<span class="sd">        collision_group : int, optional</span>
+<span class="sd">        collision_group : str or int, optional</span>
 <span class="sd">                The collision group the body is assigned to. The collision</span>
 <span class="sd">                group determines how the body collides with other bodies.</span>
+<span class="sd">                The default group is labeled &#39;default&#39;.</span>
 <span class="sd">        r       : float, optional</span>
 <span class="sd">                The amount of the color red in the body (r in [0,1])</span>
 <span class="sd">        g       : float, optional</span>
@@ -392,8 +409,10 @@
         <span class="k">assert</span> <span class="n">height</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">,</span> <span class="s1">&#39;Height of Box must be positive&#39;</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_assert_color</span><span class="p">(</span><span class="s1">&#39;Box&#39;</span><span class="p">,</span> <span class="n">r</span><span class="p">,</span> <span class="n">g</span><span class="p">,</span> <span class="n">b</span><span class="p">)</span>
 
-        <span class="k">if</span> <span class="n">collision_group</span><span class="o">+</span><span class="mi">1</span> <span class="o">&gt;</span> <span class="bp">self</span><span class="o">.</span><span class="n">_max_collision_group</span><span class="p">:</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">_max_collision_group</span> <span class="o">=</span> <span class="n">collision_group</span><span class="o">+</span><span class="mi">1</span>
+        <span class="k">if</span> <span class="n">collision_group</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">_collision_groups</span><span class="p">:</span>
+            <span class="n">group_id</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_group_id</span><span class="p">(</span><span class="n">collision_group</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">group_id</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_add_group</span><span class="p">(</span><span class="n">collision_group</span><span class="p">)</span>
 
         <span class="n">body_id</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_num_bodies</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_num_bodies</span> <span class="o">+=</span> <span class="mi">1</span>
@@ -403,13 +422,13 @@
                    <span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">z</span><span class="p">,</span>
                    <span class="n">mass</span><span class="p">,</span>
                    <span class="n">length</span><span class="p">,</span> <span class="n">width</span><span class="p">,</span> <span class="n">height</span><span class="p">,</span>
-                   <span class="n">collision_group</span><span class="p">,</span>
+                   <span class="n">group_id</span><span class="p">,</span>
                    <span class="n">r</span><span class="p">,</span> <span class="n">g</span><span class="p">,</span> <span class="n">b</span><span class="p">)</span>
 
         <span class="k">return</span> <span class="n">body_id</span></div>
 
 <div class="viewcode-block" id="Simulator.send_sphere"><a class="viewcode-back" href="../code.html#pyrosim.Simulator.send_sphere">[docs]</a>    <span class="k">def</span> <span class="nf">send_sphere</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">x</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">y</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">z</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">mass</span><span class="o">=</span><span class="mf">1.0</span><span class="p">,</span> <span class="n">radius</span><span class="o">=</span><span class="mf">0.1</span><span class="p">,</span>
-                    <span class="n">collision_group</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">r</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">g</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">b</span><span class="o">=</span><span class="mi">1</span><span class="p">):</span>
+                    <span class="n">collision_group</span><span class="o">=</span><span class="s1">&#39;default&#39;</span><span class="p">,</span> <span class="n">r</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">g</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">b</span><span class="o">=</span><span class="mi">1</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;Sends a sphere to the simulator</span>
 
 <span class="sd">        Parameters</span>
@@ -424,9 +443,10 @@
 <span class="sd">                The mass of the body (default is 1.0)</span>
 <span class="sd">        radius   : float, optional</span>
 <span class="sd">                The radius of the sphere (default is 0.5)</span>
-<span class="sd">        collision_group : int, optional</span>
+<span class="sd">        collision_group : str or int, optional</span>
 <span class="sd">                The collision group the body is assigned to. The collision</span>
 <span class="sd">                group determines how the body collides with other bodies.</span>
+<span class="sd">                The default group is labeled &#39;default&#39;.</span>
 <span class="sd">        r       : float, optional</span>
 <span class="sd">                The amount of the color red in the body (r in [0,1])</span>
 <span class="sd">        g       : float, optional</span>
@@ -442,8 +462,10 @@
         <span class="k">assert</span> <span class="n">radius</span> <span class="o">&gt;=</span> <span class="mi">0</span><span class="p">,</span> <span class="s1">&#39;Radius of Sphere must be &gt;= 0&#39;</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_assert_color</span><span class="p">(</span><span class="s1">&#39;Sphere&#39;</span><span class="p">,</span> <span class="n">r</span><span class="p">,</span> <span class="n">g</span><span class="p">,</span> <span class="n">b</span><span class="p">)</span>
 
-        <span class="k">if</span> <span class="n">collision_group</span><span class="o">+</span><span class="mi">1</span> <span class="o">&gt;</span> <span class="bp">self</span><span class="o">.</span><span class="n">_max_collision_group</span><span class="p">:</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">_max_collision_group</span> <span class="o">=</span> <span class="n">collision_group</span><span class="o">+</span><span class="mi">1</span>
+        <span class="k">if</span> <span class="n">collision_group</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">_collision_groups</span><span class="p">:</span>
+            <span class="n">group_id</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_group_id</span><span class="p">(</span><span class="n">collision_group</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">group_id</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_add_group</span><span class="p">(</span><span class="n">collision_group</span><span class="p">)</span>
 
         <span class="n">body_id</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_num_bodies</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_num_bodies</span> <span class="o">+=</span> <span class="mi">1</span>
@@ -453,7 +475,7 @@
                    <span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">z</span><span class="p">,</span>
                    <span class="n">mass</span><span class="p">,</span>
                    <span class="n">radius</span><span class="p">,</span>
-                   <span class="n">collision_group</span><span class="p">,</span>
+                   <span class="n">group_id</span><span class="p">,</span>
                    <span class="n">r</span><span class="p">,</span> <span class="n">g</span><span class="p">,</span> <span class="n">b</span><span class="p">)</span>
 
         <span class="k">return</span> <span class="n">body_id</span></div>
@@ -491,9 +513,10 @@
 <span class="sd">        radius   : float, optional</span>
 <span class="sd">                The radius of the short axis of the cylinder (default is 0.1)</span>
 <span class="sd">        r       : float, optional</span>
-<span class="sd">        collision_group : int, optional</span>
+<span class="sd">        collision_group : str or int, optional</span>
 <span class="sd">                The collision group the body is assigned to. The collision</span>
 <span class="sd">                group determines how the body collides with other bodies.</span>
+<span class="sd">                The default group is labeled &#39;default&#39;.</span>
 <span class="sd">        r       : float, optional</span>
 <span class="sd">                The amount of the color red in the body (r in [0,1])</span>
 <span class="sd">        g       : float, optional</span>
@@ -511,8 +534,10 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">_assert_non_zero</span><span class="p">(</span><span class="s1">&#39;Cylinder&#39;</span><span class="p">,</span> <span class="n">r1</span><span class="p">,</span> <span class="n">r2</span><span class="p">,</span> <span class="n">r3</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_assert_color</span><span class="p">(</span><span class="s1">&#39;Cylinder&#39;</span><span class="p">,</span> <span class="n">r</span><span class="p">,</span> <span class="n">g</span><span class="p">,</span> <span class="n">b</span><span class="p">)</span>
 
-        <span class="k">if</span> <span class="n">collision_group</span><span class="o">+</span><span class="mi">1</span> <span class="o">&gt;</span> <span class="bp">self</span><span class="o">.</span><span class="n">_max_collision_group</span><span class="p">:</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">_max_collision_group</span> <span class="o">=</span> <span class="n">collision_group</span><span class="o">+</span><span class="mi">1</span>
+        <span class="k">if</span> <span class="n">collision_group</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">_collision_groups</span><span class="p">:</span>
+            <span class="n">group_id</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_group_id</span><span class="p">(</span><span class="n">collision_group</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">group_id</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_add_group</span><span class="p">(</span><span class="n">collision_group</span><span class="p">)</span>
 
         <span class="n">body_id</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_num_bodies</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_num_bodies</span> <span class="o">+=</span> <span class="mi">1</span>
@@ -523,7 +548,7 @@
                    <span class="n">mass</span><span class="p">,</span>
                    <span class="n">r1</span><span class="p">,</span> <span class="n">r2</span><span class="p">,</span> <span class="n">r3</span><span class="p">,</span>
                    <span class="n">length</span><span class="p">,</span> <span class="n">radius</span><span class="p">,</span>
-                   <span class="n">collision_group</span><span class="p">,</span>
+                   <span class="n">group_id</span><span class="p">,</span>
                    <span class="n">r</span><span class="p">,</span> <span class="n">g</span><span class="p">,</span> <span class="n">b</span><span class="p">)</span>
 
         <span class="k">return</span> <span class="n">body_id</span></div>
@@ -701,7 +726,7 @@
 
         <span class="k">return</span> <span class="n">neuron_id</span></div>
 
-<div class="viewcode-block" id="Simulator.send_motor_neuron"><a class="viewcode-back" href="../code.html#pyrosim.Simulator.send_motor_neuron">[docs]</a>    <span class="k">def</span> <span class="nf">send_motor_neuron</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">joint_id</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">tau</span><span class="o">=</span><span class="mf">1.0</span><span class="p">):</span>
+<div class="viewcode-block" id="Simulator.send_motor_neuron"><a class="viewcode-back" href="../code.html#pyrosim.Simulator.send_motor_neuron">[docs]</a>    <span class="k">def</span> <span class="nf">send_motor_neuron</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">joint_id</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">tau</span><span class="o">=</span><span class="mf">1.0</span><span class="p">,</span> <span class="n">alpha</span><span class="o">=</span><span class="mf">1.0</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;Send motor neurons to simulator</span>
 
 <span class="sd">        Motor neurons are neurons which connecto to a specified joint and </span>
@@ -721,6 +746,8 @@
 <span class="sd">                how much of value of the neuron at the current time step comes</span>
 <span class="sd">                from external inputs vs. the value of the neuron at the </span>
 <span class="sd">                previous time step</span>
+<span class="sd">        alpha    :</span>
+<span class="sd">                The &#39;rememberance rate&#39; of the neuron. Usually 1 or 0.</span>
 
 <span class="sd">        Returns</span>
 <span class="sd">        -------</span>
@@ -735,11 +762,12 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">_num_neurons</span> <span class="o">+=</span> <span class="mi">1</span>
 
         <span class="bp">self</span><span class="o">.</span><span class="n">_send</span><span class="p">(</span><span class="s1">&#39;MotorNeuron&#39;</span><span class="p">,</span>
-                   <span class="n">neuron_id</span><span class="p">,</span>  <span class="n">joint_id</span><span class="p">,</span> <span class="n">tau</span><span class="p">)</span>
+                   <span class="n">neuron_id</span><span class="p">,</span>  <span class="n">joint_id</span><span class="p">,</span> 
+                   <span class="n">tau</span><span class="p">,</span> <span class="n">alpha</span><span class="p">)</span>
 
         <span class="k">return</span> <span class="n">neuron_id</span></div>
 
-<div class="viewcode-block" id="Simulator.send_sensor_neuron"><a class="viewcode-back" href="../code.html#pyrosim.Simulator.send_sensor_neuron">[docs]</a>    <span class="k">def</span> <span class="nf">send_sensor_neuron</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">sensor_id</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">svi</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">tau</span><span class="o">=</span><span class="mf">1.0</span><span class="p">):</span>
+<div class="viewcode-block" id="Simulator.send_sensor_neuron"><a class="viewcode-back" href="../code.html#pyrosim.Simulator.send_sensor_neuron">[docs]</a>    <span class="k">def</span> <span class="nf">send_sensor_neuron</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">sensor_id</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">svi</span><span class="o">=</span><span class="mi">0</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;Sends a sensor neuron to the simulator</span>
 
 <span class="sd">        Sensor neurons are input neurons which take the value of their </span>
@@ -753,8 +781,6 @@
 <span class="sd">                The sensor value index is the offset index of the sensor. </span>
 <span class="sd">                SVI is used for sensors which return a vector of values </span>
 <span class="sd">                (position, ray sensors, etc.)</span>
-<span class="sd">        tau              : int, optional</span>
-<span class="sd">                not used for sensor neurons</span>
 
 <span class="sd">        Returns</span>
 <span class="sd">        -------</span>
@@ -764,14 +790,12 @@
         <span class="k">assert</span> <span class="n">sensor_id</span> <span class="o">&lt;</span> <span class="bp">self</span><span class="o">.</span><span class="n">_num_sensors</span><span class="p">,</span> <span class="s1">&#39;Sensor with id &#39;</span> <span class="o">+</span> \
             <span class="nb">str</span><span class="p">(</span><span class="n">sensor_id</span><span class="p">)</span><span class="o">+</span><span class="s1">&#39; has not been sent&#39;</span>
         <span class="k">assert</span> <span class="n">svi</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">4</span><span class="p">),</span> <span class="s1">&#39;SVI must be in [0,3]&#39;</span>
-        <span class="k">assert</span> <span class="n">tau</span> <span class="o">&gt;=</span> <span class="mi">0</span><span class="p">,</span> <span class="s1">&#39;Tau must be greater than or equal to zero&#39;</span>
 
         <span class="n">neuron_id</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_num_neurons</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_num_neurons</span> <span class="o">+=</span> <span class="mi">1</span>
 
         <span class="bp">self</span><span class="o">.</span><span class="n">_send</span><span class="p">(</span><span class="s1">&#39;SensorNeuron&#39;</span><span class="p">,</span>
-                   <span class="n">neuron_id</span><span class="p">,</span> <span class="n">sensor_id</span><span class="p">,</span>
-                   <span class="n">svi</span><span class="p">,</span> <span class="n">tau</span><span class="p">)</span>
+                   <span class="n">neuron_id</span><span class="p">,</span> <span class="n">sensor_id</span><span class="p">,</span> <span class="n">svi</span><span class="p">)</span>
 
         <span class="k">return</span> <span class="n">neuron_id</span></div>
 
@@ -836,7 +860,7 @@
 
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">send_user_input_neuron</span><span class="p">(</span><span class="n">output_vals</span><span class="p">)</span></div>
 
-<div class="viewcode-block" id="Simulator.send_hidden_neuron"><a class="viewcode-back" href="../code.html#pyrosim.Simulator.send_hidden_neuron">[docs]</a>    <span class="k">def</span> <span class="nf">send_hidden_neuron</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">tau</span><span class="o">=</span><span class="mf">1.0</span><span class="p">):</span>
+<div class="viewcode-block" id="Simulator.send_hidden_neuron"><a class="viewcode-back" href="../code.html#pyrosim.Simulator.send_hidden_neuron">[docs]</a>    <span class="k">def</span> <span class="nf">send_hidden_neuron</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">tau</span><span class="o">=</span><span class="mf">1.0</span><span class="p">,</span> <span class="n">alpha</span><span class="o">=</span><span class="mf">1.0</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;Send a hidden neuron to the simulator</span>
 
 <span class="sd">        Hidden neurons are basic neurons which can have inputs and outputs. </span>
@@ -860,7 +884,7 @@
         <span class="n">neuron_id</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_num_neurons</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_num_neurons</span> <span class="o">+=</span> <span class="mi">1</span>
 
-        <span class="bp">self</span><span class="o">.</span><span class="n">_send</span><span class="p">(</span><span class="s1">&#39;HiddenNeuron&#39;</span><span class="p">,</span> <span class="n">neuron_id</span><span class="p">,</span> <span class="n">tau</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_send</span><span class="p">(</span><span class="s1">&#39;HiddenNeuron&#39;</span><span class="p">,</span> <span class="n">neuron_id</span><span class="p">,</span> <span class="n">tau</span><span class="p">,</span> <span class="n">alpha</span><span class="p">)</span>
 
         <span class="k">return</span> <span class="n">neuron_id</span></div>
 
@@ -897,22 +921,26 @@
                                                 <span class="s1">&#39;been sent&#39;</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">collision_matrix_sent</span> <span class="o">=</span> <span class="kc">True</span>
 
+        <span class="n">num_groups</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_collision_groups</span><span class="p">)</span>
+
         <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">matrix</span><span class="p">,</span> <span class="nb">str</span><span class="p">):</span>
             <span class="k">if</span> <span class="n">matrix</span> <span class="o">==</span> <span class="s1">&#39;none&#39;</span><span class="p">:</span>
-                <span class="n">matrix</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">((</span><span class="bp">self</span><span class="o">.</span><span class="n">_max_collision_group</span><span class="p">,</span>
-                                   <span class="bp">self</span><span class="o">.</span><span class="n">_max_collision_group</span><span class="p">),</span> <span class="n">dtype</span><span class="o">=</span><span class="s1">&#39;int32&#39;</span><span class="p">)</span>
+                <span class="n">matrix</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">((</span><span class="n">num_groups</span><span class="p">,</span> <span class="n">num_groups</span><span class="p">),</span>
+                                  <span class="n">dtype</span><span class="o">=</span><span class="s1">&#39;int8&#39;</span><span class="p">)</span>
 
             <span class="k">elif</span> <span class="n">matrix</span> <span class="o">==</span> <span class="s1">&#39;all&#39;</span><span class="p">:</span>
-                <span class="n">matrix</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">ones</span><span class="p">((</span><span class="bp">self</span><span class="o">.</span><span class="n">_max_collision_group</span><span class="p">,</span>
-                                  <span class="bp">self</span><span class="o">.</span><span class="n">_max_collision_group</span><span class="p">),</span> <span class="n">dtype</span><span class="o">=</span><span class="s1">&#39;int32&#39;</span><span class="p">)</span>
+                <span class="n">matrix</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">ones</span><span class="p">((</span><span class="n">num_groups</span><span class="p">,</span> <span class="n">num_groups</span><span class="p">),</span>
+                                 <span class="n">dtype</span><span class="o">=</span><span class="s1">&#39;int8&#39;</span><span class="p">)</span>
 
         <span class="n">send_string</span> <span class="o">=</span> <span class="p">[]</span>
 
-        <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_max_collision_group</span><span class="p">):</span>
-            <span class="k">for</span> <span class="n">j</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">i</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">_max_collision_group</span><span class="p">):</span>
-                <span class="n">send_string</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="nb">int</span><span class="p">(</span><span class="n">matrix</span><span class="p">[</span><span class="n">i</span><span class="p">,</span> <span class="n">j</span><span class="p">]))</span>
+        <span class="n">upper_tri</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">triu_indices</span><span class="p">(</span><span class="n">num_groups</span><span class="p">)</span>
+        <span class="n">iterator</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">nditer</span><span class="p">(</span><span class="n">matrix</span><span class="p">[</span><span class="n">upper_tri</span><span class="p">])</span>
 
-        <span class="bp">self</span><span class="o">.</span><span class="n">_send</span><span class="p">(</span><span class="s1">&#39;CollisionMatrix&#39;</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">_max_collision_group</span><span class="p">,</span> <span class="o">*</span><span class="n">send_string</span><span class="p">)</span>
+        <span class="k">for</span> <span class="n">element</span> <span class="ow">in</span> <span class="n">iterator</span><span class="p">:</span>
+            <span class="n">send_string</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">element</span><span class="p">)</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">_send</span><span class="p">(</span><span class="s1">&#39;CollisionMatrix&#39;</span><span class="p">,</span> <span class="n">num_groups</span><span class="p">,</span> <span class="o">*</span><span class="n">send_string</span><span class="p">)</span>
         <span class="k">return</span> <span class="kc">True</span></div>
 
 <div class="viewcode-block" id="Simulator.send_external_force"><a class="viewcode-back" href="../code.html#pyrosim.Simulator.send_external_force">[docs]</a>    <span class="k">def</span> <span class="nf">send_external_force</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">body_id</span><span class="p">,</span> <span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">z</span><span class="p">,</span> <span class="n">time</span><span class="o">=</span><span class="mi">0</span><span class="p">):</span>
@@ -1228,15 +1256,15 @@
 
         <span class="k">return</span> <span class="kc">True</span></div>
 
+<span class="c1"># -----I/OCommands----------------------------</span>
 <div class="viewcode-block" id="Simulator.start"><a class="viewcode-back" href="../code.html#pyrosim.Simulator.start">[docs]</a>    <span class="k">def</span> <span class="nf">start</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;Starts the simulation&quot;&quot;&quot;</span>
 
         <span class="k">assert</span> <span class="bp">self</span><span class="o">.</span><span class="n">evaluated</span> <span class="o">==</span> <span class="kc">False</span><span class="p">,</span> <span class="p">(</span>
             <span class="s1">&#39;Simulation has already been evaluated&#39;</span><span class="p">)</span>
 
-        <span class="k">if</span> <span class="p">(</span><span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">collision_matrix_sent</span><span class="p">):</span>
+        <span class="k">if</span> <span class="p">(</span><span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">collision_matrix_sent</span> <span class="ow">and</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_num_groups</span><span class="p">()</span> <span class="o">!=</span> <span class="mi">0</span><span class="p">):</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">send_collision_matrix</span><span class="p">()</span>
-            <span class="k">pass</span>
 
         <span class="c1"># build initial commands</span>
         <span class="n">commands</span> <span class="o">=</span> <span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">pyrosim_path</span> <span class="o">+</span> <span class="s1">&#39;/simulator&#39;</span><span class="p">]</span>
@@ -1281,6 +1309,13 @@
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">data</span></div>
 
 <span class="c1"># --------------------- Private methods -----------------------------</span>
+    <span class="k">def</span> <span class="nf">_add_group</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">group</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Appends group handle to list and returns index&quot;&quot;&quot;</span>
+        <span class="n">index</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_collision_groups</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_collision_groups</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">group</span><span class="p">)</span>
+
+        <span class="k">return</span> <span class="n">index</span>
+
     <span class="k">def</span> <span class="nf">_assert_color</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">name</span><span class="p">,</span> <span class="n">r</span><span class="p">,</span> <span class="n">g</span><span class="p">,</span> <span class="n">b</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;Error checks so color params are between [0,1]&quot;&quot;&quot;</span>
 

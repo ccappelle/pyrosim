@@ -222,10 +222,10 @@ normals. Currently slider joints are not drawn.</p>
                                      <span class="n">n1</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">n2</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">n3</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span>
                                      <span class="n">lo</span><span class="o">=-</span><span class="n">math</span><span class="o">.</span><span class="n">pi</span><span class="p">,</span> <span class="n">hi</span><span class="o">=</span><span class="n">math</span><span class="o">.</span><span class="n">pi</span><span class="p">)</span>
 
-<span class="c1"># slider joint joins second cylinder and box</span>
-<span class="c1"># contrary to the hinge joint, in the slider</span>
-<span class="c1"># joint (x,y,z) refers to the direction of</span>
-<span class="c1"># the joint axis</span>
+<span class="c1"># slider joint joins second cylinder and box.</span>
+<span class="c1"># Contrary to the hinge joint, the parameters</span>
+<span class="c1"># (x,y,z) refer to the joint axis in the case</span>
+<span class="c1"># of the slider joint.</span>
 <span class="n">slider_joint</span> <span class="o">=</span> <span class="n">sim</span><span class="o">.</span><span class="n">send_slider_joint</span><span class="p">(</span><span class="n">first_body_id</span><span class="o">=</span><span class="n">cyl_2</span><span class="p">,</span>
                                       <span class="n">second_body_id</span><span class="o">=</span><span class="n">box</span><span class="p">,</span>
                                       <span class="n">x</span><span class="o">=</span><span class="mf">1.0</span><span class="p">,</span> <span class="n">y</span><span class="o">=</span><span class="mf">0.0</span><span class="p">,</span> <span class="n">z</span><span class="o">=</span><span class="mf">0.0</span><span class="p">,</span>

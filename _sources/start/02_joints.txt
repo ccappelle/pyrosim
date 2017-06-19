@@ -70,10 +70,10 @@ normals. Currently slider joints are not drawn.
                                          n1=0, n2=1, n3=0,
                                          lo=-math.pi, hi=math.pi)
 
-    # slider joint joins second cylinder and box
-    # contrary to the hinge joint, in the slider
-    # joint (x,y,z) refers to the direction of 
-    # the joint axis
+    # slider joint joins second cylinder and box.
+    # Contrary to the hinge joint, the parameters
+    # (x,y,z) refer to the joint axis in the case
+    # of the slider joint.
     slider_joint = sim.send_slider_joint(first_body_id=cyl_2,
                                           second_body_id=box,
                                           x=1.0, y=0.0, z=0.0,
