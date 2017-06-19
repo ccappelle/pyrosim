@@ -41,6 +41,7 @@ void PROPRIOCEPTIVE_SENSOR::Poll(dJointID joint, int type, int t) {
                 angles[t] = dJointGetHingeAngle(joint);
         else if(type==SLIDER)
                 angles[t] = dJointGetSliderPosition(joint);
+        std::cerr<< angles[t] << "\n";
 
 }
 

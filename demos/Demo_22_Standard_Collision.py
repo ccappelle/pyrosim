@@ -51,16 +51,16 @@ def run(test):
         sim.send_synapse(source_neuron_id=bias,
                          target_neuron_id=mneurons[i], weight=1.0)
 
-    # default collision group is 0 so the bodies in the car have group 0
     sim.send_box(x=0, y=-3, z=.5, length=1, height=1, width=1, mass=5,
-                 collision_group=1, r=.5, g=0, b=0)
+                 collision_group='env', r=.5, g=0, b=0)
     sphere = sim.send_sphere(x=0, y=-3, z=1+.5, radius=0.5,
-                             collision_group=2, mass=3,
+                             collision_group='env', mass=3,
                              r=0, g=.5, b=0)
     sim.send_cylinder(x=0, y=-3, z=2+.5+0.2, mass=2, r1=0, r2=0, r3=1,
-                      length=1.0, radius=0.2, collision_group=3,
+                      length=1.0, radius=0.2, collision_group='env',
                       r=0, g=0, b=.5)
 
+    sim.send_collision_matrix('all')
     sim.film_body(sphere, 'track')
     sim.start()
     sim.wait_to_finish()

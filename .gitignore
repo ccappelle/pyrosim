@@ -7,6 +7,7 @@ build/
 log
 rundemos.sh
 makedocs.sh
+pyrosim/test
 pyrosim/simulator/simulator
 pyrosim/simulator/ode-0.12/*
 pyrosim/simulator/tmp

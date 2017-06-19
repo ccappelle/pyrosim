@@ -16,13 +16,14 @@ private:
 	double previousValue;
 
 	double tau;
+	double alpha;
 
 	double *timeValues;
 	
 public:
-        NEURON(int myID, int neuronType, double tau);
+        NEURON(int myID, int neuronType, double tau, double a);
 
-	NEURON(int myID, int neuronType, int svIndex, double tau);
+	NEURON(int myID, int neuronType, int svIndex, double tau, double a);
 
 	NEURON(int myID,  double *timeValues);
 
@@ -51,7 +52,7 @@ public:
 	void Threshold(void);
 
 private:
-	void Initialize(int myID, int neuronType, double t);
+	void Initialize(int myID, int neuronType, double t, double a);
 
 };
 

@@ -14,21 +14,21 @@ extern int BIAS_NEURON;
 extern int FUNCTION_NEURON;
 
 
-NEURON::NEURON(int myID, int neuronType, double tau) {
+NEURON::NEURON(int myID, int neuronType, double tau, double a) {
 
-	Initialize(myID,neuronType,tau);
+	Initialize(myID,neuronType,tau,a);
 	if ( type == BIAS_NEURON)
 		value = 1.0;
 }
 
-NEURON::NEURON(int myID, int neuronType, int svIndex, double tau) {
+NEURON::NEURON(int myID, int neuronType, int svIndex, double tau, double a) {
 
-	Initialize(myID,neuronType,tau);
+	Initialize(myID,neuronType,tau, a);
 	sensorValueIndex = svIndex;
 }
 
 NEURON::NEURON(int myID, double *tv){
-	Initialize(myID, FUNCTION_NEURON, 1.0);
+	Initialize(myID, FUNCTION_NEURON, 1.0, 1.0);
 
 	timeValues = tv;
 	value = timeValues[0];
@@ -117,14 +117,14 @@ void NEURON::Threshold(void) {
 
 		return;
 
-	value = previousValue + tau * value;
+	value = alpha * previousValue + tau * value;
 
 	value = tanh(value);
 }
 
 // ------------------ Private methods -------------------
 
-void NEURON::Initialize(int myID, int neuronType, double t) {
+void NEURON::Initialize(int myID, int neuronType, double t, double a) {
 
         ID = myID;
 
@@ -133,7 +133,7 @@ void NEURON::Initialize(int myID, int neuronType, double t) {
         sensorValueIndex = -1;
 
 	tau = t;
-
+        alpha = a;
         value = 0.0;
 
 	previousValue = 0.0;

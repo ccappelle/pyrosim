@@ -44,9 +44,9 @@ public:
 	void Write_Sensor_Data(int evalPeriod);
 
 private:
-        void Add_Motor_Neuron(int ID, int jointID, double tau);
+        void Add_Motor_Neuron(int ID, int jointID, double tau, double alpha);
 
-	void Add_Sensor_Neuron(int ID, int sensorID, int sensorValueIndex, double tau);
+	void Add_Sensor_Neuron(int ID, int sensorID, int sensorValueIndex);
 
         void Connect_Motor_Neuron_to_Joint( int jointID, NEURON *motorNeuron );
 

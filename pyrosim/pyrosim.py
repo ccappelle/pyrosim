@@ -53,7 +53,7 @@ class Simulator(object):
         self._num_joints = 0
         self._num_sensors = 0
         self._num_neurons = 0
-        self._max_collision_group = 1
+        self._collision_groups = []
 
         self.play_paused = play_paused
         self.play_blind = play_blind
@@ -79,14 +79,14 @@ class Simulator(object):
             self.play_paused = False
 
         # Initial simulator commands
-        self._send('TexturePath ' + self.pyrosim_path+'/textures')
-        self._send('EvaluationTime '+str(self.eval_time))
-        self._send('TimeInterval ' + str(self.dt))
-        self._send('Gravity ' + str(self.gravity))
+        self._send('TexturePath', self.pyrosim_path+'/textures')
+        self._send('EvaluationTime', self.eval_time)
+        self._send('TimeInterval', self.dt)
+        self._send('Gravity', self.gravity)
         if (self.debug):
-            self._send('Debug '+str(1))
+            self._send('Debug', 1)
         else:
-            self._send('Debug '+str(0))
+            self._send('Debug', 0)
         self.send_camera(xyz, hpr)
 
 # ------Getters-------------------------
@@ -95,9 +95,25 @@ class Simulator(object):
         assert self.evaluated == True, 'Simulation has not run yet'
         return self.data
 
+    def get_group_id(self, group):
+        """Returns the id of the collision group"""
+        try:
+            index = self._collision_groups.index(group)
+        except ValueError:
+            index = -1
+        return index
+
+    def get_group_names(self):
+        """Returns a list containing the collision groups names"""
+        return list(self._collision_groups)
+
     def get_num_bodies(self):
         """Returns the number of bodies"""
         return self._num_bodies
+
+    def get_num_groups(self):
+        """Returns the number of collision groups"""
+        return len(self._collision_groups)
 
     def get_num_joints(self):
         """Returns the number of joints"""
@@ -194,7 +210,7 @@ class Simulator(object):
 # -----Bodies----------------------------------
     def send_box(self, x=0, y=0, z=0, mass=1.0,
                  length=0.1, width=0.1, height=0.1,
-                 collision_group=0,
+                 collision_group='default',
                  r=1, g=1, b=1):
         """Send box body to the simulator
 
@@ -214,9 +230,10 @@ class Simulator(object):
                 The width of the box
         height  : float, optional
                 The height of the box
-        collision_group : int, optional
+        collision_group : str or int, optional
                 The collision group the body is assigned to. The collision
                 group determines how the body collides with other bodies.
+                The default group is labeled 'default'.
         r       : float, optional
                 The amount of the color red in the body (r in [0,1])
         g       : float, optional
@@ -234,8 +251,10 @@ class Simulator(object):
         assert height > 0, 'Height of Box must be positive'
         self._assert_color('Box', r, g, b)
 
-        if collision_group+1 > self._max_collision_group:
-            self._max_collision_group = collision_group+1
+        if collision_group in self._collision_groups:
+            group_id = self.get_group_id(collision_group)
+        else:
+            group_id = self._add_group(collision_group)
 
         body_id = self._num_bodies
         self._num_bodies += 1
@@ -245,13 +264,13 @@ class Simulator(object):
                    x, y, z,
                    mass,
                    length, width, height,
-                   collision_group,
+                   group_id,
                    r, g, b)
 
         return body_id
 
     def send_sphere(self, x=0, y=0, z=0, mass=1.0, radius=0.1,
-                    collision_group=0, r=1, g=1, b=1):
+                    collision_group='default', r=1, g=1, b=1):
         """Sends a sphere to the simulator
 
         Parameters
@@ -266,9 +285,10 @@ class Simulator(object):
                 The mass of the body (default is 1.0)
         radius   : float, optional
                 The radius of the sphere (default is 0.5)
-        collision_group : int, optional
+        collision_group : str or int, optional
                 The collision group the body is assigned to. The collision
                 group determines how the body collides with other bodies.
+                The default group is labeled 'default'.
         r       : float, optional
                 The amount of the color red in the body (r in [0,1])
         g       : float, optional
@@ -284,8 +304,10 @@ class Simulator(object):
         assert radius >= 0, 'Radius of Sphere must be >= 0'
         self._assert_color('Sphere', r, g, b)
 
-        if collision_group+1 > self._max_collision_group:
-            self._max_collision_group = collision_group+1
+        if collision_group in self._collision_groups:
+            group_id = self.get_group_id(collision_group)
+        else:
+            group_id = self._add_group(collision_group)
 
         body_id = self._num_bodies
         self._num_bodies += 1
@@ -295,7 +317,7 @@ class Simulator(object):
                    x, y, z,
                    mass,
                    radius,
-                   collision_group,
+                   group_id,
                    r, g, b)
 
         return body_id
@@ -333,9 +355,10 @@ class Simulator(object):
         radius   : float, optional
                 The radius of the short axis of the cylinder (default is 0.1)
         r       : float, optional
-        collision_group : int, optional
+        collision_group : str or int, optional
                 The collision group the body is assigned to. The collision
                 group determines how the body collides with other bodies.
+                The default group is labeled 'default'.
         r       : float, optional
                 The amount of the color red in the body (r in [0,1])
         g       : float, optional
@@ -353,8 +376,10 @@ class Simulator(object):
         self._assert_non_zero('Cylinder', r1, r2, r3)
         self._assert_color('Cylinder', r, g, b)
 
-        if collision_group+1 > self._max_collision_group:
-            self._max_collision_group = collision_group+1
+        if collision_group in self._collision_groups:
+            group_id = self.get_group_id(collision_group)
+        else:
+            group_id = self._add_group(collision_group)
 
         body_id = self._num_bodies
         self._num_bodies += 1
@@ -365,7 +390,7 @@ class Simulator(object):
                    mass,
                    r1, r2, r3,
                    length, radius,
-                   collision_group,
+                   group_id,
                    r, g, b)
 
         return body_id
@@ -543,7 +568,7 @@ class Simulator(object):
 
         return neuron_id
 
-    def send_motor_neuron(self, joint_id=0, tau=1.0):
+    def send_motor_neuron(self, joint_id=0, tau=1.0, alpha=1.0):
         """Send motor neurons to simulator
 
         Motor neurons are neurons which connecto to a specified joint and 
@@ -563,6 +588,8 @@ class Simulator(object):
                 how much of value of the neuron at the current time step comes
                 from external inputs vs. the value of the neuron at the 
                 previous time step
+        alpha    :
+                The 'rememberance rate' of the neuron. Usually 1 or 0.
 
         Returns
         -------
@@ -577,11 +604,12 @@ class Simulator(object):
         self._num_neurons += 1
 
         self._send('MotorNeuron',
-                   neuron_id,  joint_id, tau)
+                   neuron_id,  joint_id, 
+                   tau, alpha)
 
         return neuron_id
 
-    def send_sensor_neuron(self, sensor_id=0, svi=0, tau=1.0):
+    def send_sensor_neuron(self, sensor_id=0, svi=0):
         """Sends a sensor neuron to the simulator
 
         Sensor neurons are input neurons which take the value of their 
@@ -595,8 +623,6 @@ class Simulator(object):
                 The sensor value index is the offset index of the sensor. 
                 SVI is used for sensors which return a vector of values 
                 (position, ray sensors, etc.)
-        tau              : int, optional
-                not used for sensor neurons
 
         Returns
         -------
@@ -606,14 +632,12 @@ class Simulator(object):
         assert sensor_id < self._num_sensors, 'Sensor with id ' + \
             str(sensor_id)+' has not been sent'
         assert svi in range(4), 'SVI must be in [0,3]'
-        assert tau >= 0, 'Tau must be greater than or equal to zero'
 
         neuron_id = self._num_neurons
         self._num_neurons += 1
 
         self._send('SensorNeuron',
-                   neuron_id, sensor_id,
-                   svi, tau)
+                   neuron_id, sensor_id, svi)
 
         return neuron_id
 
@@ -678,7 +702,7 @@ class Simulator(object):
 
         return self.send_user_input_neuron(output_vals)
 
-    def send_hidden_neuron(self, tau=1.0):
+    def send_hidden_neuron(self, tau=1.0, alpha=1.0):
         """Send a hidden neuron to the simulator
 
         Hidden neurons are basic neurons which can have inputs and outputs. 
@@ -702,7 +726,7 @@ class Simulator(object):
         neuron_id = self._num_neurons
         self._num_neurons += 1
 
-        self._send('HiddenNeuron', neuron_id, tau)
+        self._send('HiddenNeuron', neuron_id, tau, alpha)
 
         return neuron_id
 
@@ -739,22 +763,26 @@ class Simulator(object):
                                                 'been sent')
         self.collision_matrix_sent = True
 
+        num_groups = len(self._collision_groups)
+
         if isinstance(matrix, str):
             if matrix == 'none':
-                matrix = np.zeros((self._max_collision_group,
-                                   self._max_collision_group), dtype='int32')
+                matrix = np.zeros((num_groups, num_groups),
+                                  dtype='int8')
 
             elif matrix == 'all':
-                matrix = np.ones((self._max_collision_group,
-                                  self._max_collision_group), dtype='int32')
+                matrix = np.ones((num_groups, num_groups),
+                                 dtype='int8')
 
         send_string = []
 
-        for i in range(self._max_collision_group):
-            for j in range(i, self._max_collision_group):
-                send_string.append(int(matrix[i, j]))
+        upper_tri = np.triu_indices(num_groups)
+        iterator = np.nditer(matrix[upper_tri])
 
-        self._send('CollisionMatrix', self._max_collision_group, *send_string)
+        for element in iterator:
+            send_string.append(element)
+
+        self._send('CollisionMatrix', num_groups, *send_string)
         return True
 
     def send_external_force(self, body_id, x, y, z, time=0):
@@ -1070,15 +1098,15 @@ class Simulator(object):
 
         return True
 
+# -----I/OCommands----------------------------
     def start(self):
         """Starts the simulation"""
 
         assert self.evaluated == False, (
             'Simulation has already been evaluated')
 
-        if (not self.collision_matrix_sent):
+        if (not self.collision_matrix_sent and self.get_num_groups() != 0):
             self.send_collision_matrix()
-            pass
 
         # build initial commands
         commands = [self.pyrosim_path + '/simulator']
@@ -1123,6 +1151,13 @@ class Simulator(object):
         return self.data
 
 # --------------------- Private methods -----------------------------
+    def _add_group(self, group):
+        """Appends group handle to list and returns index"""
+        index = len(self._collision_groups)
+        self._collision_groups.append(group)
+
+        return index
+
     def _assert_color(self, name, r, g, b):
         """Error checks so color params are between [0,1]"""
 

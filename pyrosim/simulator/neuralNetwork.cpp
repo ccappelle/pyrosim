@@ -34,7 +34,7 @@ NEURAL_NETWORK::~NEURAL_NETWORK(void) {
 
 void NEURAL_NETWORK::Add_Bias_Neuron(int ID) {
 
-        neurons[numNeurons] = new NEURON(ID,BIAS_NEURON, 1.0);
+        neurons[numNeurons] = new NEURON(ID,BIAS_NEURON, 1.0, 1.0);
 
         numNeurons++;
 
@@ -45,16 +45,16 @@ void NEURAL_NETWORK::Add_Function_Neuron(int ID, double *timeValues){
 	numNeurons++;
 }
 
-void NEURAL_NETWORK::Add_Hidden_Neuron(int ID, double tau) {
+void NEURAL_NETWORK::Add_Hidden_Neuron(int ID, double tau, double alpha) {
 
-	neurons[numNeurons] = new NEURON(ID,HIDDEN_NEURON,tau);
+	neurons[numNeurons] = new NEURON(ID,HIDDEN_NEURON,tau, alpha);
 
 	numNeurons++;
 }
 
-NEURON *NEURAL_NETWORK::Add_Motor_Neuron(int ID, double tau) {
+NEURON *NEURAL_NETWORK::Add_Motor_Neuron(int ID, double tau, double alpha) {
 
-        NEURON *newNeuron = new NEURON(ID,MOTOR_NEURON,tau);
+        NEURON *newNeuron = new NEURON(ID,MOTOR_NEURON,tau, alpha);
 
         neurons[numNeurons] = newNeuron;
 
@@ -63,9 +63,9 @@ NEURON *NEURAL_NETWORK::Add_Motor_Neuron(int ID, double tau) {
         return newNeuron;
 }
 
-NEURON *NEURAL_NETWORK::Add_Sensor_Neuron(int ID, int svIndex, double tau) {
+NEURON *NEURAL_NETWORK::Add_Sensor_Neuron(int ID, int svIndex) {
 
-	NEURON *newNeuron = new NEURON(ID,SENSOR_NEURON,svIndex,tau);
+	NEURON *newNeuron = new NEURON(ID,SENSOR_NEURON,svIndex,1.0,1.0);
 
 	neurons[numNeurons] = newNeuron;
 

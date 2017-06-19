@@ -88,7 +88,6 @@ void ENVIRONMENT::Read_From_Python(dWorldID world, dSpaceID space, Data *data)
                         std::cin >> y;
                         std::cin >> z;
                         std::cin >> time;
-                        std::cerr<< bodyID << " " << x << " " << y << " " << z << " " << time << "\n";
                         objects[bodyID]->Add_External_Force(x,y,z,time);
                 }
 
@@ -232,16 +231,16 @@ void ENVIRONMENT::Write_Sensor_Data(int evalPeriod) {
 
 // ----------------------- Private methods ---------------------------
 
-void ENVIRONMENT::Add_Motor_Neuron(int ID, int jointID, double tau) {
+void ENVIRONMENT::Add_Motor_Neuron(int ID, int jointID, double tau, double alpha) {
 
-        NEURON *motorNeuron = neuralNetwork->Add_Motor_Neuron(ID,tau);
+        NEURON *motorNeuron = neuralNetwork->Add_Motor_Neuron(ID,tau, alpha);
 
         Connect_Motor_Neuron_to_Joint( jointID, motorNeuron );
 }
 
-void ENVIRONMENT::Add_Sensor_Neuron(int ID, int sensorID, int sensorValueIndex, double tau) {
+void ENVIRONMENT::Add_Sensor_Neuron(int ID, int sensorID, int sensorValueIndex) {
 
-        NEURON *sensorNeuron = neuralNetwork->Add_Sensor_Neuron(ID,sensorValueIndex,tau);
+        NEURON *sensorNeuron = neuralNetwork->Add_Sensor_Neuron(ID,sensorValueIndex);
 
         Connect_Sensor_To_Sensor_Neuron( sensorID, sensorNeuron );
 }
@@ -281,13 +280,15 @@ void ENVIRONMENT::Create_Hidden_Neuron(void)
     std::cin >> ID;
 
 	double tau;
-
 	std::cin >> tau;
+
+    double alpha;
+    std::cin >> alpha;
 
     if ( neuralNetwork == NULL )
         Create_Neural_Network();
 
-	neuralNetwork->Add_Hidden_Neuron(ID,tau);
+	neuralNetwork->Add_Hidden_Neuron(ID,tau,alpha);
 }
 
 void ENVIRONMENT::Create_Joint( dWorldID world, dSpaceID space, int index, int jointType) {
@@ -349,13 +350,15 @@ void ENVIRONMENT::Create_Motor_Neuron(void) {
     std::cin >> jointID;
 
     double tau;
-
     std::cin >> tau;
+
+    double alpha;
+    std::cin >> alpha;
 
     if ( neuralNetwork == NULL )
         Create_Neural_Network();
 
-    Add_Motor_Neuron(ID,jointID,tau);
+    Add_Motor_Neuron(ID,jointID,tau,alpha);
 }
 
 void ENVIRONMENT::Create_Neural_Network(void) {
@@ -453,15 +456,11 @@ void ENVIRONMENT::Create_Sensor_Neuron(void) {
 
         std::cin >> sensorValueIndex;
 
-	double tau;
-
-	std::cin >> tau;
-
 	if ( neuralNetwork == NULL )
 
 		Create_Neural_Network();
 
-	Add_Sensor_Neuron(ID,sensorID,sensorValueIndex,tau);
+	Add_Sensor_Neuron(ID,sensorID,sensorValueIndex);
 }
 
 void ENVIRONMENT::Create_Synapse(void) {
