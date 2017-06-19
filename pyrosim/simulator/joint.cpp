@@ -182,7 +182,7 @@ void JOINT::Poll_Sensors(int t) {
 
         if ( proprioceptiveSensor )
 
-                proprioceptiveSensor->Poll(joint,t);
+                proprioceptiveSensor->Poll(joint, type, t);
 }
 
 void JOINT::Read_From_Python(void) {

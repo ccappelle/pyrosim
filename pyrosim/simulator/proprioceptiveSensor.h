@@ -24,7 +24,7 @@ public:
 
         int  Get_ID(void);
 
-	void Poll(dJointID joint, int t);
+	void Poll(dJointID joint, int type, int t);
 
         void Update_Sensor_Neurons(int t);
 

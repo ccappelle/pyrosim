@@ -1,5 +1,8 @@
 #!/bin/sh
 
+git commit -a -m "Documentation update $1"
+git push origin master
+
 cd docs
 make html
 

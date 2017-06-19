@@ -6,7 +6,12 @@
 Welcome to pyrosim's documentation!
 ===================================
 
-.. image:: img/pyrosim-logo.png
+.. raw:: html
+
+  <h1> This site is still under construction.
+  Hazards abound. </h1>
+
+.. image:: img/pyrosim-logo-3.png
     :alt: (py)thon (ro)bot (sim)ulator
     :align: center
 
@@ -23,7 +28,8 @@ Contents:
 .. toctree::
    :maxdepth: 2
 
-   demos
+   start
+   videos
    code
 
 Indices and tables

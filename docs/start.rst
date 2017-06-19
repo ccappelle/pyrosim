@@ -1,7 +1,9 @@
-Demos
------
+.. _start:
 
-The following demos provide a background in the different features and options in pyrosim.
+Getting Started
+===============
+
+The following examples provide a background in the different features and options in pyrosim.
 All demos assume you have imported pyrosim correctly. If you have installed pyrosim using
 the pip method in the pyrosim root directory::
 
@@ -26,4 +28,4 @@ This can simply be done by using
 .. toctree::
    :glob:
 
-   demos/*
+   start/*
