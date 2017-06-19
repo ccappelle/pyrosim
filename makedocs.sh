@@ -1,6 +1,9 @@
 #!/bin/sh
 
-git commit -a -m "Documentation update $1"
+DATE=$(date +%Y-%m-%d)
+echo "Documentation update $DATE"
+
+git commit -a -m "Documentation update $DATE"
 git push origin master
 
 cd docs
@@ -8,5 +11,5 @@ make html
 
 cd ../../pyrosim-docs/html
 git add .
-git commit -m "Committed Documentation $1"
+git commit -m "Documentation update $DATE"
 git push origin gh-pages
