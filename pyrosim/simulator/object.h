@@ -112,12 +112,8 @@ private:
 
 	void CreateBody(dWorldID world, dSpaceID space);
 	void CreateBox(dWorldID world, dSpaceID space);
-	void CreateCylinder(dWorldID world, dSpaceID space);
+	void CreateCylinder(dWorldID world, dSpaceID space, bool capsule);
 	void CreateSphere(dWorldID world, dSpaceID space);
-
-	void DrawBox(void);
-	void DrawCylinder(void);
-	void DrawSphere(void);
 
 	OBJECT *Find_Closest_Light_Source(int numObjects, OBJECT **objects);
 

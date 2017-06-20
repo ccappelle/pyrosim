@@ -11,6 +11,7 @@ extern int SLIDER;
 extern int BOX;
 extern int CYLINDER;
 extern int SPHERE;
+extern int CAPSULE;
 
 extern int MAX_OBJECTS;
 extern int MAX_JOINTS;
@@ -127,7 +128,8 @@ void ENVIRONMENT::Read_From_Python(dWorldID world, dSpaceID space, Data *data)
                 else if ( strcmp(incomingString,"Cylinder") == 0 )
 
                         Create_Object(world,space,numberOfBodies,CYLINDER);
-
+                else if ( strcmp(incomingString,"Capsule") == 0)
+                        Create_Object(world,space,numberOfBodies,CAPSULE);
                 else if ( strcmp(incomingString,"Sphere") == 0)
                         Create_Object(world,space,numberOfBodies, SPHERE);
 
@@ -231,9 +233,9 @@ void ENVIRONMENT::Write_Sensor_Data(int evalPeriod) {
 
 // ----------------------- Private methods ---------------------------
 
-void ENVIRONMENT::Add_Motor_Neuron(int ID, int jointID, double tau, double alpha) {
+void ENVIRONMENT::Add_Motor_Neuron(int ID, int jointID, double tau, double alpha, double start) {
 
-        NEURON *motorNeuron = neuralNetwork->Add_Motor_Neuron(ID,tau, alpha);
+        NEURON *motorNeuron = neuralNetwork->Add_Motor_Neuron(ID,tau, alpha,start);
 
         Connect_Motor_Neuron_to_Joint( jointID, motorNeuron );
 }
@@ -355,10 +357,13 @@ void ENVIRONMENT::Create_Motor_Neuron(void) {
     double alpha;
     std::cin >> alpha;
 
+    double start;
+    std::cin >> start;
+
     if ( neuralNetwork == NULL )
         Create_Neural_Network();
 
-    Add_Motor_Neuron(ID,jointID,tau,alpha);
+    Add_Motor_Neuron(ID,jointID,tau,alpha,start);
 }
 
 void ENVIRONMENT::Create_Neural_Network(void) {

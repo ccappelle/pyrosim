@@ -15,6 +15,7 @@
  int	BOX		= 0;
  int	CYLINDER	= 1;
  int SPHERE = 2;
+ int CAPSULE = 3;
 
  int HINGE = 0;
  int SLIDER = 1;

@@ -324,8 +324,9 @@ class Simulator(object):
 
     def send_cylinder(self, x=0, y=0, z=0, mass=1.0,
                       r1=0, r2=0, r3=1, length=1.0,
-                      radius=0.1, collision_group=0,
-                      r=1, g=1, b=1):
+                      radius=0.1, collision_group='default',
+                      r=1, g=1, b=1,
+                      capped=True):
         """Send cylinder body to the simulator
 
         Parameters
@@ -365,6 +366,10 @@ class Simulator(object):
                 The amount of the color green in the body (g in [0,1])
         b       : float, optional
                 The amount of the color blue in the body (b in [0,1])
+        capped  : bool, optional
+                Use a hemisphere cap at the end of the cylinder or not.
+                Collision detection in flat-ended cylinders usually takes
+                more effort.
 
         Returns
         -------
@@ -384,7 +389,12 @@ class Simulator(object):
         body_id = self._num_bodies
         self._num_bodies += 1
 
-        self._send('Cylinder',
+        if capped:
+            name = 'Capsule'
+        else:
+            name = 'Cylinder'
+
+        self._send(name,
                    body_id,
                    x, y, z,
                    mass,
@@ -568,7 +578,8 @@ class Simulator(object):
 
         return neuron_id
 
-    def send_motor_neuron(self, joint_id=0, tau=1.0, alpha=1.0):
+    def send_motor_neuron(self, joint_id=0, tau=1.0, alpha=1.0,
+                          start_value=0.0):
         """Send motor neurons to simulator
 
         Motor neurons are neurons which connecto to a specified joint and 
@@ -581,15 +592,23 @@ class Simulator(object):
 
         Parameters
         ----------
-        joint_id  : int, optional
+        joint_id    : int, optional
                 The joint id tag of the joint we want the neuron to connect to
-        tau      :
+        tau         : float, optional
                 The 'learning rate' of the neuron. Increasing tau increases
                 how much of value of the neuron at the current time step comes
                 from external inputs vs. the value of the neuron at the 
-                previous time step
-        alpha    :
+                previous time step. (default 1)
+        alpha       : float, optional
                 The 'rememberance rate' of the neuron. Usually 1 or 0.
+                An alpha of 1 helps reduce jitter in positionally controlled
+                joints. (default is 1)
+        start_value : float, optional
+                The starting value of the neuron. This value is specified
+                to mitigate the problem of a joint starting not on its midpoint
+                for positionally controlled joints. Set to +1 or greater for 
+                close to the 'hi' range and -1 or less for close to 'lo' range
+                (default is 0.0)
 
         Returns
         -------
@@ -604,8 +623,8 @@ class Simulator(object):
         self._num_neurons += 1
 
         self._send('MotorNeuron',
-                   neuron_id,  joint_id, 
-                   tau, alpha)
+                   neuron_id,  joint_id,
+                   tau, alpha, start_value)
 
         return neuron_id
 
@@ -716,6 +735,8 @@ class Simulator(object):
             how much of value of the neuron at the current time step comes
             from external inputs vs. the value of the neuron at the 
             previous time step.
+        alpha    :
+            The 'rememberance rate' of the neuron. Usually 1 or 0.
 
         Returns
         -------

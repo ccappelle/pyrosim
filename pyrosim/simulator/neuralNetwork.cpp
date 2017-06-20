@@ -52,10 +52,10 @@ void NEURAL_NETWORK::Add_Hidden_Neuron(int ID, double tau, double alpha) {
 	numNeurons++;
 }
 
-NEURON *NEURAL_NETWORK::Add_Motor_Neuron(int ID, double tau, double alpha) {
+NEURON *NEURAL_NETWORK::Add_Motor_Neuron(int ID, double tau, double alpha, double start) {
 
         NEURON *newNeuron = new NEURON(ID,MOTOR_NEURON,tau, alpha);
-
+        newNeuron->Set(start);
         neurons[numNeurons] = newNeuron;
 
 	numNeurons++;

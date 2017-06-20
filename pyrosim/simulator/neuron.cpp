@@ -100,7 +100,7 @@ void NEURON::Reset(int timeStep) {
         	
         	value = timeValues[timeStep];
         }
-	else
+	else if( timeStep >0)
 		value = 0.0;
 }
 

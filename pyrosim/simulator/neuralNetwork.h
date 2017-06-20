@@ -27,7 +27,7 @@ public:
 
 	void   Add_Hidden_Neuron(int ID, double tau, double alpha);
 
-	NEURON *Add_Motor_Neuron(int ID, double tau, double alpha);
+	NEURON *Add_Motor_Neuron(int ID, double tau, double alpha, double start);
 
 	NEURON *Add_Sensor_Neuron(int ID, int svIndex);
 
