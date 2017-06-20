@@ -3,6 +3,8 @@
 Sensors
 =======
 
+.. _sensor-basics:
+
 Basics
 ------
 

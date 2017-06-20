@@ -23,7 +23,7 @@ Requirements:
 	
 	Pyrosim currently only requires numpy.
 
-Contents:
+Learn Pyrosim:
 
 .. toctree::
    :maxdepth: 2
@@ -32,10 +32,10 @@ Contents:
    videos
    code
 
+
 Indices and tables
 ==================
 
 * :ref:`genindex`
 * :ref:`modindex`
-* :ref:`search`
 

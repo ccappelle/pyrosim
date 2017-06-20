@@ -442,7 +442,7 @@ intergroup ([i,j]) collisions are enabled
 
 <dl class="method">
 <dt id="pyrosim.Simulator.send_cylinder">
-<code class="descname">send_cylinder</code><span class="sig-paren">(</span><em>x=0</em>, <em>y=0</em>, <em>z=0</em>, <em>mass=1.0</em>, <em>r1=0</em>, <em>r2=0</em>, <em>r3=1</em>, <em>length=1.0</em>, <em>radius=0.1</em>, <em>collision_group=0</em>, <em>r=1</em>, <em>g=1</em>, <em>b=1</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pyrosim.html#Simulator.send_cylinder"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyrosim.Simulator.send_cylinder" title="Permalink to this definition">¶</a></dt>
+<code class="descname">send_cylinder</code><span class="sig-paren">(</span><em>x=0</em>, <em>y=0</em>, <em>z=0</em>, <em>mass=1.0</em>, <em>r1=0</em>, <em>r2=0</em>, <em>r3=1</em>, <em>length=1.0</em>, <em>radius=0.1</em>, <em>collision_group='default'</em>, <em>r=1</em>, <em>g=1</em>, <em>b=1</em>, <em>capped=True</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pyrosim.html#Simulator.send_cylinder"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyrosim.Simulator.send_cylinder" title="Permalink to this definition">¶</a></dt>
 <dd><p>Send cylinder body to the simulator</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
@@ -471,6 +471,9 @@ The default group is labeled &#8216;default&#8217;.</li>
 <li><strong>r</strong> &#8211; The amount of the color red in the body (r in [0,1])</li>
 <li><strong>g</strong> (<em>float, optional</em>) &#8211; The amount of the color green in the body (g in [0,1])</li>
 <li><strong>b</strong> (<em>float, optional</em>) &#8211; The amount of the color blue in the body (b in [0,1])</li>
+<li><strong>capped</strong> (<em>bool, optional</em>) &#8211; Use a hemisphere cap at the end of the cylinder or not.
+Collision detection in flat-ended cylinders usually takes
+more effort.</li>
 </ul>
 </td>
 </tr>
@@ -582,14 +585,20 @@ output neurons (motors)</p>
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>tau</strong> (<em>float, optional</em>) &#8211; The &#8216;learning rate&#8217; of the neuron. Increasing tau increases
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>tau</strong> (<em>float, optional</em>) &#8211; The &#8216;learning rate&#8217; of the neuron. Increasing tau increases
 how much of value of the neuron at the current time step comes
 from external inputs vs. the value of the neuron at the
-previous time step.</td>
+previous time step.</li>
+<li><strong>alpha</strong> &#8211; The &#8216;rememberance rate&#8217; of the neuron. Usually 1 or 0.</li>
+</ul>
+</td>
 </tr>
-<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">The id tag of the neuron</td>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first">The id tag of the neuron</p>
+</td>
 </tr>
-<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body">int</td>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><p class="first last">int</p>
+</td>
 </tr>
 </tbody>
 </table>
@@ -684,7 +693,7 @@ actuation rate.</li>
 
 <dl class="method">
 <dt id="pyrosim.Simulator.send_motor_neuron">
-<code class="descname">send_motor_neuron</code><span class="sig-paren">(</span><em>joint_id=0</em>, <em>tau=1.0</em>, <em>alpha=1.0</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pyrosim.html#Simulator.send_motor_neuron"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyrosim.Simulator.send_motor_neuron" title="Permalink to this definition">¶</a></dt>
+<code class="descname">send_motor_neuron</code><span class="sig-paren">(</span><em>joint_id=0</em>, <em>tau=1.0</em>, <em>alpha=1.0</em>, <em>start_value=0.0</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pyrosim.html#Simulator.send_motor_neuron"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyrosim.Simulator.send_motor_neuron" title="Permalink to this definition">¶</a></dt>
 <dd><p>Send motor neurons to simulator</p>
 <p>Motor neurons are neurons which connecto to a specified joint and
 determine how the joint moves every time step of simulation
@@ -699,11 +708,18 @@ will cause the joint to break.</p>
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
 <li><strong>joint_id</strong> (<em>int, optional</em>) &#8211; The joint id tag of the joint we want the neuron to connect to</li>
-<li><strong>tau</strong> &#8211; The &#8216;learning rate&#8217; of the neuron. Increasing tau increases
+<li><strong>tau</strong> (<em>float, optional</em>) &#8211; The &#8216;learning rate&#8217; of the neuron. Increasing tau increases
 how much of value of the neuron at the current time step comes
 from external inputs vs. the value of the neuron at the
-previous time step</li>
-<li><strong>alpha</strong> &#8211; The &#8216;rememberance rate&#8217; of the neuron. Usually 1 or 0.</li>
+previous time step. (default 1)</li>
+<li><strong>alpha</strong> (<em>float, optional</em>) &#8211; The &#8216;rememberance rate&#8217; of the neuron. Usually 1 or 0.
+An alpha of 1 helps reduce jitter in positionally controlled
+joints. (default is 1)</li>
+<li><strong>start_value</strong> (<em>float, optional</em>) &#8211; The starting value of the neuron. This value is specified
+to mitigate the problem of a joint starting not on its midpoint
+for positionally controlled joints. Set to +1 or greater for
+close to the &#8216;hi&#8217; range and -1 or less for close to &#8216;lo&#8217; range
+(default is 0.0)</li>
 </ul>
 </td>
 </tr>
@@ -1062,6 +1078,7 @@ the simulation</td>
       <script type="text/javascript" src="_static/jquery.js"></script>
       <script type="text/javascript" src="_static/underscore.js"></script>
       <script type="text/javascript" src="_static/doctools.js"></script>
+      <script type="text/javascript" src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
 
   
 

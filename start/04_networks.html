@@ -96,7 +96,17 @@
 <li class="toctree-l2"><a class="reference internal" href="01_body.html">Bodies</a></li>
 <li class="toctree-l2"><a class="reference internal" href="02_joints.html">Joints</a></li>
 <li class="toctree-l2"><a class="reference internal" href="03_sensors.html">Sensors</a></li>
-<li class="toctree-l2 current"><a class="current reference internal" href="#">Neural Network</a></li>
+<li class="toctree-l2 current"><a class="current reference internal" href="#">Neural Network</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#basics">Basics</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#sensor-neurons">Sensor Neurons</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#other-input-neurons">Other Input Neurons</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#hidden-neurons">Hidden Neurons</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#motor-neurons">Motor Neurons</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="#updating">Updating</a></li>
+</ul>
+</li>
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="../videos.html">Videos</a></li>
@@ -166,7 +176,94 @@
             
   <div class="section" id="neural-network">
 <span id="network"></span><h1>Neural Network<a class="headerlink" href="#neural-network" title="Permalink to this headline">¶</a></h1>
-<p>Coming soon :)</p>
+<p>Pyrosim currently only uses an artificial neural networks to control the robots.
+This page is meant to be less of a tutorial on ANNs and more about pyrosim&#8217;s specific
+implementation of ANNs. However, there should be enough information to supply a basic
+understanding of how simple ANNs function. There are many resources for learning more
+about neural networks and <a href="http://colah.github.io/" target="_blank">Christopher Olah's blog</a> is one of the prettier ones.</p>
+<div class="section" id="basics">
+<h2>Basics<a class="headerlink" href="#basics" title="Permalink to this headline">¶</a></h2>
+<p>ANNs are directed networks where the nodes are called neurons and the edges
+are called synapses (like a brain). They have many shapes and forms but will
+generally consist of some variation of input, output, and hidden neurons.
+Input neurons recieve their value from some pre-specified method (like sensory input).
+The values of the rest of the neurons are then updated based on the values comming
+from all of the input synapses. These values are then computed using the
+<a class="reference internal" href="#update-rule"><span class="std std-ref">activation function</span></a> contained within the neuron.
+This value is then sent out along the outgoing synapses and multiplied by
+the specified synaptic weight. Values are then read from the output neurons,
+giving the final result.</p>
+<p>There are six built-in types of neurons in pyrosim</p>
+<ol class="arabic simple">
+<li>Sensor</li>
+<li>Motor</li>
+<li>Hidden</li>
+<li>Bias</li>
+<li>Function</li>
+<li>User input</li>
+</ol>
+<p>The ANNs used for robotic control tend not to have the strict input output neurons
+as in many networks used for machine learning. In pyrosim, the sensor, bias, function, and
+user input neurons are all types of input neurons which receive their values
+from different sources.</p>
+<div class="section" id="sensor-neurons">
+<h3>Sensor Neurons<a class="headerlink" href="#sensor-neurons" title="Permalink to this headline">¶</a></h3>
+<p>Sensor neurons are updated based on the value of the specified sensor and <a class="reference internal" href="03_sensors.html#sensor-basics"><span class="std std-ref">svi</span></a>.
+This value is inputed to the network raw, meaning no thresholding will occur.</p>
+<p>For example, if we want to input the distance from a ray sensor and the ray sensor has the id
+<code class="code docutils literal"><span class="pre">ray_sensor_handle</span></code> we can use:</p>
+<div class="highlight-python"><div class="highlight"><pre><span></span><span class="n">dist_neuron</span> <span class="o">=</span> <span class="n">sim</span><span class="o">.</span><span class="n">send_sensor_neuron</span><span class="p">(</span><span class="n">ray_sensor_handle</span><span class="p">,</span> <span class="n">svi</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>This will send a neuron to the simulation which, at every time step,
+reads the value from the ray sensor specified
+by by <code class="code docutils literal"><span class="pre">ray_sensor_handle</span></code> at <code class="code docutils literal"><span class="pre">svi=0</span></code> (which is the distance component of the ray sensor)
+and assumes that value.</p>
+</div>
+<div class="section" id="other-input-neurons">
+<h3>Other Input Neurons<a class="headerlink" href="#other-input-neurons" title="Permalink to this headline">¶</a></h3>
+<p>Bias, function, and user input neurons are the other types of input neurons. Unlike the sensor neuron
+They recieve their input from outside the simulation. Bias neurons maintain a constant value of 1.
+Function neurons get their value from a user-specified function mapped over the appropriate <code class="code docutils literal"><span class="pre">eval_time</span></code>
+and <code class="code docutils literal"><span class="pre">dt</span></code>. Finally, user input neurons receive their value from a user-specified single value or
+vector of values.</p>
+</div>
+<div class="section" id="hidden-neurons">
+<h3>Hidden Neurons<a class="headerlink" href="#hidden-neurons" title="Permalink to this headline">¶</a></h3>
+<p>Hidden neurons are basic neuron units which update according to the normal rules. They are called
+&#8216;hidden&#8217; because there value at any given time step is not known or important to the user.</p>
+</div>
+<div class="section" id="motor-neurons">
+<h3>Motor Neurons<a class="headerlink" href="#motor-neurons" title="Permalink to this headline">¶</a></h3>
+<p>Motor neurons are the closest thing to traditional output neurons in pyrosim. The value of the motor neuron
+is read by the specified joint and then the joint actuates accordingly.</p>
+<p><strong>Notes about motor neurons and joints</strong>:</p>
+<blockquote>
+<div><ul class="simple">
+<li>Motor neurons which are not connected by synapses will have a constant value of 0. This means they will try to keep the joint at the midpoint of the joint range if the joint is using position control or at velocity 0 if not. Changing the <code class="code docutils literal"><span class="pre">torque</span></code> parameter of the joint will change how effective the joint is at maintaining its position.</li>
+<li>If a motor neuron is attached to a joint which is using positional control, it is important to be wary of where the joint is initialized in relation to its limits. If the starting point of the joint is near its <code class="code docutils literal"><span class="pre">hi</span></code> or <code class="code docutils literal"><span class="pre">lo</span></code> cutoffs, the joint will immediately try to position to the midpoint of its range and the simulation will most likely break. <em>(Still mostly untested) This problem can be partially mitigated by changing the</em> <code class="code docutils literal"><span class="pre">start_value</span></code> <em>parameter when specifying the motor neuron</em>. If the joint is not using position control then this is not a problem.</li>
+</ul>
+</div></blockquote>
+</div>
+</div>
+<div class="section" id="updating">
+<span id="update-rule"></span><h2>Updating<a class="headerlink" href="#updating" title="Permalink to this headline">¶</a></h2>
+<p>Hidden and motor neurons are updated every time step based on the input values
+and the value of the neuron at the previous time step. The activation function is as
+follows:</p>
+<div class="math">
+\[n_i^{(t)} = \sigma\left(\alpha n_i^{(t-1)} + \tau \sum_{j\in J} w_{ji} n_j^{(t-1)}\right)\]</div>
+<p>Parameters:</p>
+<blockquote>
+<div><ul class="simple">
+<li><span class="math">\(n_i^{(t)}\)</span> - neuron <span class="math">\(i\)</span> at time step <span class="math">\(t\)</span>.</li>
+<li><span class="math">\(J\)</span> - the set of neurons which input to <span class="math">\(n_i\)</span>.</li>
+<li><span class="math">\(w_{ji}\)</span> - the synaptic weight from neuron <span class="math">\(j\)</span> to <span class="math">\(i\)</span></li>
+<li><span class="math">\(\alpha,\tau\)</span> - user defined learning parameters. Usually 0 or 1.</li>
+<li><span class="math">\(\sigma\)</span> - a sigmoid function. Currently pyrosim only uses <span class="math">\(\mathbf{\tanh}\)</span>.</li>
+</ul>
+</div></blockquote>
+</div>
 </div>
 
 
@@ -223,6 +320,7 @@
       <script type="text/javascript" src="../_static/jquery.js"></script>
       <script type="text/javascript" src="../_static/underscore.js"></script>
       <script type="text/javascript" src="../_static/doctools.js"></script>
+      <script type="text/javascript" src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
 
   
 
