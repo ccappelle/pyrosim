@@ -36,7 +36,7 @@
   
     <link rel="top" title="pyrosim 0.1.1 documentation" href="../index.html"/>
         <link rel="up" title="Getting Started" href="../start.html"/>
-        <link rel="next" title="Videos" href="../videos.html"/>
+        <link rel="next" title="Advanced Options" href="../advanced.html"/>
         <link rel="prev" title="Sensors" href="03_sensors.html"/> 
 
   
@@ -91,6 +91,7 @@
             
             
               <ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../installation.html">Installation</a></li>
 <li class="toctree-l1 current"><a class="reference internal" href="../start.html">Getting Started</a><ul class="current">
 <li class="toctree-l2"><a class="reference internal" href="00_empty.html">Simulator Settings</a></li>
 <li class="toctree-l2"><a class="reference internal" href="01_body.html">Bodies</a></li>
@@ -105,10 +106,12 @@
 </ul>
 </li>
 <li class="toctree-l3"><a class="reference internal" href="#updating">Updating</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#double-pendulum-part-iii">Double Pendulum Part III</a></li>
 </ul>
 </li>
 </ul>
 </li>
+<li class="toctree-l1"><a class="reference internal" href="../advanced.html">Advanced Options</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../videos.html">Videos</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../code.html">Simulator Documentation</a></li>
 </ul>
@@ -185,14 +188,9 @@ about neural networks and <a href="http://colah.github.io/" target="_blank">Chri
 <h2>Basics<a class="headerlink" href="#basics" title="Permalink to this headline">¶</a></h2>
 <p>ANNs are directed networks where the nodes are called neurons and the edges
 are called synapses (like a brain). They have many shapes and forms but will
-generally consist of some variation of input, output, and hidden neurons.
-Input neurons recieve their value from some pre-specified method (like sensory input).
-The values of the rest of the neurons are then updated based on the values comming
-from all of the input synapses. These values are then computed using the
-<a class="reference internal" href="#update-rule"><span class="std std-ref">activation function</span></a> contained within the neuron.
-This value is then sent out along the outgoing synapses and multiplied by
-the specified synaptic weight. Values are then read from the output neurons,
-giving the final result.</p>
+generally consist of some variation of input, output, and hidden neurons.</p>
+<p>Input neurons receive their node value from some pre-specified method (like sensory input).
+The node values of the rest of the neurons are then updated based on the synaptic values coming from all of the input synapses. Synaptic values are calculated by multiplying the synaptic weight from the source neuron to the target neuron by the node value of the source neuron. These values are then computed using the <a class="reference internal" href="#update-rule"><span class="std std-ref">activation function</span></a> contained within the neuron. Most normally this is a summation of all the synaptic weight of all the inputs and a squashing function to keep the value within some range. The target neuron now contains its updated value and the rest of the network is updated in this same manner. After the network has been updated, node values are then generally read from the output neurons, giving the final result.</p>
 <p>There are six built-in types of neurons in pyrosim</p>
 <ol class="arabic simple">
 <li>Sensor</li>
@@ -264,6 +262,30 @@ follows:</p>
 </ul>
 </div></blockquote>
 </div>
+<div class="section" id="double-pendulum-part-iii">
+<h2>Double Pendulum Part III<a class="headerlink" href="#double-pendulum-part-iii" title="Permalink to this headline">¶</a></h2>
+<div class="literal-block-wrapper container" id="dp-network-py">
+<div class="code-block-caption"><span class="caption-text">dp-network.py</span><a class="headerlink" href="#dp-network-py" title="Permalink to this code">¶</a></div>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="c1"># network is designed to actuate hinge joints in</span>
+<span class="c1"># response to the slider joint moving</span>
+<span class="n">bias_neuron</span> <span class="o">=</span> <span class="n">sim</span><span class="o">.</span><span class="n">send_bias_neuron</span><span class="p">()</span>
+<span class="n">sensor_neuron</span> <span class="o">=</span> <span class="n">sim</span><span class="o">.</span><span class="n">send_sensor_neuron</span><span class="p">(</span><span class="n">prop_sensor</span><span class="p">)</span>
+<span class="n">motor_1_neuron</span> <span class="o">=</span> <span class="n">sim</span><span class="o">.</span><span class="n">send_motor_neuron</span><span class="p">(</span><span class="n">world_joint</span><span class="p">)</span>
+<span class="n">motor_2_neuron</span> <span class="o">=</span> <span class="n">sim</span><span class="o">.</span><span class="n">send_motor_neuron</span><span class="p">(</span><span class="n">hinge_joint</span><span class="p">)</span>
+
+<span class="c1"># simple synapses connect sensor to motor</span>
+<span class="c1"># bias neurons get the ball rolling</span>
+<span class="n">sim</span><span class="o">.</span><span class="n">send_synapse</span><span class="p">(</span><span class="n">bias_neuron</span><span class="p">,</span> <span class="n">motor_1_neuron</span><span class="p">,</span> <span class="o">.</span><span class="mi">001</span><span class="p">)</span>
+<span class="n">sim</span><span class="o">.</span><span class="n">send_synapse</span><span class="p">(</span><span class="n">bias_neuron</span><span class="p">,</span> <span class="n">motor_2_neuron</span><span class="p">,</span> <span class="o">.</span><span class="mi">001</span><span class="p">)</span>
+<span class="n">sim</span><span class="o">.</span><span class="n">send_synapse</span><span class="p">(</span><span class="n">sensor_neuron</span><span class="p">,</span> <span class="n">motor_1_neuron</span><span class="p">,</span> <span class="mf">1.0</span><span class="p">)</span>
+<span class="n">sim</span><span class="o">.</span><span class="n">send_synapse</span><span class="p">(</span><span class="n">sensor_neuron</span><span class="p">,</span> <span class="n">motor_2_neuron</span><span class="p">,</span> <span class="mf">1.0</span><span class="p">)</span>
+
+<span class="n">sim</span><span class="o">.</span><span class="n">start</span><span class="p">()</span>
+<span class="n">results</span> <span class="o">=</span> <span class="n">sim</span><span class="o">.</span><span class="n">wait_to_finish</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+<iframe width="100%" height="315" src="https://www.youtube.com/embed/G_ZNbsSY0sI?rel=0" frameborder="0" allowfullscreen></iframe></div>
 </div>
 
 
@@ -276,7 +298,7 @@ follows:</p>
   
     <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
       
-        <a href="../videos.html" class="btn btn-neutral float-right" title="Videos" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
+        <a href="../advanced.html" class="btn btn-neutral float-right" title="Advanced Options" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
       
       
         <a href="03_sensors.html" class="btn btn-neutral" title="Sensors" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>

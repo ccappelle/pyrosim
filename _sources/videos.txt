@@ -5,7 +5,7 @@ Videos
 
 **Pyrosim in action**
 
-The following videos are an ssortment of independent 
+The following videos are an assortment of independent 
 projects in evolutionary robotics.
 
 |

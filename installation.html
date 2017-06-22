@@ -8,10 +8,12 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>Get Started &mdash; pyrosim 0.1.1 documentation</title>
+  <title>Installation &mdash; pyrosim 0.1.1 documentation</title>
   
 
   
+  
+    <link rel="shortcut icon" href="_static/icon32-scaled.ico"/>
   
   
   
@@ -33,7 +35,7 @@
 
   
     <link rel="top" title="pyrosim 0.1.1 documentation" href="index.html"/>
-        <link rel="next" title="Simulator Settings" href="start/00_empty.html"/>
+        <link rel="next" title="Getting Started" href="start.html"/>
         <link rel="prev" title="Welcome to pyrosim’s documentation!" href="index.html"/> 
 
   
@@ -88,14 +90,10 @@
             
             
               <ul class="current">
-<li class="toctree-l1 current"><a class="current reference internal" href="#">Get Started</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="start/00_empty.html">Simulator Settings</a></li>
-<li class="toctree-l2"><a class="reference internal" href="start/01_body.html">Bodies</a></li>
-<li class="toctree-l2"><a class="reference internal" href="start/02_joints.html">Joints</a></li>
-<li class="toctree-l2"><a class="reference internal" href="start/03_sensors.html">Sensors</a></li>
-<li class="toctree-l2"><a class="reference internal" href="start/04_networks.html">Neural Network</a></li>
-</ul>
-</li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">Installation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="start.html">Getting Started</a></li>
+<li class="toctree-l1"><a class="reference internal" href="advanced.html">Advanced Options</a></li>
+<li class="toctree-l1"><a class="reference internal" href="videos.html">Videos</a></li>
 <li class="toctree-l1"><a class="reference internal" href="code.html">Simulator Documentation</a></li>
 </ul>
 
@@ -141,14 +139,12 @@
     
       <li><a href="index.html">Docs</a> &raquo;</li>
         
-      <li>Get Started</li>
+      <li>Installation</li>
     
     
       <li class="wy-breadcrumbs-aside">
         
             
-            <a href="_sources/demos.txt" rel="nofollow"> View page source</a>
-          
         
       </li>
     
@@ -160,50 +156,20 @@
           <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
            <div itemprop="articleBody">
             
-  <div class="section" id="get-started">
-<span id="start"></span><h1>Get Started<a class="headerlink" href="#get-started" title="Permalink to this headline">¶</a></h1>
-<p>The following examples provide a background in the different features and options in pyrosim.
-All demos assume you have imported pyrosim correctly. If you have installed pyrosim using
-the pip method in the pyrosim root directory:</p>
-<div class="highlight-default"><div class="highlight"><pre><span></span>$ pip install -e .
+  <div class="section" id="installation">
+<span id="id1"></span><h1>Installation<a class="headerlink" href="#installation" title="Permalink to this headline">¶</a></h1>
+<p>Currently, the make files in pyrosim are only set up to install ODE on Linux and Mac machines.
+After you have downloaded the repo from <a class="reference external" href="http://github.com/ccappelle/pyrosim">github</a> go into
+the pyrosim root folder (contains build.sh). Then run</p>
+<div class="highlight-bash"><div class="highlight"><pre><span></span>$ sh build.sh
 </pre></div>
 </div>
-<p>you should be able to simply use</p>
-<div class="highlight-python"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">pyrosim</span>
+<p>This will build ODE and compile the pyrosim C++ code creating the executable <cite>simulator</cite>.
+You can now use pyrosim as a local module or import it system wide using</p>
+<div class="highlight-bash"><div class="highlight"><pre><span></span>$ pip install -e .
 </pre></div>
 </div>
-<p>If you do not want to use pip you will have to append the root directory of pyrosim to your
-path before importing it (the root directory contains the setup.py file).
-This can simply be done by using</p>
-<div class="highlight-python"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">sys</span>
-<span class="n">sys</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">insert</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="s1">&#39;path/to/pyrosim/root&#39;</span><span class="p">)</span>
-<span class="kn">import</span> <span class="nn">pyrosim</span>
-</pre></div>
-</div>
-<div class="toctree-wrapper compound">
-<ul>
-<li class="toctree-l1"><a class="reference internal" href="start/00_empty.html">Simulator Settings</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="start/00_empty.html#empty-simulator">Empty Simulator</a></li>
-<li class="toctree-l2"><a class="reference internal" href="start/00_empty.html#running-headless">Running Headless</a></li>
-<li class="toctree-l2"><a class="reference internal" href="start/00_empty.html#timing-parameters">Timing Parameters</a></li>
-<li class="toctree-l2"><a class="reference internal" href="start/00_empty.html#camera-parameters">Camera Parameters</a></li>
-</ul>
-</li>
-<li class="toctree-l1"><a class="reference internal" href="start/01_body.html">Bodies</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="start/01_body.html#sending-bodies">Sending bodies</a></li>
-<li class="toctree-l2"><a class="reference internal" href="start/01_body.html#body-position">Body Position</a></li>
-<li class="toctree-l2"><a class="reference internal" href="start/01_body.html#body-dimensions">Body Dimensions</a></li>
-<li class="toctree-l2"><a class="reference internal" href="start/01_body.html#body-ids">Body IDs</a></li>
-</ul>
-</li>
-<li class="toctree-l1"><a class="reference internal" href="start/02_joints.html">Joints</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="start/02_joints.html#double-pendulum">Double Pendulum</a></li>
-</ul>
-</li>
-<li class="toctree-l1"><a class="reference internal" href="start/03_sensors.html">Sensors</a></li>
-<li class="toctree-l1"><a class="reference internal" href="start/04_networks.html">Neural Network</a></li>
-</ul>
-</div>
+<p>Support for windows using MinGW should be coming shortly.</p>
 </div>
 
 
@@ -216,7 +182,7 @@ This can simply be done by using</p>
   
     <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
       
-        <a href="start/00_empty.html" class="btn btn-neutral float-right" title="Simulator Settings" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
+        <a href="start.html" class="btn btn-neutral float-right" title="Getting Started" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
       
       
         <a href="index.html" class="btn btn-neutral" title="Welcome to pyrosim’s documentation!" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
@@ -260,6 +226,7 @@ This can simply be done by using</p>
       <script type="text/javascript" src="_static/jquery.js"></script>
       <script type="text/javascript" src="_static/underscore.js"></script>
       <script type="text/javascript" src="_static/doctools.js"></script>
+      <script type="text/javascript" src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
 
   
 

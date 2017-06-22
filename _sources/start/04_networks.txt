@@ -19,13 +19,9 @@ Basics
 ANNs are directed networks where the nodes are called neurons and the edges 
 are called synapses (like a brain). They have many shapes and forms but will
 generally consist of some variation of input, output, and hidden neurons.
-Input neurons recieve their value from some pre-specified method (like sensory input).
-The values of the rest of the neurons are then updated based on the values comming
-from all of the input synapses. These values are then computed using the 
-:ref:`activation function <update-rule>` contained within the neuron. 
-This value is then sent out along the outgoing synapses and multiplied by
-the specified synaptic weight. Values are then read from the output neurons, 
-giving the final result.
+
+Input neurons receive their node value from some pre-specified method (like sensory input).
+The node values of the rest of the neurons are then updated based on the synaptic values coming from all of the input synapses. Synaptic values are calculated by multiplying the synaptic weight from the source neuron to the target neuron by the node value of the source neuron. These values are then computed using the :ref:`activation function <update-rule>` contained within the neuron. Most normally this is a summation of all the synaptic weight of all the inputs and a squashing function to keep the value within some range. The target neuron now contains its updated value and the rest of the network is updated in this same manner. After the network has been updated, node values are then generally read from the output neurons, giving the final result.
 
 
 There are six built-in types of neurons in pyrosim
@@ -107,5 +103,14 @@ Parameters:
     * :math:`\alpha,\tau` - user defined learning parameters. Usually 0 or 1.
     * :math:`\sigma` - a sigmoid function. Currently pyrosim only uses :math:`\mathbf{\tanh}`.
 
+Double Pendulum Part III
+------------------------
 
+.. literalinclude:: /../demos/double-pendulum/dp-network.py
+    :lines: 52-
+    :caption: dp-network.py
+
+.. raw:: html
+
+    <iframe width="100%" height="315" src="https://www.youtube.com/embed/G_ZNbsSY0sI?rel=0" frameborder="0" allowfullscreen></iframe>
 
