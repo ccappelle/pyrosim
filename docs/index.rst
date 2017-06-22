@@ -28,7 +28,9 @@ Learn Pyrosim:
 .. toctree::
    :maxdepth: 2
 
+   installation
    start
+   advanced
    videos
    code
 

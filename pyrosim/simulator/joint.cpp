@@ -79,7 +79,6 @@ void JOINT::Actuate(void) {
     	else
       {
             dJointSetHingeParam(joint,dParamVel, 0.5*speed*desiredTarget);
-            std::cerr<<desiredTarget<< "\n";
         }
 	   dJointSetHingeParam(joint,dParamFMax, torque);
     }
