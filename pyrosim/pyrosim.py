@@ -54,6 +54,8 @@ class Simulator(object):
         self._num_sensors = 0
         self._num_neurons = 0
         self._collision_groups = []
+        self._collision_matrix = None
+        self._matrix_created = False
 
         self.play_paused = play_paused
         self.play_blind = play_blind
@@ -90,6 +92,89 @@ class Simulator(object):
         self.send_camera(xyz, hpr)
 
 # ------Getters-------------------------
+    def create_collision_matrix(self, collision_type='none'):
+        """Create a predefined collision matrix
+        
+        Parameters
+        ----------
+        collision_type : str, optional
+            Creates a collision matrix specifying the type of 
+            collision between groups desired. There are 4 options
+            'none' - no collision
+            'inter' - collisions on only between different groups
+            'intra' - collisions on only within groups
+            'all' - both inter and intra group collisions
+
+        Returns
+        -------
+        bool
+            True if successful
+        """
+
+        assert not self._matrix_created, ('Collision matrix' +
+                                          ' already created')
+
+        self._matrix_created = True
+
+        num_groups = self.get_num_groups()
+
+        self._collision_matrix = np.zeros((num_groups, num_groups),
+                                          dtype='int8')
+        if collision_type == 'all':
+            self._collision_matrix += 1
+        elif collision_type == 'inter':
+            indices = np.diag_indices(num_groups)
+            self._collision_matrix[indices] = 1
+        elif collision_type == 'intra':
+            self._collision_matrix += 1
+            indices = np.diag_indices
+            self._collision_matrix[indices] = 0
+        elif collision_type == 'none':
+            pass
+
+        return True
+
+    def assign_collision(self, group_1, group_2):
+        """Create collision potential between group 1 and group 2
+        
+        Parameters
+        ----------
+        group_1 : str
+            The string handle of group 1
+        group_2 : str
+            The string handle of group 2
+
+        Returns
+        -------
+        bool
+            True if successful
+        """
+
+        if not self._matrix_created:
+            self.create_collision_matrix()
+            self._matrix_created = True
+
+        group_1 = self.get_group_id(group_1)
+        group_2 = self.get_group_id(group_2)
+
+        self._collision_matrix[group_1, group_2] = 1
+        self._collision_matrix[group_2, group_1] = 1
+
+        return True
+
+    def remove_collision(self, group_1, group_2):
+        """Turn off collision potential between group 1 and 2"""
+
+        if not self._matrix_created:
+            self.create_collision_matrix()
+            self._matrix_created = True
+
+        group1 = self.get_group_id(group1)
+        group2 = self.get_group_id(group2)
+
+        self._collision_matrix[group1, group2] = 0
+        self._collision_matrix[group2, group1] = 0
+
     def get_data(self):
         """Get all sensor data back as numpy matrix"""
         assert self.evaluated == True, 'Simulation has not run yet'
@@ -209,6 +294,7 @@ class Simulator(object):
 
 # -----Bodies----------------------------------
     def send_box(self, x=0, y=0, z=0, mass=1.0,
+                 r1=0, r2=0, r3=1,
                  length=0.1, width=0.1, height=0.1,
                  collision_group='default',
                  r=1, g=1, b=1):
@@ -249,6 +335,7 @@ class Simulator(object):
         assert length > 0, 'Length of Box must be positive'
         assert width > 0, 'Width of Box must be positive'
         assert height > 0, 'Height of Box must be positive'
+        self._assert_non_zero('Box', r1, r2, r3)
         self._assert_color('Box', r, g, b)
 
         if collision_group in self._collision_groups:
@@ -262,15 +349,20 @@ class Simulator(object):
         self._send('Box',
                    body_id,
                    x, y, z,
-                   mass,
+                   r1, r2, r3,
                    length, width, height,
+                   mass,
                    group_id,
                    r, g, b)
 
         return body_id
 
-    def send_sphere(self, x=0, y=0, z=0, mass=1.0, radius=0.1,
-                    collision_group='default', r=1, g=1, b=1):
+    def send_sphere(self,
+                    x=0, y=0, z=0,
+                    r1=0, r2=0, r3=1,
+                    radius=0.1, mass=1.0,
+                    collision_group='default',
+                    r=1, g=1, b=1):
         """Sends a sphere to the simulator
 
         Parameters
@@ -315,16 +407,20 @@ class Simulator(object):
         self._send('Sphere',
                    body_id,
                    x, y, z,
-                   mass,
+                   r1, r2, r3,
                    radius,
+                   mass,
                    group_id,
                    r, g, b)
 
         return body_id
 
-    def send_cylinder(self, x=0, y=0, z=0, mass=1.0,
-                      r1=0, r2=0, r3=1, length=1.0,
-                      radius=0.1, collision_group='default',
+    def send_cylinder(self,
+                      x=0, y=0, z=0,
+                      r1=0, r2=0, r3=1,
+                      length=1.0, radius=0.1,
+                      mass=1.0,
+                      collision_group='default',
                       r=1, g=1, b=1,
                       capped=True):
         """Send cylinder body to the simulator
@@ -397,9 +493,9 @@ class Simulator(object):
         self._send(name,
                    body_id,
                    x, y, z,
-                   mass,
                    r1, r2, r3,
                    length, radius,
+                   mass,
                    group_id,
                    r, g, b)
 
@@ -752,60 +848,6 @@ class Simulator(object):
         return neuron_id
 
 # ---------PhysicalProperties--------------------
-    def send_collision_matrix(self, matrix='none'):
-        """Sends a matrix which defines which collision groups collide
-
-        If element [i,j] of the matrix equals 1, then bodies in groups
-        i and j collide. If element [i,j] equals 0, then the collision
-        is ignored between the groups. Bodies connected with joints
-        do not collide with eachother so there is no need to take that
-        into account within the collision matrix.
-
-        Notes
-        -----
-            This command should be sent after all bodies have been sent
-            and collision groups have been determined
-
-        Parameters
-        ----------
-        matrix : square symmetric matrix, optional
-                The matrix which defines which groups collide. The
-                'none' setting means all collisions are ignored.
-                The 'all' setting means both intragroup ([i,i]) and 
-                intergroup ([i,j]) collisions are enabled
-                (the default is 'none')
-
-        Returns
-        -------
-        bool
-            True if successful, False otherwise
-        """
-        assert not self.collision_matrix_sent, ('Collision matrix has already'
-                                                'been sent')
-        self.collision_matrix_sent = True
-
-        num_groups = len(self._collision_groups)
-
-        if isinstance(matrix, str):
-            if matrix == 'none':
-                matrix = np.zeros((num_groups, num_groups),
-                                  dtype='int8')
-
-            elif matrix == 'all':
-                matrix = np.ones((num_groups, num_groups),
-                                 dtype='int8')
-
-        send_string = []
-
-        upper_tri = np.triu_indices(num_groups)
-        iterator = np.nditer(matrix[upper_tri])
-
-        for element in iterator:
-            send_string.append(element)
-
-        self._send('CollisionMatrix', num_groups, *send_string)
-        return True
-
     def send_external_force(self, body_id, x, y, z, time=0):
         """Sends a directed force to a body at a specific time
 
@@ -1127,7 +1169,7 @@ class Simulator(object):
             'Simulation has already been evaluated')
 
         if (not self.collision_matrix_sent and self.get_num_groups() != 0):
-            self.send_collision_matrix()
+            self._send_collision_matrix()
 
         # build initial commands
         commands = [self.pyrosim_path + '/simulator']
@@ -1233,6 +1275,26 @@ class Simulator(object):
                     sensor_value = float(data_from_simulator[index])
                     self.data[sensor_id, s, t] = sensor_value
                     index = index + 1
+
+    def _send_collision_matrix(self):
+        """sends the collision matrix"""
+
+        self.collision_matrix_sent = True
+
+        if not self._matrix_created:
+            self.create_collision_matrix()
+            self._matrix_created = True
+
+        send_string = []
+
+        upper_tri = np.triu_indices(self.get_num_groups())
+        iterator = np.nditer(self._collision_matrix[upper_tri])
+
+        for element in iterator:
+            send_string.append(element)
+
+        self._send('CollisionMatrix', self.get_num_groups(), *send_string)
+        return True
 
     def _send(self, command_string, *args):
         """Send a command to the simulator"""

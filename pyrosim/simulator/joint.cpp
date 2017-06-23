@@ -21,32 +21,29 @@ extern int HINGE;
 extern int SLIDER;
 
 JOINT::JOINT(int jointType) {
-        type = jointType;
-        firstObject = 0;
-        secondObject = 0;
+    type = jointType;
+    firstObject = 0;
+    secondObject = 0;
 
-        x = 0;
-        y = 0;
-        z = 0;
+    x = 0;
+    y = 0;
+    z = 0;
 
-        normalX = 0;
-        normalY = 0;
-        normalZ = 0;
+    normalX = 0;
+    normalY = 0;
+    normalZ = 0;
 
-        lowStop = 0;
-        highStop = 0;
+    lowStop = 0;
+    highStop = 0;
 
-    	speed = 0.0;
-        torque = 0.0;
+    speed = 0.0;
+    torque = 0.0;
 
+    joint = NULL;
 
-	positionControl = true;
-
-        joint = NULL;
-
-        proprioceptiveSensor = NULL;
-
-        motorNeuron = NULL;
+    positionControl = true;
+    proprioceptiveSensor = NULL;
+    motorNeuron = NULL;
 }
 
 JOINT::~JOINT(void) {
@@ -152,18 +149,8 @@ void JOINT::Draw(){
 
         dJointGetHingeAnchor(joint,jointPosition);
         dJointGetHingeAxis(joint,jointAxis);
-        jointAngle = dJointGetHingeAngle(joint);
-        
 
-        //Make a rotation matrix from a z-aligned cylinder to target
-        //i.e. take cross product between the two vectors (0,0,1) and
-        //jointAxis. Then rotate by angle between z-aligned and jointAxis
-        float angle = acos( jointAxis[2]);
-        dRFromAxisAndAngle(rotation,
-                            jointAxis[1],
-                            -jointAxis[0],                   
-                            0.,
-                            -angle);
+        dRFromZAxis(rotation, jointAxis[0],jointAxis[1],jointAxis[2]);
         dsDrawCylinder(jointPosition,rotation,length,radius);
     }
 }

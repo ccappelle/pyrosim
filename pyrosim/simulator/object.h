@@ -35,6 +35,7 @@ private:
 	
 	double radius;
 
+	double dim1,dim2,dim3;
 	int collisionGroup;
 
 	double r,g,b;
@@ -93,7 +94,9 @@ public:
 
 	double Get_Red_Component(void);
 
-        void Poll_Sensors(int numObjects, OBJECT **objects, int t);
+    void Poll_Sensors(int numObjects, OBJECT **objects, int t);
+
+    void Read_In_External_Force(void);
 
 	void Read_From_Python(dWorldID world, dSpaceID space, int shape);
 
@@ -111,9 +114,6 @@ private:
 	double Distance_To(OBJECT *otherObject);
 
 	void CreateBody(dWorldID world, dSpaceID space);
-	void CreateBox(dWorldID world, dSpaceID space);
-	void CreateCylinder(dWorldID world, dSpaceID space, bool capsule);
-	void CreateSphere(dWorldID world, dSpaceID space);
 
 	OBJECT *Find_Closest_Light_Source(int numObjects, OBJECT **objects);
 

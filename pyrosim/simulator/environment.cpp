@@ -85,11 +85,7 @@ void ENVIRONMENT::Read_From_Python(dWorldID world, dSpaceID space, Data *data)
                         float x,y,z;
                         int time;
                         std::cin >> bodyID;
-                        std::cin >> x;
-                        std::cin >> y;
-                        std::cin >> z;
-                        std::cin >> time;
-                        objects[bodyID]->Add_External_Force(x,y,z,time);
+                        objects[bodyID]->Read_In_External_Force();
                 }
 
                 //Camera
@@ -305,13 +301,11 @@ void ENVIRONMENT::Create_Joint( dWorldID world, dSpaceID space, int index, int j
 	OBJECT *firstObject = NULL;
 
 	if ( firstObjectID >= 0 )
-
 		firstObject = objects[ firstObjectID ];
 
     OBJECT *secondObject = NULL;
 
 	if ( secondObjectID >= 0 )
-
 		secondObject = objects[ secondObjectID ];
 
 	joints[index]->Create_In_Simulator(	world, firstObject , secondObject );

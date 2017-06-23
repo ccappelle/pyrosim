@@ -39,13 +39,11 @@ public:
 
 	void Actuate(void);
 
-        int  Connect_Sensor_To_Sensor_Neuron(int sensorID , NEURON *sensorNeuron);
-
-        int  Connect_To_Motor_Neuron(int jointID, NEURON *mNeuron);
+    int  Connect_Sensor_To_Sensor_Neuron(int sensorID , NEURON *sensorNeuron);
+    int  Connect_To_Motor_Neuron(int jointID, NEURON *mNeuron);
 
 	void Create_In_Simulator(dWorldID world, OBJECT *firstObject, OBJECT *secondObject);
-
-        void Create_Proprioceptive_Sensor(int myID, int evalPeriod);
+    void Create_Proprioceptive_Sensor(int myID, int evalPeriod);
         
     void Draw(void);
 
@@ -53,10 +51,46 @@ public:
 
 	int  Get_Second_Object_Index(void);
 
-        void Poll_Sensors(int t);
+    void Poll_Sensors(int t);
 
 	void Read_From_Python(void);
 
+    void Set_Position(double X, double Y, double Z){
+        x = X;
+        y = Y;
+        z = Z;
+    }
+
+    void Set_Normal(double X, double Y, double Z){
+        normalX = X;
+        normalY = Y;
+        normalZ = Z;
+    }
+    void Set_Control(bool PositionControl){
+        positionControl = int(PositionControl);
+    }
+
+    void Set_Limits(double lo, double hi){
+        lowStop = lo;
+        highStop = hi;
+    }
+
+    void Set_Bodies(int body1, int body2){
+        firstObject = body1;
+        secondObject = body2;
+    }
+
+    void Set_Type(int t){
+        type = t;
+    }
+
+    void Set_Torque(double t){
+        torque = t;
+    }
+
+    void Set_Speed(double s){
+        speed = s;
+    }
 	void Update_Sensor_Neurons(int t);
 
 	void Write_To_Python(int evalPeriod);

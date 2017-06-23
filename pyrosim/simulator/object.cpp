@@ -23,15 +23,10 @@ OBJECT::OBJECT(void) {
 	ID = 0;
 
 	raySensor = NULL;
-
 	lightSensor = NULL;
-
 	positionSensor = NULL;
-
 	touchSensor = NULL;
-
 	vestibularSensor = NULL;
-
 	containsLightSource = false; 
 }
 
@@ -45,6 +40,14 @@ void OBJECT::Add_External_Force(float x, float y, float z, int timeStep){
     forces[timeStep][2] = z;
 }
 
+void OBJECT::Read_In_External_Force(void){
+    int xPos,yPos,zPos,time;
+    std::cin >> x;
+    std::cin >> y;
+    std::cin >> z;
+    std::cin >> time;
+    Add_External_Force(x,y,z,time);
+}
 void OBJECT::Apply_Stored_Forces(int timeStep){
     if (forces.find(timeStep)!= forces.end()){
         dBodyAddForce(body, forces[timeStep][0],forces[timeStep][1], forces[timeStep][2]);
@@ -53,55 +56,39 @@ void OBJECT::Apply_Stored_Forces(int timeStep){
 
 int OBJECT::Connect_Sensor_To_Sensor_Neuron(int sensorID , NEURON *sensorNeuron) {
 
-	if ( lightSensor )
+    if ( lightSensor )
+        if ( lightSensor->Get_ID() == sensorID ) {
+            lightSensor->Connect_To_Sensor_Neuron(sensorNeuron);
+            return true;
+        }
 
-		if ( lightSensor->Get_ID() == sensorID ) {
+    if ( positionSensor )
+        if ( positionSensor->Get_ID() == sensorID ) {
+            positionSensor->Connect_To_Sensor_Neuron(sensorNeuron);
+            return true;
+        }
 
-			lightSensor->Connect_To_Sensor_Neuron(sensorNeuron);
-
-			return true;
-		}
-
-        if ( positionSensor )
-
-                if ( positionSensor->Get_ID() == sensorID ) {
-
-                        positionSensor->Connect_To_Sensor_Neuron(sensorNeuron);
-
-			return true;
-		}
-
-        if ( raySensor )
-
-                if ( raySensor->Get_ID() == sensorID ) {
-
-                        raySensor->Connect_To_Sensor_Neuron(sensorNeuron);
-
-			return true;
-		}
+    if ( raySensor )
+        if ( raySensor->Get_ID() == sensorID ) {
+            raySensor->Connect_To_Sensor_Neuron(sensorNeuron);
+            return true;
+        }
 
 
-        if ( touchSensor )
-
-                if ( touchSensor->Get_ID() == sensorID ) {
-
-                        touchSensor->Connect_To_Sensor_Neuron(sensorNeuron);
-
-			return true;
-		}
+    if ( touchSensor )
+        if ( touchSensor->Get_ID() == sensorID ) {
+            touchSensor->Connect_To_Sensor_Neuron(sensorNeuron);
+            return true;
+        }
 
 
-        if ( vestibularSensor )
-
-                if ( vestibularSensor->Get_ID() == sensorID ) {
-
-                        vestibularSensor->Connect_To_Sensor_Neuron(sensorNeuron);
-
-			return true;
-		}
-
-	return false;
-}
+    if ( vestibularSensor )
+        if ( vestibularSensor->Get_ID() == sensorID ) {
+            vestibularSensor->Connect_To_Sensor_Neuron(sensorNeuron);
+            return true;
+        }
+    return false;
+ }
 
 void OBJECT::Create_Ray_Sensor(dSpaceID space, int myID, int evalPeriod) {
 
@@ -219,29 +206,29 @@ void OBJECT::Read_From_Python(dWorldID world, dSpaceID space, int shape) {
 	std::cin >> x;
 	std::cin >> y;
 	std::cin >> z;
-
-	std::cin >> mass;
-
+    std::cin >> r1;
+    std::cin >> r2;
+    std::cin >> r3;
+	
 	if ( myShape == BOX ) {
-
 		std::cin >> length;
 		std::cin >> width;
 		std::cin >> height;
 	}
 	else if (myShape == CYLINDER or myShape == CAPSULE) { //cylinder specific
-		std::cin >> r1;
-        std::cin >> r2;
-        std::cin >> r3;
 		std::cin >> length; 
         std::cin >> radius;
 	}
 	else { //sphere specific
 		std::cin >> radius;
 	}
+
+    std::cin >> mass;
     std::cin >> collisionGroup;
     std::cin >> r;
     std::cin >> g;
     std::cin >> b;
+
     CreateBody(world, space);
 
 }
@@ -314,76 +301,39 @@ int OBJECT::Contains_A_Light_Source(void) {
 }
 
 void OBJECT::CreateBody(dWorldID world, dSpaceID space){
-    if(myShape==BOX)
-        CreateBox(world,space);
-    else if(myShape==CYLINDER)
-        CreateCylinder(world,space,false);
-    else if(myShape==CAPSULE)
-        CreateCylinder(world,space,true);
-    else
-        CreateSphere(world,space);
 
-}
+    dMass m;
 
-void OBJECT::CreateBox(dWorldID world, dSpaceID space){
-        dMass m;
+    body = dBodyCreate (world);
+    dBodySetPosition (body,x,y,z);
 
-        body = dBodyCreate (world);
-        dBodySetPosition (body,x,y,z);
+    dMatrix3 R;
+    dRFromZAxis(R,r1,r2,r3);
+    dBodySetRotation(body,R);
+
+    if(myShape == BOX){
         dMassSetBoxTotal (&m,mass,length,width,height);
-
-        dBodySetMass (body,&m);
-
         geom = dCreateBox(space,length,width,height);
-        dGeomSetBody (geom,body);
+    }
+    else if(myShape == CAPSULE){
+        dMassSetCapsuleTotal(&m,mass,3,radius,length);
+        geom = dCreateCapsule(space,radius,length);       
+    }
+    else if(myShape == CYLINDER){
+        dMassSetCylinderTotal(&m,mass,3,radius,length);
+        geom = dCreateCylinder(space,radius,length);       
+    }    
+    else if(myShape == SPHERE){
+        dMassSetSphereTotal(&m,mass,radius);
+        geom = dCreateSphere(space,radius);         
+    }
+    dMassRotate(&m, R);
+    dBodySetMass (body,&m);
 
-        dGeomSetData(geom,this);
-}
+    dGeomSetBody (geom,body);
 
-void OBJECT::CreateCylinder(dWorldID world, dSpaceID space, bool capsule)
-{
+    dGeomSetData(geom,this);
 
-        dMass m;
-
-        body = dBodyCreate (world);
-        dBodySetPosition (body,x,y,z);
-
-        dMatrix3 R;
-        dRFromZAxis(R,r1,r2,r3);
-    	dBodySetRotation(body,R);
-
-        if(capsule)
-            dMassSetCapsuleTotal(&m, mass, 3, radius, length);
-        else
-            dMassSetCylinderTotal(&m, mass, 3, radius, length);
-
-		dMassRotate(&m, R);
-
-        dBodySetMass (body,&m);
-
-        if(capsule)
-            geom = dCreateCapsule(space,radius,length);
-        else
-            geom = dCreateCylinder(space,radius,length);
-        dGeomSetBody (geom,body);
-
-	dGeomSetData(geom,this);
-}
-
-void OBJECT::CreateSphere(dWorldID world, dSpaceID space)
-{
-	dMass m;
-
-	body = dBodyCreate(world);
-	dBodySetPosition(body, x,y,z);
-
-	dMassSetSphereTotal(&m,mass,radius);
-
-	dBodySetMass(body,&m);
-	geom = dCreateSphere(space,radius);
-	dGeomSetBody(geom,body);
-
-	dGeomSetData(geom,this);
 }
 
 double OBJECT::Distance_To(OBJECT *otherObject) {

@@ -75,9 +75,9 @@ def send_to_simulator(sim, weight_matrix):
             start_weight = weight_matrix[source_id, target_id, 0]
             end_weight = weight_matrix[source_id, target_id, 1]
             time = weight_matrix[source_id, target_id, 2]
-            # sim.send_developing_synapse(source_neuron_id=source_id, target_neuron_id=target_id,
-            #                             start_weight=start_weight, end_weight=end_weight,
-            #                             start_time=time, end_time=time)
+            sim.send_developing_synapse(source_neuron_id=source_id, target_neuron_id=target_id,
+                                        start_weight=start_weight, end_weight=end_weight,
+                                        start_time=time, end_time=time)
 
     layout = {'thighs': thighs,
               'shins': shins,
@@ -90,11 +90,14 @@ def send_to_simulator(sim, weight_matrix):
 
     env_box = sim.send_box(x=2, y=-2, z=HEIGHT/2.0, length=HEIGHT, width=HEIGHT, height=HEIGHT, collision_group=1,
                            mass=3.)
+    sim.send_hinge_joint(pyrosim.Simulator.WORLD, main_body, x=0,y=0,z=HEIGHT+EPS, n1=0,n2=.4,n3=1, position_control=False)
 
     MASS = 3
     sim.send_external_force(env_box, x=0, y=0, z=MASS*20., time=300)
-    sim.send_external_force(env_box, x=-MASS*70., y=MASS*70., z=0, time=320)
+    sim.send_external_force(env_box, x=-MASS*70., y=MASS*73., z=0, time=320)
+
     sim.send_collision_matrix('all')
+
     # for t in range(1000):
     #   x = math.cos(0.045*t)
     #   y = math.sin(0.045*t)
