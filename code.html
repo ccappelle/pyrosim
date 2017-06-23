@@ -233,6 +233,53 @@ the simulator (the default is False)</p>
 </dd></dl>
 
 <dl class="method">
+<dt id="pyrosim.Simulator.assign_collision">
+<code class="descname">assign_collision</code><span class="sig-paren">(</span><em>group_1</em>, <em>group_2</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pyrosim.html#Simulator.assign_collision"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyrosim.Simulator.assign_collision" title="Permalink to this definition">¶</a></dt>
+<dd><p>Create collision potential between group 1 and group 2</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>group_1</strong> (<em>str</em>) &#8211; The string handle of group 1</li>
+<li><strong>group_2</strong> (<em>str</em>) &#8211; The string handle of group 2</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first">True if successful</p>
+</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><p class="first last">bool</p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="pyrosim.Simulator.create_collision_matrix">
+<code class="descname">create_collision_matrix</code><span class="sig-paren">(</span><em>collision_type='none'</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pyrosim.html#Simulator.create_collision_matrix"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyrosim.Simulator.create_collision_matrix" title="Permalink to this definition">¶</a></dt>
+<dd><p>Create a predefined collision matrix</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>collision_type</strong> (<em>str, optional</em>) &#8211; Creates a collision matrix specifying the type of
+collision between groups desired. There are 4 options
+&#8216;none&#8217; - no collision
+&#8216;inter&#8217; - collisions on only between different groups
+&#8216;intra&#8217; - collisions on only within groups
+&#8216;all&#8217; - both inter and intra group collisions</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">True if successful</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body">bool</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
 <dt id="pyrosim.Simulator.film_body">
 <code class="descname">film_body</code><span class="sig-paren">(</span><em>body_id</em>, <em>method='follow'</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pyrosim.html#Simulator.film_body"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyrosim.Simulator.film_body" title="Permalink to this definition">¶</a></dt>
 <dd><p>Sets the camera to film a body</p>
@@ -335,6 +382,12 @@ x value of that sensor)</li>
 </dd></dl>
 
 <dl class="method">
+<dt id="pyrosim.Simulator.remove_collision">
+<code class="descname">remove_collision</code><span class="sig-paren">(</span><em>group_1</em>, <em>group_2</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pyrosim.html#Simulator.remove_collision"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyrosim.Simulator.remove_collision" title="Permalink to this definition">¶</a></dt>
+<dd><p>Turn off collision potential between group 1 and 2</p>
+</dd></dl>
+
+<dl class="method">
 <dt id="pyrosim.Simulator.send_bias_neuron">
 <code class="descname">send_bias_neuron</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/pyrosim.html#Simulator.send_bias_neuron"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyrosim.Simulator.send_bias_neuron" title="Permalink to this definition">¶</a></dt>
 <dd><p>Send bias neuron to simulator.</p>
@@ -353,7 +406,7 @@ x value of that sensor)</li>
 
 <dl class="method">
 <dt id="pyrosim.Simulator.send_box">
-<code class="descname">send_box</code><span class="sig-paren">(</span><em>x=0</em>, <em>y=0</em>, <em>z=0</em>, <em>mass=1.0</em>, <em>length=0.1</em>, <em>width=0.1</em>, <em>height=0.1</em>, <em>collision_group='default'</em>, <em>r=1</em>, <em>g=1</em>, <em>b=1</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pyrosim.html#Simulator.send_box"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyrosim.Simulator.send_box" title="Permalink to this definition">¶</a></dt>
+<code class="descname">send_box</code><span class="sig-paren">(</span><em>x=0</em>, <em>y=0</em>, <em>z=0</em>, <em>mass=1.0</em>, <em>r1=0</em>, <em>r2=0</em>, <em>r3=1</em>, <em>length=0.1</em>, <em>width=0.1</em>, <em>height=0.1</em>, <em>collision_group='default'</em>, <em>r=1</em>, <em>g=1</em>, <em>b=1</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pyrosim.html#Simulator.send_box"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyrosim.Simulator.send_box" title="Permalink to this definition">¶</a></dt>
 <dd><p>Send box body to the simulator</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
@@ -413,38 +466,8 @@ and roll of the camera</li>
 </dd></dl>
 
 <dl class="method">
-<dt id="pyrosim.Simulator.send_collision_matrix">
-<code class="descname">send_collision_matrix</code><span class="sig-paren">(</span><em>matrix='none'</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pyrosim.html#Simulator.send_collision_matrix"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyrosim.Simulator.send_collision_matrix" title="Permalink to this definition">¶</a></dt>
-<dd><p>Sends a matrix which defines which collision groups collide</p>
-<p>If element [i,j] of the matrix equals 1, then bodies in groups
-i and j collide. If element [i,j] equals 0, then the collision
-is ignored between the groups. Bodies connected with joints
-do not collide with eachother so there is no need to take that
-into account within the collision matrix.</p>
-<p class="rubric">Notes</p>
-<p>This command should be sent after all bodies have been sent
-and collision groups have been determined</p>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>matrix</strong> (<em>square symmetric matrix, optional</em>) &#8211; The matrix which defines which groups collide. The
-&#8216;none&#8217; setting means all collisions are ignored.
-The &#8216;all&#8217; setting means both intragroup ([i,i]) and
-intergroup ([i,j]) collisions are enabled
-(the default is &#8216;none&#8217;)</td>
-</tr>
-<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">True if successful, False otherwise</td>
-</tr>
-<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body">bool</td>
-</tr>
-</tbody>
-</table>
-</dd></dl>
-
-<dl class="method">
 <dt id="pyrosim.Simulator.send_cylinder">
-<code class="descname">send_cylinder</code><span class="sig-paren">(</span><em>x=0</em>, <em>y=0</em>, <em>z=0</em>, <em>mass=1.0</em>, <em>r1=0</em>, <em>r2=0</em>, <em>r3=1</em>, <em>length=1.0</em>, <em>radius=0.1</em>, <em>collision_group='default'</em>, <em>r=1</em>, <em>g=1</em>, <em>b=1</em>, <em>capped=True</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pyrosim.html#Simulator.send_cylinder"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyrosim.Simulator.send_cylinder" title="Permalink to this definition">¶</a></dt>
+<code class="descname">send_cylinder</code><span class="sig-paren">(</span><em>x=0</em>, <em>y=0</em>, <em>z=0</em>, <em>r1=0</em>, <em>r2=0</em>, <em>r3=1</em>, <em>length=1.0</em>, <em>radius=0.1</em>, <em>mass=1.0</em>, <em>collision_group='default'</em>, <em>r=1</em>, <em>g=1</em>, <em>b=1</em>, <em>capped=True</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pyrosim.html#Simulator.send_cylinder"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyrosim.Simulator.send_cylinder" title="Permalink to this definition">¶</a></dt>
 <dd><p>Send cylinder body to the simulator</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
@@ -886,7 +909,7 @@ actuation rate.</li>
 
 <dl class="method">
 <dt id="pyrosim.Simulator.send_sphere">
-<code class="descname">send_sphere</code><span class="sig-paren">(</span><em>x=0</em>, <em>y=0</em>, <em>z=0</em>, <em>mass=1.0</em>, <em>radius=0.1</em>, <em>collision_group='default'</em>, <em>r=1</em>, <em>g=1</em>, <em>b=1</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pyrosim.html#Simulator.send_sphere"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyrosim.Simulator.send_sphere" title="Permalink to this definition">¶</a></dt>
+<code class="descname">send_sphere</code><span class="sig-paren">(</span><em>x=0</em>, <em>y=0</em>, <em>z=0</em>, <em>r1=0</em>, <em>r2=0</em>, <em>r3=1</em>, <em>radius=0.1</em>, <em>mass=1.0</em>, <em>collision_group='default'</em>, <em>r=1</em>, <em>g=1</em>, <em>b=1</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pyrosim.html#Simulator.send_sphere"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyrosim.Simulator.send_sphere" title="Permalink to this definition">¶</a></dt>
 <dd><p>Sends a sphere to the simulator</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />

@@ -1,0 +1,345 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>Collision Matrix &mdash; pyrosim 0.1.1 documentation</title>
+  
+
+  
+  
+    <link rel="shortcut icon" href="../_static/icon32-scaled.ico"/>
+  
+  
+  
+
+  
+
+  
+  
+    
+
+  
+
+  
+  
+    <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
+  
+
+  
+
+  
+    <link rel="top" title="pyrosim 0.1.1 documentation" href="../index.html"/>
+        <link rel="up" title="Getting Started" href="../start.html"/>
+        <link rel="next" title="Advanced Options" href="../advanced.html"/>
+        <link rel="prev" title="Neural Network" href="04_networks.html"/> 
+
+  
+  <script src="../_static/js/modernizr.min.js"></script>
+
+</head>
+
+<body class="wy-body-for-nav" role="document">
+
+   
+  <div class="wy-grid-for-nav">
+
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search">
+          
+
+          
+            <a href="../index.html" class="icon icon-home"> pyrosim
+          
+
+          
+          </a>
+
+          
+            
+            
+              <div class="version">
+                0.1.1
+              </div>
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../installation.html">Installation</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="../start.html">Getting Started</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="00_empty.html">Simulator Settings</a></li>
+<li class="toctree-l2"><a class="reference internal" href="01_body.html">Bodies</a></li>
+<li class="toctree-l2"><a class="reference internal" href="02_joints.html">Joints</a></li>
+<li class="toctree-l2"><a class="reference internal" href="03_sensors.html">Sensors</a></li>
+<li class="toctree-l2"><a class="reference internal" href="04_networks.html">Neural Network</a></li>
+<li class="toctree-l2 current"><a class="current reference internal" href="#">Collision Matrix</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#collision-groups">Collision Groups</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#defining-collisions-between-groups">Defining Collisions Between Groups</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#double-pendulum-part-iv">Double Pendulum Part IV</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../advanced.html">Advanced Options</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../videos.html">Videos</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../code.html">Simulator Documentation</a></li>
+</ul>
+
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" role="navigation" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../index.html">pyrosim</a>
+        
+      </nav>
+
+
+      
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../index.html">Docs</a> &raquo;</li>
+        
+          <li><a href="../start.html">Getting Started</a> &raquo;</li>
+        
+      <li>Collision Matrix</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+            
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <div class="section" id="collision-matrix">
+<span id="collision"></span><h1>Collision Matrix<a class="headerlink" href="#collision-matrix" title="Permalink to this headline">¶</a></h1>
+<p>By default, collisions are turned off in pyrosim. To turn on collisions between rigid bodies they must be assigned collision groups and a collision matrix defining the interactions between those groups must be sent.</p>
+<div class="section" id="collision-groups">
+<h2>Collision Groups<a class="headerlink" href="#collision-groups" title="Permalink to this headline">¶</a></h2>
+<p>A collision group is a collection of bodies which all collide (or don&#8217;t) the same way with other collision groups. For example, if you do not want a robot to collide with its body parts, but want it to collide with objects in the environment, then all the bodies in the robot would be in one collision group and all the bodies in the environment would be in another.</p>
+<p>When sending a body, you can assign a collision group name to the body by setting the <code class="code docutils literal"><span class="pre">collision_group</span></code> parameter when the body is sent. The default name is &#8216;default&#8217;. After you have sent all the bodies you want in the simulation you use the name tag to define collisions</p>
+</div>
+<div class="section" id="defining-collisions-between-groups">
+<h2>Defining Collisions Between Groups<a class="headerlink" href="#defining-collisions-between-groups" title="Permalink to this headline">¶</a></h2>
+<p>If we imagine each collision group as a node on a network, then it is easy to see the collision matrix as an adjacency matrix for this network where there is an edge between two groups if they collide and none if they do not.
+To go back to our robot/environment example above, we would want a connection between the &#8216;robot&#8217; and &#8216;env&#8217; collision groups and a loop connection on the &#8216;env&#8217; node. Loops specify intra-group collision while edges between two different nodes specify inter-group collision.</p>
+<p>Regardless of how groups are defined and connected, the collisions between bodies which are attached by joints are disabled automatically. If they were enabled the simulation would most likely break.</p>
+</div>
+<div class="section" id="double-pendulum-part-iv">
+<h2>Double Pendulum Part IV<a class="headerlink" href="#double-pendulum-part-iv" title="Permalink to this headline">¶</a></h2>
+<p>We have taken our double pendulum code and removed the sensors and turned the network it to a simple forward actuation about its connection in space. This simulation hit a ball in the environment into the target blocks.</p>
+<div class="literal-block-wrapper container" id="dp-collisions-py">
+<div class="code-block-caption"><span class="caption-text">dp-collisions.py</span><a class="headerlink" href="#dp-collisions-py" title="Permalink to this code">¶</a></div>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">pyrosim</span>
+<span class="kn">import</span> <span class="nn">math</span>
+<span class="kn">import</span> <span class="nn">random</span>
+
+<span class="c1"># basically same code as previous examples with a few parameter tweaks</span>
+<span class="n">sim</span> <span class="o">=</span> <span class="n">pyrosim</span><span class="o">.</span><span class="n">Simulator</span><span class="p">(</span><span class="n">play_paused</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">debug</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">use_textures</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+                        <span class="n">xyz</span><span class="o">=</span><span class="p">[</span><span class="o">-</span><span class="mf">3.0</span><span class="p">,</span> <span class="mf">2.0</span><span class="p">,</span> <span class="mf">2.0</span><span class="p">],</span> <span class="n">hpr</span><span class="o">=</span><span class="p">[</span><span class="o">-</span><span class="mf">30.0</span><span class="p">,</span> <span class="o">-</span><span class="mf">15.0</span><span class="p">,</span> <span class="mf">0.0</span><span class="p">],</span>
+                        <span class="n">eval_time</span><span class="o">=</span><span class="mi">1000</span><span class="p">)</span>
+
+<span class="n">cyl_1</span> <span class="o">=</span> <span class="n">sim</span><span class="o">.</span><span class="n">send_cylinder</span><span class="p">(</span><span class="n">x</span><span class="o">=-</span><span class="mf">0.25</span><span class="p">,</span> <span class="n">y</span><span class="o">=</span><span class="mf">0.0</span><span class="p">,</span> <span class="n">z</span><span class="o">=</span><span class="mf">2.0</span><span class="p">,</span>
+                          <span class="n">r1</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">r2</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">r3</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span>
+                          <span class="n">length</span><span class="o">=</span><span class="mf">0.5</span><span class="p">,</span> <span class="n">radius</span><span class="o">=</span><span class="mf">0.07</span><span class="p">,</span>
+                          <span class="n">collision_group</span><span class="o">=</span><span class="s1">&#39;robot&#39;</span><span class="p">)</span>
+<span class="n">cyl_2</span> <span class="o">=</span> <span class="n">sim</span><span class="o">.</span><span class="n">send_cylinder</span><span class="p">(</span><span class="n">x</span><span class="o">=-</span><span class="mf">0.75</span><span class="p">,</span> <span class="n">y</span><span class="o">=</span><span class="mf">0.0</span><span class="p">,</span> <span class="n">z</span><span class="o">=</span><span class="mf">2.0</span><span class="p">,</span>
+                          <span class="n">r1</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">r2</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">r3</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span>
+                          <span class="n">length</span><span class="o">=</span><span class="mf">0.5</span><span class="p">,</span> <span class="n">radius</span><span class="o">=</span><span class="mf">0.07</span><span class="p">,</span>
+                          <span class="n">collision_group</span><span class="o">=</span><span class="s1">&#39;robot&#39;</span><span class="p">)</span>
+
+<span class="n">box</span> <span class="o">=</span> <span class="n">sim</span><span class="o">.</span><span class="n">send_box</span><span class="p">(</span><span class="n">x</span><span class="o">=-</span><span class="mf">1.0</span><span class="p">,</span> <span class="n">y</span><span class="o">=</span><span class="mf">0.0</span><span class="p">,</span> <span class="n">z</span><span class="o">=</span><span class="mf">2.0</span><span class="p">,</span>
+                   <span class="n">width</span><span class="o">=</span><span class="mf">0.5</span><span class="p">,</span> <span class="n">length</span><span class="o">=</span><span class="mf">0.5</span><span class="p">,</span> <span class="n">height</span><span class="o">=</span><span class="mf">0.5</span><span class="p">,</span>
+                   <span class="n">mass</span><span class="o">=</span><span class="mf">10.0</span><span class="p">,</span> <span class="n">collision_group</span><span class="o">=</span><span class="s1">&#39;robot&#39;</span><span class="p">)</span>
+
+<span class="n">world_joint</span> <span class="o">=</span> <span class="n">sim</span><span class="o">.</span><span class="n">send_hinge_joint</span><span class="p">(</span><span class="n">first_body_id</span><span class="o">=</span><span class="n">pyrosim</span><span class="o">.</span><span class="n">Simulator</span><span class="o">.</span><span class="n">WORLD</span><span class="p">,</span>
+                                   <span class="n">second_body_id</span><span class="o">=</span><span class="n">cyl_1</span><span class="p">,</span>
+                                   <span class="n">x</span><span class="o">=</span><span class="mf">0.0</span><span class="p">,</span> <span class="n">y</span><span class="o">=</span><span class="mf">0.0</span><span class="p">,</span> <span class="n">z</span><span class="o">=</span><span class="mf">2.0</span><span class="p">,</span>
+                                   <span class="n">n1</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">n2</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">n3</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span>
+                                   <span class="n">position_control</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+                                   <span class="n">torque</span><span class="o">=</span><span class="mi">1000</span><span class="p">,</span> <span class="n">speed</span><span class="o">=</span><span class="mi">3</span><span class="p">)</span>
+
+<span class="n">hinge_joint</span> <span class="o">=</span> <span class="n">sim</span><span class="o">.</span><span class="n">send_hinge_joint</span><span class="p">(</span><span class="n">first_body_id</span><span class="o">=</span><span class="n">cyl_1</span><span class="p">,</span>
+                                   <span class="n">second_body_id</span><span class="o">=</span><span class="n">cyl_2</span><span class="p">,</span>
+                                   <span class="n">x</span><span class="o">=-</span><span class="mf">0.5</span><span class="p">,</span> <span class="n">y</span><span class="o">=</span><span class="mf">0.0</span><span class="p">,</span> <span class="n">z</span><span class="o">=</span><span class="mf">2.0</span><span class="p">,</span>
+                                   <span class="n">n1</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">n2</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">n3</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span>
+                                   <span class="n">position_control</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+                                   <span class="n">torque</span><span class="o">=</span><span class="mi">1000</span><span class="p">,</span> <span class="n">speed</span><span class="o">=</span><span class="mi">3</span><span class="p">)</span>
+
+<span class="n">slider_joint</span> <span class="o">=</span> <span class="n">sim</span><span class="o">.</span><span class="n">send_slider_joint</span><span class="p">(</span><span class="n">first_body_id</span><span class="o">=</span><span class="n">cyl_2</span><span class="p">,</span>
+                                     <span class="n">second_body_id</span><span class="o">=</span><span class="n">box</span><span class="p">,</span>
+                                     <span class="n">x</span><span class="o">=</span><span class="mf">1.0</span><span class="p">,</span> <span class="n">y</span><span class="o">=</span><span class="mf">0.0</span><span class="p">,</span> <span class="n">z</span><span class="o">=</span><span class="mf">0.0</span><span class="p">,</span>
+                                     <span class="n">lo</span><span class="o">=-</span><span class="mf">0.5</span><span class="p">,</span> <span class="n">hi</span><span class="o">=</span><span class="mf">0.5</span><span class="p">)</span>
+<span class="c1"># --------- New Code ----------------------------</span>
+<span class="c1"># ball to kick</span>
+<span class="n">ball</span> <span class="o">=</span> <span class="n">sim</span><span class="o">.</span><span class="n">send_sphere</span><span class="p">(</span><span class="n">x</span><span class="o">=</span><span class="mf">1.25</span><span class="p">,</span> <span class="n">y</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">z</span><span class="o">=</span><span class="mi">4</span><span class="p">,</span> <span class="n">radius</span><span class="o">=.</span><span class="mi">3</span><span class="p">,</span>
+                       <span class="n">r</span><span class="o">=.</span><span class="mi">5</span><span class="p">,</span> <span class="n">g</span><span class="o">=.</span><span class="mi">5</span><span class="p">,</span> <span class="n">b</span><span class="o">=.</span><span class="mi">9</span><span class="p">,</span>
+                       <span class="n">collision_group</span><span class="o">=</span><span class="s1">&#39;env&#39;</span><span class="p">)</span>
+<span class="c1"># wall stack</span>
+<span class="n">SIZE</span> <span class="o">=</span> <span class="mf">1.0</span>
+<span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">3</span><span class="p">):</span>
+    <span class="n">color</span> <span class="o">=</span> <span class="n">random</span><span class="o">.</span><span class="n">random</span><span class="p">()</span>
+    <span class="n">sim</span><span class="o">.</span><span class="n">send_box</span><span class="p">(</span><span class="n">x</span><span class="o">=</span><span class="mi">3</span><span class="p">,</span> <span class="n">y</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">z</span><span class="o">=</span><span class="p">(</span><span class="n">i</span><span class="o">+</span><span class="n">SIZE</span><span class="o">/</span><span class="mf">2.0</span><span class="p">)</span><span class="o">*</span><span class="n">SIZE</span><span class="p">,</span>
+                 <span class="n">width</span><span class="o">=</span><span class="n">SIZE</span><span class="p">,</span> <span class="n">height</span><span class="o">=</span><span class="n">SIZE</span><span class="p">,</span> <span class="n">length</span><span class="o">=</span><span class="n">SIZE</span><span class="p">,</span>
+                 <span class="n">mass</span><span class="o">=.</span><span class="mi">2</span><span class="p">,</span> <span class="n">r</span><span class="o">=.</span><span class="mi">1</span><span class="p">,</span> <span class="n">g</span><span class="o">=</span><span class="n">color</span><span class="p">,</span> <span class="n">b</span><span class="o">=</span><span class="n">color</span><span class="p">,</span>
+                 <span class="n">collision_group</span><span class="o">=</span><span class="s1">&#39;env&#39;</span><span class="p">)</span>
+
+
+<span class="c1"># network is designed to just spin around the &#39;main&#39; joint</span>
+<span class="n">bias_neuron</span> <span class="o">=</span> <span class="n">sim</span><span class="o">.</span><span class="n">send_bias_neuron</span><span class="p">()</span>
+<span class="n">motor_neuron</span> <span class="o">=</span> <span class="n">sim</span><span class="o">.</span><span class="n">send_motor_neuron</span><span class="p">(</span><span class="n">world_joint</span><span class="p">)</span>
+<span class="n">sim</span><span class="o">.</span><span class="n">send_synapse</span><span class="p">(</span><span class="n">bias_neuron</span><span class="p">,</span> <span class="n">motor_neuron</span><span class="p">,</span> <span class="o">-</span><span class="mf">10.0</span><span class="p">)</span>
+
+<span class="n">pendulum</span> <span class="o">=</span> <span class="n">sim</span><span class="o">.</span><span class="n">get_group_id</span><span class="p">(</span><span class="s1">&#39;robot&#39;</span><span class="p">)</span>
+<span class="n">environment</span> <span class="o">=</span> <span class="n">sim</span><span class="o">.</span><span class="n">get_group_id</span><span class="p">(</span><span class="s1">&#39;env&#39;</span><span class="p">)</span>
+
+<span class="c1"># here we can assign collisions directly</span>
+<span class="c1"># we can also make a predefined collision matrix</span>
+<span class="c1"># using sim.create_collision_matrix(collision_type)</span>
+<span class="c1"># where collision_type = &#39;all&#39;,&#39;none&#39;,&#39;inter&#39; or &#39;intra&#39;.</span>
+<span class="n">sim</span><span class="o">.</span><span class="n">assign_collision</span><span class="p">(</span><span class="s1">&#39;robot&#39;</span><span class="p">,</span> <span class="s1">&#39;env&#39;</span><span class="p">)</span>
+<span class="n">sim</span><span class="o">.</span><span class="n">assign_collision</span><span class="p">(</span><span class="s1">&#39;env&#39;</span><span class="p">,</span> <span class="s1">&#39;env&#39;</span><span class="p">)</span>
+
+<span class="n">sim</span><span class="o">.</span><span class="n">start</span><span class="p">()</span>
+<span class="n">results</span> <span class="o">=</span> <span class="n">sim</span><span class="o">.</span><span class="n">wait_to_finish</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+<iframe width="100%" height="315" src="https://www.youtube.com/embed/TmLf08X_jB8?rel=0" frameborder="0" allowfullscreen></iframe></div>
+</div>
+
+
+           </div>
+           <div class="articleComments">
+            
+           </div>
+          </div>
+          <footer>
+  
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+      
+        <a href="../advanced.html" class="btn btn-neutral float-right" title="Advanced Options" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
+      
+      
+        <a href="04_networks.html" class="btn btn-neutral" title="Neural Network" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+      
+    </div>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2017, Josh Bongard, Collin Cappelle, UVM MECL.
+
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/snide/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  
+
+    <script type="text/javascript">
+        var DOCUMENTATION_OPTIONS = {
+            URL_ROOT:'../',
+            VERSION:'0.1.1',
+            COLLAPSE_INDEX:false,
+            FILE_SUFFIX:'.html',
+            HAS_SOURCE:  true,
+            SOURCELINK_SUFFIX: ''
+        };
+    </script>
+      <script type="text/javascript" src="../_static/jquery.js"></script>
+      <script type="text/javascript" src="../_static/underscore.js"></script>
+      <script type="text/javascript" src="../_static/doctools.js"></script>
+      <script type="text/javascript" src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+
+  
+
+  
+  
+    <script type="text/javascript" src="../_static/js/theme.js"></script>
+  
+
+  
+  
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.StickyNav.enable();
+      });
+  </script>
+   
+
+</body>
+</html>

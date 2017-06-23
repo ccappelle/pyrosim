@@ -3,7 +3,7 @@
 Neural Network
 ==============
 
-Pyrosim currently only uses an artificial neural networks to control the robots. 
+Pyrosim currently **only uses an artificial neural networks** to control the robots. 
 This page is meant to be less of a tutorial on ANNs and more about pyrosim's specific
 implementation of ANNs. However, there should be enough information to supply a basic
 understanding of how simple ANNs function. There are many resources for learning more
