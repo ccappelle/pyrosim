@@ -33,7 +33,7 @@ def send_to_simulator(sim, weight_matrix):
 
         thighs[i] = sim.send_cylinder(x=x_pos, y=y_pos, z=HEIGHT+EPS,
                                       r1=x_pos, r2=y_pos, r3=0,
-                                      length=HEIGHT, radius=EPS, capped=False
+                                      length=HEIGHT, radius=EPS, capped=True
                                       )
 
         hips[i] = sim.send_hinge_joint(first_body_id=main_body, second_body_id=thighs[i],
@@ -50,7 +50,7 @@ def send_to_simulator(sim, weight_matrix):
         shins[i] = sim.send_cylinder(x=x_pos2, y=y_pos2, z=(HEIGHT+EPS)/2.0,
                                      r1=0, r2=0, r3=1,
                                      length=HEIGHT, radius=EPS,
-                                     mass=1., capped=False)
+                                     mass=1., capped=True)
 
         knees[i] = sim.send_hinge_joint(first_body_id=thighs[i], second_body_id=shins[i],
                                         x=x_pos2, y=y_pos2, z=HEIGHT+EPS,
@@ -90,13 +90,13 @@ def send_to_simulator(sim, weight_matrix):
 
     env_box = sim.send_box(x=2, y=-2, z=HEIGHT/2.0, length=HEIGHT, width=HEIGHT, height=HEIGHT, collision_group=1,
                            mass=3.)
-    sim.send_hinge_joint(pyrosim.Simulator.WORLD, main_body, x=0,y=0,z=HEIGHT+EPS, n1=0,n2=.4,n3=1, position_control=False)
+    sim.send_slider_joint(pyrosim.Simulator.WORLD, main_body, x=0,y=.4,z=1, position_control=True)
 
     MASS = 3
     sim.send_external_force(env_box, x=0, y=0, z=MASS*20., time=300)
     sim.send_external_force(env_box, x=-MASS*70., y=MASS*73., z=0, time=320)
 
-    sim.send_collision_matrix('all')
+    sim.create_collision_matrix('all')
 
     # for t in range(1000):
     #   x = math.cos(0.045*t)

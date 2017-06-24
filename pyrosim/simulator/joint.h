@@ -42,10 +42,10 @@ public:
     int  Connect_Sensor_To_Sensor_Neuron(int sensorID , NEURON *sensorNeuron);
     int  Connect_To_Motor_Neuron(int jointID, NEURON *mNeuron);
 
-	void Create_In_Simulator(dWorldID world, OBJECT *firstObject, OBJECT *secondObject);
+	void Create_In_Simulator(dWorldID world, OBJECT *first, OBJECT *second);
     void Create_Proprioceptive_Sensor(int myID, int evalPeriod);
         
-    void Draw(void);
+    void Draw(OBJECT *first, OBJECT *second);
 
 	int  Get_First_Object_Index(void);
 

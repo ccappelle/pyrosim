@@ -131,19 +131,18 @@ void JOINT::Create_Proprioceptive_Sensor(int myID, int evalPeriod) {
         proprioceptiveSensor = new PROPRIOCEPTIVE_SENSOR(myID,evalPeriod);
 }
 
-void JOINT::Draw(){
+void JOINT::Draw(OBJECT *first, OBJECT *second){
+    dVector3 jointPosition;
+    dVector3 jointAxis;
+    dMatrix3 rotation;
+    dReal jointActuation;
+    dReal radius = .025;
+    dReal length = .3;
     if( type==HINGE){
-        dVector3 jointPosition;
-        dVector3 jointAxis;
-        dVector3 jointRotation;
-        dMatrix3 rotation;
-        dReal jointAngle;
-
         float r = 1.;
         float g = .3;
         float b = .3;
-        dReal radius = .025;
-        dReal length = .3;
+
 
         dsSetColorAlpha(r,g,b,1.0);
 
@@ -152,6 +151,41 @@ void JOINT::Draw(){
 
         dRFromZAxis(rotation, jointAxis[0],jointAxis[1],jointAxis[2]);
         dsDrawCylinder(jointPosition,rotation,length,radius);
+    }
+    else{
+        float r = .3;
+        float g = 1.0;
+        float b = .3;
+        radius = .01;
+
+        if (first != NULL && second != NULL){
+           const dReal *pos1 = dBodyGetPosition(first->Get_Body());
+           const dReal *pos2 = dBodyGetPosition(second->Get_Body());
+           x = (pos1[0] + pos2[0]) /2.0;
+           y = (pos1[1] + pos2[1])/2.0;
+           z = (pos1[2] + pos2[2])/2.0;
+        }
+        dJointGetSliderAxis(joint, jointAxis);
+        jointActuation = dJointGetSliderPosition(joint);
+        jointPosition[0] = x;
+        jointPosition[1] = y;
+        jointPosition[2] = z;
+
+        dRFromZAxis(rotation, jointAxis[0], jointAxis[1], jointAxis[2]);
+        dsSetColorAlpha(r,g,b,1.0);
+        dsDrawCylinder(jointPosition, rotation, highStop-lowStop, radius);
+
+        jointPosition[0] += jointActuation*jointAxis[0];
+        jointPosition[1] += jointActuation*jointAxis[1];
+        jointPosition[2] += jointActuation*jointAxis[2];
+        dsSetColorAlpha(1.0,1.0,.3,1.0);
+        dsDrawSphere(jointPosition, rotation, radius*2.0);  
+        
+        jointPosition[0] -= 2*jointActuation*jointAxis[0];
+        jointPosition[1] -= 2*jointActuation*jointAxis[1];
+        jointPosition[2] -= 2*jointActuation*jointAxis[2];
+        dsSetColorAlpha(.3,1.0,1.0,1.0);
+        dsDrawSphere(jointPosition, rotation, radius*2.0);  
     }
 }
 
@@ -228,16 +262,16 @@ void JOINT::Write_To_Python(int evalPeriod) {
 // ------------------- Private methods --------------------------
 
 
-void JOINT::Create_Hinge_Joint_In_Simulator(dWorldID world, OBJECT *firstObject, OBJECT *secondObject) {
+void JOINT::Create_Hinge_Joint_In_Simulator(dWorldID world, OBJECT *first, OBJECT *second) {
 
         joint = dJointCreateHinge(world,0);
 
-        if (firstObject == NULL)
-            dJointAttach( joint , 0 , secondObject->Get_Body() );
-        else if(secondObject == NULL)
-            dJointAttach( joint , firstObject->Get_Body() , 0 );
+        if (first == NULL)
+            dJointAttach( joint , 0 , second->Get_Body() );
+        else if(second == NULL)
+            dJointAttach( joint , first->Get_Body() , 0 );
         else
-            dJointAttach( joint , firstObject->Get_Body() , secondObject->Get_Body() );
+            dJointAttach( joint , first->Get_Body() , second->Get_Body() );
 
         dJointSetHingeAnchor(joint,x,y,z);
 
@@ -249,15 +283,25 @@ void JOINT::Create_Hinge_Joint_In_Simulator(dWorldID world, OBJECT *firstObject,
         }
 }
 
-void JOINT::Create_Slider_Joint_In_Simulator(dWorldID world, OBJECT *firstObject, OBJECT *secondObject){
+void JOINT::Create_Slider_Joint_In_Simulator(dWorldID world, OBJECT *first, OBJECT *second){
 
         joint = dJointCreateSlider(world,0);
-        if (firstObject == NULL)
-            dJointAttach( joint , 0 , secondObject->Get_Body() );
-        else if(secondObject == NULL)
-            dJointAttach( joint , firstObject->Get_Body() , 0 );
+        if (first == NULL){
+            dJointAttach( joint , 0 , second->Get_Body() );
+            const dReal *position = dBodyGetPosition(second->Get_Body());
+            x = position[0];
+            y = position[1];
+            z = position[2];
+        }
+        else if(second == NULL){
+            dJointAttach( joint , first->Get_Body() , 0 );
+            const dReal *position = dBodyGetPosition(first->Get_Body());
+            x = position[0];
+            y = position[1];
+            z = position[2];
+        }
         else
-            dJointAttach( joint , firstObject->Get_Body() , secondObject->Get_Body() );
+            dJointAttach( joint , first->Get_Body() , second->Get_Body() );
 
         //dJointSetHingeAnchor(joint,x,y,z);
 

@@ -77,7 +77,7 @@ Motor Neurons
 Motor neurons are the closest thing to traditional output neurons in pyrosim. The value of the motor neuron
 is read by the specified joint and then the joint actuates accordingly. 
 
-**Notes about motor neurons and joints**:
+.. note::
 
     * Motor neurons which are not connected by synapses will have a constant value of 0. This means they will try to keep the joint at the midpoint of the joint range if the joint is using position control or at velocity 0 if not. Changing the :code:`torque` parameter of the joint will change how effective the joint is at maintaining its position.
     * If a motor neuron is attached to a joint which is using positional control, it is important to be wary of where the joint is initialized in relation to its limits. If the starting point of the joint is near its :code:`hi` or :code:`lo` cutoffs, the joint will immediately try to position to the midpoint of its range and the simulation will most likely break. *(Still mostly untested) This problem can be partially mitigated by changing the* :code:`start_value` *parameter when specifying the motor neuron*. If the joint is not using position control then this is not a problem.
@@ -102,6 +102,12 @@ Parameters:
     * :math:`w_{ji}` - the synaptic weight from neuron :math:`j` to :math:`i`
     * :math:`\alpha,\tau` - user defined learning parameters. Usually 0 or 1.
     * :math:`\sigma` - a sigmoid function. Currently pyrosim only uses :math:`\mathbf{\tanh}`.
+
+.. image:: /img/graph-neural-net.png
+    :alt: Basic neural unit
+    :align: center
+    :width: 200 px
+    :height: 200 px
 
 Double Pendulum Part III
 ------------------------

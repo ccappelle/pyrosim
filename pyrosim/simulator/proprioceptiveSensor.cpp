@@ -47,7 +47,6 @@ void PROPRIOCEPTIVE_SENSOR::Poll(dJointID joint, int type, int t) {
 void PROPRIOCEPTIVE_SENSOR::Update_Sensor_Neurons(int t) {
 
         if ( mySensorNeuron )
-
                 mySensorNeuron->Set( angles[t] );
 }
 

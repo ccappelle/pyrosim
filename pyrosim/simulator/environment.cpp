@@ -47,8 +47,23 @@ void ENVIRONMENT::Draw(int debug) {
                 objects[i]->Draw();
 
         if (debug){
-                for (int j=0; j<numberOfJoints; j++)
-                        joints[j]->Draw();
+                for (int j=0; j<numberOfJoints; j++){
+                        int firstObjectID = joints[j]->Get_First_Object_Index();
+
+                        int secondObjectID = joints[j]->Get_Second_Object_Index();
+
+                        OBJECT *firstObject = NULL;
+
+                        if ( firstObjectID >= 0 )
+                            firstObject = objects[ firstObjectID ];
+
+                        OBJECT *secondObject = NULL;
+
+                        if ( secondObjectID >= 0 )
+                            secondObject = objects[ secondObjectID ];
+                        joints[j]->Draw(firstObject, secondObject);
+
+                    }
         }
 
 }

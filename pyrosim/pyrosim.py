@@ -41,12 +41,16 @@ class Simulator(object):
     """
 
     WORLD = -1
+    FOREVER = -1
 
     def __init__(self, play_blind=False, play_paused=False,
                  eval_time=constants.evaluation_time, dt=constants.dt,
                  gravity=constants.gravity,
                  xyz=constants.xyz, hpr=constants.hpr, use_textures=False,
                  debug=False):
+        assert play_blind == False or eval_time > 0, ('Cannot run'
+                                                     ' blind forever')
+
         self.strings_to_send = []
 
         self._num_bodies = 0
@@ -94,7 +98,7 @@ class Simulator(object):
 # ------Getters-------------------------
     def create_collision_matrix(self, collision_type='none'):
         """Create a predefined collision matrix
-        
+
         Parameters
         ----------
         collision_type : str, optional
@@ -136,7 +140,7 @@ class Simulator(object):
 
     def assign_collision(self, group_1, group_2):
         """Create collision potential between group 1 and group 2
-        
+
         Parameters
         ----------
         group_1 : str
@@ -505,7 +509,7 @@ class Simulator(object):
     def send_hinge_joint(self, first_body_id, second_body_id, x=0, y=0, z=0,
                          n1=0, n2=0, n3=1,
                          lo=-math.pi/4.0, hi=+math.pi/4.0,
-                         speed=1.0, torque=1.0, position_control=True):
+                         speed=1.0, torque=10.0, position_control=True):
         """Send a hinge joint to the simulator
 
                 Hinge joints rotate around the axis specified by [n1,n2,n3]
@@ -546,7 +550,7 @@ class Simulator(object):
                 The speed of the motor of the joint (default is 1.0)
         torque          : float, optional
                 The maximum amount torque the motor in the joint can use
-                (default is 1.0)
+                (default is 10.0)
         position_control : bool, optional
                 True means use position control. This means the motor neuron
                 output is treated as a target angle for the joint to actuate
@@ -566,6 +570,9 @@ class Simulator(object):
                             'than or equal to zero')
         assert torque >= 0, ('Torque of Hinge Joint must be greater'
                              'than or equal to zero')
+        assert (first_body_id >= 0 or
+                second_body_id >= 0), ('Both objects cannot be the world')
+
         self._assert_non_zero('Hinge Joint', n1, n2, n3)
 
         joint_id = self._num_joints
@@ -585,7 +592,7 @@ class Simulator(object):
     def send_slider_joint(self, first_body_id, second_body_id,
                           x=0, y=0, z=1,
                           lo=-.25, hi=+.25,
-                          speed=1.0, strength=1.0, position_control=True):
+                          speed=1.0, strength=10.0, position_control=True):
         """Send a slider joint to the simulator
 
                 Slider joints push and pull two bodies along the axis defined
@@ -617,7 +624,7 @@ class Simulator(object):
                 The upper limit in simulator units of the joint 
                 (default is 1.0)
         speed           : float, optional
-                The speed of the motor of the joint (default is 1.0)
+                The speed of the motor of the joint (default is 10.0)
         strength          : float, optional
                 The maximum amount of force the motor in the joint can use
                 (default is 1.0)
@@ -638,8 +645,10 @@ class Simulator(object):
             str(first_body_id) + ' has not been sent'
         assert speed >= 0, ('Speed of Hinge Joint must be greater'
                             'than or equal to zero')
-        assert strength >= 0, ('Torque of Hinge Joint must be greater'
+        assert strength >= 0, ('Strength must be greater'
                                'than or equal to zero')
+        assert (first_body_id >= 0 or
+                second_body_id >= 0), ('Both objects cannot be the world')
 
         joint_id = self._num_joints
         self._num_joints += 1
@@ -811,6 +820,9 @@ class Simulator(object):
         int
                 The id tag of the neuron
         """
+        assert self.eval_time >= 0, ('Cannot send function neuron'
+                                         ' in infinite mode')
+
         end_time = self.eval_time*self.dt
         time_vals = np.arange(0, end_time, self.dt)
         output_vals = list(map(function, time_vals))
@@ -1207,12 +1219,16 @@ class Simulator(object):
         """
 
         data_from_simulator = self.pipe.communicate()
+        if self.eval_time >= 0:
+            self._collect_sensor_data(data_from_simulator)
+            self.evaluated = True
 
-        self._collect_sensor_data(data_from_simulator)
-        self.evaluated = True
-
-        return self.data
-
+            return self.data
+        else:
+            self.evaluated = True
+            print data_from_simulator[0]
+            print data_from_simulator[1]
+            return 'No results during infinite run'
 # --------------------- Private methods -----------------------------
     def _add_group(self, group):
         """Appends group handle to list and returns index"""
