@@ -184,11 +184,13 @@
 <h2>Defining Collisions Between Groups<a class="headerlink" href="#defining-collisions-between-groups" title="Permalink to this headline">¶</a></h2>
 <p>If we imagine each collision group as a node on a network, then it is easy to see the collision matrix as an adjacency matrix for this network where there is an edge between two groups if they collide and none if they do not.
 To go back to our robot/environment example above, we would want a connection between the &#8216;robot&#8217; and &#8216;env&#8217; collision groups and a loop connection on the &#8216;env&#8217; node. Loops specify intra-group collision while edges between two different nodes specify inter-group collision.</p>
+<p>If you do not want to specify every collision between every group you can use the predefined collision matrices provided by pyrosim. By using the <code class="code docutils literal"><span class="pre">sim.create_collision_matrix(collision_type)</span></code> command you can choose from four different collision types: &#8216;none&#8217;, &#8216;inter&#8217;, &#8216;intra&#8217;, and &#8216;all&#8217;. They are depicted using the &#8216;env&#8217; and &#8216;robot&#8217; groups by the following figure:</p>
+<a class="reference internal image-reference" href="../_images/graph-pyrosim.png"><img alt="Different predefined collisions" class="align-center" src="../_images/graph-pyrosim.png" style="width: 100%;" /></a>
 <p>Regardless of how groups are defined and connected, the collisions between bodies which are attached by joints are disabled automatically. If they were enabled the simulation would most likely break.</p>
 </div>
 <div class="section" id="double-pendulum-part-iv">
 <h2>Double Pendulum Part IV<a class="headerlink" href="#double-pendulum-part-iv" title="Permalink to this headline">¶</a></h2>
-<p>We have taken our double pendulum code and removed the sensors and turned the network it to a simple forward actuation about its connection in space. This simulation hit a ball in the environment into the target blocks.</p>
+<p>We have taken our double pendulum code and removed the sensors and turned the network it to a simple forward actuation about its connection in space. This simulation should show the pendulum actuate and hit a ball in the environment into the target blocks.</p>
 <div class="literal-block-wrapper container" id="dp-collisions-py">
 <div class="code-block-caption"><span class="caption-text">dp-collisions.py</span><a class="headerlink" href="#dp-collisions-py" title="Permalink to this code">¶</a></div>
 <div class="highlight-default"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">pyrosim</span>

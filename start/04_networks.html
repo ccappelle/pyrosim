@@ -236,13 +236,13 @@ vector of values.</p>
 <h3>Motor Neurons<a class="headerlink" href="#motor-neurons" title="Permalink to this headline">¶</a></h3>
 <p>Motor neurons are the closest thing to traditional output neurons in pyrosim. The value of the motor neuron
 is read by the specified joint and then the joint actuates accordingly.</p>
-<p><strong>Notes about motor neurons and joints</strong>:</p>
-<blockquote>
-<div><ul class="simple">
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<ul class="last simple">
 <li>Motor neurons which are not connected by synapses will have a constant value of 0. This means they will try to keep the joint at the midpoint of the joint range if the joint is using position control or at velocity 0 if not. Changing the <code class="code docutils literal"><span class="pre">torque</span></code> parameter of the joint will change how effective the joint is at maintaining its position.</li>
 <li>If a motor neuron is attached to a joint which is using positional control, it is important to be wary of where the joint is initialized in relation to its limits. If the starting point of the joint is near its <code class="code docutils literal"><span class="pre">hi</span></code> or <code class="code docutils literal"><span class="pre">lo</span></code> cutoffs, the joint will immediately try to position to the midpoint of its range and the simulation will most likely break. <em>(Still mostly untested) This problem can be partially mitigated by changing the</em> <code class="code docutils literal"><span class="pre">start_value</span></code> <em>parameter when specifying the motor neuron</em>. If the joint is not using position control then this is not a problem.</li>
 </ul>
-</div></blockquote>
+</div>
 </div>
 </div>
 <div class="section" id="updating">
@@ -262,6 +262,7 @@ follows:</p>
 <li><span class="math">\(\sigma\)</span> - a sigmoid function. Currently pyrosim only uses <span class="math">\(\mathbf{\tanh}\)</span>.</li>
 </ul>
 </div></blockquote>
+<a class="reference internal image-reference" href="../_images/graph-neural-net.png"><img alt="Basic neural unit" class="align-center" src="../_images/graph-neural-net.png" style="width: 200px; height: 200px;" /></a>
 </div>
 <div class="section" id="double-pendulum-part-iii">
 <h2>Double Pendulum Part III<a class="headerlink" href="#double-pendulum-part-iii" title="Permalink to this headline">¶</a></h2>

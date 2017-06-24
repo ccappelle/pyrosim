@@ -631,7 +631,7 @@ previous time step.</li>
 
 <dl class="method">
 <dt id="pyrosim.Simulator.send_hinge_joint">
-<code class="descname">send_hinge_joint</code><span class="sig-paren">(</span><em>first_body_id</em>, <em>second_body_id</em>, <em>x=0</em>, <em>y=0</em>, <em>z=0</em>, <em>n1=0</em>, <em>n2=0</em>, <em>n3=1</em>, <em>lo=-0.7853981633974483</em>, <em>hi=0.7853981633974483</em>, <em>speed=1.0</em>, <em>torque=1.0</em>, <em>position_control=True</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pyrosim.html#Simulator.send_hinge_joint"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyrosim.Simulator.send_hinge_joint" title="Permalink to this definition">¶</a></dt>
+<code class="descname">send_hinge_joint</code><span class="sig-paren">(</span><em>first_body_id</em>, <em>second_body_id</em>, <em>x=0</em>, <em>y=0</em>, <em>z=0</em>, <em>n1=0</em>, <em>n2=0</em>, <em>n3=1</em>, <em>lo=-0.7853981633974483</em>, <em>hi=0.7853981633974483</em>, <em>speed=1.0</em>, <em>torque=10.0</em>, <em>position_control=True</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pyrosim.html#Simulator.send_hinge_joint"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyrosim.Simulator.send_hinge_joint" title="Permalink to this definition">¶</a></dt>
 <dd><p>Send a hinge joint to the simulator</p>
 <blockquote>
 <div>Hinge joints rotate around the axis specified by [n1,n2,n3]</div></blockquote>
@@ -662,7 +662,7 @@ specifies the axis about which the joint rotates
 <li><strong>hi</strong> (<em>float, optional</em>) &#8211; The upper limit in radians of the joint (default is pi/4)</li>
 <li><strong>speed</strong> (<em>float, optional</em>) &#8211; The speed of the motor of the joint (default is 1.0)</li>
 <li><strong>torque</strong> (<em>float, optional</em>) &#8211; The maximum amount torque the motor in the joint can use
-(default is 1.0)</li>
+(default is 10.0)</li>
 <li><strong>position_control</strong> (<em>bool, optional</em>) &#8211; True means use position control. This means the motor neuron
 output is treated as a target angle for the joint to actuate
 to. False means the motor neuron output is treated as a target
@@ -861,7 +861,7 @@ SVI is used for sensors which return a vector of values
 
 <dl class="method">
 <dt id="pyrosim.Simulator.send_slider_joint">
-<code class="descname">send_slider_joint</code><span class="sig-paren">(</span><em>first_body_id</em>, <em>second_body_id</em>, <em>x=0</em>, <em>y=0</em>, <em>z=1</em>, <em>lo=-0.25</em>, <em>hi=0.25</em>, <em>speed=1.0</em>, <em>strength=1.0</em>, <em>position_control=True</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pyrosim.html#Simulator.send_slider_joint"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyrosim.Simulator.send_slider_joint" title="Permalink to this definition">¶</a></dt>
+<code class="descname">send_slider_joint</code><span class="sig-paren">(</span><em>first_body_id</em>, <em>second_body_id</em>, <em>x=0</em>, <em>y=0</em>, <em>z=1</em>, <em>lo=-0.25</em>, <em>hi=0.25</em>, <em>speed=1.0</em>, <em>strength=10.0</em>, <em>position_control=True</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pyrosim.html#Simulator.send_slider_joint"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyrosim.Simulator.send_slider_joint" title="Permalink to this definition">¶</a></dt>
 <dd><p>Send a slider joint to the simulator</p>
 <blockquote>
 <div>Slider joints push and pull two bodies along the axis defined
@@ -887,7 +887,7 @@ space</li>
 (default is -1.0)</li>
 <li><strong>hi</strong> (<em>float, optional</em>) &#8211; The upper limit in simulator units of the joint
 (default is 1.0)</li>
-<li><strong>speed</strong> (<em>float, optional</em>) &#8211; The speed of the motor of the joint (default is 1.0)</li>
+<li><strong>speed</strong> (<em>float, optional</em>) &#8211; The speed of the motor of the joint (default is 10.0)</li>
 <li><strong>strength</strong> (<em>float, optional</em>) &#8211; The maximum amount of force the motor in the joint can use
 (default is 1.0)</li>
 <li><strong>position_control</strong> (<em>bool, optional</em>) &#8211; True means use position control. This means the motor neuron

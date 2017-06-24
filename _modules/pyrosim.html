@@ -201,12 +201,16 @@
 <span class="sd">    &quot;&quot;&quot;</span>
 
     <span class="n">WORLD</span> <span class="o">=</span> <span class="o">-</span><span class="mi">1</span>
+    <span class="n">FOREVER</span> <span class="o">=</span> <span class="o">-</span><span class="mi">1</span>
 
     <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">play_blind</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">play_paused</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
                  <span class="n">eval_time</span><span class="o">=</span><span class="n">constants</span><span class="o">.</span><span class="n">evaluation_time</span><span class="p">,</span> <span class="n">dt</span><span class="o">=</span><span class="n">constants</span><span class="o">.</span><span class="n">dt</span><span class="p">,</span>
                  <span class="n">gravity</span><span class="o">=</span><span class="n">constants</span><span class="o">.</span><span class="n">gravity</span><span class="p">,</span>
                  <span class="n">xyz</span><span class="o">=</span><span class="n">constants</span><span class="o">.</span><span class="n">xyz</span><span class="p">,</span> <span class="n">hpr</span><span class="o">=</span><span class="n">constants</span><span class="o">.</span><span class="n">hpr</span><span class="p">,</span> <span class="n">use_textures</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
                  <span class="n">debug</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
+        <span class="k">assert</span> <span class="n">play_blind</span> <span class="o">==</span> <span class="kc">False</span> <span class="ow">or</span> <span class="n">eval_time</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">,</span> <span class="p">(</span><span class="s1">&#39;Cannot run&#39;</span>
+                                                     <span class="s1">&#39; blind forever&#39;</span><span class="p">)</span>
+
         <span class="bp">self</span><span class="o">.</span><span class="n">strings_to_send</span> <span class="o">=</span> <span class="p">[]</span>
 
         <span class="bp">self</span><span class="o">.</span><span class="n">_num_bodies</span> <span class="o">=</span> <span class="mi">0</span>
@@ -254,7 +258,7 @@
 <span class="c1"># ------Getters-------------------------</span>
 <div class="viewcode-block" id="Simulator.create_collision_matrix"><a class="viewcode-back" href="../code.html#pyrosim.Simulator.create_collision_matrix">[docs]</a>    <span class="k">def</span> <span class="nf">create_collision_matrix</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">collision_type</span><span class="o">=</span><span class="s1">&#39;none&#39;</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;Create a predefined collision matrix</span>
-<span class="sd">        </span>
+
 <span class="sd">        Parameters</span>
 <span class="sd">        ----------</span>
 <span class="sd">        collision_type : str, optional</span>
@@ -296,7 +300,7 @@
 
 <div class="viewcode-block" id="Simulator.assign_collision"><a class="viewcode-back" href="../code.html#pyrosim.Simulator.assign_collision">[docs]</a>    <span class="k">def</span> <span class="nf">assign_collision</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">group_1</span><span class="p">,</span> <span class="n">group_2</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;Create collision potential between group 1 and group 2</span>
-<span class="sd">        </span>
+
 <span class="sd">        Parameters</span>
 <span class="sd">        ----------</span>
 <span class="sd">        group_1 : str</span>
@@ -665,7 +669,7 @@
 <div class="viewcode-block" id="Simulator.send_hinge_joint"><a class="viewcode-back" href="../code.html#pyrosim.Simulator.send_hinge_joint">[docs]</a>    <span class="k">def</span> <span class="nf">send_hinge_joint</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">first_body_id</span><span class="p">,</span> <span class="n">second_body_id</span><span class="p">,</span> <span class="n">x</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">y</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">z</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span>
                          <span class="n">n1</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">n2</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">n3</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span>
                          <span class="n">lo</span><span class="o">=-</span><span class="n">math</span><span class="o">.</span><span class="n">pi</span><span class="o">/</span><span class="mf">4.0</span><span class="p">,</span> <span class="n">hi</span><span class="o">=+</span><span class="n">math</span><span class="o">.</span><span class="n">pi</span><span class="o">/</span><span class="mf">4.0</span><span class="p">,</span>
-                         <span class="n">speed</span><span class="o">=</span><span class="mf">1.0</span><span class="p">,</span> <span class="n">torque</span><span class="o">=</span><span class="mf">1.0</span><span class="p">,</span> <span class="n">position_control</span><span class="o">=</span><span class="kc">True</span><span class="p">):</span>
+                         <span class="n">speed</span><span class="o">=</span><span class="mf">1.0</span><span class="p">,</span> <span class="n">torque</span><span class="o">=</span><span class="mf">10.0</span><span class="p">,</span> <span class="n">position_control</span><span class="o">=</span><span class="kc">True</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;Send a hinge joint to the simulator</span>
 
 <span class="sd">                Hinge joints rotate around the axis specified by [n1,n2,n3]</span>
@@ -706,7 +710,7 @@
 <span class="sd">                The speed of the motor of the joint (default is 1.0)</span>
 <span class="sd">        torque          : float, optional</span>
 <span class="sd">                The maximum amount torque the motor in the joint can use</span>
-<span class="sd">                (default is 1.0)</span>
+<span class="sd">                (default is 10.0)</span>
 <span class="sd">        position_control : bool, optional</span>
 <span class="sd">                True means use position control. This means the motor neuron</span>
 <span class="sd">                output is treated as a target angle for the joint to actuate</span>
@@ -726,6 +730,9 @@
                             <span class="s1">&#39;than or equal to zero&#39;</span><span class="p">)</span>
         <span class="k">assert</span> <span class="n">torque</span> <span class="o">&gt;=</span> <span class="mi">0</span><span class="p">,</span> <span class="p">(</span><span class="s1">&#39;Torque of Hinge Joint must be greater&#39;</span>
                              <span class="s1">&#39;than or equal to zero&#39;</span><span class="p">)</span>
+        <span class="k">assert</span> <span class="p">(</span><span class="n">first_body_id</span> <span class="o">&gt;=</span> <span class="mi">0</span> <span class="ow">or</span>
+                <span class="n">second_body_id</span> <span class="o">&gt;=</span> <span class="mi">0</span><span class="p">),</span> <span class="p">(</span><span class="s1">&#39;Both objects cannot be the world&#39;</span><span class="p">)</span>
+
         <span class="bp">self</span><span class="o">.</span><span class="n">_assert_non_zero</span><span class="p">(</span><span class="s1">&#39;Hinge Joint&#39;</span><span class="p">,</span> <span class="n">n1</span><span class="p">,</span> <span class="n">n2</span><span class="p">,</span> <span class="n">n3</span><span class="p">)</span>
 
         <span class="n">joint_id</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_num_joints</span>
@@ -745,7 +752,7 @@
 <div class="viewcode-block" id="Simulator.send_slider_joint"><a class="viewcode-back" href="../code.html#pyrosim.Simulator.send_slider_joint">[docs]</a>    <span class="k">def</span> <span class="nf">send_slider_joint</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">first_body_id</span><span class="p">,</span> <span class="n">second_body_id</span><span class="p">,</span>
                           <span class="n">x</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">y</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">z</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span>
                           <span class="n">lo</span><span class="o">=-.</span><span class="mi">25</span><span class="p">,</span> <span class="n">hi</span><span class="o">=+.</span><span class="mi">25</span><span class="p">,</span>
-                          <span class="n">speed</span><span class="o">=</span><span class="mf">1.0</span><span class="p">,</span> <span class="n">strength</span><span class="o">=</span><span class="mf">1.0</span><span class="p">,</span> <span class="n">position_control</span><span class="o">=</span><span class="kc">True</span><span class="p">):</span>
+                          <span class="n">speed</span><span class="o">=</span><span class="mf">1.0</span><span class="p">,</span> <span class="n">strength</span><span class="o">=</span><span class="mf">10.0</span><span class="p">,</span> <span class="n">position_control</span><span class="o">=</span><span class="kc">True</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;Send a slider joint to the simulator</span>
 
 <span class="sd">                Slider joints push and pull two bodies along the axis defined</span>
@@ -777,7 +784,7 @@
 <span class="sd">                The upper limit in simulator units of the joint </span>
 <span class="sd">                (default is 1.0)</span>
 <span class="sd">        speed           : float, optional</span>
-<span class="sd">                The speed of the motor of the joint (default is 1.0)</span>
+<span class="sd">                The speed of the motor of the joint (default is 10.0)</span>
 <span class="sd">        strength          : float, optional</span>
 <span class="sd">                The maximum amount of force the motor in the joint can use</span>
 <span class="sd">                (default is 1.0)</span>
@@ -798,8 +805,10 @@
             <span class="nb">str</span><span class="p">(</span><span class="n">first_body_id</span><span class="p">)</span> <span class="o">+</span> <span class="s1">&#39; has not been sent&#39;</span>
         <span class="k">assert</span> <span class="n">speed</span> <span class="o">&gt;=</span> <span class="mi">0</span><span class="p">,</span> <span class="p">(</span><span class="s1">&#39;Speed of Hinge Joint must be greater&#39;</span>
                             <span class="s1">&#39;than or equal to zero&#39;</span><span class="p">)</span>
-        <span class="k">assert</span> <span class="n">strength</span> <span class="o">&gt;=</span> <span class="mi">0</span><span class="p">,</span> <span class="p">(</span><span class="s1">&#39;Torque of Hinge Joint must be greater&#39;</span>
+        <span class="k">assert</span> <span class="n">strength</span> <span class="o">&gt;=</span> <span class="mi">0</span><span class="p">,</span> <span class="p">(</span><span class="s1">&#39;Strength must be greater&#39;</span>
                                <span class="s1">&#39;than or equal to zero&#39;</span><span class="p">)</span>
+        <span class="k">assert</span> <span class="p">(</span><span class="n">first_body_id</span> <span class="o">&gt;=</span> <span class="mi">0</span> <span class="ow">or</span>
+                <span class="n">second_body_id</span> <span class="o">&gt;=</span> <span class="mi">0</span><span class="p">),</span> <span class="p">(</span><span class="s1">&#39;Both objects cannot be the world&#39;</span><span class="p">)</span>
 
         <span class="n">joint_id</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_num_joints</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_num_joints</span> <span class="o">+=</span> <span class="mi">1</span>
@@ -971,6 +980,9 @@
 <span class="sd">        int</span>
 <span class="sd">                The id tag of the neuron</span>
 <span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">assert</span> <span class="bp">self</span><span class="o">.</span><span class="n">eval_time</span> <span class="o">&gt;=</span> <span class="mi">0</span><span class="p">,</span> <span class="p">(</span><span class="s1">&#39;Cannot send function neuron&#39;</span>
+                                         <span class="s1">&#39; in infinite mode&#39;</span><span class="p">)</span>
+
         <span class="n">end_time</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">eval_time</span><span class="o">*</span><span class="bp">self</span><span class="o">.</span><span class="n">dt</span>
         <span class="n">time_vals</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">end_time</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">dt</span><span class="p">)</span>
         <span class="n">output_vals</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="nb">map</span><span class="p">(</span><span class="n">function</span><span class="p">,</span> <span class="n">time_vals</span><span class="p">))</span>
@@ -1367,12 +1379,16 @@
 <span class="sd">        &quot;&quot;&quot;</span>
 
         <span class="n">data_from_simulator</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">pipe</span><span class="o">.</span><span class="n">communicate</span><span class="p">()</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">eval_time</span> <span class="o">&gt;=</span> <span class="mi">0</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_collect_sensor_data</span><span class="p">(</span><span class="n">data_from_simulator</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">evaluated</span> <span class="o">=</span> <span class="kc">True</span>
 
-        <span class="bp">self</span><span class="o">.</span><span class="n">_collect_sensor_data</span><span class="p">(</span><span class="n">data_from_simulator</span><span class="p">)</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">evaluated</span> <span class="o">=</span> <span class="kc">True</span>
-
-        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">data</span></div>
-
+            <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">data</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">evaluated</span> <span class="o">=</span> <span class="kc">True</span>
+            <span class="nb">print</span> <span class="n">data_from_simulator</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+            <span class="nb">print</span> <span class="n">data_from_simulator</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span>
+            <span class="k">return</span> <span class="s1">&#39;No results during infinite run&#39;</span></div>
 <span class="c1"># --------------------- Private methods -----------------------------</span>
     <span class="k">def</span> <span class="nf">_add_group</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">group</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;Appends group handle to list and returns index&quot;&quot;&quot;</span>

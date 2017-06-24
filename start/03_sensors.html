@@ -91,6 +91,7 @@
             
             
               <ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../installation.html">Installation</a></li>
 <li class="toctree-l1 current"><a class="reference internal" href="../start.html">Getting Started</a><ul class="current">
 <li class="toctree-l2"><a class="reference internal" href="00_empty.html">Simulator Settings</a></li>
 <li class="toctree-l2"><a class="reference internal" href="01_body.html">Bodies</a></li>
@@ -101,8 +102,10 @@
 </ul>
 </li>
 <li class="toctree-l2"><a class="reference internal" href="04_networks.html">Neural Network</a></li>
+<li class="toctree-l2"><a class="reference internal" href="05_collision.html">Collision Matrix</a></li>
 </ul>
 </li>
+<li class="toctree-l1"><a class="reference internal" href="../advanced.html">Advanced Options</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../videos.html">Videos</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../code.html">Simulator Documentation</a></li>
 </ul>
@@ -191,20 +194,17 @@ respectively.</p>
 <h2>Double Pendulum Cont.<a class="headerlink" href="#double-pendulum-cont" title="Permalink to this headline">¶</a></h2>
 <p>We add sensors to the double pendulum and evaluate the print the output.
 Insert the following code after the joints have been sent.</p>
-<div class="literal-block-wrapper container" id="demos-double-pendulum-py">
-<div class="code-block-caption"><span class="caption-text">demos/double_pendulum.py</span><a class="headerlink" href="#demos-double-pendulum-py" title="Permalink to this code">¶</a></div>
-<div class="highlight-python"><div class="highlight"><pre><span></span><span class="c1">### continued from before ###</span>
-<span class="n">pos_sensor</span> <span class="o">=</span> <span class="n">sim</span><span class="o">.</span><span class="n">send_position_sensor</span><span class="p">(</span><span class="n">cyl_1</span><span class="p">)</span>
-
+<div class="literal-block-wrapper container" id="dp-sensors-py">
+<div class="code-block-caption"><span class="caption-text">dp-sensors.py</span><a class="headerlink" href="#dp-sensors-py" title="Permalink to this code">¶</a></div>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">pos_sensor</span> <span class="o">=</span> <span class="n">sim</span><span class="o">.</span><span class="n">send_position_sensor</span><span class="p">(</span><span class="n">cyl_1</span><span class="p">)</span>
 <span class="n">vestib_sensor</span> <span class="o">=</span> <span class="n">sim</span><span class="o">.</span><span class="n">send_vestibular_sensor</span><span class="p">(</span><span class="n">cyl_2</span><span class="p">)</span>
-
 <span class="n">prop_sensor</span> <span class="o">=</span> <span class="n">sim</span><span class="o">.</span><span class="n">send_proprioceptive_sensor</span><span class="p">(</span><span class="n">slider_joint</span><span class="p">)</span>
 
 <span class="n">sim</span><span class="o">.</span><span class="n">start</span><span class="p">()</span>
 <span class="n">results</span> <span class="o">=</span> <span class="n">sim</span><span class="o">.</span><span class="n">wait_to_finish</span><span class="p">()</span>
 
 <span class="c1"># we can access the results matrix directly</span>
-<span class="k">print</span> <span class="n">results</span><span class="p">,</span> <span class="s1">&#39;</span><span class="se">\n</span><span class="s1">&#39;</span>
+<span class="nb">print</span> <span class="n">results</span><span class="p">,</span> <span class="s1">&#39;</span><span class="se">\n</span><span class="s1">&#39;</span>
 
 <span class="c1"># or use built in commands to get a specific sensor and svi</span>
 <span class="c1"># value for every time step</span>
@@ -222,9 +222,10 @@ Insert the following code after the joints have been sent.</p>
     <span class="n">v</span> <span class="o">=</span> <span class="n">vestib_sensor_results</span><span class="p">[</span><span class="n">t</span><span class="p">]</span>
     <span class="n">p</span> <span class="o">=</span> <span class="n">prop_sensor_results</span><span class="p">[</span><span class="n">t</span><span class="p">]</span>
 
-    <span class="n">output</span> <span class="o">=</span> <span class="p">(</span><span class="s1">&#39;{:3d}:: x:{: 3.1f}, y:{: 3.1f}, z:{: 3.1f}, &#39;</span> <span class="o">+</span>
-              <span class="s1">&#39;vestib:{: 3.1f}, prop:{: 3.1f}&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">t</span><span class="p">,</span> <span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">z</span><span class="p">,</span> <span class="n">v</span><span class="p">,</span> <span class="n">p</span><span class="p">)</span>
-    <span class="k">print</span> <span class="n">output</span>
+    <span class="n">output</span> <span class="o">=</span> <span class="p">(</span><span class="s1">&#39;</span><span class="si">{:3d}</span><span class="s1">:: x:</span><span class="si">{: 3.1f}</span><span class="s1">, y:</span><span class="si">{: 3.1f}</span><span class="s1">, z:</span><span class="si">{: 3.1f}</span><span class="s1">, &#39;</span> <span class="o">+</span>
+              <span class="s1">&#39;vestib:</span><span class="si">{: 3.1f}</span><span class="s1">, prop:</span><span class="si">{: 3.1f}</span><span class="s1">&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">t</span><span class="p">,</span> <span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">z</span><span class="p">,</span> <span class="n">v</span><span class="p">,</span> <span class="n">p</span><span class="p">)</span>
+    <span class="nb">print</span> <span class="n">output</span>
+
 </pre></div>
 </div>
 </div>
@@ -310,7 +311,6 @@ Insert the following code after the joints have been sent.</p>
 <span class="mi">499</span><span class="p">::</span> <span class="n">x</span><span class="p">:</span><span class="o">-</span><span class="mf">0.2</span><span class="p">,</span> <span class="n">y</span><span class="p">:</span><span class="o">-</span><span class="mf">0.0</span><span class="p">,</span> <span class="n">z</span><span class="p">:</span> <span class="mf">1.9</span><span class="p">,</span> <span class="n">vestib</span><span class="p">:</span> <span class="mf">1.1</span><span class="p">,</span> <span class="n">prop</span><span class="p">:</span> <span class="mf">0.5</span>
 </pre></div>
 </div>
-<p>Rest coming soon :)</p>
 </div>
 </div>
 
