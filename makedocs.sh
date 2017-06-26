@@ -3,9 +3,6 @@
 DATE=$(date +%Y-%m-%d)
 echo "Documentation update $DATE"
 
-git commit -a -m "Documentation update $DATE"
-git push origin master
-
 cd docs
 make html
 

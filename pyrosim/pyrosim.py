@@ -49,7 +49,8 @@ class Simulator(object):
                  xyz=constants.xyz, hpr=constants.hpr, use_textures=False,
                  debug=False):
         assert play_blind == False or eval_time > 0, ('Cannot run'
-                                                     ' blind forever')
+                                                      ' blind forever')
+        assert eval_time > 0, ('Cannot run forever: FIXXX MEEE')
 
         self.strings_to_send = []
 
@@ -506,13 +507,43 @@ class Simulator(object):
         return body_id
 
 # --------Joints------------------------------
+    def send_fixed_joint(self, first_body_id, second_body_id):
+        """Fix two bodies (or a body and space) together
+
+         This is implemented by using a hing joint and setting the hi and low 
+         stop parameter to 0. This is probably not the best way to do it...
+
+         Parameters
+         ----------
+         first_body_id   : int
+                 The body id of the first body the joint is connected to.
+                 If set equal to -1, the joint is connected to a point in
+                 space 
+         second_body_id  : int
+                 The body id of the second body the joint is connected to.
+                 If set equal to -1, the joint is connected to a point in
+                 space 
+
+         Returns
+         -------
+         bool
+             True if successful
+        """
+        assert first_body_id < self._num_bodies, 'Body with id ' + \
+            str(first_body_id) + ' has not been sent'
+        assert second_body_id < self._num_bodies, 'Body with id ' + \
+            str(second_body_id) + ' has not been sent'
+        sim.send_hinge_joint(first_body_id, second_body_id, lo=0, hi=0,
+                             torque=10000)
+        return True
+
     def send_hinge_joint(self, first_body_id, second_body_id, x=0, y=0, z=0,
                          n1=0, n2=0, n3=1,
                          lo=-math.pi/4.0, hi=+math.pi/4.0,
                          speed=1.0, torque=10.0, position_control=True):
         """Send a hinge joint to the simulator
 
-                Hinge joints rotate around the axis specified by [n1,n2,n3]
+        Hinge joints rotate around the axis specified by [n1,n2,n3]
 
         Parameters
         ----------
@@ -565,7 +596,7 @@ class Simulator(object):
         assert first_body_id < self._num_bodies, 'Body with id ' + \
             str(first_body_id) + ' has not been sent'
         assert second_body_id < self._num_bodies, 'Body with id ' + \
-            str(first_body_id) + ' has not been sent'
+            str(second_body_id) + ' has not been sent'
         assert speed >= 0, ('Speed of Hinge Joint must be greater'
                             'than or equal to zero')
         assert torque >= 0, ('Torque of Hinge Joint must be greater'
@@ -642,7 +673,7 @@ class Simulator(object):
         assert first_body_id < self._num_bodies, 'Body with id ' + \
             str(first_body_id) + ' has not been sent'
         assert second_body_id < self._num_bodies, 'Body with id ' + \
-            str(first_body_id) + ' has not been sent'
+            str(second_body_id) + ' has not been sent'
         assert speed >= 0, ('Speed of Hinge Joint must be greater'
                             'than or equal to zero')
         assert strength >= 0, ('Strength must be greater'
@@ -687,7 +718,7 @@ class Simulator(object):
                           start_value=0.0):
         """Send motor neurons to simulator
 
-        Motor neurons are neurons which connecto to a specified joint and 
+        Motor neurons are neurons which connect to a specified joint and 
         determine how the joint moves every time step of simulation
         WARNING: Sending a motor neuron to a joint whose starting position
         is not in the middle of the 'hi' & 'lo' cutoffs will most likely cause
@@ -705,7 +736,7 @@ class Simulator(object):
                 from external inputs vs. the value of the neuron at the 
                 previous time step. (default 1)
         alpha       : float, optional
-                The 'rememberance rate' of the neuron. Usually 1 or 0.
+                The 'remembrance rate' of the neuron. Usually 1 or 0.
                 An alpha of 1 helps reduce jitter in positionally controlled
                 joints. (default is 1)
         start_value : float, optional
@@ -821,7 +852,7 @@ class Simulator(object):
                 The id tag of the neuron
         """
         assert self.eval_time >= 0, ('Cannot send function neuron'
-                                         ' in infinite mode')
+                                     ' in infinite mode')
 
         end_time = self.eval_time*self.dt
         time_vals = np.arange(0, end_time, self.dt)
@@ -844,7 +875,7 @@ class Simulator(object):
             from external inputs vs. the value of the neuron at the 
             previous time step.
         alpha    :
-            The 'rememberance rate' of the neuron. Usually 1 or 0.
+            The 'remembrance rate' of the neuron. Usually 1 or 0.
 
         Returns
         -------
@@ -1204,7 +1235,7 @@ class Simulator(object):
             print 'Done \n'
             print 'Pipe open with commands: ', commands
             print 'Starting simulation \n'
-            print 'C++ recieve commands: '
+            print 'C++ receive commands: '
 
         return True
 
@@ -1230,6 +1261,7 @@ class Simulator(object):
             print data_from_simulator[1]
             return 'No results during infinite run'
 # --------------------- Private methods -----------------------------
+
     def _add_group(self, group):
         """Appends group handle to list and returns index"""
         index = len(self._collision_groups)

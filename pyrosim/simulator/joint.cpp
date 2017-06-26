@@ -139,6 +139,7 @@ void JOINT::Draw(OBJECT *first, OBJECT *second){
     dReal radius = .025;
     dReal length = .3;
     if( type==HINGE){
+        if (! (lowStop == highStop && positionControl==true)){
         float r = 1.;
         float g = .3;
         float b = .3;
@@ -151,6 +152,7 @@ void JOINT::Draw(OBJECT *first, OBJECT *second){
 
         dRFromZAxis(rotation, jointAxis[0],jointAxis[1],jointAxis[2]);
         dsDrawCylinder(jointPosition,rotation,length,radius);
+        }
     }
     else{
         float r = .3;
