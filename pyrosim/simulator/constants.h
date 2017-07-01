@@ -12,6 +12,7 @@
  int	MOTOR_NEURON	= 3;
  int FUNCTION_NEURON = 4;
 
+
  int	BOX		= 0;
  int	CYLINDER	= 1;
  int SPHERE = 2;
@@ -19,6 +20,7 @@
 
  int HINGE = 0;
  int SLIDER = 1;
-
+ int THRUSTER = 2;
+ 
 #endif
 

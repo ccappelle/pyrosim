@@ -24,14 +24,17 @@ private:
 	int	positionControl;
 
 	double  speed;
-	double torque;
+	double strength;
 
+    double lastDesired;
 	dJointID joint;
 
-        PROPRIOCEPTIVE_SENSOR *proprioceptiveSensor;
+    PROPRIOCEPTIVE_SENSOR *proprioceptiveSensor;
 
 	NEURON *motorNeuron;
 
+    OBJECT *first;
+    OBJECT *second;
 public:
 	JOINT(int jointType);
 
@@ -45,7 +48,7 @@ public:
 	void Create_In_Simulator(dWorldID world, OBJECT *first, OBJECT *second);
     void Create_Proprioceptive_Sensor(int myID, int evalPeriod);
         
-    void Draw(OBJECT *first, OBJECT *second);
+    void Draw();
 
 	int  Get_First_Object_Index(void);
 
@@ -84,8 +87,8 @@ public:
         type = t;
     }
 
-    void Set_Torque(double t){
-        torque = t;
+    void Set_Strength(double t){
+        strength = t;
     }
 
     void Set_Speed(double s){
@@ -98,9 +101,10 @@ public:
 private:
 	//void Create_Fixed_Joint_In_Simulator(dWorldID world, OBJECT *firstObject, OBJECT *secondObject);
 
-        void Create_Hinge_Joint_In_Simulator(dWorldID world, OBJECT *firstObject, OBJECT *secondObject);
-        void Create_Slider_Joint_In_Simulator(dWorldID world, OBJECT *firstObject, OBJECT *secondObject);
-	//int  Is_Fixed_Joint(OBJECT *firstObject, OBJECT *secondObject);
+        void Create_Hinge_Joint_In_Simulator(dWorldID world);
+        void Create_Slider_Joint_In_Simulator(dWorldID world);
+	   void Create_Thruster_In_Simulator(void);
+    //int  Is_Fixed_Joint(OBJECT *firstObject, OBJECT *secondObject);
 
 };
 

@@ -7,6 +7,7 @@
 
 #include <drawstuff/drawstuff.h>
 #include "texturepath.h"
+#include <cmath>
 //#include "constants.h"
 
 #ifdef dDOUBLE
@@ -19,11 +20,12 @@
 
 extern int HINGE;
 extern int SLIDER;
+extern int THRUSTER;
 
 JOINT::JOINT(int jointType) {
     type = jointType;
-    firstObject = 0;
-    secondObject = 0;
+    firstObject = -1;
+    secondObject = -1;
 
     x = 0;
     y = 0;
@@ -37,13 +39,17 @@ JOINT::JOINT(int jointType) {
     highStop = 0;
 
     speed = 0.0;
-    torque = 0.0;
+    strength = 0.0;
 
     joint = NULL;
 
     positionControl = true;
     proprioceptiveSensor = NULL;
     motorNeuron = NULL;
+
+    first = NULL;
+    second = NULL;
+    lastDesired = 0.0;
 }
 
 JOINT::~JOINT(void) {
@@ -77,9 +83,9 @@ void JOINT::Actuate(void) {
       {
             dJointSetHingeParam(joint,dParamVel, 0.5*speed*desiredTarget);
         }
-	   dJointSetHingeParam(joint,dParamFMax, torque);
+	   dJointSetHingeParam(joint,dParamFMax, strength);
     }
-    else{
+    else if(type==SLIDER){
         if (positionControl){
             currentTarget = dJointGetSliderPosition(joint);
 
@@ -89,8 +95,20 @@ void JOINT::Actuate(void) {
         else {
             dJointSetSliderParam(joint,dParamVel, speed*desiredTarget);
         }
-        dJointSetSliderParam(joint,dParamFMax, torque);   
+        dJointSetSliderParam(joint,dParamFMax, strength);   
     }
+    else if(type==THRUSTER)
+    {
+       const dReal *R = dBodyGetRotation(first->Get_Body());
+       dReal xDir, yDir, zDir;
+
+       xDir = R[0]*x + R[1]*y + R[2]*z;
+       yDir = R[4]*x + R[5]*y + R[6]*z;
+       zDir = R[8]*x + R[9]*y + R[10]*z;
+
+       dBodyAddForce(first->Get_Body(), -xDir*desiredTarget, -yDir*desiredTarget, -zDir*desiredTarget);
+        lastDesired =desiredTarget;
+     }
 }
 
 int JOINT::Connect_Sensor_To_Sensor_Neuron(int sensorID , NEURON *sensorNeuron) {
@@ -108,22 +126,24 @@ int JOINT::Connect_Sensor_To_Sensor_Neuron(int sensorID , NEURON *sensorNeuron) 
 }
 
 int  JOINT::Connect_To_Motor_Neuron(int jointID, NEURON *mNeuron) {
-
 	if ( ID == jointID ) {
-
 		motorNeuron = mNeuron;
-
 		return true;
 	}
-	else
+	else{
 		return false;
+    }
 }
 
 void JOINT::Create_In_Simulator(dWorldID world, OBJECT *firstObject, OBJECT *secondObject) {
+    first = firstObject;
+    second = secondObject;
     if(type ==HINGE)
-        Create_Hinge_Joint_In_Simulator(world,firstObject,secondObject);
-    else 
-        Create_Slider_Joint_In_Simulator(world,firstObject,secondObject);
+        Create_Hinge_Joint_In_Simulator(world);
+    else if(type==SLIDER)
+        Create_Slider_Joint_In_Simulator(world);
+    else if(type==THRUSTER)
+        Create_Thruster_In_Simulator();
 }
 
 void JOINT::Create_Proprioceptive_Sensor(int myID, int evalPeriod) {
@@ -131,7 +151,7 @@ void JOINT::Create_Proprioceptive_Sensor(int myID, int evalPeriod) {
         proprioceptiveSensor = new PROPRIOCEPTIVE_SENSOR(myID,evalPeriod);
 }
 
-void JOINT::Draw(OBJECT *first, OBJECT *second){
+void JOINT::Draw(){
     dVector3 jointPosition;
     dVector3 jointAxis;
     dMatrix3 rotation;
@@ -154,7 +174,7 @@ void JOINT::Draw(OBJECT *first, OBJECT *second){
         dsDrawCylinder(jointPosition,rotation,length,radius);
         }
     }
-    else{
+    else if(type == SLIDER){
         float r = .3;
         float g = 1.0;
         float b = .3;
@@ -189,6 +209,50 @@ void JOINT::Draw(OBJECT *first, OBJECT *second){
         dsSetColorAlpha(.3,1.0,1.0,1.0);
         dsDrawSphere(jointPosition, rotation, radius*2.0);  
     }
+    else if(type == THRUSTER)
+    {
+        
+       
+       const dReal *pos = dBodyGetPosition(first->Get_Body());
+       const dReal *R = dBodyGetRotation(first->Get_Body());
+       dReal xDir, yDir, zDir;
+
+       xDir = R[0]*x + R[1]*y + R[2]*z;
+       yDir = R[4]*x + R[5]*y + R[6]*z;
+       zDir = R[8]*x + R[9]*y + R[10]*z;
+
+       dRFromZAxis(rotation, xDir, yDir, zDir);
+       
+       float length, radius;
+
+       float param = 1.0;
+       float index = 0;
+
+       // while(param < std::abs(lastDesired)){
+       //   index ++;
+       //   param *= 10.0;
+       // }
+       if (std::abs(lastDesired)>=1.0){
+       index = log(std::abs(lastDesired));
+        for(int j=1; j<5; j++){
+            for(int i=0; i<3; i++){
+                 jointPosition[i] = pos[i];
+             }
+             if (lastDesired >0)
+                length = .02*pow(j,1.3)*index;
+             else
+                length = -.02*pow(j,1.3)*index;
+             radius = .003*(5-j)*index;
+             jointPosition[0] += xDir*length/2.0;
+             jointPosition[1] += yDir*length/2.0;
+             jointPosition[2] += zDir*length/2.0;
+
+            dsSetColorAlpha((j+10.)/15.0, (j+1)/6.0, .2, 1.0);
+            dsDrawCylinder(jointPosition, rotation, length, radius);
+        }
+    }
+
+    }
 }
 
 int JOINT::Get_First_Object_Index(void) {
@@ -210,41 +274,45 @@ void JOINT::Poll_Sensors(int t) {
 
 void JOINT::Read_From_Python(void) {
 
-        std::cin >> ID;
-
+    std::cin >> ID;  
+    if (type == HINGE)
+    {
         std::cin >> firstObject;
-
         std::cin >> secondObject;
-
         std::cin >> x;
-
         std::cin >> y;
-
         std::cin >> z;
-
         std::cin >> normalX;
-
         std::cin >> normalY;
-
         std::cin >> normalZ;
-
         std::cin >> lowStop;
-
         std::cin >> highStop;
-
         std::cin >> speed;
-
-        std::cin >> torque;
-
-	char temp[100];
-
-	std::cin >> temp;
-
-	if ( strcmp(temp,"True")==0 )
-
-		positionControl = true;
-	else
-		positionControl = false;
+        std::cin >> strength;
+        std::cin >> positionControl;
+    }
+    else if (type == SLIDER)
+    {
+        std::cin >> firstObject;
+        std::cin >> secondObject;
+        std::cin >> normalX;
+        std::cin >> normalY;
+        std::cin >> normalZ;
+        std::cin >> lowStop;
+        std::cin >> highStop;
+        std::cin >> speed;
+        std::cin >> strength;
+        std::cin >> positionControl;
+    }
+    else if (type == THRUSTER)
+    {
+        std::cin >> firstObject;
+        std::cin >> x;
+        std::cin >> y;
+        std::cin >> z;
+        std::cin >> lowStop;
+        std::cin >> highStop;
+    }
 }
 
 void JOINT::Update_Sensor_Neurons(int t) {
@@ -264,7 +332,7 @@ void JOINT::Write_To_Python(int evalPeriod) {
 // ------------------- Private methods --------------------------
 
 
-void JOINT::Create_Hinge_Joint_In_Simulator(dWorldID world, OBJECT *first, OBJECT *second) {
+void JOINT::Create_Hinge_Joint_In_Simulator(dWorldID world) {
 
         joint = dJointCreateHinge(world,0);
 
@@ -285,7 +353,7 @@ void JOINT::Create_Hinge_Joint_In_Simulator(dWorldID world, OBJECT *first, OBJEC
         }
 }
 
-void JOINT::Create_Slider_Joint_In_Simulator(dWorldID world, OBJECT *first, OBJECT *second){
+void JOINT::Create_Slider_Joint_In_Simulator(dWorldID world){
 
         joint = dJointCreateSlider(world,0);
         if (first == NULL){
@@ -315,4 +383,21 @@ void JOINT::Create_Slider_Joint_In_Simulator(dWorldID world, OBJECT *first, OBJE
         }
 }
 
+void JOINT::Create_Thruster_In_Simulator(void){
+        dReal mag = sqrt(x*x + y*y + z*z);
+        x = x/mag;
+        y = y/mag;
+        z = z/mag;
+
+       const dReal *R = dBodyGetRotation(first->Get_Body());
+       dReal xDir, yDir, zDir;
+
+       xDir = R[0]*x + R[4]*y + R[8]*z;
+       yDir = R[1]*x + R[5]*y + R[9]*z;
+       zDir = R[2]*x + R[6]*y + R[10]*z;
+
+       x = xDir;
+       y = yDir;
+       z = zDir;
+}
 #endif

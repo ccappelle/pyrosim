@@ -7,6 +7,7 @@
 
 extern int HINGE;
 extern int SLIDER;
+extern int THRUSTER;
 
 extern int BOX;
 extern int CYLINDER;
@@ -48,21 +49,7 @@ void ENVIRONMENT::Draw(int debug) {
 
         if (debug){
                 for (int j=0; j<numberOfJoints; j++){
-                        int firstObjectID = joints[j]->Get_First_Object_Index();
-
-                        int secondObjectID = joints[j]->Get_Second_Object_Index();
-
-                        OBJECT *firstObject = NULL;
-
-                        if ( firstObjectID >= 0 )
-                            firstObject = objects[ firstObjectID ];
-
-                        OBJECT *secondObject = NULL;
-
-                        if ( secondObjectID >= 0 )
-                            secondObject = objects[ secondObjectID ];
-                        joints[j]->Draw(firstObject, secondObject);
-
+                        joints[j]->Draw();
                     }
         }
 
@@ -150,6 +137,8 @@ void ENVIRONMENT::Read_From_Python(dWorldID world, dSpaceID space, Data *data)
 
                 else if ( strcmp(incomingString,"SliderJoint") == 0)
                         Create_Joint(world,space,numberOfJoints,SLIDER);
+                else if ( strcmp(incomingString,"Thruster") == 0)
+                        Create_Joint(world,space,numberOfJoints,THRUSTER);
                 //Sensors
                 else if ( strcmp(incomingString,"PositionSensor") == 0 )
 
@@ -433,10 +422,10 @@ void ENVIRONMENT::Connect_Motor_Neuron_to_Joint( int jointID, NEURON *motorNeuro
     int done = false;
 
     int jointIndex = 0;
-
-    while ( (done == false) && (jointIndex < numberOfJoints) )
-
+    while ( (done == false) && (jointIndex < numberOfJoints) && (jointIndex < 100) )
         done = joints[jointIndex++]->Connect_To_Motor_Neuron( jointID , motorNeuron );
+    
+    //joints[jointID]->Connect_To_Motor_Neuron(jointID, motorNeuron);
 }
 
 void ENVIRONMENT::Connect_Sensor_To_Sensor_Neuron( int sensorID , NEURON *sensorNeuron ) {

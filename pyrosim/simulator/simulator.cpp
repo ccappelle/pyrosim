@@ -189,9 +189,9 @@ static void simLoop (int pause)
 
           updated_xyz[0] += data.xyz[0];
           updated_xyz[1] += data.xyz[1];
-          updated_xyz[2] = data.xyz[2];
+          updated_xyz[2] += data.xyz[2];
 
-          for(int i=0;i<LAGSIZE;i++) updated_xyz[2] +=  average_z[i]/float(LAGSIZE); //lag movement
+          //for(int i=0;i<LAGSIZE;i++) updated_xyz[2] +=  average_z[i]/float(LAGSIZE); //lag movement
 
               dsSetViewpoint(updated_xyz,data.hpr);
         }

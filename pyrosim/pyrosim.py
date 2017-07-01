@@ -533,7 +533,7 @@ class Simulator(object):
             str(first_body_id) + ' has not been sent'
         assert second_body_id < self._num_bodies, 'Body with id ' + \
             str(second_body_id) + ' has not been sent'
-        sim.send_hinge_joint(first_body_id, second_body_id, lo=0, hi=0,
+        self.send_hinge_joint(first_body_id, second_body_id, lo=0, hi=0,
                              torque=10000)
         return True
 
@@ -608,6 +608,10 @@ class Simulator(object):
 
         joint_id = self._num_joints
         self._num_joints += 1
+        if position_control:
+            pc = 1
+        else:
+            pc = 0
 
         self._send('HingeJoint',
                    joint_id,
@@ -615,8 +619,8 @@ class Simulator(object):
                    x, y, z,
                    n1, n2, n3,
                    lo, hi,
-                   speed/(self.dt*20), torque,
-                   position_control)
+                   speed, torque,
+                   pc)
 
         return joint_id
 
@@ -683,18 +687,56 @@ class Simulator(object):
 
         joint_id = self._num_joints
         self._num_joints += 1
+        if position_control:
+            pc = 1
+        else:
+            pc = 0
 
         self._send('SliderJoint',
                    joint_id,
                    first_body_id, second_body_id,
-                   0, 0, 0,
                    x, y, z,
                    lo, hi,
-                   speed/(self.dt*20), strength,
-                   position_control)
+                   speed, strength,
+                   pc)
 
         return joint_id
 
+    def send_thruster(self, body_id, x=0, y=0, z=-1, lo=-10.0, hi=10.0):
+        """Send a thruster engine to the specified body
+
+        The thruster engine provides a linear force to the center of
+        mass of the assigned body in the specified direction
+
+        body_id : int
+            The handle of the body the jet should be attached to
+        x       : float, optional
+            The x value of the directional vector (default is 0)
+        y       : float, optional
+            The y value of the directional vector (default is 0)
+        z       : float, optional
+            The z value of the directional vector (default is 1)
+        lo      : float, optional
+            The amount of force when the associated motor
+            neuron is -1. Negative implies force in the 
+            opposit direction. (default is -10)
+        hi      : float, optioal
+            The amount of force when the associated motor
+            neuron is +1. (default is 10)
+        """
+        self._assert_non_zero('Jet', x, y, z)
+        assert hi >= lo, 'Hi parameter must be geq to lo parameter'
+        assert body_id < self._num_bodies, 'Body must exist'
+
+        joint_id = self._num_joints
+        self._num_joints += 1
+
+        self._send('Thruster', joint_id,
+                   body_id,
+                    x, y, z,
+                   lo, hi)
+
+        return joint_id
 # -----------Neurons----------------------
     def send_bias_neuron(self):
         """Send bias neuron to simulator.
