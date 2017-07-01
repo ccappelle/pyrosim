@@ -996,6 +996,31 @@ The default group is labeled &#8216;default&#8217;.</li>
 </dd></dl>
 
 <dl class="method">
+<dt id="pyrosim.Simulator.send_thruster">
+<code class="descname">send_thruster</code><span class="sig-paren">(</span><em>body_id</em>, <em>x=0</em>, <em>y=0</em>, <em>z=-1</em>, <em>lo=-10.0</em>, <em>hi=10.0</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pyrosim.html#Simulator.send_thruster"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyrosim.Simulator.send_thruster" title="Permalink to this definition">¶</a></dt>
+<dd><p>Send a thruster engine to the specified body</p>
+<p>The thruster engine provides a linear force to the center of
+mass of the assigned body in the specified direction</p>
+<dl class="docutils">
+<dt>body_id</dt>
+ <span class="classifier-delimiter">:</span> <span class="classifier">int</span><dd>The handle of the body the jet should be attached to</dd>
+<dt>x</dt>
+ <span class="classifier-delimiter">:</span> <span class="classifier">float, optional</span><dd>The x value of the directional vector (default is 0)</dd>
+<dt>y</dt>
+ <span class="classifier-delimiter">:</span> <span class="classifier">float, optional</span><dd>The y value of the directional vector (default is 0)</dd>
+<dt>z</dt>
+ <span class="classifier-delimiter">:</span> <span class="classifier">float, optional</span><dd>The z value of the directional vector (default is 1)</dd>
+<dt>lo</dt>
+ <span class="classifier-delimiter">:</span> <span class="classifier">float, optional</span><dd>The amount of force when the associated motor
+neuron is -1. Negative implies force in the
+opposit direction. (default is -10)</dd>
+<dt>hi</dt>
+ <span class="classifier-delimiter">:</span> <span class="classifier">float, optioal</span><dd>The amount of force when the associated motor
+neuron is +1. (default is 10)</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
 <dt id="pyrosim.Simulator.send_touch_sensor">
 <code class="descname">send_touch_sensor</code><span class="sig-paren">(</span><em>body_id=0</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pyrosim.html#Simulator.send_touch_sensor"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyrosim.Simulator.send_touch_sensor" title="Permalink to this definition">¶</a></dt>
 <dd><p>Send touch sensor to a body in the simulator</p>

@@ -693,7 +693,7 @@
             <span class="nb">str</span><span class="p">(</span><span class="n">first_body_id</span><span class="p">)</span> <span class="o">+</span> <span class="s1">&#39; has not been sent&#39;</span>
         <span class="k">assert</span> <span class="n">second_body_id</span> <span class="o">&lt;</span> <span class="bp">self</span><span class="o">.</span><span class="n">_num_bodies</span><span class="p">,</span> <span class="s1">&#39;Body with id &#39;</span> <span class="o">+</span> \
             <span class="nb">str</span><span class="p">(</span><span class="n">second_body_id</span><span class="p">)</span> <span class="o">+</span> <span class="s1">&#39; has not been sent&#39;</span>
-        <span class="n">sim</span><span class="o">.</span><span class="n">send_hinge_joint</span><span class="p">(</span><span class="n">first_body_id</span><span class="p">,</span> <span class="n">second_body_id</span><span class="p">,</span> <span class="n">lo</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">hi</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">send_hinge_joint</span><span class="p">(</span><span class="n">first_body_id</span><span class="p">,</span> <span class="n">second_body_id</span><span class="p">,</span> <span class="n">lo</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">hi</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span>
                              <span class="n">torque</span><span class="o">=</span><span class="mi">10000</span><span class="p">)</span>
         <span class="k">return</span> <span class="kc">True</span></div>
 
@@ -768,6 +768,10 @@
 
         <span class="n">joint_id</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_num_joints</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_num_joints</span> <span class="o">+=</span> <span class="mi">1</span>
+        <span class="k">if</span> <span class="n">position_control</span><span class="p">:</span>
+            <span class="n">pc</span> <span class="o">=</span> <span class="mi">1</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">pc</span> <span class="o">=</span> <span class="mi">0</span>
 
         <span class="bp">self</span><span class="o">.</span><span class="n">_send</span><span class="p">(</span><span class="s1">&#39;HingeJoint&#39;</span><span class="p">,</span>
                    <span class="n">joint_id</span><span class="p">,</span>
@@ -775,8 +779,8 @@
                    <span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">z</span><span class="p">,</span>
                    <span class="n">n1</span><span class="p">,</span> <span class="n">n2</span><span class="p">,</span> <span class="n">n3</span><span class="p">,</span>
                    <span class="n">lo</span><span class="p">,</span> <span class="n">hi</span><span class="p">,</span>
-                   <span class="n">speed</span><span class="o">/</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">dt</span><span class="o">*</span><span class="mi">20</span><span class="p">),</span> <span class="n">torque</span><span class="p">,</span>
-                   <span class="n">position_control</span><span class="p">)</span>
+                   <span class="n">speed</span><span class="p">,</span> <span class="n">torque</span><span class="p">,</span>
+                   <span class="n">pc</span><span class="p">)</span>
 
         <span class="k">return</span> <span class="n">joint_id</span></div>
 
@@ -843,18 +847,56 @@
 
         <span class="n">joint_id</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_num_joints</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_num_joints</span> <span class="o">+=</span> <span class="mi">1</span>
+        <span class="k">if</span> <span class="n">position_control</span><span class="p">:</span>
+            <span class="n">pc</span> <span class="o">=</span> <span class="mi">1</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">pc</span> <span class="o">=</span> <span class="mi">0</span>
 
         <span class="bp">self</span><span class="o">.</span><span class="n">_send</span><span class="p">(</span><span class="s1">&#39;SliderJoint&#39;</span><span class="p">,</span>
                    <span class="n">joint_id</span><span class="p">,</span>
                    <span class="n">first_body_id</span><span class="p">,</span> <span class="n">second_body_id</span><span class="p">,</span>
-                   <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span>
                    <span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">z</span><span class="p">,</span>
                    <span class="n">lo</span><span class="p">,</span> <span class="n">hi</span><span class="p">,</span>
-                   <span class="n">speed</span><span class="o">/</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">dt</span><span class="o">*</span><span class="mi">20</span><span class="p">),</span> <span class="n">strength</span><span class="p">,</span>
-                   <span class="n">position_control</span><span class="p">)</span>
+                   <span class="n">speed</span><span class="p">,</span> <span class="n">strength</span><span class="p">,</span>
+                   <span class="n">pc</span><span class="p">)</span>
 
         <span class="k">return</span> <span class="n">joint_id</span></div>
 
+<div class="viewcode-block" id="Simulator.send_thruster"><a class="viewcode-back" href="../code.html#pyrosim.Simulator.send_thruster">[docs]</a>    <span class="k">def</span> <span class="nf">send_thruster</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">body_id</span><span class="p">,</span> <span class="n">x</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">y</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">z</span><span class="o">=-</span><span class="mi">1</span><span class="p">,</span> <span class="n">lo</span><span class="o">=-</span><span class="mf">10.0</span><span class="p">,</span> <span class="n">hi</span><span class="o">=</span><span class="mf">10.0</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Send a thruster engine to the specified body</span>
+
+<span class="sd">        The thruster engine provides a linear force to the center of</span>
+<span class="sd">        mass of the assigned body in the specified direction</span>
+
+<span class="sd">        body_id : int</span>
+<span class="sd">            The handle of the body the jet should be attached to</span>
+<span class="sd">        x       : float, optional</span>
+<span class="sd">            The x value of the directional vector (default is 0)</span>
+<span class="sd">        y       : float, optional</span>
+<span class="sd">            The y value of the directional vector (default is 0)</span>
+<span class="sd">        z       : float, optional</span>
+<span class="sd">            The z value of the directional vector (default is 1)</span>
+<span class="sd">        lo      : float, optional</span>
+<span class="sd">            The amount of force when the associated motor</span>
+<span class="sd">            neuron is -1. Negative implies force in the </span>
+<span class="sd">            opposit direction. (default is -10)</span>
+<span class="sd">        hi      : float, optioal</span>
+<span class="sd">            The amount of force when the associated motor</span>
+<span class="sd">            neuron is +1. (default is 10)</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_assert_non_zero</span><span class="p">(</span><span class="s1">&#39;Jet&#39;</span><span class="p">,</span> <span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">z</span><span class="p">)</span>
+        <span class="k">assert</span> <span class="n">hi</span> <span class="o">&gt;=</span> <span class="n">lo</span><span class="p">,</span> <span class="s1">&#39;Hi parameter must be geq to lo parameter&#39;</span>
+        <span class="k">assert</span> <span class="n">body_id</span> <span class="o">&lt;</span> <span class="bp">self</span><span class="o">.</span><span class="n">_num_bodies</span><span class="p">,</span> <span class="s1">&#39;Body must exist&#39;</span>
+
+        <span class="n">joint_id</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_num_joints</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_num_joints</span> <span class="o">+=</span> <span class="mi">1</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">_send</span><span class="p">(</span><span class="s1">&#39;Thruster&#39;</span><span class="p">,</span> <span class="n">joint_id</span><span class="p">,</span>
+                   <span class="n">body_id</span><span class="p">,</span>
+                    <span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">z</span><span class="p">,</span>
+                   <span class="n">lo</span><span class="p">,</span> <span class="n">hi</span><span class="p">)</span>
+
+        <span class="k">return</span> <span class="n">joint_id</span></div>
 <span class="c1"># -----------Neurons----------------------</span>
 <div class="viewcode-block" id="Simulator.send_bias_neuron"><a class="viewcode-back" href="../code.html#pyrosim.Simulator.send_bias_neuron">[docs]</a>    <span class="k">def</span> <span class="nf">send_bias_neuron</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;Send bias neuron to simulator.</span>
