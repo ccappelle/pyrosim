@@ -534,7 +534,7 @@ class Simulator(object):
         assert second_body_id < self._num_bodies, 'Body with id ' + \
             str(second_body_id) + ' has not been sent'
         self.send_hinge_joint(first_body_id, second_body_id, lo=0, hi=0,
-                             torque=10000)
+                              torque=10000)
         return True
 
     def send_hinge_joint(self, first_body_id, second_body_id, x=0, y=0, z=0,
@@ -723,6 +723,11 @@ class Simulator(object):
         hi      : float, optioal
             The amount of force when the associated motor
             neuron is +1. (default is 10)
+
+        Returns
+        -------
+        int
+            The id handle of the thruster
         """
         self._assert_non_zero('Jet', x, y, z)
         assert hi >= lo, 'Hi parameter must be geq to lo parameter'
@@ -733,10 +738,11 @@ class Simulator(object):
 
         self._send('Thruster', joint_id,
                    body_id,
-                    x, y, z,
+                   x, y, z,
                    lo, hi)
 
         return joint_id
+
 # -----------Neurons----------------------
     def send_bias_neuron(self):
         """Send bias neuron to simulator.
@@ -762,7 +768,10 @@ class Simulator(object):
 
         Motor neurons are neurons which connect to a specified joint and 
         determine how the joint moves every time step of simulation
-        WARNING: Sending a motor neuron to a joint whose starting position
+        
+        Warning
+        -------
+        Sending a motor neuron to a joint whose starting position
         is not in the middle of the 'hi' & 'lo' cutoffs will most likely cause
         instabilities in the simulation. For example creating a joint with
         either 'hi' or 'lo' to 0 and attaching a motor neuron to this joint

@@ -239,10 +239,10 @@ void JOINT::Draw(){
                  jointPosition[i] = pos[i];
              }
              if (lastDesired >0)
-                length = .02*pow(j,1.3)*index;
+                length = .04*pow(j,1.3)*index;
              else
-                length = -.02*pow(j,1.3)*index;
-             radius = .003*(5-j)*index;
+                length = -.04*pow(j,1.3)*index;
+             radius = .005*(5-j)*index;
              jointPosition[0] += xDir*length/2.0;
              jointPosition[1] += yDir*length/2.0;
              jointPosition[2] += zDir*length/2.0;

@@ -52,6 +52,7 @@ void OBJECT::Apply_Stored_Forces(int timeStep){
     if (forces.find(timeStep)!= forces.end()){
         dBodyAddForce(body, forces[timeStep][0],forces[timeStep][1], forces[timeStep][2]);
     }
+
 }
 
 int OBJECT::Connect_Sensor_To_Sensor_Neuron(int sensorID , NEURON *sensorNeuron) {
