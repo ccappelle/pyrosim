@@ -694,7 +694,7 @@
         <span class="k">assert</span> <span class="n">second_body_id</span> <span class="o">&lt;</span> <span class="bp">self</span><span class="o">.</span><span class="n">_num_bodies</span><span class="p">,</span> <span class="s1">&#39;Body with id &#39;</span> <span class="o">+</span> \
             <span class="nb">str</span><span class="p">(</span><span class="n">second_body_id</span><span class="p">)</span> <span class="o">+</span> <span class="s1">&#39; has not been sent&#39;</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">send_hinge_joint</span><span class="p">(</span><span class="n">first_body_id</span><span class="p">,</span> <span class="n">second_body_id</span><span class="p">,</span> <span class="n">lo</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">hi</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span>
-                             <span class="n">torque</span><span class="o">=</span><span class="mi">10000</span><span class="p">)</span>
+                              <span class="n">torque</span><span class="o">=</span><span class="mi">10000</span><span class="p">)</span>
         <span class="k">return</span> <span class="kc">True</span></div>
 
 <div class="viewcode-block" id="Simulator.send_hinge_joint"><a class="viewcode-back" href="../code.html#pyrosim.Simulator.send_hinge_joint">[docs]</a>    <span class="k">def</span> <span class="nf">send_hinge_joint</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">first_body_id</span><span class="p">,</span> <span class="n">second_body_id</span><span class="p">,</span> <span class="n">x</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">y</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">z</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span>
@@ -883,6 +883,11 @@
 <span class="sd">        hi      : float, optioal</span>
 <span class="sd">            The amount of force when the associated motor</span>
 <span class="sd">            neuron is +1. (default is 10)</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        int</span>
+<span class="sd">            The id handle of the thruster</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_assert_non_zero</span><span class="p">(</span><span class="s1">&#39;Jet&#39;</span><span class="p">,</span> <span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">z</span><span class="p">)</span>
         <span class="k">assert</span> <span class="n">hi</span> <span class="o">&gt;=</span> <span class="n">lo</span><span class="p">,</span> <span class="s1">&#39;Hi parameter must be geq to lo parameter&#39;</span>
@@ -893,10 +898,11 @@
 
         <span class="bp">self</span><span class="o">.</span><span class="n">_send</span><span class="p">(</span><span class="s1">&#39;Thruster&#39;</span><span class="p">,</span> <span class="n">joint_id</span><span class="p">,</span>
                    <span class="n">body_id</span><span class="p">,</span>
-                    <span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">z</span><span class="p">,</span>
+                   <span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">z</span><span class="p">,</span>
                    <span class="n">lo</span><span class="p">,</span> <span class="n">hi</span><span class="p">)</span>
 
         <span class="k">return</span> <span class="n">joint_id</span></div>
+
 <span class="c1"># -----------Neurons----------------------</span>
 <div class="viewcode-block" id="Simulator.send_bias_neuron"><a class="viewcode-back" href="../code.html#pyrosim.Simulator.send_bias_neuron">[docs]</a>    <span class="k">def</span> <span class="nf">send_bias_neuron</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;Send bias neuron to simulator.</span>
@@ -922,7 +928,10 @@
 
 <span class="sd">        Motor neurons are neurons which connect to a specified joint and </span>
 <span class="sd">        determine how the joint moves every time step of simulation</span>
-<span class="sd">        WARNING: Sending a motor neuron to a joint whose starting position</span>
+<span class="sd">        </span>
+<span class="sd">        Warning</span>
+<span class="sd">        -------</span>
+<span class="sd">        Sending a motor neuron to a joint whose starting position</span>
 <span class="sd">        is not in the middle of the &#39;hi&#39; &amp; &#39;lo&#39; cutoffs will most likely cause</span>
 <span class="sd">        instabilities in the simulation. For example creating a joint with</span>
 <span class="sd">        either &#39;hi&#39; or &#39;lo&#39; to 0 and attaching a motor neuron to this joint</span>
