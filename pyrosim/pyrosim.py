@@ -1285,8 +1285,8 @@ class Simulator(object):
 
 # -----I/OCommands----------------------------
     def make_movie(self,  movie_name=''):
-        assert self.capture == True, 
-            ('No frames captured, set capture to true')
+        assert self.capture == True, (
+            'No frames captured, set capture to true')
 
         if movie_name == '':
             time_stamp = datetime.now().strftime('%Y-%m-%d-%H-%M-%S')

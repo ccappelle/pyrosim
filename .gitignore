@@ -2,6 +2,7 @@
 *.d
 *.pyc
 *.egg*
+*.ppm
 dist/
 build/
 log
@@ -11,3 +12,4 @@ pyrosim/test
 pyrosim/simulator/simulator
 pyrosim/simulator/ode-0.12/*
 pyrosim/simulator/tmp
+pyrosim/frame
