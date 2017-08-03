@@ -6,9 +6,7 @@ class SYNAPSE {
 private:
 
 	int sourceNeuronIndex;
-
 	int targetNeuronIndex;
-
 	double weight;
 	double startWeight;
 	double endWeight;
@@ -19,6 +17,7 @@ public:
         SYNAPSE(void);
 
 	~SYNAPSE(void);
+	void Read_From_Python(void);
 
 	int  Get_Source_Neuron_Index(void);
 

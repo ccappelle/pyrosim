@@ -6,26 +6,28 @@
 #include "synapse.h"
 
 SYNAPSE::SYNAPSE(void) {
+    sourceNeuronIndex = 0;
+    targetNeuronIndex = 0;
+    startWeight = 0.;
+    endWeight = 0.;
+    startTime = 0;
+    endTime = 0;
 
-        std::cin >> sourceNeuronIndex; 
-
-        std::cin >> targetNeuronIndex;
-
-	std::cin >> startWeight;
-
-	std::cin >> endWeight;
-
-	std::cin >> startTime;
-
-	std::cin >> endTime;
-
-	weight = startWeight;
-
-	//std::cerr << sourceNeuronIndex<< " " << targetNeuronIndex << " " << startWeight << " " << endWeight << " " << startTime << " " << endTime << "\n";
+    //Read_From_Python();
 }
 
 SYNAPSE::~SYNAPSE(void) {
 
+}
+
+void SYNAPSE::Read_From_Python(void){
+    std::cin >> sourceNeuronIndex; 
+    std::cin >> targetNeuronIndex;
+    std::cin >> startWeight;
+    std::cin >> endWeight;
+    std::cin >> startTime;
+    std::cin >> endTime;
+    weight = startWeight;
 }
 
 int SYNAPSE::Get_Source_Neuron_Index(void) {
@@ -44,18 +46,12 @@ double SYNAPSE::Get_Weight(void) {
 }
 
 void SYNAPSE::Print(void) {
-
 	std::cerr << sourceNeuronIndex << " ";
-
-        std::cerr << targetNeuronIndex << " ";
-
-        std::cerr << startWeight << " ";
-
-        std::cerr << endWeight << " ";
-
-        std::cerr << startTime << " ";
-
-        std::cerr << endTime << "\n";
+    std::cerr << targetNeuronIndex << " ";
+    std::cerr << startWeight << " ";
+    std::cerr << endWeight << " ";
+    std::cerr << startTime << " ";
+    std::cerr << endTime << "\n";
 }
 
 void SYNAPSE::Update_Weight(int time){
@@ -70,7 +66,6 @@ void SYNAPSE::Update_Weight(int time){
 		double startRatio = 1.-(time-startTime)/double(endTime-startTime);
 		double endRatio = 1.-(endTime-time)/double(endTime-startTime);
 		weight = startRatio*startWeight + endRatio*endWeight;
-
 	}
 }
 #endif

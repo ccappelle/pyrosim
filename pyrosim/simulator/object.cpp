@@ -62,27 +62,21 @@ int OBJECT::Connect_Sensor_To_Sensor_Neuron(int sensorID , NEURON *sensorNeuron)
             lightSensor->Connect_To_Sensor_Neuron(sensorNeuron);
             return true;
         }
-
     if ( positionSensor )
         if ( positionSensor->Get_ID() == sensorID ) {
             positionSensor->Connect_To_Sensor_Neuron(sensorNeuron);
             return true;
         }
-
     if ( raySensor )
         if ( raySensor->Get_ID() == sensorID ) {
             raySensor->Connect_To_Sensor_Neuron(sensorNeuron);
             return true;
         }
-
-
     if ( touchSensor )
         if ( touchSensor->Get_ID() == sensorID ) {
             touchSensor->Connect_To_Sensor_Neuron(sensorNeuron);
             return true;
         }
-
-
     if ( vestibularSensor )
         if ( vestibularSensor->Get_ID() == sensorID ) {
             vestibularSensor->Connect_To_Sensor_Neuron(sensorNeuron);
@@ -92,33 +86,27 @@ int OBJECT::Connect_Sensor_To_Sensor_Neuron(int sensorID , NEURON *sensorNeuron)
  }
 
 void OBJECT::Create_Ray_Sensor(dSpaceID space, int myID, int evalPeriod) {
-
 	raySensor = new RAY_SENSOR(space,this,myID,evalPeriod);
 }
 
 void OBJECT::Create_Light_Sensor(int myID, int evalPeriod) {
-
-        lightSensor = new LIGHT_SENSOR(myID,evalPeriod);
+    lightSensor = new LIGHT_SENSOR(myID,evalPeriod);
 }
 
 void OBJECT::Create_Light_Source(void) {
-
 	containsLightSource = true;
 }
 
 void OBJECT::Create_Position_Sensor(int myID, int evalPeriod) {
-
 	positionSensor = new POSITION_SENSOR(myID,evalPeriod);
 }
 
 void OBJECT::Create_Touch_Sensor(int myID, int evalPeriod) {
-
 	touchSensor = new TOUCH_SENSOR(myID,evalPeriod);
 }
 
 void OBJECT::Create_Vestibular_Sensor(int myID, int evalPeriod) {
-
-        vestibularSensor = new VESTIBULAR_SENSOR(myID,evalPeriod);
+    vestibularSensor = new VESTIBULAR_SENSOR(myID,evalPeriod);
 }
 
 void OBJECT::Draw(void) {
@@ -141,60 +129,47 @@ void OBJECT::Draw(void) {
 }
 
 void OBJECT::Draw_Ray_Sensor(double x, double y, double z, int t) {
-
 	if ( raySensor )
-
 		raySensor->Draw(x,y,z,t);
 }
 
 double OBJECT::Get_Blue_Component(void) {
-
-        return b;
+    return b;
 }
 
 dBodyID OBJECT::Get_Body(void) {
-
 	return body;
 }
 
 double OBJECT::Get_Green_Component(void) {
-
-        return g;
+    return g;
 }
 
 int OBJECT::Get_Group(void){
     return collisionGroup;
 }
 double OBJECT::Get_Length(void) {
-
 	return length;
 }
 
 double OBJECT::Get_Radius(void) {
-
 	return radius;
 }
 
 double OBJECT::Get_Red_Component(void) {
-
 	return r;
 }
 
 void OBJECT::Poll_Sensors(int numObjects, OBJECT **objects, int t) {
-
 	if ( lightSensor ) {
-
 		OBJECT *closestLightSource = Find_Closest_Light_Source(numObjects,objects);
-
 		lightSensor->Poll(body,closestLightSource->Get_Body(),t);
 	}
 
-        if ( positionSensor )
-
-                positionSensor->Poll(body,t);
+    if ( positionSensor )
+        positionSensor->Poll(body,t);
 
 	if ( vestibularSensor )
-
 		vestibularSensor->Poll(body,t);
 }
 
@@ -223,7 +198,6 @@ void OBJECT::Read_From_Python(dWorldID world, dSpaceID space, int shape) {
 	else { //sphere specific
 		std::cin >> radius;
 	}
-
     std::cin >> mass;
     std::cin >> collisionGroup;
     std::cin >> r;
@@ -235,63 +209,45 @@ void OBJECT::Read_From_Python(dWorldID world, dSpaceID space, int shape) {
 }
 
 void OBJECT::Set_Ray_Sensor(double distance, OBJECT *objectThatWasHit, int t) {
-
 	if ( raySensor )
-
 		raySensor->Set(distance,objectThatWasHit,t);
 }
 
 void OBJECT::Touch_Sensor_Fires(int t) {
-
 	if ( touchSensor )
-
 		touchSensor->Fires(t);
 }
 
 void OBJECT::Update_Sensor_Neurons(int t) {
+    if ( raySensor )
+        raySensor->Update_Sensor_Neurons(t);
 
-        if ( raySensor )
+    if ( lightSensor )
+        lightSensor->Update_Sensor_Neurons(t);
 
-                raySensor->Update_Sensor_Neurons(t);
+    if ( positionSensor )
+        positionSensor->Update_Sensor_Neurons(t);
 
-        if ( lightSensor )
+    if ( touchSensor )
+        touchSensor->Update_Sensor_Neurons(t);
 
-                lightSensor->Update_Sensor_Neurons(t);
-
-        if ( positionSensor )
-
-                positionSensor->Update_Sensor_Neurons(t);
-
-        if ( touchSensor )
-
-                touchSensor->Update_Sensor_Neurons(t);
-
-        if ( vestibularSensor )
-
-                vestibularSensor->Update_Sensor_Neurons(t);
+    if ( vestibularSensor )
+        vestibularSensor->Update_Sensor_Neurons(t);
 }
 
 void OBJECT::Write_To_Python(int evalPeriod) {
 
 	if ( raySensor )
-
 		raySensor->Write_To_Python(evalPeriod);
 
 	if ( lightSensor )
-
 		lightSensor->Write_To_Python(evalPeriod);
-
 	if ( positionSensor )
-
 		positionSensor->Write_To_Python(evalPeriod);
-
 	if ( touchSensor )
-
 		touchSensor->Write_To_Python(evalPeriod);
-
-        if ( vestibularSensor )
-
-                vestibularSensor->Write_To_Python(evalPeriod);
+    if ( vestibularSensor )
+        vestibularSensor->Write_To_Python(evalPeriod);
 }
 
 // ------------------------------- Private methods ------------------------------
@@ -338,15 +294,11 @@ void OBJECT::CreateBody(dWorldID world, dSpaceID space){
 }
 
 double OBJECT::Distance_To(OBJECT *otherObject) {
-
 	const dReal *myPos = dBodyGetPosition( body );
-
 	const dReal *hisPos = dBodyGetPosition( otherObject->Get_Body() );
 
 	double xDiff = myPos[0] - hisPos[0];
-
     double yDiff = myPos[1] - hisPos[1];
-
     double zDiff = myPos[2] - hisPos[2];
 
 	return sqrt( pow(xDiff,2.0) + pow(yDiff,2.0) + pow(zDiff,2.0) );
@@ -355,23 +307,18 @@ double OBJECT::Distance_To(OBJECT *otherObject) {
 
 OBJECT* OBJECT::Find_Closest_Light_Source(int numObjects, OBJECT **objects) {
 
-	double distance = 1000.0;
-
+	double distance = 10000.0;
 	int    closestLightSource = 0;
 
-	for (int i=0;i<numObjects;i++)
-
+	for (int i=0;i<numObjects;i++){
 		if ( objects[i]->Contains_A_Light_Source() ) {
-
 			double distanceToObject = Distance_To(objects[i]);
-
 			if ( distanceToObject < distance ) {
-
 				distance = distanceToObject;
-
 				closestLightSource = i;
 			}
 		}
+    }
 
 	return objects[closestLightSource];
 }

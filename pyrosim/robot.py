@@ -9,17 +9,25 @@ class Robot(object):
 
         self.network = None
 
-    def add_cylinder(**kwargs):
+    def add_cylinder(self, **kwargs):
         pass
 
-    def add_body(body):
+    def add_body(self, body):
         self.bodies.append(body)
 
-    def add_box(**kwargs):
+    def add_box(self, **kwargs):
         pass
 
-    def add_sphere(**kwargs):
+    def add_sphere(self, **kwargs):
         pass
 
-    def add_joint(**kwargs):
+    def add_joint(self, **kwargs):
         pass
+
+    def send_body(self, sim):
+
+
+    def send_to_simulator(self, sim):
+        self.send_bodies(sim)
+
+

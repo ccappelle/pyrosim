@@ -8,17 +8,11 @@
 #include "math.h"
 
 extern int MAX_NEURONS;
-
 extern int MAX_SYNAPSES;
-
 extern int SENSOR_NEURON;
-
 extern int BIAS_NEURON;
-
 extern int HIDDEN_NEURON;
-
 extern int MOTOR_NEURON;
-
 extern int FUNCTION_NEURON;
 
 NEURAL_NETWORK::NEURAL_NETWORK(void) {
@@ -33,11 +27,8 @@ NEURAL_NETWORK::~NEURAL_NETWORK(void) {
 }
 
 void NEURAL_NETWORK::Add_Bias_Neuron(int ID) {
-
         neurons[numNeurons] = new NEURON(ID,BIAS_NEURON, 1.0, 1.0);
-
         numNeurons++;
-
 }
 
 void NEURAL_NETWORK::Add_Function_Neuron(int ID, double *timeValues){
@@ -46,37 +37,34 @@ void NEURAL_NETWORK::Add_Function_Neuron(int ID, double *timeValues){
 }
 
 void NEURAL_NETWORK::Add_Hidden_Neuron(int ID, double tau, double alpha) {
-
 	neurons[numNeurons] = new NEURON(ID,HIDDEN_NEURON,tau, alpha);
-
 	numNeurons++;
 }
 
 NEURON *NEURAL_NETWORK::Add_Motor_Neuron(int ID, double tau, double alpha, double start) {
-
-        NEURON *newNeuron = new NEURON(ID,MOTOR_NEURON,tau, alpha);
-        newNeuron->Set(start);
-        neurons[numNeurons] = newNeuron;
+    
+    NEURON *newNeuron = new NEURON(ID,MOTOR_NEURON,tau, alpha);
+    newNeuron->Set(start);
+    neurons[numNeurons] = newNeuron;
 
 	numNeurons++;
 
-        return newNeuron;
+    return newNeuron;
 }
 
 NEURON *NEURAL_NETWORK::Add_Sensor_Neuron(int ID, int svIndex) {
 
 	NEURON *newNeuron = new NEURON(ID,SENSOR_NEURON,svIndex,1.0,1.0);
-
 	neurons[numNeurons] = newNeuron;
-
 	numNeurons++;
 
 	return newNeuron;
 }
 
 void NEURAL_NETWORK::Add_Synapse(void) {
-
-        synapses[numSynapses++] = new SYNAPSE(); 
+    synapses[numSynapses] = new SYNAPSE();
+    synapses[numSynapses]-> Read_From_Python();
+    numSynapses ++; 
 }
 
 void NEURAL_NETWORK::Update(int timeStep) {
@@ -87,7 +75,6 @@ void NEURAL_NETWORK::Update(int timeStep) {
 	Update_Synapses(timeStep);
 
 	Update_Neurons();
-
 	Threshold_Neurons();
 }
 
@@ -147,13 +134,9 @@ void NEURAL_NETWORK::Update_Neurons(void) {
 	for ( int s = 0 ; s < numSynapses ; s++ ) {
 
 		int sni = synapses[s]->Get_Source_Neuron_Index();
-
 		int tni = synapses[s]->Get_Target_Neuron_Index();
-	
 		double w = synapses[s]->Get_Weight();
-
 		double influence = w * neurons[sni]->Get_Previous_Value();
-
 		neurons[tni]->Set( neurons[tni]->Get_Value() + influence );
 	}
 

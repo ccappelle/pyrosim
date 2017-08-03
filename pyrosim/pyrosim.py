@@ -96,7 +96,7 @@ class Simulator(object):
             self._send('Debug', 0)
         self.send_camera(xyz, hpr)
 
-# ------Getters-------------------------
+# ------Collisions-------------------------
     def create_collision_matrix(self, collision_type='none'):
         """Create a predefined collision matrix
 
@@ -179,7 +179,7 @@ class Simulator(object):
 
         self._collision_matrix[group1, group2] = 0
         self._collision_matrix[group2, group1] = 0
-
+# ------Getters--------------------------
     def get_data(self):
         """Get all sensor data back as numpy matrix"""
         assert self.evaluated == True, 'Simulation has not run yet'
