@@ -121,7 +121,8 @@ if __name__ == "__main__":
     for j in range(NUM):
         for i in range(NUM):
             sim[i] = pyrosim.Simulator(eval_time=eval_time, debug=True, dt=0.045, play_paused=True,
-                                       gravity=gravity, play_blind=BLIND, use_textures=True)
+                                       gravity=gravity, play_blind=BLIND, use_textures=True,
+                                       capture=1)
             num_sensors = 5
             num_motors = 8
 

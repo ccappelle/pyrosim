@@ -5,9 +5,12 @@ import numpy as np
 import constants
 
 from subprocess import Popen, PIPE
+import subprocess
 
 import errno
 import shutil
+
+from datetime import datetime
 
 
 def make_sure_path_exists(path):
@@ -15,7 +18,7 @@ def make_sure_path_exists(path):
         shutil.rmtree(path, ignore_errors=True)
         os.makedirs(path)
     except OSError as exception:
-        if exception.errno != errno.EEXIST :
+        if exception.errno != errno.EEXIST:
             raise
 
 
@@ -50,9 +53,9 @@ class Simulator(object):
     debug       : bool, optional
             If True print out every string command sent through the pipe to 
             the simulator (the default is False)
-    capture     : int, optional
-            If non-zero captures frames of the simulation every capture
-            timesteps.  Meaningless if playing blind.  (the default is 0) 
+    capture     : bool, optional
+            If True captures frames of the simulation every capture
+            timesteps.  Meaningless if playing blind.  (the default is False) 
     """
 
     WORLD = -1
@@ -87,8 +90,7 @@ class Simulator(object):
 
         self.capture = capture
         if (self.capture):
-            make_sure_path_exists("frame")
-        
+            make_sure_path_exists('frame')
 
         self.evaluated = False
         self.collision_matrix_sent = False
@@ -110,7 +112,11 @@ class Simulator(object):
         self._send('EvaluationTime', self.eval_time)
         self._send('TimeInterval', self.dt)
         self._send('Gravity', self.gravity)
-        self._send('Capture', self.capture)
+        if (self.capture):
+            self._send('Capture', 1)
+        else:
+            self._send('Capture', 0)
+
         if (self.debug):
             self._send('Debug', 1)
         else:
@@ -201,6 +207,7 @@ class Simulator(object):
         self._collision_matrix[group1, group2] = 0
         self._collision_matrix[group2, group1] = 0
 # ------Getters--------------------------
+
     def get_data(self):
         """Get all sensor data back as numpy matrix"""
         assert self.evaluated == True, 'Simulation has not run yet'
@@ -789,7 +796,7 @@ class Simulator(object):
 
         Motor neurons are neurons which connect to a specified joint and 
         determine how the joint moves every time step of simulation
-        
+
         Warning
         -------
         Sending a motor neuron to a joint whose starting position
@@ -1277,6 +1284,24 @@ class Simulator(object):
         return True
 
 # -----I/OCommands----------------------------
+    def make_movie(self,  movie_name=''):
+        assert self.capture == True, 
+            ('No frames captured, set capture to true')
+
+        if movie_name == '':
+            time_stamp = datetime.now().strftime('%Y-%m-%d-%H-%M-%S')
+            movie_name = time_stamp + '_movie.mp4'
+
+        movie_command = 'ffmpeg -r 30 -i %04d.ppm -vcodec' + \
+                        ' libx264 -pix_fmt yuv420p ' + movie_name
+
+        try:
+            os.chdir('frame')
+            subprocess.call(movie_command, shell=True)
+        except Exception:
+            print('Command sent was: ' + movie_command)
+            print('Must have ffmpeg installed')
+
     def start(self):
         """Starts the simulation"""
 
@@ -1332,8 +1357,8 @@ class Simulator(object):
             print data_from_simulator[0]
             print data_from_simulator[1]
             return 'No results during infinite run'
-# --------------------- Private methods -----------------------------
 
+    # --------------------- Private methods ---------------------------
     def _add_group(self, group):
         """Appends group handle to list and returns index"""
         index = len(self._collision_groups)

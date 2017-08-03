@@ -4,7 +4,12 @@
 #include <ode/ode.h>
 #include <drawstuff/drawstuff.h>
 
+// glut 
+#ifdef __APPLE__
+#include <GLUT/glut.h>
+#else
 #include <GL/glut.h>
+#endif
 
 //custom headers
 #include "texturepath.h"
