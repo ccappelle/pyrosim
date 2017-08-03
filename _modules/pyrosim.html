@@ -165,6 +165,21 @@
 <span class="kn">import</span> <span class="nn">constants</span>
 
 <span class="kn">from</span> <span class="nn">subprocess</span> <span class="k">import</span> <span class="n">Popen</span><span class="p">,</span> <span class="n">PIPE</span>
+<span class="kn">import</span> <span class="nn">subprocess</span>
+
+<span class="kn">import</span> <span class="nn">errno</span>
+<span class="kn">import</span> <span class="nn">shutil</span>
+
+<span class="kn">from</span> <span class="nn">datetime</span> <span class="k">import</span> <span class="n">datetime</span>
+
+
+<span class="k">def</span> <span class="nf">make_sure_path_exists</span><span class="p">(</span><span class="n">path</span><span class="p">):</span>
+    <span class="k">try</span><span class="p">:</span>
+        <span class="n">shutil</span><span class="o">.</span><span class="n">rmtree</span><span class="p">(</span><span class="n">path</span><span class="p">,</span> <span class="n">ignore_errors</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+        <span class="n">os</span><span class="o">.</span><span class="n">makedirs</span><span class="p">(</span><span class="n">path</span><span class="p">)</span>
+    <span class="k">except</span> <span class="ne">OSError</span> <span class="k">as</span> <span class="n">exception</span><span class="p">:</span>
+        <span class="k">if</span> <span class="n">exception</span><span class="o">.</span><span class="n">errno</span> <span class="o">!=</span> <span class="n">errno</span><span class="o">.</span><span class="n">EEXIST</span><span class="p">:</span>
+            <span class="k">raise</span>
 
 
 <div class="viewcode-block" id="Simulator"><a class="viewcode-back" href="../code.html#pyrosim.Simulator">[docs]</a><span class="k">class</span> <span class="nc">Simulator</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
@@ -198,6 +213,9 @@
 <span class="sd">    debug       : bool, optional</span>
 <span class="sd">            If True print out every string command sent through the pipe to </span>
 <span class="sd">            the simulator (the default is False)</span>
+<span class="sd">    capture     : bool, optional</span>
+<span class="sd">            If True captures frames of the simulation every capture</span>
+<span class="sd">            timesteps.  Meaningless if playing blind.  (the default is False) </span>
 <span class="sd">    &quot;&quot;&quot;</span>
 
     <span class="n">WORLD</span> <span class="o">=</span> <span class="o">-</span><span class="mi">1</span>
@@ -207,7 +225,7 @@
                  <span class="n">eval_time</span><span class="o">=</span><span class="n">constants</span><span class="o">.</span><span class="n">evaluation_time</span><span class="p">,</span> <span class="n">dt</span><span class="o">=</span><span class="n">constants</span><span class="o">.</span><span class="n">dt</span><span class="p">,</span>
                  <span class="n">gravity</span><span class="o">=</span><span class="n">constants</span><span class="o">.</span><span class="n">gravity</span><span class="p">,</span>
                  <span class="n">xyz</span><span class="o">=</span><span class="n">constants</span><span class="o">.</span><span class="n">xyz</span><span class="p">,</span> <span class="n">hpr</span><span class="o">=</span><span class="n">constants</span><span class="o">.</span><span class="n">hpr</span><span class="p">,</span> <span class="n">use_textures</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
-                 <span class="n">debug</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
+                 <span class="n">debug</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">capture</span><span class="o">=</span><span class="mi">0</span><span class="p">):</span>
         <span class="k">assert</span> <span class="n">play_blind</span> <span class="o">==</span> <span class="kc">False</span> <span class="ow">or</span> <span class="n">eval_time</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">,</span> <span class="p">(</span><span class="s1">&#39;Cannot run&#39;</span>
                                                       <span class="s1">&#39; blind forever&#39;</span><span class="p">)</span>
         <span class="k">assert</span> <span class="n">eval_time</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">,</span> <span class="p">(</span><span class="s1">&#39;Cannot run forever: FIXXX MEEE&#39;</span><span class="p">)</span>
@@ -230,6 +248,10 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">debug</span> <span class="o">=</span> <span class="n">debug</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">use_textures</span> <span class="o">=</span> <span class="n">use_textures</span>
 
+        <span class="bp">self</span><span class="o">.</span><span class="n">capture</span> <span class="o">=</span> <span class="n">capture</span>
+        <span class="k">if</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">capture</span><span class="p">):</span>
+            <span class="n">make_sure_path_exists</span><span class="p">(</span><span class="s1">&#39;frame&#39;</span><span class="p">)</span>
+
         <span class="bp">self</span><span class="o">.</span><span class="n">evaluated</span> <span class="o">=</span> <span class="kc">False</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">collision_matrix_sent</span> <span class="o">=</span> <span class="kc">False</span>
 
@@ -250,13 +272,18 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">_send</span><span class="p">(</span><span class="s1">&#39;EvaluationTime&#39;</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">eval_time</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_send</span><span class="p">(</span><span class="s1">&#39;TimeInterval&#39;</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">dt</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_send</span><span class="p">(</span><span class="s1">&#39;Gravity&#39;</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">gravity</span><span class="p">)</span>
+        <span class="k">if</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">capture</span><span class="p">):</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_send</span><span class="p">(</span><span class="s1">&#39;Capture&#39;</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_send</span><span class="p">(</span><span class="s1">&#39;Capture&#39;</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span>
+
         <span class="k">if</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">debug</span><span class="p">):</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">_send</span><span class="p">(</span><span class="s1">&#39;Debug&#39;</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
         <span class="k">else</span><span class="p">:</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">_send</span><span class="p">(</span><span class="s1">&#39;Debug&#39;</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">send_camera</span><span class="p">(</span><span class="n">xyz</span><span class="p">,</span> <span class="n">hpr</span><span class="p">)</span>
 
-<span class="c1"># ------Getters-------------------------</span>
+<span class="c1"># ------Collisions-------------------------</span>
 <div class="viewcode-block" id="Simulator.create_collision_matrix"><a class="viewcode-back" href="../code.html#pyrosim.Simulator.create_collision_matrix">[docs]</a>    <span class="k">def</span> <span class="nf">create_collision_matrix</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">collision_type</span><span class="o">=</span><span class="s1">&#39;none&#39;</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;Create a predefined collision matrix</span>
 
@@ -339,6 +366,7 @@
 
         <span class="bp">self</span><span class="o">.</span><span class="n">_collision_matrix</span><span class="p">[</span><span class="n">group1</span><span class="p">,</span> <span class="n">group2</span><span class="p">]</span> <span class="o">=</span> <span class="mi">0</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_collision_matrix</span><span class="p">[</span><span class="n">group2</span><span class="p">,</span> <span class="n">group1</span><span class="p">]</span> <span class="o">=</span> <span class="mi">0</span></div>
+<span class="c1"># ------Getters--------------------------</span>
 
 <div class="viewcode-block" id="Simulator.get_data"><a class="viewcode-back" href="../code.html#pyrosim.Simulator.get_data">[docs]</a>    <span class="k">def</span> <span class="nf">get_data</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;Get all sensor data back as numpy matrix&quot;&quot;&quot;</span>
@@ -928,7 +956,7 @@
 
 <span class="sd">        Motor neurons are neurons which connect to a specified joint and </span>
 <span class="sd">        determine how the joint moves every time step of simulation</span>
-<span class="sd">        </span>
+
 <span class="sd">        Warning</span>
 <span class="sd">        -------</span>
 <span class="sd">        Sending a motor neuron to a joint whose starting position</span>
@@ -1416,6 +1444,43 @@
         <span class="k">return</span> <span class="kc">True</span></div>
 
 <span class="c1"># -----I/OCommands----------------------------</span>
+<div class="viewcode-block" id="Simulator.make_movie"><a class="viewcode-back" href="../code.html#pyrosim.Simulator.make_movie">[docs]</a>    <span class="k">def</span> <span class="nf">make_movie</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span>  <span class="n">movie_name</span><span class="o">=</span><span class="s1">&#39;&#39;</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Takes captured image files and converts them into a movie</span>
+
+<span class="sd">        Uses ffmpeg to convert images. ffmpeg needs to be installed</span>
+<span class="sd">        for this command to work. Takes images from &#39;frame&#39; directory</span>
+<span class="sd">        </span>
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        movie_name  : string, optional</span>
+<span class="sd">            The movies file name. Must include a proper extenison.</span>
+<span class="sd">            If left blank, default makes file name:</span>
+<span class="sd">            &#39;%Y-%m-%d-%H-%M-%S_movie.mp4&#39;</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        bool</span>
+<span class="sd">            True if successful, False otherwise</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">assert</span> <span class="bp">self</span><span class="o">.</span><span class="n">capture</span> <span class="o">==</span> <span class="kc">True</span><span class="p">,</span> <span class="p">(</span>
+            <span class="s1">&#39;No frames captured, set capture to true&#39;</span><span class="p">)</span>
+
+        <span class="k">if</span> <span class="n">movie_name</span> <span class="o">==</span> <span class="s1">&#39;&#39;</span><span class="p">:</span>
+            <span class="n">time_stamp</span> <span class="o">=</span> <span class="n">datetime</span><span class="o">.</span><span class="n">now</span><span class="p">()</span><span class="o">.</span><span class="n">strftime</span><span class="p">(</span><span class="s1">&#39;%Y-%m-</span><span class="si">%d</span><span class="s1">-%H-%M-%S&#39;</span><span class="p">)</span>
+            <span class="n">movie_name</span> <span class="o">=</span> <span class="n">time_stamp</span> <span class="o">+</span> <span class="s1">&#39;_movie.mp4&#39;</span>
+
+        <span class="n">movie_command</span> <span class="o">=</span> <span class="s1">&#39;ffmpeg -r 30 -i </span><span class="si">%04d</span><span class="s1">.ppm -vcodec&#39;</span> <span class="o">+</span> \
+                        <span class="s1">&#39; libx264 -pix_fmt yuv420p &#39;</span> <span class="o">+</span> <span class="n">movie_name</span>
+
+        <span class="k">try</span><span class="p">:</span>
+            <span class="n">os</span><span class="o">.</span><span class="n">chdir</span><span class="p">(</span><span class="s1">&#39;frame&#39;</span><span class="p">)</span>
+            <span class="n">subprocess</span><span class="o">.</span><span class="n">call</span><span class="p">(</span><span class="n">movie_command</span><span class="p">,</span> <span class="n">shell</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+        <span class="k">except</span> <span class="ne">Exception</span><span class="p">:</span>
+            <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Command sent was: &#39;</span> <span class="o">+</span> <span class="n">movie_command</span><span class="p">)</span>
+            <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Must have ffmpeg installed&#39;</span><span class="p">)</span>
+            <span class="k">return</span> <span class="kc">False</span>
+            
+        <span class="k">return</span> <span class="kc">True</span></div>
 <div class="viewcode-block" id="Simulator.start"><a class="viewcode-back" href="../code.html#pyrosim.Simulator.start">[docs]</a>    <span class="k">def</span> <span class="nf">start</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;Starts the simulation&quot;&quot;&quot;</span>
 
@@ -1471,8 +1536,8 @@
             <span class="nb">print</span> <span class="n">data_from_simulator</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
             <span class="nb">print</span> <span class="n">data_from_simulator</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span>
             <span class="k">return</span> <span class="s1">&#39;No results during infinite run&#39;</span></div>
-<span class="c1"># --------------------- Private methods -----------------------------</span>
 
+    <span class="c1"># --------------------- Private methods ---------------------------</span>
     <span class="k">def</span> <span class="nf">_add_group</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">group</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;Appends group handle to list and returns index&quot;&quot;&quot;</span>
         <span class="n">index</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_collision_groups</span><span class="p">)</span>

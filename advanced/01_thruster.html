@@ -8,7 +8,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>External Forces &mdash; pyrosim 0.1.1 documentation</title>
+  <title>Internal Thruster &mdash; pyrosim 0.1.1 documentation</title>
   
 
   
@@ -36,8 +36,8 @@
   
     <link rel="top" title="pyrosim 0.1.1 documentation" href="../index.html"/>
         <link rel="up" title="Advanced Options" href="../advanced.html"/>
-        <link rel="next" title="Internal Thruster" href="01_thruster.html"/>
-        <link rel="prev" title="Advanced Options" href="../advanced.html"/> 
+        <link rel="next" title="Videos" href="../videos.html"/>
+        <link rel="prev" title="External Forces" href="00_forces.html"/> 
 
   
   <script src="../_static/js/modernizr.min.js"></script>
@@ -94,8 +94,12 @@
 <li class="toctree-l1"><a class="reference internal" href="../installation.html">Installation</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../start.html">Getting Started</a></li>
 <li class="toctree-l1 current"><a class="reference internal" href="../advanced.html">Advanced Options</a><ul class="current">
-<li class="toctree-l2 current"><a class="current reference internal" href="#">External Forces</a></li>
-<li class="toctree-l2"><a class="reference internal" href="01_thruster.html">Internal Thruster</a></li>
+<li class="toctree-l2"><a class="reference internal" href="00_forces.html">External Forces</a></li>
+<li class="toctree-l2 current"><a class="current reference internal" href="#">Internal Thruster</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#basics">Basics</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#spaceship">Spaceship</a></li>
+</ul>
+</li>
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="../videos.html">Videos</a></li>
@@ -146,7 +150,7 @@
         
           <li><a href="../advanced.html">Advanced Options</a> &raquo;</li>
         
-      <li>External Forces</li>
+      <li>Internal Thruster</li>
     
     
       <li class="wy-breadcrumbs-aside">
@@ -163,11 +167,21 @@
           <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
            <div itemprop="articleBody">
             
-  <div class="section" id="external-forces">
-<span id="forces"></span><h1>External Forces<a class="headerlink" href="#external-forces" title="Permalink to this headline">¶</a></h1>
-<p>In pyrosim you can add external forces to any body at any time step within the simulation.
-For example if you wanted to throw a block at time step fifty in the <em>z</em> (up) direction with a force of <a href="#id1"><span class="problematic" id="id2">*</span></a>5 newtons`, you would first create the block using <code class="code docutils literal"><span class="pre">box_id</span> <span class="pre">=</span> <span class="pre">sim.create_box(**kwargs)</span></code> and then send the external force using <code class="code docutils literal"><span class="pre">sim.send_external_force(box_id,</span> <span class="pre">x=0,</span> <span class="pre">y=0,</span> <span class="pre">z=5,</span> <span class="pre">time=50)</span></code>.</p>
-<p>Here <code class="code docutils literal"><span class="pre">x,y,z</span></code> refers to the force vector applied to the body. It is important to remember that larger mass bodies will need more force to move.</p>
+  <div class="section" id="internal-thruster">
+<span id="thrusters"></span><h1>Internal Thruster<a class="headerlink" href="#internal-thruster" title="Permalink to this headline">¶</a></h1>
+<div class="section" id="basics">
+<h2>Basics<a class="headerlink" href="#basics" title="Permalink to this headline">¶</a></h2>
+<p>Thrusters are objects attached to bodies which apply force based on the value of the motor neuron associated to them.
+They are like joints except they can only affect one body directly (multiple indirectly if joined or colliding).
+Thrusters apply force along a specified direction which rotates as the body it is connected to rotates.
+This means thrusters, if allowed, can apply force in both the negative and positive direction specified.
+Motor neurons control thrusters much in the same way they control position control joints: when a motor neuron outputs a 1, the thruster outputs its max force and when the motor neuron outputs a -1, the thruster uses its min force.
+This means thrusters can be seamlessly integrated into any neural network.</p>
+</div>
+<div class="section" id="spaceship">
+<h2>Spaceship<a class="headerlink" href="#spaceship" title="Permalink to this headline">¶</a></h2>
+<p>The natural example for thrusters is, of course, a spaceship. Here we recreate space-x by launching a rocket and having it return safely to ground.</p>
+</div>
 </div>
 
 
@@ -180,10 +194,10 @@ For example if you wanted to throw a block at time step fifty in the <em>z</em> 
   
     <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
       
-        <a href="01_thruster.html" class="btn btn-neutral float-right" title="Internal Thruster" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
+        <a href="../videos.html" class="btn btn-neutral float-right" title="Videos" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
       
       
-        <a href="../advanced.html" class="btn btn-neutral" title="Advanced Options" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+        <a href="00_forces.html" class="btn btn-neutral" title="External Forces" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
       
     </div>
   
