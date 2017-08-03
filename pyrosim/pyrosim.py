@@ -6,6 +6,18 @@ import constants
 
 from subprocess import Popen, PIPE
 
+import errno
+import shutil
+
+
+def make_sure_path_exists(path):
+    try:
+        shutil.rmtree(path, ignore_errors=True)
+        os.makedirs(path)
+    except OSError as exception:
+        if exception.errno != errno.EEXIST :
+            raise
+
 
 class Simulator(object):
     """Python interface for ODE simulator
@@ -38,6 +50,9 @@ class Simulator(object):
     debug       : bool, optional
             If True print out every string command sent through the pipe to 
             the simulator (the default is False)
+    capture     : int, optional
+            If non-zero captures frames of the simulation every capture
+            timesteps.  Meaningless if playing blind.  (the default is 0) 
     """
 
     WORLD = -1
@@ -47,7 +62,7 @@ class Simulator(object):
                  eval_time=constants.evaluation_time, dt=constants.dt,
                  gravity=constants.gravity,
                  xyz=constants.xyz, hpr=constants.hpr, use_textures=False,
-                 debug=False):
+                 debug=False, capture=0):
         assert play_blind == False or eval_time > 0, ('Cannot run'
                                                       ' blind forever')
         assert eval_time > 0, ('Cannot run forever: FIXXX MEEE')
@@ -70,6 +85,11 @@ class Simulator(object):
         self.debug = debug
         self.use_textures = use_textures
 
+        self.capture = capture
+        if (self.capture):
+            make_sure_path_exists("frame")
+        
+
         self.evaluated = False
         self.collision_matrix_sent = False
 
@@ -90,6 +110,7 @@ class Simulator(object):
         self._send('EvaluationTime', self.eval_time)
         self._send('TimeInterval', self.dt)
         self._send('Gravity', self.gravity)
+        self._send('Capture', self.capture)
         if (self.debug):
             self._send('Debug', 1)
         else:

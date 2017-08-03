@@ -4,6 +4,8 @@
 #include <ode/ode.h>
 #include <drawstuff/drawstuff.h>
 
+#include <GL/glut.h>
+
 //custom headers
 #include "texturepath.h"
 #include "environment.h"
@@ -32,6 +34,10 @@ ENVIRONMENT *environment;
 int numberOfBodies = 0;
 bool initialized = false;
 static dGeomID ground;
+
+const unsigned int WINDOW_WIDTH = 352*2;
+const unsigned int WINDOW_HEIGHT = 288*2;
+
 
 Data data;//struct which keeps all user input values for various parameterss. see datastruct.h
 static float updated_xyz[3];
@@ -119,6 +125,36 @@ static void nearCallback (void *callbakData, dGeomID o1, dGeomID o2)
                 dGeomGetBody(contact[i].geom.g2));
         }
     }
+}
+
+
+static void captureFrame(int num) {
+
+
+	char s[200];
+
+	//printf("capturing frame %04d\n",num);
+	sprintf (s,"frame/%04d.ppm",num);
+
+	FILE *f = fopen (s,"wb");
+	fprintf (f,"P6\n%d %d\n255\n",WINDOW_WIDTH,WINDOW_HEIGHT);
+
+	void *buf = malloc( WINDOW_WIDTH * WINDOW_HEIGHT * 3 );
+	glReadPixels( 0, 0, WINDOW_WIDTH, WINDOW_HEIGHT, GL_RGB, GL_UNSIGNED_BYTE, buf );
+
+	for (int y=(WINDOW_HEIGHT - 1); y>=0; y--) {
+		for (int x=0; x<WINDOW_WIDTH; x++) {
+			unsigned char *pixel = ((unsigned char *)buf)+((y*WINDOW_WIDTH+ x)*3);
+			unsigned char b[3];
+			b[0] = *pixel;
+			b[1] = *(pixel+1);
+			b[2] = *(pixel+2);
+			fwrite(b,3,1,f);
+		}
+	}
+	free(buf);
+	fclose(f);
+
 }
 
 
@@ -220,8 +256,10 @@ static void simLoop (int pause)
             dsSetViewpoint(data.xyz, update_hpr);
             }
         }
-}
-environment->Draw(data.debug);
+    }
+    environment->Draw(data.debug);
+	if((!pause) && data.capture && (timer % data.capture == 0))
+		captureFrame(timer / data.capture);
 }
 
 void Initialize_ODE(void) {
@@ -288,7 +326,7 @@ int main (int argc, char **argv)
         Run_Blind();
     else{
       Initialize_Draw_Stuff();
-      dsSimulationLoop (argc,argv,352*2,288*2,&fn);
+      dsSimulationLoop (argc,argv,WINDOW_WIDTH,WINDOW_HEIGHT,&fn);
   }
   return 0;
 }

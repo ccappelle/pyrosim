@@ -19,6 +19,7 @@ struct Data
   int followBody;
   int collisionMatrix[MAX_GROUPS][MAX_GROUPS];
   int numCollisionGroups;
+  int capture;
 };
 
 #endif
