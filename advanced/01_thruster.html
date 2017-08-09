@@ -180,8 +180,65 @@ This means thrusters can be seamlessly integrated into any neural network.</p>
 </div>
 <div class="section" id="spaceship">
 <h2>Spaceship<a class="headerlink" href="#spaceship" title="Permalink to this headline">¶</a></h2>
-<p>The natural example for thrusters is, of course, a spaceship. Here we recreate space-x by launching a rocket and having it return safely to ground.</p>
+<p>The natural example for thrusters is, of course, a spaceship. Here we recreate space-x by launching a rocket and having it return safely to ground (and then still thrusting upwards because it actuates on a sine wave, so it&#8217;s not really like space-x but we are trying to get on the bandwagon).</p>
+<div class="literal-block-wrapper container" id="rocket-ship-py">
+<div class="code-block-caption"><span class="caption-text">rocket_ship.py</span><a class="headerlink" href="#rocket-ship-py" title="Permalink to this code">¶</a></div>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">pyrosim</span>
+<span class="kn">import</span> <span class="nn">math</span>
+
+<span class="n">sim</span> <span class="o">=</span> <span class="n">pyrosim</span><span class="o">.</span><span class="n">Simulator</span><span class="p">(</span><span class="n">play_blind</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">play_paused</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">debug</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+                        <span class="n">use_textures</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">xyz</span><span class="o">=</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="o">-</span><span class="mi">4</span><span class="p">,</span> <span class="mi">1</span><span class="p">],</span> <span class="n">hpr</span><span class="o">=</span><span class="p">[</span><span class="mi">90</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">],</span>
+                        <span class="n">eval_time</span><span class="o">=</span><span class="mi">200</span><span class="p">)</span>
+
+<span class="n">MAIN_HEIGHT</span> <span class="o">=</span> <span class="mf">1.0</span>
+<span class="n">MAIN_WIDTH</span> <span class="o">=</span> <span class="n">MAIN_HEIGHT</span><span class="o">/</span><span class="mf">5.0</span>
+<span class="n">NUM_THRUSTERS</span> <span class="o">=</span> <span class="mi">4</span>
+
+<span class="c1"># set up fuselage</span>
+<span class="n">main_body</span> <span class="o">=</span> <span class="n">sim</span><span class="o">.</span><span class="n">send_cylinder</span><span class="p">(</span><span class="n">x</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">y</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">z</span><span class="o">=</span><span class="n">MAIN_HEIGHT</span><span class="o">+</span><span class="n">MAIN_WIDTH</span><span class="p">,</span>
+                  <span class="n">r1</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">r2</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">r3</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span>
+                  <span class="n">length</span><span class="o">=</span><span class="n">MAIN_HEIGHT</span><span class="p">,</span> <span class="n">radius</span><span class="o">=</span><span class="n">MAIN_WIDTH</span><span class="p">,</span>
+                  <span class="n">mass</span><span class="o">=</span><span class="mi">100</span>
+                  <span class="p">)</span>
+<span class="c1"># make thrusters</span>
+<span class="n">side_cyls</span> <span class="o">=</span> <span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">*</span><span class="n">NUM_THRUSTERS</span>
+<span class="n">thrusters</span> <span class="o">=</span> <span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">*</span><span class="n">NUM_THRUSTERS</span>
+<span class="n">mneuron</span> <span class="o">=</span> <span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">*</span><span class="n">NUM_THRUSTERS</span>
+
+<span class="c1"># network consists of sin input neuron connected to thrusters</span>
+<span class="n">fnueron</span> <span class="o">=</span> <span class="n">sim</span><span class="o">.</span><span class="n">send_function_neuron</span><span class="p">(</span><span class="n">math</span><span class="o">.</span><span class="n">sin</span><span class="p">)</span>
+
+<span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">NUM_THRUSTERS</span><span class="p">):</span>
+    <span class="n">x</span> <span class="o">=</span> <span class="n">math</span><span class="o">.</span><span class="n">cos</span><span class="p">(</span><span class="mi">2</span><span class="o">*</span><span class="n">math</span><span class="o">.</span><span class="n">pi</span><span class="o">/</span><span class="nb">float</span><span class="p">(</span><span class="n">NUM_THRUSTERS</span><span class="p">)</span><span class="o">*</span><span class="n">i</span><span class="p">)</span><span class="o">*</span><span class="n">MAIN_WIDTH</span>
+    <span class="n">y</span> <span class="o">=</span> <span class="n">math</span><span class="o">.</span><span class="n">sin</span><span class="p">(</span><span class="mi">2</span><span class="o">*</span><span class="n">math</span><span class="o">.</span><span class="n">pi</span><span class="o">/</span><span class="nb">float</span><span class="p">(</span><span class="n">NUM_THRUSTERS</span><span class="p">)</span><span class="o">*</span><span class="n">i</span><span class="p">)</span><span class="o">*</span><span class="n">MAIN_WIDTH</span>
+
+    <span class="n">side_cyls</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="n">sim</span><span class="o">.</span><span class="n">send_cylinder</span><span class="p">(</span><span class="n">x</span><span class="p">,</span><span class="n">y</span><span class="p">,</span><span class="n">MAIN_HEIGHT</span><span class="o">/</span><span class="mf">3.0</span><span class="o">+</span><span class="n">MAIN_WIDTH</span><span class="p">,</span>
+                                    <span class="n">r1</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">r2</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">r3</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span>
+                                    <span class="n">length</span><span class="o">=</span><span class="n">MAIN_HEIGHT</span><span class="o">/</span><span class="mf">3.0</span><span class="p">,</span>
+                                    <span class="n">radius</span><span class="o">=</span><span class="n">MAIN_WIDTH</span><span class="o">/</span><span class="mf">3.0</span><span class="p">)</span>
+    <span class="n">sim</span><span class="o">.</span><span class="n">send_fixed_joint</span><span class="p">(</span><span class="n">main_body</span><span class="p">,</span> <span class="n">side_cyls</span><span class="p">[</span><span class="n">i</span><span class="p">])</span>
+
+    <span class="c1"># thrusters are attached to a body and apply a </span>
+    <span class="c1"># directional force (x,y,z) based on the value of </span>
+    <span class="c1"># the attached motor neuron. The effect of the force</span>
+    <span class="c1"># on the body depends on the lo and hi parameters </span>
+    <span class="c1"># and the total mass of the bodies attached.</span>
+    <span class="c1"># Currently the thrusters only apply force to the </span>
+    <span class="c1"># center of mass of the attached body.</span>
+    <span class="n">thrusters</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="n">sim</span><span class="o">.</span><span class="n">send_thruster</span><span class="p">(</span><span class="n">side_cyls</span><span class="p">[</span><span class="n">i</span><span class="p">],</span> 
+                                     <span class="n">x</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">y</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">z</span><span class="o">=-</span><span class="mi">1</span><span class="p">,</span> 
+                                     <span class="n">lo</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">hi</span><span class="o">=</span><span class="mi">40</span><span class="p">)</span>
+
+    <span class="n">mneuron</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="n">sim</span><span class="o">.</span><span class="n">send_motor_neuron</span><span class="p">(</span><span class="n">thrusters</span><span class="p">[</span><span class="n">i</span><span class="p">])</span>
+    <span class="n">sim</span><span class="o">.</span><span class="n">send_synapse</span><span class="p">(</span><span class="n">fnueron</span><span class="p">,</span> <span class="n">mneuron</span><span class="p">[</span><span class="n">i</span><span class="p">],</span> <span class="mf">1.0</span><span class="p">)</span>
+
+<span class="n">sim</span><span class="o">.</span><span class="n">film_body</span><span class="p">(</span><span class="n">main_body</span><span class="p">,</span> <span class="s1">&#39;track&#39;</span><span class="p">)</span>
+<span class="n">sim</span><span class="o">.</span><span class="n">start</span><span class="p">()</span>
+<span class="n">sim</span><span class="o">.</span><span class="n">wait_to_finish</span><span class="p">()</span>
+</pre></div>
 </div>
+</div>
+<iframe width="100%" height="315" src="https://www.youtube.com/embed/J1Bsi3IW9VE?rel=0" frameborder="0" allowfullscreen></iframe></div>
 </div>
 
 
