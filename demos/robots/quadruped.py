@@ -1,6 +1,7 @@
 import math
 import numpy as np
 import math
+import pyrosim
 
 HEIGHT = 0.3
 EPS = 0.05
@@ -90,7 +91,6 @@ def send_to_simulator(sim, weight_matrix):
 
     env_box = sim.send_box(x=2, y=-2, z=HEIGHT/2.0, length=HEIGHT, width=HEIGHT, height=HEIGHT, collision_group=1,
                            mass=3.)
-    sim.send_slider_joint(pyrosim.Simulator.WORLD, main_body, x=0,y=.4,z=1, position_control=True)
 
     MASS = 3
     sim.send_external_force(env_box, x=0, y=0, z=MASS*20., time=300)
@@ -107,7 +107,7 @@ def send_to_simulator(sim, weight_matrix):
     return layout
 
 if __name__ == "__main__":
-    import pyrosim
+
 
     eval_time = 1000
     gravity = -1.0
@@ -122,7 +122,7 @@ if __name__ == "__main__":
         for i in range(NUM):
             sim[i] = pyrosim.Simulator(eval_time=eval_time, debug=True, dt=0.045, play_paused=True,
                                        gravity=gravity, play_blind=BLIND, use_textures=True,
-                                       capture=1)
+                                       capture=False)
             num_sensors = 5
             num_motors = 8
 

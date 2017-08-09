@@ -24,7 +24,9 @@ private:
 
 	double *r, *g, *b;
 
-        NEURON *mySensorNeurons[4];
+    double maxDistance;
+
+    NEURON *mySensorNeurons[4];
 
 public:
 	RAY_SENSOR(dSpaceID space, OBJECT *myObj, int myID, int evalPeriod);
@@ -33,7 +35,7 @@ public:
 
 	void Add_To_Object(void);
 
-        void Connect_To_Sensor_Neuron(NEURON *sensorNeuron);
+    void Connect_To_Sensor_Neuron(NEURON *sensorNeuron);
 
 	void Draw(double endX, double endY, double endZ, int t);
 

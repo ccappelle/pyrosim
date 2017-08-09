@@ -1098,7 +1098,7 @@ class Simulator(object):
 
         return sensor_id
 
-    def send_ray_sensor(self, body_id=0, x=0, y=0, z=0, r1=0, r2=0, r3=1):
+    def send_ray_sensor(self, body_id=0, x=0, y=0, z=0, r1=0, r2=0, r3=1, max_distance=10):
         """Sends a ray sensor to the simulator connected to a body
 
         Ray sensors return four values each time step, the distance and 
@@ -1124,6 +1124,9 @@ class Simulator(object):
         r3       : float, optional
                 The z direction of the sensor. The array [r1,r2,r3] is the 
                 direction the ray sensor is pointing in the time step.
+        max_distance: float, optional
+                The maximum distance away the ray can sense in simulator
+                units. (default is 10.0)
 
         Returns
         -------
@@ -1140,7 +1143,8 @@ class Simulator(object):
         self._send('RaySensor',
                    sensor_id, body_id,
                    x, y, z,
-                   r1, r2, r3)
+                   r1, r2, r3,
+                   max_distance)
 
         return sensor_id
 
@@ -1285,6 +1289,23 @@ class Simulator(object):
 
 # -----I/OCommands----------------------------
     def make_movie(self,  movie_name=''):
+        """Takes captured image files and converts them into a movie
+
+        Uses ffmpeg to convert images. ffmpeg needs to be installed
+        for this command to work. Takes images from 'frame' directory
+
+        Parameters
+        ----------
+        movie_name  : string, optional
+            The movies file name. Must include a proper extenison.
+            If left blank, default is to make a time stamped file name:
+            '%Y-%m-%d-%H-%M-%S_movie.mp4'
+
+        Returns
+        -------
+        bool
+            True if successful, False otherwise
+        """
         assert self.capture == True, (
             'No frames captured, set capture to true')
 
@@ -1298,9 +1319,13 @@ class Simulator(object):
         try:
             os.chdir('frame')
             subprocess.call(movie_command, shell=True)
+
         except Exception:
             print('Command sent was: ' + movie_command)
             print('Must have ffmpeg installed')
+            return False
+
+        return True
 
     def start(self):
         """Starts the simulation"""

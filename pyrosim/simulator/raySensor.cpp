@@ -29,9 +29,11 @@ RAY_SENSOR::RAY_SENSOR(dSpaceID space, OBJECT *myObj, int myID, int evalPeriod) 
 
         std::cin >> r3;
 
+        std::cin >> maxDistance;
+
 	Initialize(evalPeriod);
 
-        ray = dCreateRay(space,10.0);
+        ray = dCreateRay(space,maxDistance);
 
 	Add_To_Object();
 
@@ -94,7 +96,7 @@ void RAY_SENSOR::Initialize(int evalPeriod) {
 
         for (int t=0;t<evalPeriod;t++) {
 
-                distances[t] = 10.0;
+                distances[t] = maxDistance;
 
                 r[t] = 0.0;
 
