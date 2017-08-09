@@ -399,7 +399,7 @@ for this command to work. Takes images from &#8216;frame&#8217; directory</p>
 <col class="field-body" />
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>movie_name</strong> (<em>string, optional</em>) &#8211; The movies file name. Must include a proper extenison.
-If left blank, default makes file name:
+If left blank, default is to make a time stamped file name:
 &#8216;%Y-%m-%d-%H-%M-%S_movie.mp4&#8217;</td>
 </tr>
 <tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">True if successful, False otherwise</td>
@@ -859,7 +859,7 @@ each time step</p>
 
 <dl class="method">
 <dt id="pyrosim.Simulator.send_ray_sensor">
-<code class="descname">send_ray_sensor</code><span class="sig-paren">(</span><em>body_id=0</em>, <em>x=0</em>, <em>y=0</em>, <em>z=0</em>, <em>r1=0</em>, <em>r2=0</em>, <em>r3=1</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pyrosim.html#Simulator.send_ray_sensor"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyrosim.Simulator.send_ray_sensor" title="Permalink to this definition">¶</a></dt>
+<code class="descname">send_ray_sensor</code><span class="sig-paren">(</span><em>body_id=0</em>, <em>x=0</em>, <em>y=0</em>, <em>z=0</em>, <em>r1=0</em>, <em>r2=0</em>, <em>r3=1</em>, <em>max_distance=10</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pyrosim.html#Simulator.send_ray_sensor"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyrosim.Simulator.send_ray_sensor" title="Permalink to this definition">¶</a></dt>
 <dd><p>Sends a ray sensor to the simulator connected to a body</p>
 <p>Ray sensors return four values each time step, the distance and
 color (r,g,b).</p>
@@ -879,6 +879,8 @@ direction the ray sensor is pointing in the time step.</li>
 is the direction the ray sensor is pointing in the time step.</li>
 <li><strong>r3</strong> (<em>float, optional</em>) &#8211; The z direction of the sensor. The array [r1,r2,r3] is the
 direction the ray sensor is pointing in the time step.</li>
+<li><strong>max_distance</strong> (<em>float, optional</em>) &#8211; The maximum distance away the ray can sense in simulator
+units. (default is 10.0)</li>
 </ul>
 </td>
 </tr>

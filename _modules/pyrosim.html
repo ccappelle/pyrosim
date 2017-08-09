@@ -1258,7 +1258,7 @@
 
         <span class="k">return</span> <span class="n">sensor_id</span></div>
 
-<div class="viewcode-block" id="Simulator.send_ray_sensor"><a class="viewcode-back" href="../code.html#pyrosim.Simulator.send_ray_sensor">[docs]</a>    <span class="k">def</span> <span class="nf">send_ray_sensor</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">body_id</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">x</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">y</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">z</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">r1</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">r2</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">r3</span><span class="o">=</span><span class="mi">1</span><span class="p">):</span>
+<div class="viewcode-block" id="Simulator.send_ray_sensor"><a class="viewcode-back" href="../code.html#pyrosim.Simulator.send_ray_sensor">[docs]</a>    <span class="k">def</span> <span class="nf">send_ray_sensor</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">body_id</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">x</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">y</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">z</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">r1</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">r2</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">r3</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">max_distance</span><span class="o">=</span><span class="mi">10</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;Sends a ray sensor to the simulator connected to a body</span>
 
 <span class="sd">        Ray sensors return four values each time step, the distance and </span>
@@ -1284,6 +1284,9 @@
 <span class="sd">        r3       : float, optional</span>
 <span class="sd">                The z direction of the sensor. The array [r1,r2,r3] is the </span>
 <span class="sd">                direction the ray sensor is pointing in the time step.</span>
+<span class="sd">        max_distance: float, optional</span>
+<span class="sd">                The maximum distance away the ray can sense in simulator</span>
+<span class="sd">                units. (default is 10.0)</span>
 
 <span class="sd">        Returns</span>
 <span class="sd">        -------</span>
@@ -1300,7 +1303,8 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">_send</span><span class="p">(</span><span class="s1">&#39;RaySensor&#39;</span><span class="p">,</span>
                    <span class="n">sensor_id</span><span class="p">,</span> <span class="n">body_id</span><span class="p">,</span>
                    <span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">z</span><span class="p">,</span>
-                   <span class="n">r1</span><span class="p">,</span> <span class="n">r2</span><span class="p">,</span> <span class="n">r3</span><span class="p">)</span>
+                   <span class="n">r1</span><span class="p">,</span> <span class="n">r2</span><span class="p">,</span> <span class="n">r3</span><span class="p">,</span>
+                   <span class="n">max_distance</span><span class="p">)</span>
 
         <span class="k">return</span> <span class="n">sensor_id</span></div>
 
@@ -1449,12 +1453,12 @@
 
 <span class="sd">        Uses ffmpeg to convert images. ffmpeg needs to be installed</span>
 <span class="sd">        for this command to work. Takes images from &#39;frame&#39; directory</span>
-<span class="sd">        </span>
+
 <span class="sd">        Parameters</span>
 <span class="sd">        ----------</span>
 <span class="sd">        movie_name  : string, optional</span>
 <span class="sd">            The movies file name. Must include a proper extenison.</span>
-<span class="sd">            If left blank, default makes file name:</span>
+<span class="sd">            If left blank, default is to make a time stamped file name:</span>
 <span class="sd">            &#39;%Y-%m-%d-%H-%M-%S_movie.mp4&#39;</span>
 
 <span class="sd">        Returns</span>
@@ -1475,12 +1479,14 @@
         <span class="k">try</span><span class="p">:</span>
             <span class="n">os</span><span class="o">.</span><span class="n">chdir</span><span class="p">(</span><span class="s1">&#39;frame&#39;</span><span class="p">)</span>
             <span class="n">subprocess</span><span class="o">.</span><span class="n">call</span><span class="p">(</span><span class="n">movie_command</span><span class="p">,</span> <span class="n">shell</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+
         <span class="k">except</span> <span class="ne">Exception</span><span class="p">:</span>
             <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Command sent was: &#39;</span> <span class="o">+</span> <span class="n">movie_command</span><span class="p">)</span>
             <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Must have ffmpeg installed&#39;</span><span class="p">)</span>
             <span class="k">return</span> <span class="kc">False</span>
-            
+
         <span class="k">return</span> <span class="kc">True</span></div>
+
 <div class="viewcode-block" id="Simulator.start"><a class="viewcode-back" href="../code.html#pyrosim.Simulator.start">[docs]</a>    <span class="k">def</span> <span class="nf">start</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;Starts the simulation&quot;&quot;&quot;</span>
 
