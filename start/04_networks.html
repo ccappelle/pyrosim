@@ -103,6 +103,7 @@
 <li class="toctree-l4"><a class="reference internal" href="#other-input-neurons">Other Input Neurons</a></li>
 <li class="toctree-l4"><a class="reference internal" href="#hidden-neurons">Hidden Neurons</a></li>
 <li class="toctree-l4"><a class="reference internal" href="#motor-neurons">Motor Neurons</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#synapses">Synapses</a></li>
 </ul>
 </li>
 <li class="toctree-l3"><a class="reference internal" href="#updating">Updating</a></li>
@@ -244,9 +245,13 @@ is read by the specified joint and then the joint actuates accordingly.</p>
 </ul>
 </div>
 </div>
+<div class="section" id="synapses">
+<span id="update-rule"></span><span id="id1"></span><h3>Synapses<a class="headerlink" href="#synapses" title="Permalink to this headline">¶</a></h3>
+<p>Synapses connect neurons together. In pyrosim there are two types of synapses: normal and developing. Normal synapses maintain their single weight value throughout evaluation. Developing synapses change their weight over the evaluation of the robot. Developing synapses linearly interpolate their weight from starting to ending weight over the course of the starting to ending time.</p>
+</div>
 </div>
 <div class="section" id="updating">
-<span id="update-rule"></span><h2>Updating<a class="headerlink" href="#updating" title="Permalink to this headline">¶</a></h2>
+<h2>Updating<a class="headerlink" href="#updating" title="Permalink to this headline">¶</a></h2>
 <p>Hidden and motor neurons are updated every time step based on the input values
 and the value of the neuron at the previous time step. The activation function is as
 follows:</p>

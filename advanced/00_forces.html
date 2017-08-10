@@ -94,7 +94,11 @@
 <li class="toctree-l1"><a class="reference internal" href="../installation.html">Installation</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../start.html">Getting Started</a></li>
 <li class="toctree-l1 current"><a class="reference internal" href="../advanced.html">Advanced Options</a><ul class="current">
-<li class="toctree-l2 current"><a class="current reference internal" href="#">External Forces</a></li>
+<li class="toctree-l2 current"><a class="current reference internal" href="#">External Forces</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#basics">Basics</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#quadruped">Quadruped</a></li>
+</ul>
+</li>
 <li class="toctree-l2"><a class="reference internal" href="01_thruster.html">Internal Thruster</a></li>
 </ul>
 </li>
@@ -165,9 +169,150 @@
             
   <div class="section" id="external-forces">
 <span id="forces"></span><h1>External Forces<a class="headerlink" href="#external-forces" title="Permalink to this headline">¶</a></h1>
+<div class="section" id="basics">
+<h2>Basics<a class="headerlink" href="#basics" title="Permalink to this headline">¶</a></h2>
 <p>In pyrosim you can add external forces to any body at any time step within the simulation.
 For example if you wanted to throw a block at time step fifty in the <em>z</em> (up) direction with a force of <a href="#id1"><span class="problematic" id="id2">*</span></a>5 newtons`, you would first create the block using <code class="code docutils literal"><span class="pre">box_id</span> <span class="pre">=</span> <span class="pre">sim.create_box(**kwargs)</span></code> and then send the external force using <code class="code docutils literal"><span class="pre">sim.send_external_force(box_id,</span> <span class="pre">x=0,</span> <span class="pre">y=0,</span> <span class="pre">z=5,</span> <span class="pre">time=50)</span></code>.</p>
 <p>Here <code class="code docutils literal"><span class="pre">x,y,z</span></code> refers to the force vector applied to the body. It is important to remember that larger mass bodies will need more force to move.</p>
+</div>
+<div class="section" id="quadruped">
+<h2>Quadruped<a class="headerlink" href="#quadruped" title="Permalink to this headline">¶</a></h2>
+<p>Here we present our famed mascot being hit by a box thrown with external forces. This example also showcases <a class="reference internal" href="../start/04_networks.html#id1"><span class="std std-ref">developing synapses</span></a>.</p>
+<div class="literal-block-wrapper container" id="quadruped-py">
+<div class="code-block-caption"><span class="caption-text">quadruped.py</span><a class="headerlink" href="#quadruped-py" title="Permalink to this code">¶</a></div>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">math</span>
+<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+<span class="kn">import</span> <span class="nn">math</span>
+<span class="kn">import</span> <span class="nn">pyrosim</span>
+
+<span class="n">HEIGHT</span> <span class="o">=</span> <span class="mf">0.3</span>
+<span class="n">EPS</span> <span class="o">=</span> <span class="mf">0.05</span>
+<span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">seed</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span>
+
+<span class="k">def</span> <span class="nf">send_to_simulator</span><span class="p">(</span><span class="n">sim</span><span class="p">,</span> <span class="n">weight_matrix</span><span class="p">):</span>
+    <span class="n">main_body</span> <span class="o">=</span> <span class="n">sim</span><span class="o">.</span><span class="n">send_box</span><span class="p">(</span><span class="n">x</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">y</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">z</span><span class="o">=</span><span class="n">HEIGHT</span><span class="o">+</span><span class="n">EPS</span><span class="p">,</span>
+                             <span class="n">length</span><span class="o">=</span><span class="n">HEIGHT</span><span class="p">,</span> <span class="n">width</span><span class="o">=</span><span class="n">HEIGHT</span><span class="p">,</span>
+                             <span class="n">height</span><span class="o">=</span><span class="n">EPS</span><span class="o">*</span><span class="mf">2.0</span><span class="p">,</span> <span class="n">mass</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+
+    <span class="c1"># id arrays</span>
+    <span class="n">thighs</span> <span class="o">=</span> <span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">*</span><span class="mi">4</span>
+    <span class="n">shins</span> <span class="o">=</span> <span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">*</span><span class="mi">4</span>
+    <span class="n">hips</span> <span class="o">=</span> <span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">*</span><span class="mi">4</span>
+    <span class="n">knees</span> <span class="o">=</span> <span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">*</span><span class="mi">4</span>
+    <span class="n">foot_sensors</span> <span class="o">=</span> <span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">*</span><span class="mi">4</span>
+    <span class="n">sensor_neurons</span> <span class="o">=</span> <span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">*</span><span class="mi">5</span>
+    <span class="n">motor_neurons</span> <span class="o">=</span> <span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">*</span><span class="mi">8</span>
+
+    <span class="n">delta</span> <span class="o">=</span> <span class="nb">float</span><span class="p">(</span><span class="n">math</span><span class="o">.</span><span class="n">pi</span><span class="p">)</span><span class="o">/</span><span class="mf">2.0</span>
+
+    <span class="c1"># quadruped is a box with one leg on each side</span>
+    <span class="c1"># each leg consists thigh and shin cylinders</span>
+    <span class="c1"># with hip and knee joints</span>
+    <span class="c1"># each shin/foot then has a touch sensor</span>
+    <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">4</span><span class="p">):</span>
+        <span class="n">theta</span> <span class="o">=</span> <span class="n">delta</span><span class="o">*</span><span class="n">i</span>
+        <span class="n">x_pos</span> <span class="o">=</span> <span class="n">math</span><span class="o">.</span><span class="n">cos</span><span class="p">(</span><span class="n">theta</span><span class="p">)</span><span class="o">*</span><span class="n">HEIGHT</span>
+        <span class="n">y_pos</span> <span class="o">=</span> <span class="n">math</span><span class="o">.</span><span class="n">sin</span><span class="p">(</span><span class="n">theta</span><span class="p">)</span><span class="o">*</span><span class="n">HEIGHT</span>
+
+        <span class="n">thighs</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="n">sim</span><span class="o">.</span><span class="n">send_cylinder</span><span class="p">(</span><span class="n">x</span><span class="o">=</span><span class="n">x_pos</span><span class="p">,</span> <span class="n">y</span><span class="o">=</span><span class="n">y_pos</span><span class="p">,</span> <span class="n">z</span><span class="o">=</span><span class="n">HEIGHT</span><span class="o">+</span><span class="n">EPS</span><span class="p">,</span>
+                                      <span class="n">r1</span><span class="o">=</span><span class="n">x_pos</span><span class="p">,</span> <span class="n">r2</span><span class="o">=</span><span class="n">y_pos</span><span class="p">,</span> <span class="n">r3</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span>
+                                      <span class="n">length</span><span class="o">=</span><span class="n">HEIGHT</span><span class="p">,</span> <span class="n">radius</span><span class="o">=</span><span class="n">EPS</span><span class="p">,</span> <span class="n">capped</span><span class="o">=</span><span class="kc">True</span>
+                                      <span class="p">)</span>
+
+        <span class="n">hips</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="n">sim</span><span class="o">.</span><span class="n">send_hinge_joint</span><span class="p">(</span><span class="n">main_body</span><span class="p">,</span> <span class="n">thighs</span><span class="p">[</span><span class="n">i</span><span class="p">],</span>
+                                       <span class="n">x</span><span class="o">=</span><span class="n">x_pos</span><span class="o">/</span><span class="mf">2.0</span><span class="p">,</span> <span class="n">y</span><span class="o">=</span><span class="n">y_pos</span><span class="o">/</span><span class="mf">2.0</span><span class="p">,</span> <span class="n">z</span><span class="o">=</span><span class="n">HEIGHT</span><span class="o">+</span><span class="n">EPS</span><span class="p">,</span>
+                                       <span class="n">n1</span><span class="o">=-</span><span class="n">y_pos</span><span class="p">,</span> <span class="n">n2</span><span class="o">=</span><span class="n">x_pos</span><span class="p">,</span> <span class="n">n3</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span>
+                                       <span class="n">lo</span><span class="o">=-</span><span class="n">math</span><span class="o">.</span><span class="n">pi</span><span class="o">/</span><span class="mf">4.0</span><span class="p">,</span> <span class="n">hi</span><span class="o">=</span><span class="n">math</span><span class="o">.</span><span class="n">pi</span><span class="o">/</span><span class="mf">4.0</span><span class="p">,</span>
+                                       <span class="n">speed</span><span class="o">=</span><span class="mf">1.0</span><span class="p">)</span>
+
+        <span class="n">motor_neurons</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="n">sim</span><span class="o">.</span><span class="n">send_motor_neuron</span><span class="p">(</span><span class="n">joint_id</span><span class="o">=</span><span class="n">hips</span><span class="p">[</span><span class="n">i</span><span class="p">])</span>
+
+        <span class="n">x_pos2</span> <span class="o">=</span> <span class="n">math</span><span class="o">.</span><span class="n">cos</span><span class="p">(</span><span class="n">theta</span><span class="p">)</span><span class="o">*</span><span class="mf">1.5</span><span class="o">*</span><span class="n">HEIGHT</span>
+        <span class="n">y_pos2</span> <span class="o">=</span> <span class="n">math</span><span class="o">.</span><span class="n">sin</span><span class="p">(</span><span class="n">theta</span><span class="p">)</span><span class="o">*</span><span class="mf">1.5</span><span class="o">*</span><span class="n">HEIGHT</span>
+
+        <span class="n">shins</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="n">sim</span><span class="o">.</span><span class="n">send_cylinder</span><span class="p">(</span><span class="n">x</span><span class="o">=</span><span class="n">x_pos2</span><span class="p">,</span> <span class="n">y</span><span class="o">=</span><span class="n">y_pos2</span><span class="p">,</span> <span class="n">z</span><span class="o">=</span><span class="p">(</span><span class="n">HEIGHT</span><span class="o">+</span><span class="n">EPS</span><span class="p">)</span><span class="o">/</span><span class="mf">2.0</span><span class="p">,</span>
+                                     <span class="n">r1</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">r2</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">r3</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span>
+                                     <span class="n">length</span><span class="o">=</span><span class="n">HEIGHT</span><span class="p">,</span> <span class="n">radius</span><span class="o">=</span><span class="n">EPS</span><span class="p">,</span>
+                                     <span class="n">mass</span><span class="o">=</span><span class="mf">1.</span><span class="p">,</span> <span class="n">capped</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+
+        <span class="n">knees</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="n">sim</span><span class="o">.</span><span class="n">send_hinge_joint</span><span class="p">(</span><span class="n">thighs</span><span class="p">[</span><span class="n">i</span><span class="p">],</span> <span class="n">shins</span><span class="p">[</span><span class="n">i</span><span class="p">],</span>
+                                        <span class="n">x</span><span class="o">=</span><span class="n">x_pos2</span><span class="p">,</span> <span class="n">y</span><span class="o">=</span><span class="n">y_pos2</span><span class="p">,</span> <span class="n">z</span><span class="o">=</span><span class="n">HEIGHT</span><span class="o">+</span><span class="n">EPS</span><span class="p">,</span>
+                                        <span class="n">n1</span><span class="o">=-</span><span class="n">y_pos</span><span class="p">,</span> <span class="n">n2</span><span class="o">=</span><span class="n">x_pos</span><span class="p">,</span> <span class="n">n3</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span>
+                                        <span class="n">lo</span><span class="o">=-</span><span class="n">math</span><span class="o">.</span><span class="n">pi</span><span class="o">/</span><span class="mf">4.0</span><span class="p">,</span> <span class="n">hi</span><span class="o">=</span><span class="n">math</span><span class="o">.</span><span class="n">pi</span><span class="o">/</span><span class="mf">4.0</span><span class="p">)</span>
+
+        <span class="n">motor_neurons</span><span class="p">[</span><span class="n">i</span><span class="o">+</span><span class="mi">4</span><span class="p">]</span> <span class="o">=</span> <span class="n">sim</span><span class="o">.</span><span class="n">send_motor_neuron</span><span class="p">(</span><span class="n">knees</span><span class="p">[</span><span class="n">i</span><span class="p">])</span>
+        <span class="n">foot_sensors</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="n">sim</span><span class="o">.</span><span class="n">send_touch_sensor</span><span class="p">(</span><span class="n">shins</span><span class="p">[</span><span class="n">i</span><span class="p">])</span>
+        <span class="n">sensor_neurons</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="n">sim</span><span class="o">.</span><span class="n">send_sensor_neuron</span><span class="p">(</span><span class="n">foot_sensors</span><span class="p">[</span><span class="n">i</span><span class="p">])</span>
+
+    <span class="n">count</span> <span class="o">=</span> <span class="mi">0</span>
+    <span class="c1"># developing synapses linearly change from the start value to the</span>
+    <span class="c1"># end value over the course of start time to end time</span>
+    <span class="c1"># Here we connect each sensor to each motor, pulling weights from</span>
+    <span class="c1"># the weight matrix</span>
+    <span class="k">for</span> <span class="n">source_id</span> <span class="ow">in</span> <span class="n">sensor_neurons</span><span class="p">:</span>
+        <span class="k">for</span> <span class="n">target_id</span> <span class="ow">in</span> <span class="n">motor_neurons</span><span class="p">:</span>
+            <span class="n">count</span> <span class="o">+=</span> <span class="mi">1</span>
+            <span class="n">start_weight</span> <span class="o">=</span> <span class="n">weight_matrix</span><span class="p">[</span><span class="n">source_id</span><span class="p">,</span> <span class="n">target_id</span><span class="p">,</span> <span class="mi">0</span><span class="p">]</span>
+            <span class="n">end_weight</span> <span class="o">=</span> <span class="n">weight_matrix</span><span class="p">[</span><span class="n">source_id</span><span class="p">,</span> <span class="n">target_id</span><span class="p">,</span> <span class="mi">1</span><span class="p">]</span>
+            <span class="n">start_time</span> <span class="o">=</span> <span class="n">weight_matrix</span><span class="p">[</span><span class="n">source_id</span><span class="p">,</span> <span class="n">target_id</span><span class="p">,</span> <span class="mi">2</span><span class="p">]</span>
+            <span class="n">end_time</span> <span class="o">=</span> <span class="n">weight_matrix</span><span class="p">[</span><span class="n">source_id</span><span class="p">,</span> <span class="n">target_id</span><span class="p">,</span> <span class="mi">3</span><span class="p">]</span>
+            <span class="n">sim</span><span class="o">.</span><span class="n">send_developing_synapse</span><span class="p">(</span><span class="n">source_id</span><span class="p">,</span> <span class="n">target_id</span><span class="p">,</span>
+                                        <span class="n">start_weight</span><span class="o">=</span><span class="n">start_weight</span><span class="p">,</span>
+                                        <span class="n">end_weight</span><span class="o">=</span><span class="n">end_weight</span><span class="p">,</span>
+                                        <span class="n">start_time</span><span class="o">=</span><span class="n">start_time</span><span class="p">,</span> 
+                                        <span class="n">end_time</span><span class="o">=</span><span class="n">end_time</span><span class="p">)</span>
+
+    <span class="c1"># layouts are useful for other things not relevant to this example</span>
+    <span class="n">layout</span> <span class="o">=</span> <span class="p">{</span><span class="s1">&#39;thighs&#39;</span><span class="p">:</span> <span class="n">thighs</span><span class="p">,</span>
+              <span class="s1">&#39;shins&#39;</span><span class="p">:</span> <span class="n">shins</span><span class="p">,</span>
+              <span class="s1">&#39;hips&#39;</span><span class="p">:</span> <span class="n">hips</span><span class="p">,</span>
+              <span class="s1">&#39;knees&#39;</span><span class="p">:</span> <span class="n">knees</span><span class="p">,</span>
+              <span class="s1">&#39;feet&#39;</span><span class="p">:</span> <span class="n">foot_sensors</span><span class="p">,</span>
+              <span class="s1">&#39;sensor_neurons&#39;</span><span class="p">:</span> <span class="n">sensor_neurons</span><span class="p">,</span>
+              <span class="s1">&#39;motor_neurons&#39;</span><span class="p">:</span> <span class="n">motor_neurons</span><span class="p">}</span>
+
+    <span class="n">env_box</span> <span class="o">=</span> <span class="n">sim</span><span class="o">.</span><span class="n">send_box</span><span class="p">(</span><span class="n">x</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span> <span class="n">y</span><span class="o">=-</span><span class="mi">2</span><span class="p">,</span> <span class="n">z</span><span class="o">=</span><span class="n">HEIGHT</span><span class="o">/</span><span class="mf">2.0</span><span class="p">,</span>
+                           <span class="n">length</span><span class="o">=</span><span class="n">HEIGHT</span><span class="p">,</span>
+                           <span class="n">width</span><span class="o">=</span><span class="n">HEIGHT</span><span class="p">,</span>
+                           <span class="n">height</span><span class="o">=</span><span class="n">HEIGHT</span><span class="p">,</span>
+                           <span class="n">mass</span><span class="o">=</span><span class="mf">3.</span><span class="p">)</span>
+
+    <span class="c1"># send the box towards the origin with specified force</span>
+    <span class="c1"># proportional to its mass</span>
+    <span class="n">MASS</span> <span class="o">=</span> <span class="mi">3</span>
+    <span class="n">sim</span><span class="o">.</span><span class="n">send_external_force</span><span class="p">(</span><span class="n">env_box</span><span class="p">,</span> <span class="n">x</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">y</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">z</span><span class="o">=</span><span class="n">MASS</span><span class="o">*</span><span class="mf">20.</span><span class="p">,</span> <span class="n">time</span><span class="o">=</span><span class="mi">300</span><span class="p">)</span>
+    <span class="n">sim</span><span class="o">.</span><span class="n">send_external_force</span><span class="p">(</span><span class="n">env_box</span><span class="p">,</span> <span class="n">x</span><span class="o">=-</span><span class="n">MASS</span><span class="o">*</span><span class="mf">70.</span><span class="p">,</span> <span class="n">y</span><span class="o">=</span><span class="n">MASS</span><span class="o">*</span><span class="mf">73.</span><span class="p">,</span> <span class="n">z</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">time</span><span class="o">=</span><span class="mi">320</span><span class="p">)</span>
+
+    <span class="n">sim</span><span class="o">.</span><span class="n">create_collision_matrix</span><span class="p">(</span><span class="s1">&#39;all&#39;</span><span class="p">)</span>
+
+    <span class="k">return</span> <span class="n">layout</span>
+
+<span class="k">if</span> <span class="n">__name__</span> <span class="o">==</span> <span class="s2">&quot;__main__&quot;</span><span class="p">:</span>
+
+    <span class="n">eval_time</span> <span class="o">=</span> <span class="mi">1000</span>
+    <span class="n">gravity</span> <span class="o">=</span> <span class="o">-</span><span class="mf">1.0</span>
+    <span class="n">sim</span> <span class="o">=</span> <span class="n">pyrosim</span><span class="o">.</span><span class="n">Simulator</span><span class="p">(</span><span class="n">eval_time</span><span class="o">=</span><span class="n">eval_time</span><span class="p">,</span> <span class="n">debug</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+                               <span class="n">play_paused</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+                               <span class="n">gravity</span><span class="o">=</span><span class="n">gravity</span><span class="p">,</span>
+                               <span class="n">play_blind</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+                               <span class="n">use_textures</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+                               <span class="n">capture</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+    <span class="n">num_sensors</span> <span class="o">=</span> <span class="mi">5</span>
+    <span class="n">num_motors</span> <span class="o">=</span> <span class="mi">8</span>
+
+    <span class="c1"># our weight matrix specifies the values for the </span>
+    <span class="c1"># starting and ending weights as well as the starting and</span>
+    <span class="c1"># ending times for the synapses</span>
+    <span class="n">weight_matrix</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">rand</span><span class="p">(</span><span class="n">num_sensors</span><span class="o">+</span><span class="n">num_motors</span><span class="p">,</span>
+                                   <span class="n">num_sensors</span><span class="o">+</span><span class="n">num_motors</span><span class="p">,</span> <span class="mi">4</span><span class="p">)</span>
+    <span class="n">weight_matrix</span><span class="p">[:,</span> <span class="p">:,</span> <span class="mi">0</span><span class="p">:</span><span class="mi">1</span><span class="p">]</span> <span class="o">=</span> <span class="n">weight_matrix</span><span class="p">[:,</span> <span class="p">:,</span> <span class="mi">0</span><span class="p">:</span><span class="mi">1</span><span class="p">]</span><span class="o">*</span><span class="mf">2.</span><span class="o">-</span><span class="mf">1.</span>
+
+    <span class="n">layout</span> <span class="o">=</span> <span class="n">send_to_simulator</span><span class="p">(</span><span class="n">sim</span><span class="p">,</span> <span class="n">weight_matrix</span><span class="o">=</span><span class="n">weight_matrix</span><span class="p">)</span>
+    <span class="n">sim</span><span class="o">.</span><span class="n">start</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+<iframe width="100%" height="315" src="https://www.youtube.com/embed/r7pnT__eFaw?rel=0" frameborder="0" allowfullscreen></iframe></div>
 </div>
 
 
