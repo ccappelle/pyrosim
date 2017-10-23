@@ -44,11 +44,11 @@ public:
 	void Write_Sensor_Data(int evalPeriod);
 
 private:
-        void Add_Motor_Neuron(int ID, int jointID, double tau, double alpha, double start);
+    void Add_Motor_Neuron(int ID, int jointID, double tau, double alpha, double start);
 
 	void Add_Sensor_Neuron(int ID, int sensorID, int sensorValueIndex);
 
-        void Connect_Motor_Neuron_to_Joint( int jointID, NEURON *motorNeuron );
+    void Connect_Motor_Neuron_to_Joint( int jointID, NEURON *motorNeuron );
 
 	void Connect_Sensor_To_Sensor_Neuron( int sensorID , NEURON *sensorNeuron );
 
@@ -57,6 +57,8 @@ private:
 	void Create_Function_Neuron(int evalPeriod);
 	
 	void Create_Hidden_Neuron( void );
+
+	void Create_IsSeen_Sensor(int evalPeriod);
 
 	void Create_Joint( dWorldID world, dSpaceID space, int index, int jointType);
 
@@ -84,7 +86,7 @@ private:
 
 	void Create_Vestibular_Sensor(int evalPeriod);
 
-        void Update_Sensor_Neurons(int timeStep);
+	void Update_Sensor_Neurons(int timeStep);
 };
 
 #endif

@@ -83,6 +83,12 @@ is read by the specified joint and then the joint actuates accordingly.
     * If a motor neuron is attached to a joint which is using positional control, it is important to be wary of where the joint is initialized in relation to its limits. If the starting point of the joint is near its :code:`hi` or :code:`lo` cutoffs, the joint will immediately try to position to the midpoint of its range and the simulation will most likely break. *(Still mostly untested) This problem can be partially mitigated by changing the* :code:`start_value` *parameter when specifying the motor neuron*. If the joint is not using position control then this is not a problem.
 
 .. _update-rule:
+.. _synapses:
+
+Synapses
+^^^^^^^^
+
+Synapses connect neurons together. In pyrosim there are two types of synapses: normal and developing. Normal synapses maintain their single weight value throughout evaluation. Developing synapses change their weight over the evaluation of the robot. Developing synapses linearly interpolate their weight from starting to ending weight over the course of the starting to ending time.
 
 Updating
 --------

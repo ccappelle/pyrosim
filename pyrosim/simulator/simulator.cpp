@@ -44,7 +44,7 @@ const unsigned int WINDOW_WIDTH = 352*2;
 const unsigned int WINDOW_HEIGHT = 288*2;
 
 
-Data data;//struct which keeps all user input values for various parameterss. see datastruct.h
+Data *data = new Data;//struct which keeps all user input values for various parameterss. see datastruct.h
 static float updated_xyz[3];
 int LAGSIZE = 20;
 static float average_z[20];
@@ -68,11 +68,13 @@ void Handle_Ray_Sensor(dGeomID o1, dGeomID o2) {
         if ( n>0 ) {
 
             OBJECT *obj = (OBJECT *)dGeomGetData(o1);
+            OBJECT *obj2 = (OBJECT *)dGeomGetData(o2);
 
-            obj->Set_Ray_Sensor(contact.geom.depth,(OBJECT*)dGeomGetData(o2),timer);
+            obj->Set_Ray_Sensor(contact.geom.depth,obj2,timer);
 
-            if ( data.runBlind == false )
+            if ( data->runBlind == false )
                 obj->Draw_Ray_Sensor(contact.geom.pos[0],contact.geom.pos[1],contact.geom.pos[2],timer);
+
         }
     }
 }
@@ -84,7 +86,7 @@ void Handle_Ray_Sensors(dGeomID o1, dGeomID o2) {
     Handle_Ray_Sensor(o2,o1);
 }
 
-static void nearCallback (void *callbakData, dGeomID o1, dGeomID o2)
+static void nearCallback (void *callbackData, dGeomID o1, dGeomID o2)
 {
   int i,n;
 
@@ -96,21 +98,25 @@ static void nearCallback (void *callbakData, dGeomID o1, dGeomID o2)
   OBJECT *d1 = (OBJECT *)dGeomGetData(o1);
 
   OBJECT *d2 = (OBJECT *)dGeomGetData(o2);
-
   // if (d1 && d2)
   //   return;
   if ( d1 && d2 ){
         if (dAreConnected (d1->Get_Body(),d2->Get_Body())) return; //no collision between joint connected bodies
         int d1Group = d1->Get_Group();
         int d2Group = d2->Get_Group();
-        if(!data.collisionMatrix[d1Group][d2Group]) return; //no collision between groups where matrix[i][j]=0
+        if(!data->collisionMatrix[d1Group][d2Group]) return; //no collision between groups where matrix[i][j]=0
     }
 
-    if ( d1 )
+    // std::cerr << "Collision Occurs" << std::endl;
+    if ( d1 ){
         d1->Touch_Sensor_Fires(timer);
+        // std::cerr << "one :" << d1->Get_ID() << std::endl;
+    }
+    if ( d2 ){
+            d2->Touch_Sensor_Fires(timer);
+        // std::cerr << "two :" << d2->Get_ID() << std::endl;
+    }
 
-    if ( d2 )
-        d2->Touch_Sensor_Fires(timer);
 
     const int N = 10;
     dContact contact[N];
@@ -197,22 +203,22 @@ void Simulate_For_One_Time_Step(void) {
   environment->Actuate_Joints();
   environment->Update_Forces(timer);
 
-  dWorldStep (world, data.dt);
+  dWorldStep (world, data->dt);
 
   dJointGroupEmpty(contactgroup);
 
   timer++;
 
-  if ( timer==data.evaluationTime )
+  if ( timer==data->evaluationTime )
     Terminate();
 }
 
 static void simLoop (int pause)
 {
     if (!initialized){
-        dsSetViewpoint (data.xyz,data.hpr);
-        if(data.followBody>=0){
-          environment->Get_Object_Position(updated_xyz, data.followBody);
+        dsSetViewpoint (data->xyz,data->hpr);
+        if(data->followBody>=0){
+          environment->Get_Object_Position(updated_xyz, data->followBody);
           for(int i=0;i<LAGSIZE;i++) average_z[i] = updated_xyz[2];
       }
     initialized = true;
@@ -222,28 +228,28 @@ static void simLoop (int pause)
     if ( !pause ){
         Simulate_For_One_Time_Step();
 
-        if (data.followBody>=0)
+        if (data->followBody>=0)
         {
-          environment->Get_Object_Position(updated_xyz, data.followBody);
+          environment->Get_Object_Position(updated_xyz, data->followBody);
 
           average_z[timer%LAGSIZE] = updated_xyz[2];
 
-          updated_xyz[0] += data.xyz[0];
-          updated_xyz[1] += data.xyz[1];
-          updated_xyz[2] += data.xyz[2];
+          updated_xyz[0] += data->xyz[0];
+          updated_xyz[1] += data->xyz[1];
+          updated_xyz[2] += data->xyz[2];
 
           //for(int i=0;i<LAGSIZE;i++) updated_xyz[2] +=  average_z[i]/float(LAGSIZE); //lag movement
 
-              dsSetViewpoint(updated_xyz,data.hpr);
+              dsSetViewpoint(updated_xyz,data->hpr);
         }
 
-      if (data.trackBody>=0)
+      if (data->trackBody>=0)
        {
           float dirVector[3];
-          environment->Get_Object_Position(dirVector, data.trackBody);
+          environment->Get_Object_Position(dirVector, data->trackBody);
           
           for(int i=0;i<3;i++)
-            dirVector[i] -= data.xyz[i];
+            dirVector[i] -= data->xyz[i];
 
         if (!(dirVector[0]==0 and dirVector[1]==0 and dirVector[2]==0)){
           float zDrop = dirVector[2];
@@ -256,15 +262,15 @@ static void simLoop (int pause)
 
             update_hpr[0] = heading;
             update_hpr[1] = pitch;
-            update_hpr[2] = data.hpr[2];
+            update_hpr[2] = data->hpr[2];
 
-            dsSetViewpoint(data.xyz, update_hpr);
+            dsSetViewpoint(data->xyz, update_hpr);
             }
         }
     }
-    environment->Draw(data.debug);
-	if((!pause) && data.capture && (timer % data.capture == 0))
-		captureFrame(timer / data.capture);
+    environment->Draw(data->debug);
+	if((!pause) && data->capture && (timer % data->capture == 0))
+		captureFrame(timer / data->capture);
 }
 
 void Initialize_ODE(void) {
@@ -287,24 +293,24 @@ void Initialize_Draw_Stuff(void){
     fn.step = &simLoop;
     fn.command = &command;
     fn.stop = 0;
-    fn.path_to_textures = data.texturePathStr;
+    fn.path_to_textures = data->texturePathStr;
     
 }
 void Initialize_Environment(void) {
     environment = new ENVIRONMENT();
-    data.followBody = -1;
-    data.trackBody = -1;
+    data->followBody = -1;
+    data->trackBody = -1;
 }
 
 
 void Read_From_Python(void) {
     //environment->Read_From_Python(world,space, texturePathStr, &evaluationTime,&dt,&gravity,xyz,hpr,&debug,&followBody,&trackBody);
-  environment->Read_From_Python(world,space,&data);
+  environment->Read_From_Python(world,space,data);
 }
 
 void Terminate(void) {
-
-    environment->Write_Sensor_Data(data.evaluationTime);
+    delete data;
+    environment->Write_Sensor_Data(data->evaluationTime);
     exit(0);
 }
 
@@ -317,17 +323,17 @@ void Run_Blind(void) {
 
 int main (int argc, char **argv)
 {
-    data.runBlind = false; 
+    data->runBlind = false; 
 
     if ( (argc > 1) && (strcmp(argv[1],"-blind")==0) )
-        data.runBlind = true;
+        data->runBlind = true;
 
     Initialize_ODE();
     Initialize_Environment();
     Read_From_Python();
-    dWorldSetGravity(world,0,0,data.gravity);
+    dWorldSetGravity(world,0,0,data->gravity);
 
-    if ( data.runBlind )
+    if ( data->runBlind )
         Run_Blind();
     else{
       Initialize_Draw_Stuff();

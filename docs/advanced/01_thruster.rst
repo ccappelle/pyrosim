@@ -16,4 +16,11 @@ This means thrusters can be seamlessly integrated into any neural network.
 Spaceship
 ---------
 
-The natural example for thrusters is, of course, a spaceship. Here we recreate space-x by launching a rocket and having it return safely to ground.
+The natural example for thrusters is, of course, a spaceship. Here we recreate space-x by launching a rocket and having it return safely to ground (and then still thrusting upwards because it actuates on a sine wave, so it's not really like space-x but we are trying to get on the bandwagon).
+
+.. literalinclude:: /../demos/robots/rocket_ship.py
+    :caption: rocket_ship.py
+
+.. raw:: html 
+
+    <iframe width="100%" height="315" src="https://www.youtube.com/embed/J1Bsi3IW9VE?rel=0" frameborder="0" allowfullscreen></iframe>

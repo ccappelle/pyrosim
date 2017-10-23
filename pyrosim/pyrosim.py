@@ -1,3 +1,4 @@
+from __future__ import division, print_function
 import math
 import os
 import numpy as np
@@ -101,8 +102,8 @@ class Simulator(object):
         self.body_to_follow = -1
 
         if debug:
-            print 'Simulator exec location ', self.pyrosim_path, '\n'
-            print 'Python send commands: '
+            print ('Simulator exec location ', self.pyrosim_path, '\n')
+            print ('Python send commands: ')
 
         if (self.play_paused == True and self.play_blind == True):
             self.play_paused = False
@@ -1023,7 +1024,30 @@ class Simulator(object):
         return body_id
 
 # ----------Sensors----------------------
-    def send_light_sensor(self, body_id=0):
+    def send_is_seen_sensor(self, body_id):
+        """Attaches a sensor which detects when a body is being hit by a ray sensor
+
+        Parameters
+        ----------
+        body_id : int
+            The body id to connect the sensor to
+
+        Returns
+        -------
+        int
+            The id tag of the sensor
+        """
+        assert body_id < self._num_bodies, 'Body id ' + \
+            str(body_id)+' has not been sent'
+
+        sensor_id = self._num_sensors
+        self._num_sensors += 1
+
+        self._send('IsSeenSensor', sensor_id, body_id)
+
+        return sensor_id
+
+    def send_light_sensor(self, body_id):
         """Attaches a light sensor to a body in simulation
 
         Parameters
@@ -1034,7 +1058,7 @@ class Simulator(object):
         Returns
         -------
         int
-                The id tag of the sensor
+            The id tag of the sensor
         """
         assert body_id < self._num_bodies, 'Body id ' + \
             str(body_id)+' has not been sent'
@@ -1098,7 +1122,10 @@ class Simulator(object):
 
         return sensor_id
 
-    def send_ray_sensor(self, body_id=0, x=0, y=0, z=0, r1=0, r2=0, r3=1, max_distance=10):
+    def send_ray_sensor(self, body_id=0,
+                        x=0, y=0, z=0,
+                        r1=0, r2=0, r3=1,
+                        max_distance=10):
         """Sends a ray sensor to the simulator connected to a body
 
         Ray sensors return four values each time step, the distance and 
@@ -1354,10 +1381,10 @@ class Simulator(object):
 
         self.pipe.stdin.write('Done\n')
         if self.debug:
-            print 'Done \n'
-            print 'Pipe open with commands: ', commands
-            print 'Starting simulation \n'
-            print 'C++ receive commands: '
+            print ('Done \n')
+            print ('Pipe open with commands: ', commands)
+            print ('Starting simulation \n')
+            print ('C++ receive commands: ')
 
         return True
 
@@ -1372,6 +1399,7 @@ class Simulator(object):
         """
 
         data_from_simulator = self.pipe.communicate()
+
         if self.eval_time >= 0:
             self._collect_sensor_data(data_from_simulator)
             self.evaluated = True
@@ -1379,11 +1407,11 @@ class Simulator(object):
             return self.data
         else:
             self.evaluated = True
-            print data_from_simulator[0]
-            print data_from_simulator[1]
+            print (data_from_simulator[0])
+            print (data_from_simulator[1])
             return 'No results during infinite run'
 
-    # --------------------- Private methods ---------------------------
+# --------------------- Private methods ---------------------------
     def _add_group(self, group):
         """Appends group handle to list and returns index"""
         index = len(self._collision_groups)
@@ -1422,9 +1450,9 @@ class Simulator(object):
             chop_start = debug_output.find('Simulation test environment')
             chop_end = debug_output.find('sideways and up')+15
             if chop_start > 0:
-                print debug_output[:chop_start], debug_output[chop_end:-1]
+                print (debug_output[:chop_start], debug_output[chop_end:-1])
             else:
-                print debug_output
+                print (debug_output)
 
         data_from_simulator = data_from_simulator[0]
         data_from_simulator = data_from_simulator.split()
@@ -1442,7 +1470,14 @@ class Simulator(object):
 
             for t in range(0, self.eval_time):  # time step
                 for s in range(0, num_sensor_vals):  # svi
-                    sensor_value = float(data_from_simulator[index])
+                    try:
+                        sensor_value = float(data_from_simulator[index])
+                    except IndexError:
+                        print (index, data_from_simulator)
+                        print (debug_output)
+                        raise IndexError
+
+
                     self.data[sensor_id, s, t] = sensor_value
                     index = index + 1
 
@@ -1477,5 +1512,5 @@ class Simulator(object):
         string_to_send += '\n'
 
         if self.debug:
-            print string_to_send,
+            print (string_to_send,)
         self.strings_to_send.append(string_to_send)

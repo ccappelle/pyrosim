@@ -123,7 +123,9 @@ void RAY_SENSOR::Set(double dist, OBJECT *objectThatWasHit,int t) {
                 g[t] = objectThatWasHit->Get_Green_Component();
 
                 b[t] = objectThatWasHit->Get_Blue_Component();
-	}
+	       
+               objectThatWasHit->IsSeen_Sensor_Fires(t);
+        }
 }
 
 void RAY_SENSOR::Update_Sensor_Neurons(int t) {
@@ -147,17 +149,19 @@ void RAY_SENSOR::Update_Sensor_Neurons(int t) {
 
 void RAY_SENSOR::Write_To_Python(int evalPeriod) {
 
-	char outString[1000000];
-
+	char outString[100000];
+    std::cerr << "eval period" << evalPeriod << std::endl;
 	sprintf(outString,"%d %d ",ID,4);
 
-	for ( int  t = 0 ; t < evalPeriod ; t++ )
-
-		sprintf(outString,"%s %f %f %f %f ",outString,distances[t],r[t],g[t],b[t]);
+	for ( int  t = 0 ; t < evalPeriod ; t++ ){
+	   sprintf(outString,"%s %f %f %f %f ",outString,distances[t],r[t],g[t],b[t]);
+       
+    }
 
 	sprintf(outString,"%s \n",outString);
+    std::cerr<< "length" << strlen(outString) << std::endl;
 
-        std::cout << outString;
+    std::cout << outString;
 }
 
 #endif

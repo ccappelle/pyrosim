@@ -146,6 +146,9 @@ void ENVIRONMENT::Read_From_Python(dWorldID world, dSpaceID space, Data *data)
                 else if ( strcmp(incomingString,"Thruster") == 0)
                         Create_Joint(world,space,numberOfJoints,THRUSTER);
                 //Sensors
+                else if ( strcmp(incomingString,"IsSeenSensor") == 0)
+                        Create_IsSeen_Sensor(data->evaluationTime);
+
                 else if ( strcmp(incomingString,"PositionSensor") == 0 )
 
                         Create_Position_Sensor(data->evaluationTime);
@@ -226,13 +229,11 @@ void ENVIRONMENT::Update_Forces(int timeStep){
 }
 void ENVIRONMENT::Write_Sensor_Data(int evalPeriod) {
 
+    std::cerr << "finishing" << std::endl;
 	for (int i=0;i<numberOfBodies;i++)
-
 		objects[i]->Write_To_Python(evalPeriod);
-
-        for (int j=0;j<numberOfJoints;j++)
-
-        	joints[j]->Write_To_Python(evalPeriod);
+    for (int j=0;j<numberOfJoints;j++)
+    	joints[j]->Write_To_Python(evalPeriod);
 
 	std::cout << "Done\n";
 }
@@ -395,6 +396,16 @@ void ENVIRONMENT::Create_Ray_Sensor(dSpaceID space, int evalPeriod) {
     std::cin >> objectIndex;
 
     objects[objectIndex]->Create_Ray_Sensor(space,ID,evalPeriod);
+}
+
+void ENVIRONMENT::Create_IsSeen_Sensor(int evalPeriod){
+    int objectIndex;
+    int ID;
+
+    std::cin >> ID;
+    std::cin >> objectIndex;
+    std::cerr << "Creating is seen " << ID << std::endl;
+    objects[objectIndex]->Create_IsSeen_Sensor(ID, evalPeriod);
 }
 
 void ENVIRONMENT::Create_Position_Sensor(int evalPeriod) {

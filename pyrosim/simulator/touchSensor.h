@@ -10,10 +10,8 @@ class TOUCH_SENSOR {
 private:
 
 	int    ID;
-
 	int *values;
-
-        NEURON *mySensorNeuron;
+    NEURON *mySensorNeuron;
 
 public:
 	TOUCH_SENSOR(int myID, int evalPeriod);

@@ -26,4 +26,5 @@ all: $(OBJ)
 .PHONY: clean
 clean:
 	rm -f *.o
-	rm $(BIN)
+	rm -f *.d
+	rm -f $(BIN)

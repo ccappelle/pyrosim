@@ -3,7 +3,6 @@
 
 #include "constants.h"
 #include "object.h"
-#include "positionSensor.h"
 #include "iostream"
 #include <drawstuff/drawstuff.h>
 #include "texturepath.h"
@@ -27,6 +26,7 @@ OBJECT::OBJECT(void) {
 	positionSensor = NULL;
 	touchSensor = NULL;
 	vestibularSensor = NULL;
+    isSeenSensor = NULL;
 	containsLightSource = false; 
 }
 
@@ -82,8 +82,17 @@ int OBJECT::Connect_Sensor_To_Sensor_Neuron(int sensorID , NEURON *sensorNeuron)
             vestibularSensor->Connect_To_Sensor_Neuron(sensorNeuron);
             return true;
         }
+    if ( isSeenSensor )
+        if ( isSeenSensor->Get_ID() == sensorID) {
+            isSeenSensor->Connect_To_Sensor_Neuron(sensorNeuron);
+            return true;
+        }
     return false;
  }
+
+void OBJECT::Create_IsSeen_Sensor(int myID, int evalPeriod){
+    isSeenSensor = new IS_SEEN_SENSOR(myID, evalPeriod);
+}
 
 void OBJECT::Create_Ray_Sensor(dSpaceID space, int myID, int evalPeriod) {
 	raySensor = new RAY_SENSOR(space,this,myID,evalPeriod);
@@ -141,6 +150,9 @@ dBodyID OBJECT::Get_Body(void) {
 	return body;
 }
 
+int OBJECT::Get_ID(void){
+    return ID;
+}
 double OBJECT::Get_Green_Component(void) {
     return g;
 }
@@ -218,6 +230,11 @@ void OBJECT::Touch_Sensor_Fires(int t) {
 		touchSensor->Fires(t);
 }
 
+void OBJECT::IsSeen_Sensor_Fires(int t){
+    if ( isSeenSensor )
+        isSeenSensor->Fires(t);
+}
+
 void OBJECT::Update_Sensor_Neurons(int t) {
     if ( raySensor )
         raySensor->Update_Sensor_Neurons(t);
@@ -236,18 +253,33 @@ void OBJECT::Update_Sensor_Neurons(int t) {
 }
 
 void OBJECT::Write_To_Python(int evalPeriod) {
-
-	if ( raySensor )
+    std::cerr << "writing sensor to python " << this->Get_ID() << std::endl;
+	if ( raySensor ){
+        std::cerr << "  writing ray sensor to python "  << std::endl;
 		raySensor->Write_To_Python(evalPeriod);
+        
+    }
 
-	if ( lightSensor )
+	if ( lightSensor ){
 		lightSensor->Write_To_Python(evalPeriod);
-	if ( positionSensor )
+        std::cerr << "  writing light sensor to python "  << std::endl;
+    }
+	if ( positionSensor ){
+        std::cerr << "  writing position sensor to python "  << std::endl;
 		positionSensor->Write_To_Python(evalPeriod);
-	if ( touchSensor )
+    }
+	if ( touchSensor ){
+        std::cerr << "  writing touch sensor to python "  << std::endl;
 		touchSensor->Write_To_Python(evalPeriod);
-    if ( vestibularSensor )
+    }
+    if ( vestibularSensor ){
+        std::cerr << "  writing vestib sensor to python "  << std::endl;
         vestibularSensor->Write_To_Python(evalPeriod);
+    }
+    if ( isSeenSensor ){
+        std::cerr << "  writing is seen sensor to python "  << std::endl;
+        isSeenSensor->Write_To_Python(evalPeriod);
+    }
 }
 
 // ------------------------------- Private methods ------------------------------
