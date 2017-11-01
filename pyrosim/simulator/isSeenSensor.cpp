@@ -40,16 +40,13 @@ void IS_SEEN_SENSOR::Update_Sensor_Neurons(int t) {
 void IS_SEEN_SENSOR::Write_To_Python(int evalPeriod) {
 
         char outString[100000];
-        std::cerr << "eval period " << evalPeriod << std::endl;
         sprintf(outString,"%d %d ",ID,1);
 
         for ( int t=0; t < evalPeriod; t++ ){
-            std::cerr << t << " values " << values[t] << std::endl;
             sprintf(outString,"%s %d ",outString,values[t]);
         }
 
         sprintf(outString,"%s \n",outString);
-        std::cerr << strlen(outString) << std::endl;
         std::cout << outString;
 }
 

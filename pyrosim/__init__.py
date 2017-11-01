@@ -1,1 +1,1 @@
-from pyrosim import Simulator
+from .pyrosim import Simulator

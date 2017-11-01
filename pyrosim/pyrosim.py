@@ -3,8 +3,6 @@ import math
 import os
 import numpy as np
 
-import constants
-
 from subprocess import Popen, PIPE
 import subprocess
 
@@ -13,6 +11,12 @@ import shutil
 
 from datetime import datetime
 
+#simulator init constants
+evaluation_time = 100;
+dt = 0.05;
+hpr=[121,-27.5000,0.0000];
+xyz=[0.8317,-0.9817,0.8000];
+gravity = -1.0;
 
 def make_sure_path_exists(path):
     try:
@@ -63,9 +67,9 @@ class Simulator(object):
     FOREVER = -1
 
     def __init__(self, play_blind=False, play_paused=False,
-                 eval_time=constants.evaluation_time, dt=constants.dt,
-                 gravity=constants.gravity,
-                 xyz=constants.xyz, hpr=constants.hpr, use_textures=False,
+                 eval_time=evaluation_time, dt=dt,
+                 gravity=gravity,
+                 xyz=xyz, hpr=hpr, use_textures=False,
                  debug=False, capture=0):
         assert play_blind == False or eval_time > 0, ('Cannot run'
                                                       ' blind forever')
@@ -1374,7 +1378,7 @@ class Simulator(object):
         if (self.play_paused == True):
             commands.append('-pause')
 
-        self.pipe = Popen(commands, stdout=PIPE, stdin=PIPE, stderr=PIPE)
+        self.pipe = Popen(commands, stdout=PIPE, stdin=PIPE, stderr=PIPE, universal_newlines=True)
 
         for string_to_send in self.strings_to_send:
             self.pipe.stdin.write(string_to_send)

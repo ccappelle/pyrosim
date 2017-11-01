@@ -253,11 +253,10 @@ void OBJECT::Update_Sensor_Neurons(int t) {
 }
 
 void OBJECT::Write_To_Python(int evalPeriod) {
-    std::cerr << "writing sensor to python " << this->Get_ID() << std::endl;
+    std::cerr << "writing sensors in body " << this->Get_ID() << " to python " << std::endl;
 	if ( raySensor ){
         std::cerr << "  writing ray sensor to python "  << std::endl;
 		raySensor->Write_To_Python(evalPeriod);
-        
     }
 
 	if ( lightSensor ){

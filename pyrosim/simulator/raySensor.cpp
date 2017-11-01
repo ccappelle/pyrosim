@@ -150,7 +150,7 @@ void RAY_SENSOR::Update_Sensor_Neurons(int t) {
 void RAY_SENSOR::Write_To_Python(int evalPeriod) {
 
 	char outString[100000];
-    std::cerr << "eval period" << evalPeriod << std::endl;
+
 	sprintf(outString,"%d %d ",ID,4);
 
 	for ( int  t = 0 ; t < evalPeriod ; t++ ){
@@ -159,8 +159,6 @@ void RAY_SENSOR::Write_To_Python(int evalPeriod) {
     }
 
 	sprintf(outString,"%s \n",outString);
-    std::cerr<< "length" << strlen(outString) << std::endl;
-
     std::cout << outString;
 }
 
