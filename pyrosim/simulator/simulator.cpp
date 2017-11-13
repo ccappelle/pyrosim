@@ -269,6 +269,7 @@ static void simLoop (int pause)
         }
     }
     environment->Draw(data->debug);
+    
 	if((!pause) && data->capture && (timer % data->capture == 0))
 		captureFrame(timer / data->capture);
 }

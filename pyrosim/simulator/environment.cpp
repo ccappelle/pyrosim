@@ -64,7 +64,7 @@ void ENVIRONMENT::Get_Object_Position(float *xyz, int bodyID){
 
 void ENVIRONMENT::Read_From_Python(dWorldID world, dSpaceID space, Data *data)
 {
-       char incomingString[100];
+       char incomingString[10000];
 
         std::cin >> incomingString;
 
@@ -72,7 +72,7 @@ void ENVIRONMENT::Read_From_Python(dWorldID world, dSpaceID space, Data *data)
                 std::cerr << incomingString << "\n";
                 //Simulator options
                 if ( strcmp(incomingString,"EvaluationTime") == 0 )
-                        std::cin >> (data->evaluationTime);
+                        std::cin >> data->evaluationTime;
 
                 else if ( strcmp(incomingString,"TimeInterval") == 0)
                         std::cin >> data->dt;
