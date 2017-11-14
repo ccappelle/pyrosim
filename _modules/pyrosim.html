@@ -158,11 +158,10 @@
            <div itemprop="articleBody">
             
   <h1>Source code for pyrosim</h1><div class="highlight"><pre>
-<span></span><span class="kn">import</span> <span class="nn">math</span>
+<span></span><span class="kn">from</span> <span class="nn">__future__</span> <span class="k">import</span> <span class="n">division</span><span class="p">,</span> <span class="n">print_function</span>
+<span class="kn">import</span> <span class="nn">math</span>
 <span class="kn">import</span> <span class="nn">os</span>
 <span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
-
-<span class="kn">import</span> <span class="nn">constants</span>
 
 <span class="kn">from</span> <span class="nn">subprocess</span> <span class="k">import</span> <span class="n">Popen</span><span class="p">,</span> <span class="n">PIPE</span>
 <span class="kn">import</span> <span class="nn">subprocess</span>
@@ -172,6 +171,12 @@
 
 <span class="kn">from</span> <span class="nn">datetime</span> <span class="k">import</span> <span class="n">datetime</span>
 
+<span class="c1">#simulator init constants</span>
+<span class="n">evaluation_time</span> <span class="o">=</span> <span class="mi">100</span><span class="p">;</span>
+<span class="n">dt</span> <span class="o">=</span> <span class="mf">0.05</span><span class="p">;</span>
+<span class="n">hpr</span><span class="o">=</span><span class="p">[</span><span class="mi">121</span><span class="p">,</span><span class="o">-</span><span class="mf">27.5000</span><span class="p">,</span><span class="mf">0.0000</span><span class="p">];</span>
+<span class="n">xyz</span><span class="o">=</span><span class="p">[</span><span class="mf">0.8317</span><span class="p">,</span><span class="o">-</span><span class="mf">0.9817</span><span class="p">,</span><span class="mf">0.8000</span><span class="p">];</span>
+<span class="n">gravity</span> <span class="o">=</span> <span class="o">-</span><span class="mf">1.0</span><span class="p">;</span>
 
 <span class="k">def</span> <span class="nf">make_sure_path_exists</span><span class="p">(</span><span class="n">path</span><span class="p">):</span>
     <span class="k">try</span><span class="p">:</span>
@@ -222,9 +227,9 @@
     <span class="n">FOREVER</span> <span class="o">=</span> <span class="o">-</span><span class="mi">1</span>
 
     <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">play_blind</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">play_paused</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
-                 <span class="n">eval_time</span><span class="o">=</span><span class="n">constants</span><span class="o">.</span><span class="n">evaluation_time</span><span class="p">,</span> <span class="n">dt</span><span class="o">=</span><span class="n">constants</span><span class="o">.</span><span class="n">dt</span><span class="p">,</span>
-                 <span class="n">gravity</span><span class="o">=</span><span class="n">constants</span><span class="o">.</span><span class="n">gravity</span><span class="p">,</span>
-                 <span class="n">xyz</span><span class="o">=</span><span class="n">constants</span><span class="o">.</span><span class="n">xyz</span><span class="p">,</span> <span class="n">hpr</span><span class="o">=</span><span class="n">constants</span><span class="o">.</span><span class="n">hpr</span><span class="p">,</span> <span class="n">use_textures</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+                 <span class="n">eval_time</span><span class="o">=</span><span class="n">evaluation_time</span><span class="p">,</span> <span class="n">dt</span><span class="o">=</span><span class="n">dt</span><span class="p">,</span>
+                 <span class="n">gravity</span><span class="o">=</span><span class="n">gravity</span><span class="p">,</span>
+                 <span class="n">xyz</span><span class="o">=</span><span class="n">xyz</span><span class="p">,</span> <span class="n">hpr</span><span class="o">=</span><span class="n">hpr</span><span class="p">,</span> <span class="n">use_textures</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
                  <span class="n">debug</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">capture</span><span class="o">=</span><span class="mi">0</span><span class="p">):</span>
         <span class="k">assert</span> <span class="n">play_blind</span> <span class="o">==</span> <span class="kc">False</span> <span class="ow">or</span> <span class="n">eval_time</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">,</span> <span class="p">(</span><span class="s1">&#39;Cannot run&#39;</span>
                                                       <span class="s1">&#39; blind forever&#39;</span><span class="p">)</span>
@@ -261,8 +266,8 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">body_to_follow</span> <span class="o">=</span> <span class="o">-</span><span class="mi">1</span>
 
         <span class="k">if</span> <span class="n">debug</span><span class="p">:</span>
-            <span class="nb">print</span> <span class="s1">&#39;Simulator exec location &#39;</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">pyrosim_path</span><span class="p">,</span> <span class="s1">&#39;</span><span class="se">\n</span><span class="s1">&#39;</span>
-            <span class="nb">print</span> <span class="s1">&#39;Python send commands: &#39;</span>
+            <span class="nb">print</span> <span class="p">(</span><span class="s1">&#39;Simulator exec location &#39;</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">pyrosim_path</span><span class="p">,</span> <span class="s1">&#39;</span><span class="se">\n</span><span class="s1">&#39;</span><span class="p">)</span>
+            <span class="nb">print</span> <span class="p">(</span><span class="s1">&#39;Python send commands: &#39;</span><span class="p">)</span>
 
         <span class="k">if</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">play_paused</span> <span class="o">==</span> <span class="kc">True</span> <span class="ow">and</span> <span class="bp">self</span><span class="o">.</span><span class="n">play_blind</span> <span class="o">==</span> <span class="kc">True</span><span class="p">):</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">play_paused</span> <span class="o">=</span> <span class="kc">False</span>
@@ -1183,7 +1188,30 @@
         <span class="k">return</span> <span class="n">body_id</span></div>
 
 <span class="c1"># ----------Sensors----------------------</span>
-<div class="viewcode-block" id="Simulator.send_light_sensor"><a class="viewcode-back" href="../code.html#pyrosim.Simulator.send_light_sensor">[docs]</a>    <span class="k">def</span> <span class="nf">send_light_sensor</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">body_id</span><span class="o">=</span><span class="mi">0</span><span class="p">):</span>
+<div class="viewcode-block" id="Simulator.send_is_seen_sensor"><a class="viewcode-back" href="../code.html#pyrosim.Simulator.send_is_seen_sensor">[docs]</a>    <span class="k">def</span> <span class="nf">send_is_seen_sensor</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">body_id</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Attaches a sensor which detects when a body is being hit by a ray sensor</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        body_id : int</span>
+<span class="sd">            The body id to connect the sensor to</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        int</span>
+<span class="sd">            The id tag of the sensor</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">assert</span> <span class="n">body_id</span> <span class="o">&lt;</span> <span class="bp">self</span><span class="o">.</span><span class="n">_num_bodies</span><span class="p">,</span> <span class="s1">&#39;Body id &#39;</span> <span class="o">+</span> \
+            <span class="nb">str</span><span class="p">(</span><span class="n">body_id</span><span class="p">)</span><span class="o">+</span><span class="s1">&#39; has not been sent&#39;</span>
+
+        <span class="n">sensor_id</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_num_sensors</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_num_sensors</span> <span class="o">+=</span> <span class="mi">1</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">_send</span><span class="p">(</span><span class="s1">&#39;IsSeenSensor&#39;</span><span class="p">,</span> <span class="n">sensor_id</span><span class="p">,</span> <span class="n">body_id</span><span class="p">)</span>
+
+        <span class="k">return</span> <span class="n">sensor_id</span></div>
+
+<div class="viewcode-block" id="Simulator.send_light_sensor"><a class="viewcode-back" href="../code.html#pyrosim.Simulator.send_light_sensor">[docs]</a>    <span class="k">def</span> <span class="nf">send_light_sensor</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">body_id</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;Attaches a light sensor to a body in simulation</span>
 
 <span class="sd">        Parameters</span>
@@ -1194,7 +1222,7 @@
 <span class="sd">        Returns</span>
 <span class="sd">        -------</span>
 <span class="sd">        int</span>
-<span class="sd">                The id tag of the sensor</span>
+<span class="sd">            The id tag of the sensor</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">assert</span> <span class="n">body_id</span> <span class="o">&lt;</span> <span class="bp">self</span><span class="o">.</span><span class="n">_num_bodies</span><span class="p">,</span> <span class="s1">&#39;Body id &#39;</span> <span class="o">+</span> \
             <span class="nb">str</span><span class="p">(</span><span class="n">body_id</span><span class="p">)</span><span class="o">+</span><span class="s1">&#39; has not been sent&#39;</span>
@@ -1258,7 +1286,10 @@
 
         <span class="k">return</span> <span class="n">sensor_id</span></div>
 
-<div class="viewcode-block" id="Simulator.send_ray_sensor"><a class="viewcode-back" href="../code.html#pyrosim.Simulator.send_ray_sensor">[docs]</a>    <span class="k">def</span> <span class="nf">send_ray_sensor</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">body_id</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">x</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">y</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">z</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">r1</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">r2</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">r3</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">max_distance</span><span class="o">=</span><span class="mi">10</span><span class="p">):</span>
+<div class="viewcode-block" id="Simulator.send_ray_sensor"><a class="viewcode-back" href="../code.html#pyrosim.Simulator.send_ray_sensor">[docs]</a>    <span class="k">def</span> <span class="nf">send_ray_sensor</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">body_id</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span>
+                        <span class="n">x</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">y</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">z</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span>
+                        <span class="n">r1</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">r2</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">r3</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span>
+                        <span class="n">max_distance</span><span class="o">=</span><span class="mi">10</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;Sends a ray sensor to the simulator connected to a body</span>
 
 <span class="sd">        Ray sensors return four values each time step, the distance and </span>
@@ -1514,10 +1545,10 @@
 
         <span class="bp">self</span><span class="o">.</span><span class="n">pipe</span><span class="o">.</span><span class="n">stdin</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="s1">&#39;Done</span><span class="se">\n</span><span class="s1">&#39;</span><span class="p">)</span>
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">debug</span><span class="p">:</span>
-            <span class="nb">print</span> <span class="s1">&#39;Done </span><span class="se">\n</span><span class="s1">&#39;</span>
-            <span class="nb">print</span> <span class="s1">&#39;Pipe open with commands: &#39;</span><span class="p">,</span> <span class="n">commands</span>
-            <span class="nb">print</span> <span class="s1">&#39;Starting simulation </span><span class="se">\n</span><span class="s1">&#39;</span>
-            <span class="nb">print</span> <span class="s1">&#39;C++ receive commands: &#39;</span>
+            <span class="nb">print</span> <span class="p">(</span><span class="s1">&#39;Done </span><span class="se">\n</span><span class="s1">&#39;</span><span class="p">)</span>
+            <span class="nb">print</span> <span class="p">(</span><span class="s1">&#39;Pipe open with commands: &#39;</span><span class="p">,</span> <span class="n">commands</span><span class="p">)</span>
+            <span class="nb">print</span> <span class="p">(</span><span class="s1">&#39;Starting simulation </span><span class="se">\n</span><span class="s1">&#39;</span><span class="p">)</span>
+            <span class="nb">print</span> <span class="p">(</span><span class="s1">&#39;C++ receive commands: &#39;</span><span class="p">)</span>
 
         <span class="k">return</span> <span class="kc">True</span></div>
 
@@ -1532,6 +1563,7 @@
 <span class="sd">        &quot;&quot;&quot;</span>
 
         <span class="n">data_from_simulator</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">pipe</span><span class="o">.</span><span class="n">communicate</span><span class="p">()</span>
+
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">eval_time</span> <span class="o">&gt;=</span> <span class="mi">0</span><span class="p">:</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">_collect_sensor_data</span><span class="p">(</span><span class="n">data_from_simulator</span><span class="p">)</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">evaluated</span> <span class="o">=</span> <span class="kc">True</span>
@@ -1539,11 +1571,11 @@
             <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">data</span>
         <span class="k">else</span><span class="p">:</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">evaluated</span> <span class="o">=</span> <span class="kc">True</span>
-            <span class="nb">print</span> <span class="n">data_from_simulator</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
-            <span class="nb">print</span> <span class="n">data_from_simulator</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span>
+            <span class="nb">print</span> <span class="p">(</span><span class="n">data_from_simulator</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
+            <span class="nb">print</span> <span class="p">(</span><span class="n">data_from_simulator</span><span class="p">[</span><span class="mi">1</span><span class="p">])</span>
             <span class="k">return</span> <span class="s1">&#39;No results during infinite run&#39;</span></div>
 
-    <span class="c1"># --------------------- Private methods ---------------------------</span>
+<span class="c1"># --------------------- Private methods ---------------------------</span>
     <span class="k">def</span> <span class="nf">_add_group</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">group</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;Appends group handle to list and returns index&quot;&quot;&quot;</span>
         <span class="n">index</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_collision_groups</span><span class="p">)</span>
@@ -1582,9 +1614,9 @@
             <span class="n">chop_start</span> <span class="o">=</span> <span class="n">debug_output</span><span class="o">.</span><span class="n">find</span><span class="p">(</span><span class="s1">&#39;Simulation test environment&#39;</span><span class="p">)</span>
             <span class="n">chop_end</span> <span class="o">=</span> <span class="n">debug_output</span><span class="o">.</span><span class="n">find</span><span class="p">(</span><span class="s1">&#39;sideways and up&#39;</span><span class="p">)</span><span class="o">+</span><span class="mi">15</span>
             <span class="k">if</span> <span class="n">chop_start</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">:</span>
-                <span class="nb">print</span> <span class="n">debug_output</span><span class="p">[:</span><span class="n">chop_start</span><span class="p">],</span> <span class="n">debug_output</span><span class="p">[</span><span class="n">chop_end</span><span class="p">:</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span>
+                <span class="nb">print</span> <span class="p">(</span><span class="n">debug_output</span><span class="p">[:</span><span class="n">chop_start</span><span class="p">],</span> <span class="n">debug_output</span><span class="p">[</span><span class="n">chop_end</span><span class="p">:</span><span class="o">-</span><span class="mi">1</span><span class="p">])</span>
             <span class="k">else</span><span class="p">:</span>
-                <span class="nb">print</span> <span class="n">debug_output</span>
+                <span class="nb">print</span> <span class="p">(</span><span class="n">debug_output</span><span class="p">)</span>
 
         <span class="n">data_from_simulator</span> <span class="o">=</span> <span class="n">data_from_simulator</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
         <span class="n">data_from_simulator</span> <span class="o">=</span> <span class="n">data_from_simulator</span><span class="o">.</span><span class="n">split</span><span class="p">()</span>
@@ -1602,7 +1634,14 @@
 
             <span class="k">for</span> <span class="n">t</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">eval_time</span><span class="p">):</span>  <span class="c1"># time step</span>
                 <span class="k">for</span> <span class="n">s</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">num_sensor_vals</span><span class="p">):</span>  <span class="c1"># svi</span>
-                    <span class="n">sensor_value</span> <span class="o">=</span> <span class="nb">float</span><span class="p">(</span><span class="n">data_from_simulator</span><span class="p">[</span><span class="n">index</span><span class="p">])</span>
+                    <span class="k">try</span><span class="p">:</span>
+                        <span class="n">sensor_value</span> <span class="o">=</span> <span class="nb">float</span><span class="p">(</span><span class="n">data_from_simulator</span><span class="p">[</span><span class="n">index</span><span class="p">])</span>
+                    <span class="k">except</span> <span class="ne">IndexError</span><span class="p">:</span>
+                        <span class="nb">print</span> <span class="p">(</span><span class="n">index</span><span class="p">,</span> <span class="n">data_from_simulator</span><span class="p">)</span>
+                        <span class="nb">print</span> <span class="p">(</span><span class="n">debug_output</span><span class="p">)</span>
+                        <span class="k">raise</span> <span class="ne">IndexError</span>
+
+
                     <span class="bp">self</span><span class="o">.</span><span class="n">data</span><span class="p">[</span><span class="n">sensor_id</span><span class="p">,</span> <span class="n">s</span><span class="p">,</span> <span class="n">t</span><span class="p">]</span> <span class="o">=</span> <span class="n">sensor_value</span>
                     <span class="n">index</span> <span class="o">=</span> <span class="n">index</span> <span class="o">+</span> <span class="mi">1</span>
 
@@ -1637,7 +1676,7 @@
         <span class="n">string_to_send</span> <span class="o">+=</span> <span class="s1">&#39;</span><span class="se">\n</span><span class="s1">&#39;</span>
 
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">debug</span><span class="p">:</span>
-            <span class="nb">print</span> <span class="n">string_to_send</span><span class="p">,</span>
+            <span class="nb">print</span> <span class="p">(</span><span class="n">string_to_send</span><span class="p">,)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">strings_to_send</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">string_to_send</span><span class="p">)</span></div>
 </pre></div>
 
