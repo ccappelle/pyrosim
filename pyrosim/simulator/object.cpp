@@ -1,7 +1,7 @@
 #ifndef _OBJECT_CPP
 #define _OBJECT_CPP
 
-#include "constants.h"
+// #include "constants.h"
 #include "object.h"
 #include "iostream"
 #include <drawstuff/drawstuff.h>
@@ -172,17 +172,17 @@ double OBJECT::Get_Red_Component(void) {
 	return r;
 }
 
-void OBJECT::Poll_Sensors(int numObjects, OBJECT **objects, int t) {
-	if ( lightSensor ) {
-		OBJECT *closestLightSource = Find_Closest_Light_Source(numObjects,objects);
-		lightSensor->Poll(body,closestLightSource->Get_Body(),t);
-	}
+void OBJECT::Poll_Sensors(int numObjects, std::vector<OBJECT*> objects, int t) {
+    if ( lightSensor ) {
+        OBJECT *closestLightSource = Find_Closest_Light_Source(numObjects,objects);
+        lightSensor->Poll(body,closestLightSource->Get_Body(),t);
+    }
 
     if ( positionSensor )
         positionSensor->Poll(body,t);
 
-	if ( vestibularSensor )
-		vestibularSensor->Poll(body,t);
+    if ( vestibularSensor )
+        vestibularSensor->Poll(body,t);
 }
 
 void OBJECT::Read_From_Python(dWorldID world, dSpaceID space, int shape) {
@@ -335,23 +335,22 @@ double OBJECT::Distance_To(OBJECT *otherObject) {
 	return sqrt( pow(xDiff,2.0) + pow(yDiff,2.0) + pow(zDiff,2.0) );
 }
 
+OBJECT* OBJECT::Find_Closest_Light_Source(int numObjects, std::vector<OBJECT*> objects) {
 
-OBJECT* OBJECT::Find_Closest_Light_Source(int numObjects, OBJECT **objects) {
+    double distance = 10000.0;
+    int    closestLightSource = 0;
 
-	double distance = 10000.0;
-	int    closestLightSource = 0;
-
-	for (int i=0;i<numObjects;i++){
-		if ( objects[i]->Contains_A_Light_Source() ) {
-			double distanceToObject = Distance_To(objects[i]);
-			if ( distanceToObject < distance ) {
-				distance = distanceToObject;
-				closestLightSource = i;
-			}
-		}
+    for (int i=0;i<numObjects;i++){
+        if ( objects[i]->Contains_A_Light_Source() ) {
+            double distanceToObject = Distance_To(objects[i]);
+            if ( distanceToObject < distance ) {
+                distance = distanceToObject;
+                closestLightSource = i;
+            }
+        }
     }
 
-	return objects[closestLightSource];
+    return objects[closestLightSource];
 }
 
 #endif

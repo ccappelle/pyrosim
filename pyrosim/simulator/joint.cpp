@@ -18,9 +18,6 @@
 #define dsDrawCapsule dsDrawCapsuleD
 #endif
 
-extern int HINGE;
-extern int SLIDER;
-extern int THRUSTER;
 
 JOINT::JOINT(int jointType) {
     type = jointType;

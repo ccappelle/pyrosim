@@ -4,6 +4,7 @@
 #include "iostream"
 #include "positionSensor.h"
 #include "neuron.h"
+#include <sstream>
 
 POSITION_SENSOR::POSITION_SENSOR(int myID, int evalPeriod) {
 
@@ -64,19 +65,13 @@ void POSITION_SENSOR::Update_Sensor_Neurons(int t) {
 }
 
 void POSITION_SENSOR::Write_To_Python(int evalPeriod) {
-
-        char outString[1000000];
-
-        sprintf(outString,"%d %d ",ID,3);
-
-        for ( int  t = 0 ; t < evalPeriod ; t++ ) {
-                sprintf(outString,"%s %f %f %f ",outString,x[t],y[t],z[t]);
+        std::ostringstream outString;
+        outString << ID << " " << 3 << " ";
+        for (int t=0; t<evalPeriod; t++)
+        {
+                outString << x[t] << " " << y[t] << " " << z[t] << " ";
         }
-
-        sprintf(outString,"%s \n",outString);
-
-        std::cout << outString;
-        
+        std::cout << outString.str() << std::endl;
 }
 
 #endif

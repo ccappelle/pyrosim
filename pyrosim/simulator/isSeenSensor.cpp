@@ -4,6 +4,7 @@
 #include "iostream"
 #include "isSeenSensor.h"
 #include "neuron.h"
+#include <sstream>
 
 IS_SEEN_SENSOR::IS_SEEN_SENSOR(int myID, int evalPeriod){
     ID = myID;
@@ -39,15 +40,13 @@ void IS_SEEN_SENSOR::Update_Sensor_Neurons(int t) {
 
 void IS_SEEN_SENSOR::Write_To_Python(int evalPeriod) {
 
-        char outString[100000];
-        sprintf(outString,"%d %d ",ID,1);
-
-        for ( int t=0; t < evalPeriod; t++ ){
-            sprintf(outString,"%s %d ",outString,values[t]);
+        std::ostringstream outString;
+        outString << ID << " " << 1 << " ";
+        for (int t=0; t<evalPeriod; t++)
+        {
+                outString << values[t] << " ";
         }
-
-        sprintf(outString,"%s \n",outString);
-        std::cout << outString;
+        std::cout << outString.str() << std::endl;
 }
 
 #endif

@@ -27,3 +27,13 @@ Pitch Bot
 .. raw:: html
 
     <iframe width="100%" height="315" src="https://www.youtube.com/embed/pntpHbZQYrw?start=140" frameborder="0" allowfullscreen></iframe>
+
+|
+|
+
+Roboctopus
+----------
+
+.. raw:: html
+    
+    <iframe width="100%" height="315" src="https://www.youtube.com/embed/xE71KSqk1kI?rel=0" frameborder="0" allowfullscreen></iframe>
