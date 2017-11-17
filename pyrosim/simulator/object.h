@@ -11,9 +11,8 @@
 #include <map>
 #include <utility>
 #include <array>
-#include <vector>
 
-enum {BOX, CAPSULE, CYLINDER, SPHERE};
+class NEURON;
 
 class OBJECT {
 
@@ -92,8 +91,7 @@ public:
 
 	double Get_Red_Component(void);
 
-    //void Poll_Sensors(int numObjects, OBJECT **objects, int t);
-	void Poll_Sensors(int numObjects, std::vector<OBJECT*> objects, int t);
+    void Poll_Sensors(int numObjects, OBJECT **objects, int t);
 
     void Read_In_External_Force(void);
 	void Read_From_Python(dWorldID world, dSpaceID space, int shape);
@@ -110,7 +108,9 @@ private:
 	int  Contains_A_Light_Source(void);
 	double Distance_To(OBJECT *otherObject);
 	void CreateBody(dWorldID world, dSpaceID space);
-	OBJECT *Find_Closest_Light_Source(int numObjects, std::vector<OBJECT*> objects);
+
+	OBJECT *Find_Closest_Light_Source(int numObjects, OBJECT **objects);
+
 };
 
 #endif

@@ -1380,8 +1380,6 @@ class Simulator(object):
 
         self.pipe = Popen(commands, stdout=PIPE, stdin=PIPE, stderr=PIPE)
 
-        # Send sizing parameters
-        self._send_initialization()
         for string_to_send in self.strings_to_send:
             self.pipe.stdin.write(string_to_send)
 
@@ -1486,19 +1484,6 @@ class Simulator(object):
 
                     self.data[sensor_id, s, t] = sensor_value
                     index = index + 1
-    def _send(self, command_string, *args):
-        """Send a command to the simulator"""
-
-        # first argument should be a string
-        assert isinstance(command_string, str), ('Command must be string')
-        string_to_send = command_string
-        for arg in args:
-            string_to_send += ' ' + str(arg)
-        string_to_send += '\n'
-
-        if self.debug:
-            print (string_to_send,)
-        self.strings_to_send.append(string_to_send)
 
     def _send_collision_matrix(self):
         """sends the collision matrix"""
@@ -1520,18 +1505,16 @@ class Simulator(object):
         self._send('CollisionMatrix', self.get_num_groups(), *send_string)
         return True
 
-    def _send_initialization(self):
-        send_string = ('Init ' + 
-                        str(self._num_bodies) + ' ' + 
-                        str(self._num_joints) + ' ' +
-                        str(self._num_neurons) + ' ' +
-                        str(self._num_sensors) + ' '
-                        )
-        # write num bodies
-        self.pipe.stdin.write(send_string)
-        # write num joints
+    def _send(self, command_string, *args):
+        """Send a command to the simulator"""
 
-        # write num neurons
+        # first argument should be a string
+        assert isinstance(command_string, str), ('Command must be string')
+        string_to_send = command_string
+        for arg in args:
+            string_to_send += ' ' + str(arg)
+        string_to_send += '\n'
 
-        # write num sensors
-
+        if self.debug:
+            print (string_to_send,)
+        self.strings_to_send.append(string_to_send)

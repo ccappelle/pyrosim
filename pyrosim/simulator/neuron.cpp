@@ -2,8 +2,17 @@
 #define _NEURON_CPP
 
 #include "iostream"
+
 #include "neuron.h"
+
 #include "math.h"
+
+extern int SENSOR_NEURON;
+
+extern int BIAS_NEURON;
+
+extern int FUNCTION_NEURON;
+
 
 NEURON::NEURON(int myID, int neuronType, double tau, double a) {
 

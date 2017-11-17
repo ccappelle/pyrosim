@@ -2,23 +2,22 @@
 #define _NEURAL_NETWORK_H
 
 #include "neuron.h"
+
 #include "synapse.h"
-
-#include <vector>
-
 
 class NEURAL_NETWORK {
 
 private:
-	// NEURON **neurons;
-	std::vector<NEURON*> neurons;
-	std::vector<SYNAPSE*> synapses;
+	NEURON **neurons;
+
 	int    numNeurons;
-    // SYNAPSE **synapses;
-    int    numSynapses;
+
+        SYNAPSE **synapses;
+
+        int    numSynapses;
 
 public:
-	NEURAL_NETWORK(int nn, int s);
+	NEURAL_NETWORK(void);
 
 	~NEURAL_NETWORK(void);
 
@@ -37,9 +36,9 @@ public:
 	void Update(int timeStep);
 
 private:
-	void Initialize_Neurons(int numNeurons);
+	void Initialize_Neurons(void);
 
-	void Initialize_Synapses(int s);
+	void Initialize_Synapses(void);
 
 	void Push_Current_Values_To_Previous_Values(void);
 

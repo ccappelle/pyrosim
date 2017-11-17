@@ -4,7 +4,7 @@
 const int MAX_GROUPS = 1000;
 struct Data
 {
-  char texturePathStr[10000];
+  char texturePathStr[100];
   //simulator parameters
   int runBlind;
   float gravity;
@@ -20,11 +20,6 @@ struct Data
   int collisionMatrix[MAX_GROUPS][MAX_GROUPS];
   int numCollisionGroups;
   int capture;
-  
-  int numBodies;
-  int numJoints;
-  int numNeurons;
-  int numSynapses;
 };
 
 #endif

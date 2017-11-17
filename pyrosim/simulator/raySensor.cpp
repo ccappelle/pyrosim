@@ -7,8 +7,6 @@
 #include <drawstuff/drawstuff.h>
 #include "neuron.h"
 
-#include <sstream>
-
 #ifdef dDOUBLE
 #define dsDrawLine dsDrawLineD
 #endif
@@ -150,13 +148,18 @@ void RAY_SENSOR::Update_Sensor_Neurons(int t) {
 }
 
 void RAY_SENSOR::Write_To_Python(int evalPeriod) {
-    std::ostringstream outString;
-    outString << ID << " " << 4 << " ";
-    for (int t=0; t<evalPeriod; t++)
-    {
-        outString << distances[t] << " " << r[t] << " " << g[t] << " " << b[t] << " ";
+
+	char outString[100000];
+
+	sprintf(outString,"%d %d ",ID,4);
+
+	for ( int  t = 0 ; t < evalPeriod ; t++ ){
+	   sprintf(outString,"%s %f %f %f %f ",outString,distances[t],r[t],g[t],b[t]);
+       
     }
-    std::cout << outString.str() << std::endl;
+
+	sprintf(outString,"%s \n",outString);
+    std::cout << outString;
 }
 
 #endif

@@ -12,6 +12,7 @@ SYNAPSE::SYNAPSE(void) {
     endWeight = 0.;
     startTime = 0;
     endTime = 0;
+
     //Read_From_Python();
 }
 

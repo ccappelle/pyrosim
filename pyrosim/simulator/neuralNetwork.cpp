@@ -2,13 +2,24 @@
 #define _NEURAL_NETWORK_CPP
 
 #include "iostream"
+
 #include "neuralNetwork.h"
+
 #include "math.h"
 
+extern int MAX_NEURONS;
+extern int MAX_SYNAPSES;
+extern int SENSOR_NEURON;
+extern int BIAS_NEURON;
+extern int HIDDEN_NEURON;
+extern int MOTOR_NEURON;
+extern int FUNCTION_NEURON;
 
-NEURAL_NETWORK::NEURAL_NETWORK(int nn, int s) {
-	Initialize_Neurons(nn);
-	Initialize_Synapses(s);
+NEURAL_NETWORK::NEURAL_NETWORK(void) {
+
+	Initialize_Neurons();
+
+	Initialize_Synapses();
 }
 
 NEURAL_NETWORK::~NEURAL_NETWORK(void) {
@@ -16,8 +27,8 @@ NEURAL_NETWORK::~NEURAL_NETWORK(void) {
 }
 
 void NEURAL_NETWORK::Add_Bias_Neuron(int ID) {
-    neurons[numNeurons] = new NEURON(ID,BIAS_NEURON, 1.0, 1.0);
-    numNeurons++;
+        neurons[numNeurons] = new NEURON(ID,BIAS_NEURON, 1.0, 1.0);
+        numNeurons++;
 }
 
 void NEURAL_NETWORK::Add_Function_Neuron(int ID, double *timeValues){
@@ -37,22 +48,22 @@ NEURON *NEURAL_NETWORK::Add_Motor_Neuron(int ID, double tau, double alpha, doubl
     neurons[numNeurons] = newNeuron;
 
 	numNeurons++;
+
     return newNeuron;
 }
 
 NEURON *NEURAL_NETWORK::Add_Sensor_Neuron(int ID, int svIndex) {
 
 	NEURON *newNeuron = new NEURON(ID,SENSOR_NEURON,svIndex,1.0,1.0);
-    neurons.push_back(newNeuron);
+	neurons[numNeurons] = newNeuron;
 	numNeurons++;
 
 	return newNeuron;
 }
 
 void NEURAL_NETWORK::Add_Synapse(void) {
-    SYNAPSE *s = new SYNAPSE();
-    s->Read_From_Python();
-    synapses.push_back(s);
+    synapses[numSynapses] = new SYNAPSE();
+    synapses[numSynapses]-> Read_From_Python();
     numSynapses ++; 
 }
 
@@ -69,29 +80,47 @@ void NEURAL_NETWORK::Update(int timeStep) {
 
 // ------------------------- Private methods -----------------------------
 
-void NEURAL_NETWORK::Initialize_Neurons(int nn) {
-        neurons.reserve(nn);
+void NEURAL_NETWORK::Initialize_Neurons(void) {
+
+        neurons = new NEURON * [MAX_NEURONS];
+
+        for (int n = 0 ; n < MAX_NEURONS ; n++ )
+
+                neurons[n] = NULL;
+
         numNeurons = 0;
 }
 
-void NEURAL_NETWORK::Initialize_Synapses(int s) {
-        synapses.reserve(s);
+void NEURAL_NETWORK::Initialize_Synapses(void) {
+
+        synapses = new SYNAPSE * [MAX_SYNAPSES];
+
+        for (int s = 0 ; s < MAX_SYNAPSES ; s++ )
+
+                synapses[s] = NULL;
+
         numSynapses = 0;
 }
 
 void NEURAL_NETWORK::Push_Current_Values_To_Previous_Values(void) {
+
         for (int n = 0 ; n < numNeurons ; n++ )
-		  neurons[n]->Push_Current_Value_To_Previous_Value();
+
+		neurons[n]->Push_Current_Value_To_Previous_Value();
 }
 
 void NEURAL_NETWORK::Reset_Neuron_Values(int timeStep) {
+
 	for ( int n = 0 ; n < numNeurons ; n++ )
+
 		neurons[n]->Reset(timeStep);
 }
 
 void NEURAL_NETWORK::Threshold_Neurons(void) {
+
         for ( int n = 0 ; n < numNeurons ; n++ )
-		  neurons[n]->Threshold();	
+
+		neurons[n]->Threshold();	
 }
 
 void NEURAL_NETWORK::Update_Synapses(int timeStep){

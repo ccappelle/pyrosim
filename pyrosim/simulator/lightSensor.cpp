@@ -61,7 +61,8 @@ void LIGHT_SENSOR::Write_To_Python(int evalPeriod) {
         sprintf(outString,"%d %d ",ID,1);
 
         for ( int  t = 0 ; t < evalPeriod ; t++ )
-            sprintf(outString,"%s %f ",outString,values[t]);
+
+                sprintf(outString,"%s %f ",outString,values[t]);
 
         sprintf(outString,"%s \n",outString);
 

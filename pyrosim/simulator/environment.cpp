@@ -3,24 +3,28 @@
 
 #include "environment.h"
 #include "iostream"
-#include <string>
-// #include "constants.h"
 
-// extern int HINGE;
-// extern int SLIDER;
-// extern int THRUSTER;
 
-// extern int BOX;
-// extern int CYLINDER;
-// extern int SPHERE;
-// extern int CAPSULE;
+extern int HINGE;
+extern int SLIDER;
+extern int THRUSTER;
+
+extern int BOX;
+extern int CYLINDER;
+extern int SPHERE;
+extern int CAPSULE;
+
+extern int MAX_OBJECTS;
+extern int MAX_JOINTS;
 
 ENVIRONMENT::ENVIRONMENT(void) {
 
-	//objects = new OBJECT * [MAX_OBJECTS];
-	//joints  = new JOINT * [MAX_JOINTS]; 
+	objects = new OBJECT * [MAX_OBJECTS];
+
+	joints  = new JOINT * [MAX_JOINTS];
 
 	numberOfBodies = 0;
+
 	numberOfJoints = 0;
 
 	neuralNetwork = NULL;
@@ -60,16 +64,12 @@ void ENVIRONMENT::Get_Object_Position(float *xyz, int bodyID){
 
 void ENVIRONMENT::Read_From_Python(dWorldID world, dSpaceID space, Data *data)
 {
-       // char incomingString[10000];
-        std::string incomingBuffered;
+       char incomingString[10000];
 
-        // std::cin >> incomingString;
-        //std::getline(std::cin, incomingBuffered);
-        std::cin >> incomingBuffered;
+        std::cin >> incomingString;
 
-        while ( incomingBuffered.compare("Done") != 0 ) {
-                const char *incomingString = incomingBuffered.c_str();
-                std::cerr << incomingBuffered << "\n";
+        while ( strcmp(incomingString,"Done") != 0 ) {
+                std::cerr << incomingString << "\n";
                 //Simulator options
                 if ( strcmp(incomingString,"EvaluationTime") == 0 )
                         std::cin >> data->evaluationTime;
@@ -89,22 +89,7 @@ void ENVIRONMENT::Read_From_Python(dWorldID world, dSpaceID space, Data *data)
                         std::cin >> bodyID;
                         objects[bodyID]->Read_In_External_Force();
                 }
-                else if ( strcmp(incomingString,"Init")==0)
-                {
-                    // bodies, joints, neurons, synapses
-                    std::cin >> data->numBodies;
-                    std::cin >> data->numJoints;
-                    std::cin >> data->numNeurons;
-                    std::cin >> data->numSynapses;
-                    objects.reserve(data->numBodies);
-                    joints.reserve(data->numJoints);
 
-                    // initialize neural network
-                    if(data->numNeurons>0)
-                    {
-                        Create_Neural_Network(data->numNeurons, data->numSynapses);
-                    }
-                }
                 //Camera
                 else if ( strcmp(incomingString,"Camera") == 0)
                 {
@@ -141,9 +126,11 @@ void ENVIRONMENT::Read_From_Python(dWorldID world, dSpaceID space, Data *data)
                 }
                 //Bodies
                 else if ( strcmp(incomingString,"Box") == 0 )
+
                         Create_Object(world,space,numberOfBodies,BOX);
 
                 else if ( strcmp(incomingString,"Cylinder") == 0 )
+
                         Create_Object(world,space,numberOfBodies,CYLINDER);
                 else if ( strcmp(incomingString,"Capsule") == 0)
                         Create_Object(world,space,numberOfBodies,CAPSULE);
@@ -158,34 +145,41 @@ void ENVIRONMENT::Read_From_Python(dWorldID world, dSpaceID space, Data *data)
                         Create_Joint(world,space,numberOfJoints,SLIDER);
                 else if ( strcmp(incomingString,"Thruster") == 0)
                         Create_Joint(world,space,numberOfJoints,THRUSTER);
-
                 //Sensors
                 else if ( strcmp(incomingString,"IsSeenSensor") == 0)
                         Create_IsSeen_Sensor(data->evaluationTime);
 
                 else if ( strcmp(incomingString,"PositionSensor") == 0 )
+
                         Create_Position_Sensor(data->evaluationTime);
 
                 else if ( strcmp(incomingString,"TouchSensor") == 0 )
+
                         Create_Touch_Sensor(data->evaluationTime);
 
                 else if ( strcmp(incomingString,"RaySensor") == 0 )
+
                         Create_Ray_Sensor(space,data->evaluationTime);
 
                 else if ( strcmp(incomingString,"ProprioceptiveSensor") == 0 )
+
                         Create_Proprioceptive_Sensor(data->evaluationTime);
 
                 else if ( strcmp(incomingString,"LightSensor") == 0 )
+
                         Create_Light_Sensor(data->evaluationTime);
 
                 else if ( strcmp(incomingString,"VestibularSensor") == 0 )
+
                         Create_Vestibular_Sensor(data->evaluationTime);
 
                 else if ( strcmp(incomingString,"LightSource") == 0 )
+
                         Create_Light_Source();
 
                 //Neurons
                 else if ( strcmp(incomingString,"BiasNeuron") == 0 )
+
                         Create_Bias_Neuron();
                 else if ( strcmp(incomingString,"SensorNeuron") == 0 )
 
@@ -202,22 +196,21 @@ void ENVIRONMENT::Read_From_Python(dWorldID world, dSpaceID space, Data *data)
                 else if ( strcmp(incomingString,"FunctionNeuron") == 0)
                         Create_Function_Neuron(data->evaluationTime);
                 //Synapse
-                else if ( strcmp(incomingString, "Synapse") == 0)
-                        Create_Synapse();
                 else
-                    std::cerr << "OUTPUT NOT FOUND:: " << incomingString << std::endl;
-                // std::cin >> incomingString;
-                //std::getline(std::cin, incomingBuffered);
-                std::cin >> incomingBuffered;
+                        Create_Synapse();
+
+                std::cin >> incomingString;
         }
 }
 
 void ENVIRONMENT::Poll_Sensors(int timeStep) {
 
         for (int i=0;i<numberOfBodies;i++)
+
                 objects[i]->Poll_Sensors(numberOfBodies,objects,timeStep);
 
         for (int j=0;j<numberOfJoints;j++)
+
                 joints[j]->Poll_Sensors(timeStep);
 }
 
@@ -248,7 +241,9 @@ void ENVIRONMENT::Write_Sensor_Data(int evalPeriod) {
 // ----------------------- Private methods ---------------------------
 
 void ENVIRONMENT::Add_Motor_Neuron(int ID, int jointID, double tau, double alpha, double start) {
+
         NEURON *motorNeuron = neuralNetwork->Add_Motor_Neuron(ID,tau, alpha,start);
+
         Connect_Motor_Neuron_to_Joint( jointID, motorNeuron );
 }
 
@@ -265,9 +260,9 @@ void ENVIRONMENT::Create_Bias_Neuron(void) {
 
         std::cin >> ID;
 
-        // if ( neuralNetwork == NULL )
+        if ( neuralNetwork == NULL )
 
-        //         Create_Neural_Network();
+                Create_Neural_Network();
 
         neuralNetwork->Add_Bias_Neuron(ID);
 }
@@ -276,8 +271,8 @@ void ENVIRONMENT::Create_Function_Neuron(int evalPeriod){
         int ID;
         std::cin >> ID;
 
-        // if( neuralNetwork == NULL)
-        //         Create_Neural_Network();
+        if( neuralNetwork == NULL)
+                Create_Neural_Network();
         double *timeValues = new double[evalPeriod];
 
         for(int i=0; i<evalPeriod; i++)
@@ -299,18 +294,16 @@ void ENVIRONMENT::Create_Hidden_Neuron(void)
     double alpha;
     std::cin >> alpha;
 
-    // if ( neuralNetwork == NULL )
-    //     Create_Neural_Network();
+    if ( neuralNetwork == NULL )
+        Create_Neural_Network();
 
 	neuralNetwork->Add_Hidden_Neuron(ID,tau,alpha);
 }
 
 void ENVIRONMENT::Create_Joint( dWorldID world, dSpaceID space, int index, int jointType) {
 
-	//joints[index] = new JOINT(jointType);
-    //JOINT to_add = JOINT(jointType);
-    //jointVec.push_back(JOINT(jointType));
-    joints.push_back(new JOINT(jointType));
+	joints[index] = new JOINT(jointType);
+
 	joints[index]->Read_From_Python();
 	int firstObjectID = joints[index]->Get_First_Object_Index();
 
@@ -332,17 +325,24 @@ void ENVIRONMENT::Create_Joint( dWorldID world, dSpaceID space, int index, int j
 }
 
 void ENVIRONMENT::Create_Light_Sensor(int evalPeriod) {
+
         int objectIndex;
+
         int ID;
+
         std::cin >> ID;
+
         std::cin >> objectIndex;
+
         objects[objectIndex]->Create_Light_Sensor(ID,evalPeriod);
 }
 
 void ENVIRONMENT::Create_Light_Source(void) {
 
 	int objectIndex;
+
 	std::cin >> objectIndex;
+
 	objects[objectIndex]->Create_Light_Source();
 }
 
@@ -365,19 +365,21 @@ void ENVIRONMENT::Create_Motor_Neuron(void) {
     double start;
     std::cin >> start;
 
-    // if ( neuralNetwork == NULL )
-    //     Create_Neural_Network();
+    if ( neuralNetwork == NULL )
+        Create_Neural_Network();
 
     Add_Motor_Neuron(ID,jointID,tau,alpha,start);
 }
 
-void ENVIRONMENT::Create_Neural_Network(int numNeurons, int numSynapses) {
-	neuralNetwork = new NEURAL_NETWORK(numNeurons, numSynapses);
+void ENVIRONMENT::Create_Neural_Network(void) {
+
+	neuralNetwork = new NEURAL_NETWORK();
 }
 
 void ENVIRONMENT::Create_Object(dWorldID world, dSpaceID space, int index, int shape) {
-    // objects[index] = new OBJECT();
-    objects.push_back(new OBJECT());
+
+    objects[index] = new OBJECT();
+
 	objects[index]->Read_From_Python(world,space,shape);
 
 	numberOfBodies++;
@@ -474,18 +476,18 @@ void ENVIRONMENT::Create_Sensor_Neuron(void) {
 
         std::cin >> sensorValueIndex;
 
-	// if ( neuralNetwork == NULL )
+	if ( neuralNetwork == NULL )
 
-	// 	Create_Neural_Network();
+		Create_Neural_Network();
 
 	Add_Sensor_Neuron(ID,sensorID,sensorValueIndex);
 }
 
 void ENVIRONMENT::Create_Synapse(void) {
 
-        // if ( neuralNetwork == NULL )
+        if ( neuralNetwork == NULL )
 
-        //         Create_Neural_Network();
+                Create_Neural_Network();
 
         neuralNetwork->Add_Synapse();
 }

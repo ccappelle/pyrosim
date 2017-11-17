@@ -1,8 +1,6 @@
 #ifndef _NEURON_H
 #define _NEURON_H
 
-enum {SENSOR_NEURON, MOTOR_NEURON, HIDDEN_NEURON, BIAS_NEURON, FUNCTION_NEURON};
-
 class NEURON {
 
 private:

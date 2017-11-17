@@ -50,8 +50,11 @@ int LAGSIZE = 20;
 static float average_z[20];
 
 void Draw_Distance_Sensor(dGeomID myGeom, dGeomID thisGeom);
+
 void Read_From_Python(void);
+
 void Set_Distance_Sensor(dGeomID o);
+
 void Terminate(void);
 
 void Handle_Ray_Sensor(dGeomID o1, dGeomID o2) {

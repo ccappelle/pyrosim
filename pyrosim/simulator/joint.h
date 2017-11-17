@@ -5,8 +5,6 @@
 #include "proprioceptiveSensor.h"
 #include "neuron.h"
 
-enum {HINGE, SLIDER, THRUSTER};
-
 class JOINT {
 
 private:

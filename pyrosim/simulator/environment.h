@@ -6,22 +6,19 @@
 #include "object.h"
 #include "neuralNetwork.h"
 #include "datastruct.h"
-#include <vector>
 
 class ENVIRONMENT {
  
 private:
 
 	int numberOfBodies;
+
 	int numberOfJoints;
 	int type; 
 	
-	//OBJECT **objects;
+	OBJECT **objects;
 
-	//JOINT **joints;
-
-	std::vector<JOINT*> joints;
-	std::vector<OBJECT*> objects;
+	JOINT **joints;
 
 	NEURAL_NETWORK *neuralNetwork;
 
@@ -36,7 +33,7 @@ public:
 
 	void Get_Object_Position(float *xyz, int bodyID);
 
-    void Poll_Sensors(int timeStep);
+        void Poll_Sensors(int timeStep);
 
     void Read_From_Python(dWorldID world, dSpaceID space, Data *data);
 
@@ -71,7 +68,7 @@ private:
 
     void Create_Motor_Neuron(void);
 
-	void Create_Neural_Network(int numNeurons, int numSynapses);
+	void Create_Neural_Network(void);
 
 	void Create_Object(dWorldID world, dSpaceID space, int index, int objType);
 
