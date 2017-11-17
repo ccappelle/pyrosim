@@ -20,7 +20,6 @@ extern int MAX_JOINTS;
 ENVIRONMENT::ENVIRONMENT(void) {
 
 	objects = new OBJECT * [MAX_OBJECTS];
-
 	joints  = new JOINT * [MAX_JOINTS];
 
 	numberOfBodies = 0;

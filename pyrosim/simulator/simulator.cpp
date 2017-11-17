@@ -310,8 +310,8 @@ void Read_From_Python(void) {
 }
 
 void Terminate(void) {
-    delete data;
     environment->Write_Sensor_Data(data->evaluationTime);
+    delete data;
     exit(0);
 }
 
