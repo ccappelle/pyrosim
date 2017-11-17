@@ -13,4 +13,5 @@ pyrosim/simulator/simulator
 pyrosim/simulator/ode-0.12/*
 pyrosim/simulator/tmp
 pyrosim/frame
+./frame
 .DS_Store

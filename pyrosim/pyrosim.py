@@ -1378,7 +1378,7 @@ class Simulator(object):
         if (self.play_paused == True):
             commands.append('-pause')
 
-        self.pipe = Popen(commands, stdout=PIPE, stdin=PIPE, stderr=PIPE)
+        self.pipe = Popen(commands, stdout=PIPE, stdin=PIPE, stderr=PIPE, universal_newlines=True)
 
         for string_to_send in self.strings_to_send:
             self.pipe.stdin.write(string_to_send)

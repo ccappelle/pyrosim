@@ -23,6 +23,7 @@ all: $(OBJ)
 .cpp.o:
 	$(CXX) $(CXXFLAGS) -MMD -c -o $@ $<
 
+
 .PHONY: clean
 clean:
 	rm -f *.o

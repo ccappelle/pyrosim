@@ -13,11 +13,11 @@ echo -n "Unpacking ode-0.12.tar.bz2..." &&
 tar -xjf ode-0.12.tar.bz2 &&
 echo "done" &&
 
-mkdir ./tmp
+mkdir -p ./tmp
 
 echo -n "Building ode-0.12..." &&
 cd ode-0.12 &&
-./configure --enable-double-precision > ../tmp/odeconfigure 2>&1 &&
+./configure --enable-double-precision --disable-demos --without-x > ../tmp/odeconfigure 2>&1 &&
 make $MAKEOPTS > ../tmp/odemake 2>&1 &&
 cd .. &&
 echo "done" &&
