@@ -1378,7 +1378,7 @@ class Simulator(object):
         if (self.play_paused == True):
             commands.append('-pause')
 
-        self.pipe = Popen(commands, stdout=PIPE, stdin=PIPE, stderr=PIPE)
+        self.pipe = Popen(commands, stdout=PIPE, stdin=PIPE, stderr=PIPE, universal_newlines=True)
 
         # Send sizing parameters
         self._send_initialization()

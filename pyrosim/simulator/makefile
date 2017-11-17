@@ -9,7 +9,7 @@ ifeq ($(UNAME), Darwin)
 endif
 
 CXX=g++
-CXXFLAGS=-std=c++11 -DHAVE_CONFIG_H -I. -Iode-0.12/ode/src  -Iode-0.12/include -DDRAWSTUFF_TEXTURE_PATH="\"ode-0.12/drawstuff/textures\"" -DdTRIMESH_ENABLED -DdDOUBLE  -g -O2 -MT -MP
+CXXFLAGS=-std=c++11 -DHAVE_CONFIG_H -I. -Iode-0.12/ode/src -Iode-0.12/include -DdTRIMESH_ENABLED -DdDOUBLE  -g -O2 -MT -MP
 BIN=simulator
 
 SRC=$(wildcard *.cpp)
@@ -20,8 +20,8 @@ DSFRAMEWORK=ode-0.12/drawstuff/src/libdrawstuff.la ode-0.12/ode/src/libode.la -f
 all: $(OBJ)
 	$(LIBTOOLOPTS) $(CXX) -g -O2 -o $(BIN) $(OBJ) $(DSFRAMEWORK)
 
-%.o: %.cpp
-	$(CXX) $(CXXFLAGS) -MMD -c -o  $@ $< 
+.cpp.o:
+	$(CXX) $(CXXFLAGS) -c -o $@ $<
 
 .PHONY: clean
 clean:
