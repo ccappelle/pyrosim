@@ -20,6 +20,9 @@ struct Data
   int collisionMatrix[MAX_GROUPS][MAX_GROUPS];
   int numCollisionGroups;
   int capture;
+
+  int windowWidth = 750;
+  int windowHeight = 450;
 };
 
 #endif

@@ -40,9 +40,6 @@ int numberOfBodies = 0;
 bool initialized = false;
 static dGeomID ground;
 
-const unsigned int WINDOW_WIDTH = 352*2;
-const unsigned int WINDOW_HEIGHT = 288*2;
-
 
 Data *data = new Data;//struct which keeps all user input values for various parameterss. see datastruct.h
 static float updated_xyz[3];
@@ -148,14 +145,14 @@ static void captureFrame(int num) {
 	sprintf (s,"frame/%04d.ppm",num);
 
 	FILE *f = fopen (s,"wb");
-	fprintf (f,"P6\n%d %d\n255\n",WINDOW_WIDTH,WINDOW_HEIGHT);
+	fprintf (f,"P6\n%d %d\n255\n",data->windowWidth,data->windowHeight);
 
-	void *buf = malloc( WINDOW_WIDTH * WINDOW_HEIGHT * 3 );
-	glReadPixels( 0, 0, WINDOW_WIDTH, WINDOW_HEIGHT, GL_RGB, GL_UNSIGNED_BYTE, buf );
+	void *buf = malloc( data->windowWidth * data->windowHeight * 3 );
+	glReadPixels( 0, 0, data->windowWidth, data->windowHeight, GL_RGB, GL_UNSIGNED_BYTE, buf );
 
-	for (int y=(WINDOW_HEIGHT - 1); y>=0; y--) {
-		for (int x=0; x<WINDOW_WIDTH; x++) {
-			unsigned char *pixel = ((unsigned char *)buf)+((y*WINDOW_WIDTH+ x)*3);
+	for (int y=(data->windowHeight - 1); y>=0; y--) {
+		for (int x=0; x<data->windowWidth; x++) {
+			unsigned char *pixel = ((unsigned char *)buf)+((y*data->windowWidth+ x)*3);
 			unsigned char b[3];
 			b[0] = *pixel;
 			b[1] = *(pixel+1);
@@ -329,6 +326,7 @@ int main (int argc, char **argv)
     if ( (argc > 1) && (strcmp(argv[1],"-blind")==0) )
         data->runBlind = true;
 
+
     Initialize_ODE();
     Initialize_Environment();
     Read_From_Python();
@@ -338,7 +336,7 @@ int main (int argc, char **argv)
         Run_Blind();
     else{
       Initialize_Draw_Stuff();
-      dsSimulationLoop (argc,argv,WINDOW_WIDTH,WINDOW_HEIGHT,&fn);
+      dsSimulationLoop (argc,argv,data->windowWidth,data->windowHeight,&fn);
   }
   return 0;
 }

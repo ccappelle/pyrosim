@@ -3,6 +3,7 @@ import pyrosim
 
 sim = pyrosim.Simulator(play_blind=False,
                         eval_time=100, dt=0.05,
+                        window_size=(1000, 750),
                         debug=True)
 
 cyl = sim.send_cylinder(x=0, y=0, z=2, 

@@ -88,6 +88,11 @@ void ENVIRONMENT::Read_From_Python(dWorldID world, dSpaceID space, Data *data)
                         std::cin >> bodyID;
                         objects[bodyID]->Read_In_External_Force();
                 }
+                else if ( strcmp(incomingString,"WindowSize") == 0)
+                {
+                    std::cin >> data->windowWidth;
+                    std::cin >> data->windowHeight;
+                }
 
                 //Camera
                 else if ( strcmp(incomingString,"Camera") == 0)

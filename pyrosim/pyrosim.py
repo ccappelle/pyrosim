@@ -47,6 +47,9 @@ class Simulator(object):
     gravity     : float, optional
             The gravity in the system. Negative values implies normal downward 
             force of gravity. (default is -1.0)
+    window_size  : tuple or list of 2 ints, optional
+            The initial window size for the visualization. Irrelevant if 
+            blind=True. Default is (750, 500)
     xyz         : list of 3 floats
             The xyz position of the camera (default is [0.8317,-0.9817,0.8000])
     hpr         : float, optional
@@ -69,6 +72,7 @@ class Simulator(object):
     def __init__(self, play_blind=False, play_paused=False,
                  eval_time=evaluation_time, dt=dt,
                  gravity=gravity,
+                 window_size = (750,500),
                  xyz=xyz, hpr=hpr, use_textures=False,
                  debug=False, capture=0):
         assert play_blind == False or eval_time > 0, ('Cannot run'
@@ -117,6 +121,7 @@ class Simulator(object):
         self._send('EvaluationTime', self.eval_time)
         self._send('TimeInterval', self.dt)
         self._send('Gravity', self.gravity)
+        self._send('WindowSize', *window_size)
         if (self.capture):
             self._send('Capture', 1)
         else:
