@@ -443,10 +443,10 @@ void ENVIRONMENT::Connect_Motor_Neuron_to_Joint( int jointID, NEURON *motorNeuro
     int done = false;
 
     int jointIndex = 0;
-    while ( (done == false) && (jointIndex < numberOfJoints) && (jointIndex < 100) )
-        done = joints[jointIndex++]->Connect_To_Motor_Neuron( jointID , motorNeuron );
+    // while ( (done == false) && (jointIndex < numberOfJoints))
+    //   done = joints[jointIndex++]->Connect_To_Motor_Neuron( jointID , motorNeuron );
     
-    //joints[jointID]->Connect_To_Motor_Neuron(jointID, motorNeuron);
+    joints[jointID]->Connect_To_Motor_Neuron(jointID, motorNeuron);
 }
 
 void ENVIRONMENT::Connect_Sensor_To_Sensor_Neuron( int sensorID , NEURON *sensorNeuron ) {
