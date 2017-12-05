@@ -6,7 +6,7 @@ MAKEOPTS="-j2"
 #wget https://sourceforge.net/projects/opende/files/ODE/0.12/ode-0.12.tar.bz2 > /tmp/odewget 2>&1 &&
 #echo "done" &&
 
-echo -n "Changing into simulator"
+echo "Changing into simulator directory"
 cd ./pyrosim/simulator
 
 echo -n "Unpacking ode-0.12.tar.bz2..." &&
@@ -19,7 +19,6 @@ echo -n "Building ode-0.12..." &&
 cd ode-0.12 &&
 ./configure --enable-double-precision > ../tmp/odeconfigure 2>&1 &&
 make $MAKEOPTS > ../tmp/odemake 2>&1 &&
-make install > ../tmp/odeinstall 2>&1 &&
 cd .. &&
 echo "done" &&
 
