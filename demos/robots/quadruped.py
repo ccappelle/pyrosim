@@ -127,3 +127,5 @@ if __name__ == "__main__":
 
     layout = send_to_simulator(sim, weight_matrix=weight_matrix)
     sim.start()
+
+    sim.wait_to_finish()

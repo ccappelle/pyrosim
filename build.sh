@@ -19,7 +19,6 @@ echo -n "Building ode-0.12..." &&
 cd ode-0.12 &&
 ./configure --enable-double-precision > ../tmp/odeconfigure 2>&1 &&
 make $MAKEOPTS > ../tmp/odemake 2>&1 &&
-make install > ../tmp/odeinstall 2>&1 &&
 cd .. &&
 echo "done" &&
 
