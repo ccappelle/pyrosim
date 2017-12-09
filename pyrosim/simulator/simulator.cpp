@@ -46,6 +46,11 @@ static float updated_xyz[3];
 int LAGSIZE = 20;
 static float average_z[20];
 
+const float FPS = 300.0;
+const float baseDT = 1.0/FPS;
+float framestart;
+float accumulator = 0.0;
+
 void Draw_Distance_Sensor(dGeomID myGeom, dGeomID thisGeom);
 
 void Read_From_Python(void);
@@ -221,50 +226,60 @@ static void simLoop (int pause)
     initialized = true;
     }
 
+    // accumulator += dsElapsedTime();
+    // if (accumulator>10.0*baseDT)
+    // {
+    //   accumulator = 10.0*baseDT;
+    // }
+    // accumulator to maintain frame rate
+    // while(accumulator>baseDT)
+    //{   
+      // accumulator -= data->dt;
+      if ( !pause ){
+          Simulate_For_One_Time_Step();
+ 
+          if (data->followBody>=0)
+          {
+            environment->Get_Object_Position(updated_xyz, data->followBody);
 
-    if ( !pause ){
-        Simulate_For_One_Time_Step();
+            average_z[timer%LAGSIZE] = updated_xyz[2];
 
-        if (data->followBody>=0)
-        {
-          environment->Get_Object_Position(updated_xyz, data->followBody);
+            updated_xyz[0] += data->xyz[0];
+            updated_xyz[1] += data->xyz[1];
+            updated_xyz[2] += data->xyz[2];
 
-          average_z[timer%LAGSIZE] = updated_xyz[2];
+            //for(int i=0;i<LAGSIZE;i++) updated_xyz[2] +=  average_z[i]/float(LAGSIZE); //lag movement
 
-          updated_xyz[0] += data->xyz[0];
-          updated_xyz[1] += data->xyz[1];
-          updated_xyz[2] += data->xyz[2];
+                dsSetViewpoint(updated_xyz,data->hpr);
+          }
 
-          //for(int i=0;i<LAGSIZE;i++) updated_xyz[2] +=  average_z[i]/float(LAGSIZE); //lag movement
+        if (data->trackBody>=0)
+         {
+            float dirVector[3];
+            environment->Get_Object_Position(dirVector, data->trackBody);
+            
+            for(int i=0;i<3;i++)
+              dirVector[i] -= data->xyz[i];
 
-              dsSetViewpoint(updated_xyz,data->hpr);
-        }
+          if (!(dirVector[0]==0 and dirVector[1]==0 and dirVector[2]==0)){
+            float zDrop = dirVector[2];
+            float magnitude = sqrt(pow(dirVector[0],2)+ pow(dirVector[1],2)+pow(dirVector[2],2));
+            for(int i=0;i<3;i++) dirVector[i] = dirVector[i]/magnitude;
 
-      if (data->trackBody>=0)
-       {
-          float dirVector[3];
-          environment->Get_Object_Position(dirVector, data->trackBody);
-          
-          for(int i=0;i<3;i++)
-            dirVector[i] -= data->xyz[i];
+              float heading = -atan2(dirVector[0],dirVector[1]) * 180.0 / 3.14159+90.;
+              float pitch = asin(zDrop/magnitude) * 180.0 / 3.14159;
+              float update_hpr[3];
 
-        if (!(dirVector[0]==0 and dirVector[1]==0 and dirVector[2]==0)){
-          float zDrop = dirVector[2];
-          float magnitude = sqrt(pow(dirVector[0],2)+ pow(dirVector[1],2)+pow(dirVector[2],2));
-          for(int i=0;i<3;i++) dirVector[i] = dirVector[i]/magnitude;
+              update_hpr[0] = heading;
+              update_hpr[1] = pitch;
+              update_hpr[2] = data->hpr[2];
 
-            float heading = -atan2(dirVector[0],dirVector[1]) * 180.0 / 3.14159+90.;
-            float pitch = asin(zDrop/magnitude) * 180.0 / 3.14159;
-            float update_hpr[3];
+              dsSetViewpoint(data->xyz, update_hpr);
+              }
+          }
+      }
 
-            update_hpr[0] = heading;
-            update_hpr[1] = pitch;
-            update_hpr[2] = data->hpr[2];
-
-            dsSetViewpoint(data->xyz, update_hpr);
-            }
-        }
-    }
+    // }
     environment->Draw(data->debug);
     
 	if((!pause) && data->capture && (timer % data->capture == 0))
@@ -336,6 +351,7 @@ int main (int argc, char **argv)
         Run_Blind();
     else{
       Initialize_Draw_Stuff();
+
       dsSimulationLoop (argc,argv,data->windowWidth,data->windowHeight,&fn);
   }
   return 0;
