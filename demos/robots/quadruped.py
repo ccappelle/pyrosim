@@ -98,8 +98,8 @@ def send_to_simulator(sim, weight_matrix):
     # send the box towards the origin with specified force
     # proportional to its mass
     MASS = 3
-    sim.send_external_force(env_box, x=0, y=0, z=MASS*20., time=300)
-    sim.send_external_force(env_box, x=-MASS*70., y=MASS*73., z=0, time=320)
+    # sim.send_external_force(env_box, x=0, y=0, z=MASS*20., time=300)
+    # sim.send_external_force(env_box, x=-MASS*70., y=MASS*73., z=0, time=320)
 
     sim.create_collision_matrix('all')
 
@@ -107,14 +107,19 @@ def send_to_simulator(sim, weight_matrix):
 
 if __name__ == "__main__":
 
-    eval_time = 1000
+    seconds = 10.0
+    dt = 0.05
+    eval_time = int(seconds/dt)
+    print eval_time
     gravity = -1.0
+
     sim = pyrosim.Simulator(eval_time=eval_time, debug=True,
                                play_paused=False,
                                gravity=gravity,
                                play_blind=False,
                                use_textures=True,
-                               capture=False)
+                               capture=False,
+                               dt=dt)
     num_sensors = 5
     num_motors = 8
 
