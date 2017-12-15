@@ -287,7 +287,7 @@ class Simulator(object):
                 in simulation
         hpr : list of floats
                 A length 3 list specifying the heading, pitch, 
-                and roll of the camera
+                and roll of the camera in degrees
 
         Returns
         -------
