@@ -110,7 +110,7 @@ if __name__ == "__main__":
     seconds = 10.0
     dt = 0.05
     eval_time = int(seconds/dt)
-    print eval_time
+    print(eval_time)
     gravity = -1.0
 
     sim = pyrosim.Simulator(eval_time=eval_time, debug=True,
