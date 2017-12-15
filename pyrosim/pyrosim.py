@@ -740,42 +740,6 @@ class Simulator(object):
 
         return joint_id
 
-    def send_adhesive_joint(self, body_id, adhesion_kind=0):
-        """Send an adhesive joint to the simulator.
-
-           Whenever it is actuated, all bodies that are touched by the body
-           that has this joint will stick (form a rigid joint) to it.
-
-        Parameters
-        ----------
-        body_id   : int
-                The body id of the body the joint is connected to.
-
-        adhesion_kind   :  int
-                ID of the mechanism of adhesion. All bodies with no
-                exceptions are adhesive to joints with adhesion_kind=0; for
-                if the value is not zero, only the bodies that are marked
-                as being susceptible to the adhesion of the kind with that
-                id will form rigid joints.
-
-        Returns
-        -------
-        int
-                The id tag for the adhesive joint
-        """
-        assert body_id < self._num_bodies, 'Body with id ' + \
-            str(body_id) + ' has not been sent'
-
-        joint_id = self._num_joints
-        self._num_joints += 1
-
-        self._send('AdhesiveJoint',
-                   joint_id,
-                   body_id,
-                   adhesion_kind)
-
-        return joint_id
-
     def send_thruster(self, body_id, x=0, y=0, z=-1, lo=-10.0, hi=10.0):
         """Send a thruster engine to the specified body
 
