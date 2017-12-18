@@ -11,6 +11,6 @@ for s in range(NUM_SIMS):
                           r3=0, length=1.0, radius=0.1)
     sims[s].start()
 
-for s in range(NUM_SIMS):
-    sims[s].wait_to_finish()
+# for s in range(NUM_SIMS):
+#     sims[s].wait_to_finish()
 
