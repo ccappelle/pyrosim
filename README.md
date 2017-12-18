@@ -10,7 +10,7 @@ environments. [Read the Docs](https://ccappelle.github.io/pyrosim)
 
   If you downloaded the zipped version, unzip the directory somewhere you can access it.
 
-  Note: Pyrosim is intended for use with Python2.x. It does not yet run smoothly with Python3.x.
+  Note: Pyrosim has been tested on Python 2.7 and 3.6 but should work with any 3.x version of Python. 
   Pyrosim also currently only supports Linux and Mac OS. Windows support has been discontinued
   for the time being.
 
