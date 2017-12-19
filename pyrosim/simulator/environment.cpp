@@ -16,12 +16,13 @@ template<typename actuatorClass> ACTUATOR * createActuatorInstance() { return st
 typedef std::map<std::string, ACTUATOR * (*) ()> StringToActuatorMapType;
 
 #include "actuator/rotary.h"
-// stringToActuatorMap["HingeJoint"] = &createActuatorInstance<ROTARY_ACTUATOR>;
+#include "actuator/linear.h"
 
 StringToActuatorMapType stringToActuatorMap = {
-	{"HingeJoint", &createActuatorInstance<ROTARY_ACTUATOR>}
+	{"HingeJoint", &createActuatorInstance<ROTARY_ACTUATOR>},
+	{"SliderJoint", &createActuatorInstance<LINEAR_ACTUATOR>}
 };
-// TBA: "SliderJoint", "Thruster"
+// TBA: "Thruster"
 
 //// /ACTUATOR_RELEVANT
 
