@@ -51,7 +51,7 @@ sim.start()
 results = sim.wait_to_finish()
 
 # we can access the results matrix directly
-print results, '\n'
+print(results + '\n')
 
 # or use built in commands to get a specific sensor and svi
 # value for every time step
@@ -71,5 +71,5 @@ for t in range(500):
 
     output = ('{:3d}:: x:{: 3.1f}, y:{: 3.1f}, z:{: 3.1f}, ' +
               'vestib:{: 3.1f}, prop:{: 3.1f}').format(t, x, y, z, v, p)
-    print output
+    print(output)
 
