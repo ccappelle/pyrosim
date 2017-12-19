@@ -18,27 +18,6 @@
 
 extern int HINGE; // FIXME: remove once proprioceptive sensors are fixed
 
-ROTARY_ACTUATOR::ROTARY_ACTUATOR(void) :
-	firstObject(-1),
-	secondObject(-1),
-	x(0),
-	y(0),
-	z(0),
-	normalX(0),
-	normalY(0),
-	normalZ(0),
-	lowStop(0),
-	highStop(0),
-	speed(0.0),
-	strength(0.0),
-	joint(NULL),
-	positionControl(true),
-	proprioceptiveSensor(NULL),
-	first(NULL),
-	second(NULL) {}
-
-ROTARY_ACTUATOR::~ROTARY_ACTUATOR(void) {}
-
 void ROTARY_ACTUATOR::Actuate(void) {
 
 	if ( motorNeuron == NULL )
@@ -175,4 +154,4 @@ void ROTARY_ACTUATOR::Write_To_Python(int evalPeriod) const {
 		proprioceptiveSensor->Write_To_Python(evalPeriod);
 }
 
-#endif
+#endif // _ACTUATOR_ROTARY_CPP

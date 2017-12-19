@@ -7,7 +7,7 @@
 
 class ROTARY_ACTUATOR : public ACTUATOR {
 
-private:
+protected:
 	int	firstObject;
 	int	secondObject;
 
@@ -32,21 +32,32 @@ private:
 	OBJECT *second;
 
 public:
-	ROTARY_ACTUATOR(void);
-	~ROTARY_ACTUATOR(void);
+	ROTARY_ACTUATOR(void) :
+		firstObject(-1), secondObject(-1),
+		x(0), y(0), z(0),
+		normalX(0), normalY(0), normalZ(0),
+		lowStop(0), highStop(0),
+		speed(0.0), strength(0.0),
+		joint(NULL),
+		positionControl(true),
+		proprioceptiveSensor(NULL),
+		first(NULL),
+		second(NULL) {};
 
-	void Actuate(void);
+	// Virtual functiontions are declared that way for making very similar derivatives like LINEAR_ACTUATOR
+
+	virtual void Actuate(void);
 	bool Connect_Sensor_To_Sensor_Neuron(int sensorID, NEURON *sensorNeuron);
 
-	void Create_In_Simulator(dWorldID world, OBJECT** allObjects, int numObjects);
+	virtual void Create_In_Simulator(dWorldID world, OBJECT** allObjects, int numObjects);
 	bool Create_Proprioceptive_Sensor(int myID, int evalPeriod);
 
-	void Draw(void) const;
+	virtual void Draw(void) const;
 
-	void Poll_Sensors(int t);
+	virtual void Poll_Sensors(int t);
 	void Update_Sensor_Neurons(int t);
 
-	void Read_From_Python(void);
+	virtual void Read_From_Python(void);
 	void Write_To_Python(int evalPeriod) const;
 
 };
