@@ -12,7 +12,7 @@ CXX=g++
 CXXFLAGS=-std=c++11 -DHAVE_CONFIG_H -I. -Iode-0.12/ode/src -Iode-0.12/include -DdTRIMESH_ENABLED -DdDOUBLE  -g -O2 -MT -MP
 BIN=simulator
 
-SRC=$(wildcard *.cpp)
+SRC=$(wildcard *.cpp */*.cpp)
 OBJ=$(SRC:%.cpp=%.o)
 LIBTOOLOPTS=/bin/bash ode-0.12/libtool --tag=CXX --mode=link
 DSFRAMEWORK=ode-0.12/drawstuff/src/libdrawstuff.la ode-0.12/ode/src/libode.la -framework OpenGL -framework GLUT -lm -lpthread ${openglopts}
@@ -26,6 +26,6 @@ all: $(OBJ)
 
 .PHONY: clean
 clean:
-	rm -f *.o
-	rm -f *.d
+	rm -f *.o */*.o
+	rm -f *.d */*.o
 	rm -f $(BIN)

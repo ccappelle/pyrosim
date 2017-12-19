@@ -41,15 +41,15 @@ public:
 	bool Connect_Sensor_To_Sensor_Neuron(int sensorID, NEURON *sensorNeuron);
 
 	void Create_In_Simulator(dWorldID world, OBJECT** allObjects, int numObjects);
-	void Create_Proprioceptive_Sensor(int myID, int evalPeriod);
+	bool Create_Proprioceptive_Sensor(int myID, int evalPeriod);
 
-	void Draw(void);
+	void Draw(void) const;
 
 	void Poll_Sensors(int t);
 	void Update_Sensor_Neurons(int t);
 
 	void Read_From_Python(void);
-	void Write_To_Python(int evalPeriod);
+	void Write_To_Python(int evalPeriod) const;
 
 };
 

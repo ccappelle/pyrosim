@@ -1,39 +1,42 @@
 #ifndef _ENVIRONMENT_H
 #define _ENVIRONMENT_H
 
+#include <string>
 #include <ode/ode.h>
-#include "joint.h"
+
+#include "actuator/actuator.h"
 #include "object.h"
 #include "neuralNetwork.h"
 #include "datastruct.h"
 
 class ENVIRONMENT {
- 
+
 private:
 
 	int numberOfBodies;
 
-	int numberOfJoints;
-	int type; 
-	
-	OBJECT **objects;
+	int numberOfActuators;
 
-	JOINT **joints;
+//	int type; // why is it here?
 
-	NEURAL_NETWORK *neuralNetwork;
+	OBJECT ** objects;
+
+	ACTUATOR ** actuators;
+
+	NEURAL_NETWORK * neuralNetwork;
 
 public:
 	ENVIRONMENT(void);
 
 	~ENVIRONMENT(void);
 
-	void Actuate_Joints(void);
+	void Actuate_Actuators(void);
 
 	void Draw(int debug=0);
 
 	void Get_Object_Position(float *xyz, int bodyID);
 
-        void Poll_Sensors(int timeStep);
+	void Poll_Sensors(int timeStep);
 
     void Read_From_Python(dWorldID world, dSpaceID space, Data *data);
 
@@ -48,19 +51,17 @@ private:
 
 	void Add_Sensor_Neuron(int ID, int sensorID, int sensorValueIndex);
 
-    void Connect_Motor_Neuron_to_Joint( int jointID, NEURON *motorNeuron );
-
 	void Connect_Sensor_To_Sensor_Neuron( int sensorID , NEURON *sensorNeuron );
 
 	void Create_Bias_Neuron( void );
 
 	void Create_Function_Neuron(int evalPeriod);
-	
+
 	void Create_Hidden_Neuron( void );
 
 	void Create_IsSeen_Sensor(int evalPeriod);
 
-	void Create_Joint( dWorldID world, dSpaceID space, int index, int jointType);
+	void Create_Actuator(dWorldID world, dSpaceID space, int index, std::string actuatorTypeString);
 
 	void Create_Light_Sensor(int evalPeriod);
 

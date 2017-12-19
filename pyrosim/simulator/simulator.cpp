@@ -198,21 +198,21 @@ static void command (int cmd)
 
 void Simulate_For_One_Time_Step(void) {
 
-  dSpaceCollide (space,0,&nearCallback);
+	dSpaceCollide (space,0,&nearCallback);
 
-  environment->Poll_Sensors(timer);
-  environment->Update_Neural_Network(timer);
-  environment->Actuate_Joints();
-  environment->Update_Forces(timer);
+	environment->Poll_Sensors(timer);
+	environment->Update_Neural_Network(timer);
+	environment->Actuate_Actuators();
+	environment->Update_Forces(timer);
 
-  dWorldStep (world, data->dt);
+	dWorldStep (world, data->dt);
 
-  dJointGroupEmpty(contactgroup);
+	dJointGroupEmpty(contactgroup);
 
-  timer++;
+	timer++;
 
-  if ( timer==data->evaluationTime )
-    Terminate();
+	if ( timer==data->evaluationTime )
+		Terminate();
 }
 
 static void simLoop (int pause)

@@ -1,13 +1,12 @@
 #ifndef _ACTUATOR_ROTARY_CPP
 #define _ACTUATOR_ROTARY_CPP
 
-#include "iostream"
+#include <drawstuff/drawstuff.h>
+#include <iostream>
+#include <cmath>
 
 #include "rotary.h"
-
-#include <drawstuff/drawstuff.h>
 #include "texturepath.h"
-#include <cmath>
 
 #ifdef dDOUBLE
 #define dsDrawLine dsDrawLineD
@@ -16,6 +15,8 @@
 #define dsDrawCylinder dsDrawCylinderD
 #define dsDrawCapsule dsDrawCapsuleD
 #endif
+
+extern int HINGE; // FIXME: remove once proprioceptive sensors are fixed
 
 ROTARY_ACTUATOR::ROTARY_ACTUATOR(void) :
 	firstObject(-1),
@@ -30,7 +31,7 @@ ROTARY_ACTUATOR::ROTARY_ACTUATOR(void) :
 	highStop(0),
 	speed(0.0),
 	strength(0.0),
-	joint(NULL)
+	joint(NULL),
 	positionControl(true),
 	proprioceptiveSensor(NULL),
 	motorNeuron(NULL),
@@ -66,7 +67,7 @@ void ROTARY_ACTUATOR::Actuate(void) {
 	dJointSetHingeParam(joint,dParamFMax, strength);
 }
 
-int ROTARY_ACTUATOR::Connect_Sensor_To_Sensor_Neuron(int sensorID , NEURON *sensorNeuron) {
+bool ROTARY_ACTUATOR::Connect_Sensor_To_Sensor_Neuron(int sensorID , NEURON *sensorNeuron) {
 
 	if ( proprioceptiveSensor )
 		if ( proprioceptiveSensor->Get_ID() == sensorID ) {
@@ -103,12 +104,14 @@ void ROTARY_ACTUATOR::Create_In_Simulator(dWorldID world, OBJECT** allObjects, i
 	}
 }
 
-void ROTARY_ACTUATOR::Create_Proprioceptive_Sensor(int myID, int evalPeriod) {
+bool ROTARY_ACTUATOR::Create_Proprioceptive_Sensor(int sensorID, int evalPeriod) {
 
-	proprioceptiveSensor = new PROPRIOCEPTIVE_SENSOR(myID, evalPeriod); // FIXME: where's the corresponding delete?
+	proprioceptiveSensor = new PROPRIOCEPTIVE_SENSOR(sensorID, evalPeriod); // FIXME: where's the corresponding delete?
+
+	return true;
 }
 
-void ROTARY_ACTUATOR::Draw(void) {
+void ROTARY_ACTUATOR::Draw(void) const {
 
 	if( lowStop == highStop && positionControl == true )
 		return;
@@ -137,7 +140,7 @@ void ROTARY_ACTUATOR::Poll_Sensors(int t) {
 
 	if ( proprioceptiveSensor )
 
-		proprioceptiveSensor->Poll(joint, type, t);
+		proprioceptiveSensor->Poll(joint, HINGE, t); // FIXME: change this once the sensors are fixed
 }
 
 void ROTARY_ACTUATOR::Read_From_Python(void) {
@@ -166,7 +169,7 @@ void ROTARY_ACTUATOR::Update_Sensor_Neurons(int t) {
 		proprioceptiveSensor->Update_Sensor_Neurons(t);
 }
 
-void ROTARY_ACTUATOR::Write_To_Python(int evalPeriod) {
+void ROTARY_ACTUATOR::Write_To_Python(int evalPeriod) const {
 
 	if ( proprioceptiveSensor )
 
