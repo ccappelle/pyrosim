@@ -51,7 +51,7 @@ sim.start()
 results = sim.wait_to_finish()
 
 # we can access the results matrix directly
-print(results + '\n')
+print(str(results) + '\n')
 
 # or use built in commands to get a specific sensor and svi
 # value for every time step
