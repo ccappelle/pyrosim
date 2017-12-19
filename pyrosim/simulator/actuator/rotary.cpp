@@ -34,7 +34,6 @@ ROTARY_ACTUATOR::ROTARY_ACTUATOR(void) :
 	joint(NULL),
 	positionControl(true),
 	proprioceptiveSensor(NULL),
-	motorNeuron(NULL),
 	first(NULL),
 	second(NULL) {}
 

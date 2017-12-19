@@ -28,8 +28,6 @@ private:
 
 	PROPRIOCEPTIVE_SENSOR *proprioceptiveSensor;
 
-	NEURON *motorNeuron;
-
 	OBJECT *first;
 	OBJECT *second;
 

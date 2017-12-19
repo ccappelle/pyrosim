@@ -7,10 +7,13 @@
 class ACTUATOR {
 
 protected:
+	/********* WARNING: DO NOT REDECLARE OR REINITIALIZE THOSE VARIABLES IN DERIVATIVE CLASSES *********/
 	int ID;
 	NEURON* motorNeuron;
 
 public:
+	ACTUATOR(void) : ID(-1), motorNeuron(NULL) {};
+
 	virtual void Read_From_Python(void) = 0;
 	virtual void Write_To_Python(int evalPeriod) const = 0;
 
