@@ -15,7 +15,7 @@ public:
 	ACTUATOR(void) : ID(-1), motorNeuron(NULL) {};
 
 	virtual void Read_From_Python(void) = 0;
-	virtual void Write_To_Python(int evalPeriod) const = 0;
+	virtual void Write_To_Python(int evalPeriod) const {};
 
 	virtual void Create_In_Simulator(dWorldID world, OBJECT** allObjects, int numObjects) = 0;
 	virtual void Actuate(void) = 0;
@@ -33,7 +33,7 @@ public:
 			return false;
 	};
 
-	virtual void Poll_Sensors(int t) {}; // what's t?
+	virtual void Poll_Sensors(int currentTimestep) {};
 	virtual void Update_Sensor_Neurons(int t) {};
 	virtual bool Create_Proprioceptive_Sensor(int sensorID, int evalPeriod) {return false;};
 };

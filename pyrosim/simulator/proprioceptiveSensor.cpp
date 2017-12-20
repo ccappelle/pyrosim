@@ -9,7 +9,6 @@
 
 extern int HINGE;
 extern int SLIDER;
-extern int THRUSTER;
 
 PROPRIOCEPTIVE_SENSOR::PROPRIOCEPTIVE_SENSOR(int myID, int evalPeriod) {
 

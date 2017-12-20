@@ -6,7 +6,6 @@
 #include <cmath>
 
 #include "rotary.h"
-#include "texturepath.h"
 
 #ifdef dDOUBLE
 #define dsDrawLine dsDrawLineD
