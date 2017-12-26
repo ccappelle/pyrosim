@@ -17,10 +17,11 @@ private:
 
 	double lastDesired;
 
-	OBJECT *first;
+	OBJECT * first;
 
 public:
-	THRUSTER(void) : lastDesired(0.0) {};
+	THRUSTER(void) : lastDesired(0.0),
+	                 first(NULL) {};
 
 	void Actuate(void);
 
