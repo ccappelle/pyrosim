@@ -18,13 +18,14 @@ typedef std::map<std::string, ACTUATOR * (*) ()> StringToActuatorMapType;
 #include "actuator/rotary.h"
 #include "actuator/linear.h"
 #include "actuator/thruster.h"
+#include "actuator/adhesive.h"
 
 StringToActuatorMapType stringToActuatorMap = {
 	{"HingeJoint", &createActuatorInstance<ROTARY_ACTUATOR>},
 	{"SliderJoint", &createActuatorInstance<LINEAR_ACTUATOR>},
-	{"Thruster", &createActuatorInstance<THRUSTER>}
+	{"Thruster", &createActuatorInstance<THRUSTER>},
+	{"AdhesiveJoint", &createActuatorInstance<ADHESIVE>}
 };
-// TBA: "Thruster"
 
 //// /ACTUATOR_RELEVANT
 
