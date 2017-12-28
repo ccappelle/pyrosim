@@ -90,59 +90,63 @@ void Handle_Ray_Sensors(dGeomID o1, dGeomID o2) {
 
 static void nearCallback (void *callbackData, dGeomID o1, dGeomID o2)
 {
-  int i,n;
+	int i, n;
 
-  Handle_Ray_Sensors(o1,o2);
-    // Cancel collisions between distance sensors and other objects.
-  if ( (dGeomGetClass(o1) == dRayClass) || (dGeomGetClass(o2) == dRayClass) ) return;
+	Handle_Ray_Sensors(o1, o2);
+	// Cancel collisions between distance sensors and other objects.
+	if ( (dGeomGetClass(o1) == dRayClass) || (dGeomGetClass(o2) == dRayClass) ) return;
 
+	OBJECT *d1 = (OBJECT *)dGeomGetData(o1);
+	OBJECT *d2 = (OBJECT *)dGeomGetData(o2);
 
-  OBJECT *d1 = (OBJECT *)dGeomGetData(o1);
+	if ( d1 && d2 ){
+		if (dAreConnected (d1->Get_Body(),d2->Get_Body())) return; //no collision between joint connected bodies
+		int d1Group = d1->Get_Group();
+		int d2Group = d2->Get_Group();
+		if(!data->collisionMatrix[d1Group][d2Group]) return; //no collision between groups where matrix[i][j]=0
+	}
 
-  OBJECT *d2 = (OBJECT *)dGeomGetData(o2);
-  // if (d1 && d2)
-  //   return;
-  if ( d1 && d2 ){
-        if (dAreConnected (d1->Get_Body(),d2->Get_Body())) return; //no collision between joint connected bodies
-        int d1Group = d1->Get_Group();
-        int d2Group = d2->Get_Group();
-        if(!data->collisionMatrix[d1Group][d2Group]) return; //no collision between groups where matrix[i][j]=0
-    }
-
-    // std::cerr << "Collision Occurs" << std::endl;
-    if ( d1 ){
-        d1->Touch_Sensor_Fires(timer);
-        // std::cerr << "one :" << d1->Get_ID() << std::endl;
-    }
-    if ( d2 ){
-            d2->Touch_Sensor_Fires(timer);
-        // std::cerr << "two :" << d2->Get_ID() << std::endl;
-    }
+	// std::cerr << "Collision Occurs" << std::endl;
+	if ( d1 ){
+		d1->Touch_Sensor_Fires(timer);
+		// std::cerr << "one :" << d1->Get_ID() << std::endl;
+	}
+	if ( d2 ){
+		d2->Touch_Sensor_Fires(timer);
+		// std::cerr << "two :" << d2->Get_ID() << std::endl;
+	}
 
 
-    const int N = 10;
-    dContact contact[N];
-    n = dCollide (o1,o2,N,&contact[0].geom,sizeof(dContact));
-    if (n > 0) {
-        for (i=0; i<n; i++) {
+	// If the bodies are supposed to stick together, form a rigid joint between them
+	if ( d1 && d2 && d1->Check_Adhesion(d2) ){
+		std::cout << "Checked! Body IDs are " << d1->Get_ID() << " and " << d2->Get_ID() << std::endl;
+		dJointID g = dJointCreateFixed(world, contactgroup);
+		dJointAttach(g, d1->Get_Body(), d2->Get_Body());
+		dJointSetFixed(g);
+	}
 
-            contact[i].surface.mode = dContactSlip1 | dContactSlip2 | dContactApprox1;
+	const int N = 10;
+	dContact contact[N];
+	n = dCollide (o1,o2,N,&contact[0].geom,sizeof(dContact));
+	if (n > 0) {
+		for (i=0; i<n; i++) {
 
-            contact[i].surface.mu = dInfinity;
-            contact[i].surface.slip1 = 0.01;
-            contact[i].surface.slip2 = 0.01;
+			contact[i].surface.mode = dContactSlip1 | dContactSlip2 | dContactApprox1;
 
-            dJointID c = dJointCreateContact (world,contactgroup,&contact[i]);
-            dJointAttach (c,
-                dGeomGetBody(contact[i].geom.g1),
-                dGeomGetBody(contact[i].geom.g2));
+			contact[i].surface.mu = dInfinity;
+			contact[i].surface.slip1 = 0.01;
+			contact[i].surface.slip2 = 0.01;
+
+			dJointID c = dJointCreateContact (world,contactgroup,&contact[i]);
+			dJointAttach (c,
+			              dGeomGetBody(contact[i].geom.g1),
+			              dGeomGetBody(contact[i].geom.g2));
         }
     }
 }
 
 
 static void captureFrame(int num) {
-
 
 	char s[200];
 
@@ -257,7 +261,7 @@ static void simLoop (int pause)
          {
             float dirVector[3];
             environment->Get_Object_Position(dirVector, data->trackBody);
-            
+
             for(int i=0;i<3;i++)
               dirVector[i] -= data->xyz[i];
 
@@ -281,7 +285,7 @@ static void simLoop (int pause)
 
     // }
     environment->Draw(data->debug);
-    
+
 	if((!pause) && data->capture && (timer % data->capture == 0))
 		captureFrame(timer / data->capture);
 }
@@ -336,7 +340,7 @@ void Run_Blind(void) {
 
 int main (int argc, char **argv)
 {
-    data->runBlind = false; 
+    data->runBlind = false;
 
     if ( (argc > 1) && (strcmp(argv[1],"-blind")==0) )
         data->runBlind = true;

@@ -9,20 +9,12 @@ class ADHESIVE : public ACTUATOR {
 private:
 	int	firstObject;
 
-//	double	x;
-//	double	y;
-//	double	z;
-//	double  lowStop;
-//	double  highStop;
-
-//	double lastDesired;
-
 	OBJECT *first;
 
-	int adhesionKind; // ignored for now
+	int adhesionKind;
 
 public:
-	ADHESIVE(void) : first(NULL) {};
+	ADHESIVE(void) : first(NULL), adhesionKind(0) {};
 
 	void Actuate(void);
 

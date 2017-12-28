@@ -11,6 +11,7 @@
 #include <map>
 #include <utility>
 #include <array>
+#include <set>
 
 class NEURON;
 
@@ -22,24 +23,25 @@ private:
 
 	int	myShape;
 
-        dBodyID body;
+	dBodyID body;
 
-        dGeomID geom;
+	dGeomID geom;
 
-	double x,y,z;
+	double x, y, z;
 
 	double mass;
-	
-	double r1,r2,r3;
 
-	double length,width,height;
-	
+	double r1, r2, r3;
+
+	double length, width, height;
+
 	double radius;
 
-	double dim1,dim2,dim3;
+	double dim1, dim2, dim3;
+
 	int collisionGroup;
 
-	double r,g,b;
+	double r, g, b;
 
 	LIGHT_SENSOR *lightSensor;
 	POSITION_SENSOR *positionSensor;
@@ -50,11 +52,22 @@ private:
 
 	int	containsLightSource;
 
-	std::map< int, std::array<float,3> > forces; 
-public:
-	OBJECT();
+	std::map< int, std::array<float,3> > forces;
 
-	~OBJECT(void);
+	std::set< int > adhesionTypes;
+
+public:
+	OBJECT(void) :
+		ID(0),
+		raySensor(NULL),
+		lightSensor(NULL),
+		positionSensor(NULL),
+		touchSensor(NULL),
+		vestibularSensor(NULL),
+		isSeenSensor(NULL),
+		containsLightSource(false) {};
+
+	~OBJECT(void) {};
 
 	void Add_External_Force(float x, float y, float z, int timeStep);
 
@@ -76,26 +89,40 @@ public:
 
     void Create_Vestibular_Sensor(int myID, int evalPeriod);
 
+	void Set_Adhesion(int adhesionKind);
+	//! Adds the object to an adhesion group
+	/*!
+	  An adhesion group of 0 means that the body will stick to anything;
+	  adhesion groups with number greater than 0 ensure that only the objects
+	  with matching groups will adhese to the object.
+	*/
+
+	void Unset_Adhesion(int adhesionKind);
+	//! Removes the object from an adhesion group
+
+	bool Check_Adhesion(OBJECT* other);
+	//! True if this object should adhese to the other
+
 	void Draw(void);
 	void Draw_Ray_Sensor(double x, double y, double z, int t);
 
-	double Get_Blue_Component(void);
-	dBodyID Get_Body(void);
-	double Get_Green_Component(void);
+	dBodyID Get_Body(void) {return body;};
 
-    int Get_Group(void);
-    int Get_ID(void);
-    
-	double Get_Length(void);
-	double Get_Radius(void);
+	int Get_Group(void) {return collisionGroup;};
+	int Get_ID(void) {return ID;};
 
-	double Get_Red_Component(void);
+	double Get_Length(void) {return length;};
+	double Get_Radius(void) {return radius;};
+
+	double Get_Red_Component(void) {return r;};
+	double Get_Green_Component(void) {return g;};
+	double Get_Blue_Component(void) {return b;};
 
     void Poll_Sensors(int numObjects, OBJECT **objects, int t);
 
     void Read_In_External_Force(void);
 	void Read_From_Python(dWorldID world, dSpaceID space, int shape);
-	void Set_Ray_Sensor(double distance,OBJECT *objectThatWasHit, int t);
+	void Set_Ray_Sensor(double distance, OBJECT *objectThatWasHit, int t);
 
 	void Touch_Sensor_Fires(int t);
 

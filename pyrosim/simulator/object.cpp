@@ -1,12 +1,14 @@
 #ifndef _OBJECT_CPP
 #define _OBJECT_CPP
 
+#include <iostream>
+#include <drawstuff/drawstuff.h>
+#include <cstdlib>
+#include <algorithm>
+
 #include "constants.h"
 #include "object.h"
-#include "iostream"
-#include <drawstuff/drawstuff.h>
 #include "texturepath.h"
-
 
 #ifdef dDOUBLE
 #define dsDrawLine dsDrawLineD
@@ -16,31 +18,15 @@
 #define dsDrawCapsule dsDrawCapsuleD
 #endif
 
-
-OBJECT::OBJECT(void) {
-
-	ID = 0;
-
-	raySensor = NULL;
-	lightSensor = NULL;
-	positionSensor = NULL;
-	touchSensor = NULL;
-	vestibularSensor = NULL;
-    isSeenSensor = NULL;
-	containsLightSource = false; 
-}
-
-OBJECT::~OBJECT(void) {
-
-}
-
 void OBJECT::Add_External_Force(float x, float y, float z, int timeStep){
+
     forces[timeStep][0] = x;
     forces[timeStep][1] = y;
     forces[timeStep][2] = z;
 }
 
 void OBJECT::Read_In_External_Force(void){
+
     int xPos,yPos,zPos,time;
     std::cin >> x;
     std::cin >> y;
@@ -48,7 +34,9 @@ void OBJECT::Read_In_External_Force(void){
     std::cin >> time;
     Add_External_Force(x,y,z,time);
 }
+
 void OBJECT::Apply_Stored_Forces(int timeStep){
+
     if (forces.find(timeStep)!= forces.end()){
         dBodyAddForce(body, forces[timeStep][0],forces[timeStep][1], forces[timeStep][2]);
     }
@@ -118,6 +106,43 @@ void OBJECT::Create_Vestibular_Sensor(int myID, int evalPeriod) {
     vestibularSensor = new VESTIBULAR_SENSOR(myID,evalPeriod);
 }
 
+void OBJECT::Set_Adhesion(int adhesionKind) {
+	adhesionTypes.insert(adhesionKind);
+}
+
+void OBJECT::Unset_Adhesion(int adhesionKind) {
+
+	if (adhesionTypes.erase(adhesionKind) < 1) {
+		std::cerr << "Object " << this << " does not have adhesion of type " << adhesionKind << ", exiting" << std::endl;
+		exit(1);
+	}
+}
+
+bool OBJECT::Check_Adhesion(OBJECT* other) {
+
+	// If any one of the objects is a member of zeroth adhesion group, then the objects should stick
+	if (adhesionTypes.find(0) != adhesionTypes.end() ||
+	    other->adhesionTypes.find(0) != other->adhesionTypes.end())
+		return true;
+
+	// Otherwise, check if the sets of adhesion groups intersect
+	std::set<int>::iterator iThis = adhesionTypes.begin();
+	std::set<int>::iterator iOther = other->adhesionTypes.begin();
+	while (iThis != adhesionTypes.end() && iOther != other->adhesionTypes.end()) {
+		if (*iThis < *iOther) {
+			++iThis;
+			continue;
+		}
+		if (*iOther < *iThis) {
+			++iOther;
+			continue;
+		}
+		return true;
+	}
+
+	return false;
+}
+
 void OBJECT::Draw(void) {
 
     dsSetColor(r,g,b);
@@ -138,41 +163,13 @@ void OBJECT::Draw(void) {
 }
 
 void OBJECT::Draw_Ray_Sensor(double x, double y, double z, int t) {
+
 	if ( raySensor )
 		raySensor->Draw(x,y,z,t);
 }
 
-double OBJECT::Get_Blue_Component(void) {
-    return b;
-}
-
-dBodyID OBJECT::Get_Body(void) {
-	return body;
-}
-
-int OBJECT::Get_ID(void){
-    return ID;
-}
-double OBJECT::Get_Green_Component(void) {
-    return g;
-}
-
-int OBJECT::Get_Group(void){
-    return collisionGroup;
-}
-double OBJECT::Get_Length(void) {
-	return length;
-}
-
-double OBJECT::Get_Radius(void) {
-	return radius;
-}
-
-double OBJECT::Get_Red_Component(void) {
-	return r;
-}
-
 void OBJECT::Poll_Sensors(int numObjects, OBJECT **objects, int t) {
+
 	if ( lightSensor ) {
 		OBJECT *closestLightSource = Find_Closest_Light_Source(numObjects,objects);
 		lightSensor->Poll(body,closestLightSource->Get_Body(),t);
@@ -197,14 +194,14 @@ void OBJECT::Read_From_Python(dWorldID world, dSpaceID space, int shape) {
     std::cin >> r1;
     std::cin >> r2;
     std::cin >> r3;
-	
+
 	if ( myShape == BOX ) {
 		std::cin >> length;
 		std::cin >> width;
 		std::cin >> height;
 	}
 	else if (myShape == CYLINDER or myShape == CAPSULE) { //cylinder specific
-		std::cin >> length; 
+		std::cin >> length;
         std::cin >> radius;
 	}
 	else { //sphere specific
@@ -305,15 +302,15 @@ void OBJECT::CreateBody(dWorldID world, dSpaceID space){
     }
     else if(myShape == CAPSULE){
         dMassSetCapsuleTotal(&m,mass,3,radius,length);
-        geom = dCreateCapsule(space,radius,length);       
+        geom = dCreateCapsule(space,radius,length);
     }
     else if(myShape == CYLINDER){
         dMassSetCylinderTotal(&m,mass,3,radius,length);
-        geom = dCreateCylinder(space,radius,length);       
-    }    
+        geom = dCreateCylinder(space,radius,length);
+    }
     else if(myShape == SPHERE){
         dMassSetSphereTotal(&m,mass,radius);
-        geom = dCreateSphere(space,radius);         
+        geom = dCreateSphere(space,radius);
     }
     dMassRotate(&m, R);
     dBodySetMass (body,&m);
@@ -325,6 +322,7 @@ void OBJECT::CreateBody(dWorldID world, dSpaceID space){
 }
 
 double OBJECT::Distance_To(OBJECT *otherObject) {
+
 	const dReal *myPos = dBodyGetPosition( body );
 	const dReal *hisPos = dBodyGetPosition( otherObject->Get_Body() );
 
@@ -354,4 +352,4 @@ OBJECT* OBJECT::Find_Closest_Light_Source(int numObjects, OBJECT **objects) {
 	return objects[closestLightSource];
 }
 
-#endif
+#endif // _OBJECT_CPP
