@@ -120,7 +120,7 @@ static void nearCallback (void *callbackData, dGeomID o1, dGeomID o2)
 	// If the bodies are supposed to stick together, form a rigid joint between them
 	if ( d1 && d2 && d1->Check_Adhesion(d2) ){
 		std::cout << "Checked! Body IDs are " << d1->Get_ID() << " and " << d2->Get_ID() << std::endl;
-		dJointID g = dJointCreateFixed(world, contactgroup);
+		dJointID g = dJointCreateFixed(world, 0);
 		dJointAttach(g, d1->Get_Body(), d2->Get_Body());
 		dJointSetFixed(g);
 	}
