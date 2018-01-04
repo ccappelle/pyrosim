@@ -4,7 +4,7 @@
 #include <iostream>
 #include <drawstuff/drawstuff.h>
 #include <cstdlib>
-#include <algorithm>
+#include <vector>
 
 #include "constants.h"
 #include "object.h"
@@ -107,40 +107,75 @@ void OBJECT::Create_Vestibular_Sensor(int myID, int evalPeriod) {
 }
 
 void OBJECT::Set_Adhesion(int adhesionKind) {
-	adhesionTypes.insert(adhesionKind);
+
+	adhesionTypesExhibiting.insert(adhesionKind);
+
+	// If there are already some joints that rely on this adhesion group, add one duplicate entry to each of their lists of adhesion kinds
+	// That way they won't be destroyed when the previous JOINT of the same kind sends Unset_Adhesion()
+	if (adhesionTypesExhibiting.count(adhesionKind) > 1) {
+		for (std::map<dJointID,std::multiset<int>>::iterator jointRecordIt=adhesiveJointsToTypes.begin(); jointRecordIt!=adhesiveJointsToTypes.end(); jointRecordIt++) {
+			if (jointRecordIt->second.find(adhesionKind) != jointRecordIt->second.end())
+				jointRecordIt->second.insert(adhesionKind);
+		}
+	}
 }
 
 void OBJECT::Unset_Adhesion(int adhesionKind) {
 
-	if (adhesionTypes.erase(adhesionKind) < 1) {
+	// Remove the adhesion kind from those exhibited by this object
+	std::multiset<int>::iterator kpos = adhesionTypesExhibiting.find(adhesionKind);
+	if (kpos!=adhesionTypesExhibiting.end())
+		adhesionTypesExhibiting.erase(kpos);
+	else {
 		std::cerr << "Object " << this << " does not have adhesion of type " << adhesionKind << ", exiting" << std::endl;
 		exit(1);
 	}
-}
 
-bool OBJECT::Check_Adhesion(OBJECT* other) {
+	// Find out which joints are not supported by any kinds of adhesion anymore
+	std::vector<dJointID> unstuckJoints;
 
-	// If any one of the objects is a member of zeroth adhesion group, then the objects should stick
-	if (adhesionTypes.find(0) != adhesionTypes.end() ||
-	    other->adhesionTypes.find(0) != other->adhesionTypes.end())
-		return true;
-
-	// Otherwise, check if the sets of adhesion groups intersect
-	std::set<int>::iterator iThis = adhesionTypes.begin();
-	std::set<int>::iterator iOther = other->adhesionTypes.begin();
-	while (iThis != adhesionTypes.end() && iOther != other->adhesionTypes.end()) {
-		if (*iThis < *iOther) {
-			++iThis;
-			continue;
-		}
-		if (*iOther < *iThis) {
-			++iOther;
-			continue;
-		}
-		return true;
+	for (std::map<dJointID,std::multiset<int>>::iterator jointRecordIt=adhesiveJointsToTypes.begin(); jointRecordIt!=adhesiveJointsToTypes.end(); jointRecordIt++) {
+		kpos = jointRecordIt->second.find(adhesionKind);
+		if (kpos!=jointRecordIt->second.end())
+			jointRecordIt->second.erase(kpos);
+		if (jointRecordIt->second.empty())
+			unstuckJoints.push_back(jointRecordIt->first);
 	}
 
-	return false;
+	// Destroy the obsolete joints and burn the records
+	for (std::vector<dJointID>::iterator itUnJoint=unstuckJoints.begin(); itUnJoint!=unstuckJoints.end(); itUnJoint++) {
+		dJointDestroy(*itUnJoint);
+		adhesiveJointsToTypes.erase(*itUnJoint);
+	}
+}
+
+void OBJECT::Process_Adhesive_Touch(dWorldID world, OBJECT* other) {
+
+	// Find all adhesion groups to which *other is susceptible and which *this exhibits, keeping in mind that there may be some duplicates among the latter.
+	std::multiset<int> ats; // adhesion types set
+
+	std::set<int>::iterator susIt = other->adhesionTypesSusceptible.begin();
+	std::multiset<int>::iterator exhIt = adhesionTypesExhibiting.begin();
+	while (susIt!=other->adhesionTypesSusceptible.end() && exhIt!=adhesionTypesExhibiting.end()) {
+		if(*susIt < *exhIt)
+			susIt++;
+		else if(*susIt > *exhIt)
+			exhIt++;
+		else {
+			ats.insert(*exhIt);
+			exhIt++;
+		}
+	}
+
+	// If there are any valid adhesion groups, add a joint and make a record about why it was added
+	if(!ats.empty()) {
+
+		dJointID j = dJointCreateFixed(world, 0);
+		dJointAttach(j, Get_Body(), other->Get_Body());
+		dJointSetFixed(j);
+
+		adhesiveJointsToTypes[j] = ats;
+	}
 }
 
 void OBJECT::Draw(void) {

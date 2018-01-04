@@ -8,21 +8,39 @@
 
 void ADHESIVE::Actuate(void) {
 
+	// If no motor neuron is connected, do nothing
+	if ( motorNeuron == NULL )
+		return;
+
 	// Update the adhesion groups according to the output of the motor neuron
-	// FIXME
+	double neuVal = motorNeuron->Get_Value();
+
+//	std::cerr << neuVal << std::endl;
+
+	if ( enabledNow && neuVal < 0.5 ) {
+
+//		std::cerr << "Unsetting adhesion\n";
+		first->Unset_Adhesion(adhesionKind);
+		enabledNow = false;
+	}
+
+	if ( !enabledNow && neuVal >= 0.5 ) {
+
+//		std::cerr << "Setting adhesion\n";
+		first->Set_Adhesion(adhesionKind);
+		enabledNow = true;
+	}
 }
 
 void ADHESIVE::Create_In_Simulator(dWorldID world, OBJECT ** allObjects, int numObjects) {
 
 	if ( firstObject >= 0 )
 		first = allObjects[firstObject];
-
-	first->Set_Adhesion(adhesionKind);
 }
 
 void ADHESIVE::Draw() const {
 
-	// FIXME: artistic block here
+	// FIXME: work over my artistic block here
 }
 
 void ADHESIVE::Read_From_Python(void) {

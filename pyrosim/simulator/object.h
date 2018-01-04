@@ -54,7 +54,9 @@ private:
 
 	std::map< int, std::array<float,3> > forces;
 
-	std::set< int > adhesionTypes;
+	std::set< int > adhesionTypesSusceptible;
+	std::multiset< int > adhesionTypesExhibiting;
+	std::map< dJointID, std::multiset<int> > adhesiveJointsToTypes;
 
 public:
 	OBJECT(void) :
@@ -65,7 +67,10 @@ public:
 		touchSensor(NULL),
 		vestibularSensor(NULL),
 		isSeenSensor(NULL),
-		containsLightSource(false) {};
+		containsLightSource(false) {
+
+		adhesionTypesSusceptible.insert(0);
+	};
 
 	~OBJECT(void) {};
 
@@ -90,18 +95,21 @@ public:
     void Create_Vestibular_Sensor(int myID, int evalPeriod);
 
 	void Set_Adhesion(int adhesionKind);
-	//! Adds the object to an adhesion group
+	//! Adds an adhesion group to the object
 	/*!
 	  An adhesion group of 0 means that the body will stick to anything;
 	  adhesion groups with number greater than 0 ensure that only the objects
 	  with matching groups will adhese to the object.
+	  Adhesion groups can be assigned to objects multiple times; in this case
+	  Unset_Adhesion() must be called multiple times before the objects are
+	  destroyed.
 	*/
 
 	void Unset_Adhesion(int adhesionKind);
 	//! Removes the object from an adhesion group
 
-	bool Check_Adhesion(OBJECT* other);
-	//! True if this object should adhese to the other
+	void Process_Adhesive_Touch(dWorldID world, OBJECT* other);
+	//! Connects the approapriate objects when they touch in nearCallback()
 
 	void Draw(void);
 	void Draw_Ray_Sensor(double x, double y, double z, int t);

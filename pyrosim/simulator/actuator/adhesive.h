@@ -13,8 +13,10 @@ private:
 
 	int adhesionKind;
 
+	bool enabledNow;
+
 public:
-	ADHESIVE(void) : first(NULL), adhesionKind(0) {};
+	ADHESIVE(void) : first(NULL), adhesionKind(0), enabledNow(false) {};
 
 	void Actuate(void);
 

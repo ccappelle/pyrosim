@@ -4,7 +4,7 @@
 #include <ode/ode.h>
 #include <drawstuff/drawstuff.h>
 
-// glut 
+// glut
 #ifdef __APPLE__
 #include <GLUT/glut.h>
 #else
@@ -104,6 +104,9 @@ static void nearCallback (void *callbackData, dGeomID o1, dGeomID o2)
 		int d1Group = d1->Get_Group();
 		int d2Group = d2->Get_Group();
 		if(!data->collisionMatrix[d1Group][d2Group]) return; //no collision between groups where matrix[i][j]=0
+
+		d1->Process_Adhesive_Touch(world, d2);
+		d2->Process_Adhesive_Touch(world, d1);
 	}
 
 	// std::cerr << "Collision Occurs" << std::endl;
@@ -114,15 +117,6 @@ static void nearCallback (void *callbackData, dGeomID o1, dGeomID o2)
 	if ( d2 ){
 		d2->Touch_Sensor_Fires(timer);
 		// std::cerr << "two :" << d2->Get_ID() << std::endl;
-	}
-
-
-	// If the bodies are supposed to stick together, form a rigid joint between them
-	if ( d1 && d2 && d1->Check_Adhesion(d2) ){
-		std::cout << "Checked! Body IDs are " << d1->Get_ID() << " and " << d2->Get_ID() << std::endl;
-		dJointID g = dJointCreateFixed(world, 0);
-		dJointAttach(g, d1->Get_Body(), d2->Get_Body());
-		dJointSetFixed(g);
 	}
 
 	const int N = 10;
@@ -237,11 +231,11 @@ static void simLoop (int pause)
     // }
     // accumulator to maintain frame rate
     // while(accumulator>baseDT)
-    //{   
+    //{
       // accumulator -= data->dt;
       if ( !pause ){
           Simulate_For_One_Time_Step();
- 
+
           if (data->followBody>=0)
           {
             environment->Get_Object_Position(updated_xyz, data->followBody);
@@ -298,7 +292,7 @@ void Initialize_ODE(void) {
     contactgroup = dJointGroupCreate (0);
     ground = dCreatePlane (space,0,0,1,0);
 
-    dGeomSetData(ground,NULL); 
+    dGeomSetData(ground,NULL);
 
     timer = 0;
 }
@@ -311,8 +305,8 @@ void Initialize_Draw_Stuff(void){
     fn.command = &command;
     fn.stop = 0;
     fn.path_to_textures = data->texturePathStr;
-    
 }
+
 void Initialize_Environment(void) {
     environment = new ENVIRONMENT();
     data->followBody = -1;
