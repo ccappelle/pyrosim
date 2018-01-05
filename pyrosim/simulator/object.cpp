@@ -226,9 +226,9 @@ void OBJECT::Read_From_Python(dWorldID world, dSpaceID space, int shape) {
 	std::cin >> x;
 	std::cin >> y;
 	std::cin >> z;
-    std::cin >> r1;
-    std::cin >> r2;
-    std::cin >> r3;
+	std::cin >> r1;
+	std::cin >> r2;
+	std::cin >> r3;
 
 	if ( myShape == BOX ) {
 		std::cin >> length;
@@ -237,16 +237,16 @@ void OBJECT::Read_From_Python(dWorldID world, dSpaceID space, int shape) {
 	}
 	else if (myShape == CYLINDER or myShape == CAPSULE) { //cylinder specific
 		std::cin >> length;
-        std::cin >> radius;
+		std::cin >> radius;
 	}
 	else { //sphere specific
 		std::cin >> radius;
 	}
-    std::cin >> mass;
-    std::cin >> collisionGroup;
-    std::cin >> r;
-    std::cin >> g;
-    std::cin >> b;
+	std::cin >> mass;
+	std::cin >> collisionGroup;
+	std::cin >> r;
+	std::cin >> g;
+	std::cin >> b;
 
     CreateBody(world, space);
 

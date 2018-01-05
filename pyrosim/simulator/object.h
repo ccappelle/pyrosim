@@ -69,7 +69,7 @@ public:
 		isSeenSensor(NULL),
 		containsLightSource(false) {
 
-		adhesionTypesSusceptible.insert(0);
+		Set_Adhesion_Susceptibility(0);
 	};
 
 	~OBJECT(void) {};
@@ -94,19 +94,26 @@ public:
 
     void Create_Vestibular_Sensor(int myID, int evalPeriod);
 
+	void Set_Adhesion_Susceptibility(int adhesionKind) {adhesionTypesSusceptible.insert(adhesionKind);};
+	//! Makes object susceptible to adhesion of adhesionKind
+
 	void Set_Adhesion(int adhesionKind);
-	//! Adds an adhesion group to the object
+	//! Makes object exhibit the adhesion of adhesionKind
 	/*!
-	  An adhesion group of 0 means that the body will stick to anything;
+	  Makes the body actively stick to every OBJECT with adhesionKind adhesion
+	  group. All OBJECTs are in the adhesion group 0;
 	  adhesion groups with number greater than 0 ensure that only the objects
 	  with matching groups will adhese to the object.
-	  Adhesion groups can be assigned to objects multiple times; in this case
-	  Unset_Adhesion() must be called multiple times before the objects are
-	  destroyed.
+	  Adhesion groups can be assigned to objects multiple times.
 	*/
 
 	void Unset_Adhesion(int adhesionKind);
-	//! Removes the object from an adhesion group
+	//! The object will cease to exhibit adhesion of adhesionKind
+	/*!
+	  If Set_Adhesion was called multiple times on some adhesionKind,
+	  Unset_Adhesion must be called the same amount of times before it takes
+	  effect.
+	*/
 
 	void Process_Adhesive_Touch(dWorldID world, OBJECT* other);
 	//! Connects the approapriate objects when they touch in nearCallback()

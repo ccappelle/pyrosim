@@ -84,157 +84,128 @@ void ENVIRONMENT::Get_Object_Position(float *xyz, int bodyID){
 
 void ENVIRONMENT::Read_From_Python(dWorldID world, dSpaceID space, Data *data)
 {
-       char incomingString[10000];
+	char incomingString[10000];
+	std::cin >> incomingString;
 
-        std::cin >> incomingString;
+	while ( strcmp(incomingString,"Done") != 0 ) {
+		std::cerr << incomingString << "\n";
 
-        while ( strcmp(incomingString,"Done") != 0 ) {
-                std::cerr << incomingString << "\n";
-                //Simulator options
-                if ( strcmp(incomingString,"EvaluationTime") == 0 )
-                        std::cin >> data->evaluationTime;
+		//Simulator options
+		if ( strcmp(incomingString,"EvaluationTime") == 0 )
+			std::cin >> data->evaluationTime;
+		else if ( strcmp(incomingString,"TimeInterval") == 0)
+			std::cin >> data->dt;
+		else if ( strcmp(incomingString,"Gravity") == 0)
+			std::cin >> data->gravity;
+		else if ( strcmp(incomingString,"TexturePath") == 0)
+			std::cin >> data->texturePathStr;
+		else if ( strcmp(incomingString,"Debug") == 0)
+			std::cin >> data->debug;
+		else if ( strcmp(incomingString,"ExternalForce") == 0){
+			int bodyID;
+			float x,y,z;
+			int time;
+			std::cin >> bodyID;
+			objects[bodyID]->Read_In_External_Force();
+		}
+		else if ( strcmp(incomingString,"WindowSize") == 0)
+		{
+			std::cin >> data->windowWidth;
+			std::cin >> data->windowHeight;
+		}
 
-                else if ( strcmp(incomingString,"TimeInterval") == 0)
-                        std::cin >> data->dt;
-                else if ( strcmp(incomingString,"Gravity") == 0)
-                        std::cin >> data->gravity;
-                else if ( strcmp(incomingString,"TexturePath") == 0)
-                        std::cin >> data->texturePathStr;
-                else if ( strcmp(incomingString,"Debug") == 0)
-                        std::cin >> data->debug;
-                else if ( strcmp(incomingString,"ExternalForce") == 0){
-                        int bodyID;
-                        float x,y,z;
-                        int time;
-                        std::cin >> bodyID;
-                        objects[bodyID]->Read_In_External_Force();
-                }
-                else if ( strcmp(incomingString,"WindowSize") == 0)
-                {
-                    std::cin >> data->windowWidth;
-                    std::cin >> data->windowHeight;
-                }
+		//Camera
+		else if ( strcmp(incomingString,"Camera") == 0)
+		{
+			std::cin >> data->xyz[0];
+			std::cin >> data->xyz[1];
+			std::cin >> data->xyz[2];
 
-                //Camera
-                else if ( strcmp(incomingString,"Camera") == 0)
-                {
-                        std::cin >> data->xyz[0];
-                        std::cin >> data->xyz[1];
-                        std::cin >> data->xyz[2];
+			std::cin >> data->hpr[0];
+			std::cin >> data->hpr[1];
+			std::cin >> data->hpr[2];
+		}
 
-                        std::cin >> data->hpr[0];
-                        std::cin >> data->hpr[1];
-                        std::cin >> data->hpr[2];
-                }
+		else if ( strcmp(incomingString,"FollowBody")==0)
+			std::cin >> data->followBody;
+		else if ( strcmp(incomingString,"TrackBody")==0)
+			std::cin >> data->trackBody;
+		else if ( strcmp(incomingString,"Capture")==0)
+			std::cin >> data->capture;
 
-                else if ( strcmp(incomingString,"FollowBody")==0)
-                        std::cin >> data->followBody;
-                else if ( strcmp(incomingString,"TrackBody")==0)
-                        std::cin >> data->trackBody;
+		//Collision data
+		else if ( strcmp(incomingString,"CollisionMatrix")==0){
+			std::cin >> data->numCollisionGroups;
+			for(int i=0;i<data->numCollisionGroups;i++){
+				for(int j=i;j<data->numCollisionGroups;j++){
+					data->collisionMatrix[i][j]=0;
+					data->collisionMatrix[j][i]=0;
+					std::cin >> data->collisionMatrix[i][j];
+					data->collisionMatrix[j][i] = data->collisionMatrix[i][j];
+				}
+			}
+		}
 
-                else if ( strcmp(incomingString,"Capture")==0)
-                {
-                		std::cin >> data->capture;
-                }
+		//Bodies
+		else if ( strcmp(incomingString, "Box") == 0 )
+			Create_Object(world, space, numberOfBodies, BOX);
+		else if ( strcmp(incomingString, "Cylinder") == 0 )
+			Create_Object(world, space, numberOfBodies, CYLINDER);
+		else if ( strcmp(incomingString, "Capsule") == 0)
+			Create_Object(world, space, numberOfBodies, CAPSULE);
+		else if ( strcmp(incomingString, "Sphere") == 0)
+			Create_Object(world, space, numberOfBodies, SPHERE);
 
-                //Collision data
-                else if ( strcmp(incomingString,"CollisionMatrix")==0){
-                        std::cin >> data->numCollisionGroups;
-                        for(int i=0;i<data->numCollisionGroups;i++){
-                          for(int j=i;j<data->numCollisionGroups;j++){
-                                data->collisionMatrix[i][j]=0;
-                                data->collisionMatrix[j][i]=0;
-                                std::cin >> data->collisionMatrix[i][j];
-                                data->collisionMatrix[j][i] = data->collisionMatrix[i][j];
-                         }
-                        }
-                }
-                //Bodies
-                else if ( strcmp(incomingString,"Box") == 0 )
+		//Body properties
+		else if ( strcmp(incomingString,"MakeObjectSusceptibleToAdhesionKind") == 0 )
+			Make_Object_Susceptible_To_Adhesion_Kind();
 
-                        Create_Object(world,space,numberOfBodies,BOX);
+		//Actuators
+		else if ( stringToActuatorMap.find(incomingString) != stringToActuatorMap.end() )
+			Create_Actuator(world, space, numberOfActuators, incomingString);
 
-                else if ( strcmp(incomingString,"Cylinder") == 0 )
+		//Sensors
+		else if ( strcmp(incomingString,"IsSeenSensor") == 0)
+			Create_IsSeen_Sensor(data->evaluationTime);
+		else if ( strcmp(incomingString,"PositionSensor") == 0 )
+			Create_Position_Sensor(data->evaluationTime);
+		else if ( strcmp(incomingString,"TouchSensor") == 0 )
+			Create_Touch_Sensor(data->evaluationTime);
+		else if ( strcmp(incomingString,"RaySensor") == 0 )
+			Create_Ray_Sensor(space,data->evaluationTime);
+		else if ( strcmp(incomingString,"ProprioceptiveSensor") == 0 )
+			Create_Proprioceptive_Sensor(data->evaluationTime);
+		else if ( strcmp(incomingString,"LightSensor") == 0 )
+			Create_Light_Sensor(data->evaluationTime);
+		else if ( strcmp(incomingString,"VestibularSensor") == 0 )
+			Create_Vestibular_Sensor(data->evaluationTime);
+		else if ( strcmp(incomingString,"LightSource") == 0 )
+			Create_Light_Source();
 
-                        Create_Object(world,space,numberOfBodies,CYLINDER);
+		//Neurons
+		else if ( strcmp(incomingString,"BiasNeuron") == 0 )
+			Create_Bias_Neuron();
+		else if ( strcmp(incomingString,"SensorNeuron") == 0 )
+			Create_Sensor_Neuron();
+		else if ( strcmp(incomingString,"HiddenNeuron") == 0 )
+			Create_Hidden_Neuron();
+		else if ( strcmp(incomingString,"MotorNeuron") == 0 )
+			Create_Motor_Neuron();
+		else if ( strcmp(incomingString,"FunctionNeuron") == 0 )
+			Create_Function_Neuron(data->evaluationTime);
 
-                else if ( strcmp(incomingString,"Capsule") == 0)
+		//Synapse
+		else if ( strcmp(incomingString,"Synapse") == 0 )
+			Create_Synapse();
 
-                        Create_Object(world,space,numberOfBodies,CAPSULE);
+		//If the string was not recognized, exit with error
+		else {
+			std::cerr << "Unrecognized command " << incomingString << " received, exiting\n";
+			exit(1);
+		}
 
-                else if ( strcmp(incomingString,"Sphere") == 0)
-
-                        Create_Object(world,space,numberOfBodies, SPHERE);
-
-                //Actuators
-                else if ( stringToActuatorMap.find(incomingString) != stringToActuatorMap.end() )
-                    Create_Actuator(world, space, numberOfActuators, incomingString);
-
-                //Sensors
-                else if ( strcmp(incomingString,"IsSeenSensor") == 0)
-                        Create_IsSeen_Sensor(data->evaluationTime);
-
-                else if ( strcmp(incomingString,"PositionSensor") == 0 )
-
-                        Create_Position_Sensor(data->evaluationTime);
-
-                else if ( strcmp(incomingString,"TouchSensor") == 0 )
-
-                        Create_Touch_Sensor(data->evaluationTime);
-
-                else if ( strcmp(incomingString,"RaySensor") == 0 )
-
-                        Create_Ray_Sensor(space,data->evaluationTime);
-
-                else if ( strcmp(incomingString,"ProprioceptiveSensor") == 0 )
-
-                        Create_Proprioceptive_Sensor(data->evaluationTime);
-
-                else if ( strcmp(incomingString,"LightSensor") == 0 )
-
-                        Create_Light_Sensor(data->evaluationTime);
-
-                else if ( strcmp(incomingString,"VestibularSensor") == 0 )
-
-                        Create_Vestibular_Sensor(data->evaluationTime);
-
-                else if ( strcmp(incomingString,"LightSource") == 0 )
-
-                        Create_Light_Source();
-
-                //Neurons
-                else if ( strcmp(incomingString,"BiasNeuron") == 0 )
-
-                        Create_Bias_Neuron();
-                else if ( strcmp(incomingString,"SensorNeuron") == 0 )
-
-                        Create_Sensor_Neuron();
-
-                else if ( strcmp(incomingString,"HiddenNeuron") == 0 )
-
-                        Create_Hidden_Neuron();
-
-                else if ( strcmp(incomingString,"MotorNeuron") == 0 )
-
-                        Create_Motor_Neuron();
-
-                else if ( strcmp(incomingString,"FunctionNeuron") == 0 )
-                        Create_Function_Neuron(data->evaluationTime);
-
-                //Synapse
-                else if ( strcmp(incomingString,"Synapse") == 0 )
-
-                        Create_Synapse();
-
-				//If the string was not recognized, exit with error
-                else {
-
-					std::cerr << "Unrecognized command " << incomingString << " received, exiting\n";
-                    exit(1);
-                }
-
-                std::cin >> incomingString;
-        }
+		std::cin >> incomingString;
+	}
 }
 
 void ENVIRONMENT::Poll_Sensors(int timeStep) {
@@ -411,14 +382,23 @@ void ENVIRONMENT::Create_Object(dWorldID world, dSpaceID space, int index, int s
 	numberOfBodies++;
 }
 
+void ENVIRONMENT::Make_Object_Susceptible_To_Adhesion_Kind(void) {
+
+	int objectIndex;
+	int adhesionKind;
+
+	std::cin >> objectIndex;
+	std::cin >> adhesionKind;
+
+	objects[objectIndex]->Set_Adhesion_Susceptibility(adhesionKind);
+}
+
 void ENVIRONMENT::Create_Ray_Sensor(dSpaceID space, int evalPeriod) {
 
     int objectIndex;
-
     int ID;
 
     std::cin >> ID;
-
     std::cin >> objectIndex;
 
     objects[objectIndex]->Create_Ray_Sensor(space,ID,evalPeriod);
@@ -432,17 +412,16 @@ void ENVIRONMENT::Create_IsSeen_Sensor(int evalPeriod){
 	std::cin >> ID;
 	std::cin >> objectIndex;
 	std::cerr << "Creating is seen " << ID << std::endl;
+
 	objects[objectIndex]->Create_IsSeen_Sensor(ID, evalPeriod);
 }
 
 void ENVIRONMENT::Create_Position_Sensor(int evalPeriod) {
 
     int objectIndex;
-
     int ID;
 
     std::cin >> ID;
-
     std::cin >> objectIndex;
 
     objects[objectIndex]->Create_Position_Sensor(ID, evalPeriod);
@@ -499,11 +478,11 @@ void ENVIRONMENT::Create_Sensor_Neuron(void) {
 
 void ENVIRONMENT::Create_Synapse(void) {
 
-        if ( neuralNetwork == NULL )
+	if ( neuralNetwork == NULL )
 
-                Create_Neural_Network();
+		Create_Neural_Network();
 
-        neuralNetwork->Add_Synapse();
+	neuralNetwork->Add_Synapse();
 }
 
 void ENVIRONMENT::Create_Touch_Sensor(int evalPeriod) {

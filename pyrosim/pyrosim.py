@@ -433,7 +433,7 @@ class Simulator(object):
 
         Returns
         -------
-        int     
+        int
                 The id tag of the sphere
         """
         assert radius >= 0, 'Radius of Sphere must be >= 0'
@@ -543,6 +543,36 @@ class Simulator(object):
                    r, g, b)
 
         return body_id
+
+    def send_adhesion_susceptibility(self, body_id, adhesion_kind):
+        """Mark a body as susceptible to adhesion of a certain kind
+
+        All bodies are susceptible to adhesion of zeroth kind. Mark some
+        bodies as susceptible to adhesion of a certain kind to make only
+        the adhesive actuators of matching and zeroth kind stick to them.
+
+        Parameters
+        ----------
+        body_id        : int
+                The body id of the body to be marked
+        adhesion_kind : int
+                Identifier of the adhesion kind
+
+        Returns
+        -------
+        bool
+            True if successful
+
+        """
+        assert body_id < self._num_bodies, 'Body with id ' + \
+            str(body_id) + ' has not been sent'
+
+        self._send('MakeObjectSusceptibleToAdhesionKind',
+                   body_id,
+                   adhesion_kind)
+
+        return True
+
 
 # --------Joints------------------------------
     def send_fixed_joint(self, first_body_id, second_body_id):

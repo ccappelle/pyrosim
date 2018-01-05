@@ -73,6 +73,8 @@ private:
 
 	void Create_Object(dWorldID world, dSpaceID space, int index, int objType);
 
+	void Make_Object_Susceptible_To_Adhesion_Kind(void);
+
 	void Create_Ray_Sensor(dSpaceID space, int evalPeriod);
 
 	void Create_Position_Sensor(int evalPeriod);

@@ -315,8 +315,8 @@ void Initialize_Environment(void) {
 
 
 void Read_From_Python(void) {
-    //environment->Read_From_Python(world,space, texturePathStr, &evaluationTime,&dt,&gravity,xyz,hpr,&debug,&followBody,&trackBody);
-  environment->Read_From_Python(world,space,data);
+	//environment->Read_From_Python(world,space, texturePathStr, &evaluationTime,&dt,&gravity,xyz,hpr,&debug,&followBody,&trackBody);
+	environment->Read_From_Python(world, space, data);
 }
 
 void Terminate(void) {
