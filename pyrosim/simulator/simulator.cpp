@@ -142,7 +142,20 @@ static void nearCallback (void *callbackData, dGeomID o1, dGeomID o2)
 
 static void captureFrame(int num) {
 
-	char s[200];
+    // FIXME: It appears to be a difference in pixel formats between MacOS and Linux
+    // (and I vaguely remember that having something to do with compositing).
+    // Figure out a way to autodetect the format and choose the right one for reading.
+    // Useful reading on glGet:
+    // https://www.khronos.org/opengl/wiki/GLAPI/glGet#Framebuffers
+
+    //GLint pf;
+    //glGetIntegerv(GL_PACK_ALIGNMENT, &pf);
+    //std::cerr << pf << " " << GL_RGB << std::endl;
+
+    const int depth = 4;
+    GLenum pixelFormat = GL_RGBA;
+
+	char s[10000];
 
 	//printf("capturing frame %04d\n",num);
 	sprintf (s,"frame/%04d.ppm",num);
@@ -150,12 +163,12 @@ static void captureFrame(int num) {
 	FILE *f = fopen (s,"wb");
 	fprintf (f,"P6\n%d %d\n255\n",data->windowWidth,data->windowHeight);
 
-	void *buf = malloc( data->windowWidth * data->windowHeight * 3 );
-	glReadPixels( 0, 0, data->windowWidth, data->windowHeight, GL_RGB, GL_UNSIGNED_BYTE, buf );
+	void *buf = malloc( data->windowWidth * data->windowHeight * depth );
+	glReadPixels( 0, 0, data->windowWidth, data->windowHeight, pixelFormat, GL_UNSIGNED_BYTE, buf );
 
 	for (int y=(data->windowHeight - 1); y>=0; y--) {
 		for (int x=0; x<data->windowWidth; x++) {
-			unsigned char *pixel = ((unsigned char *)buf)+((y*data->windowWidth+ x)*3);
+			unsigned char *pixel = ((unsigned char *)buf)+((y*data->windowWidth+ x)*depth);
 			unsigned char b[3];
 			b[0] = *pixel;
 			b[1] = *(pixel+1);
