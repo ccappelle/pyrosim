@@ -298,15 +298,12 @@ static void simLoop (int pause)
 
 void Initialize_ODE(void) {
 
-    dInitODE2(0);
-    world = dWorldCreate();
-    space = dHashSpaceCreate (0);
-    contactgroup = dJointGroupCreate (0);
-    ground = dCreatePlane (space,0,0,1,0);
+	dInitODE2(0);
+	world = dWorldCreate();
+	space = dHashSpaceCreate (0);
+	contactgroup = dJointGroupCreate (0);
 
-    dGeomSetData(ground,NULL);
-
-    timer = 0;
+	timer = 0;
 }
 
 void Initialize_Draw_Stuff(void){
@@ -354,6 +351,12 @@ int main (int argc, char **argv) {
 	Initialize_ODE();
 	Initialize_Environment();
 	Read_From_Python();
+
+	if ( !data->disableFloor ) {
+		ground = dCreatePlane (space,0,0,1,0);
+		dGeomSetData(ground,NULL);
+	}
+
 	dWorldSetGravity(world, 0, 0, data->gravity);
 
 	if ( data->runBlind )

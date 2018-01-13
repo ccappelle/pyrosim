@@ -97,6 +97,8 @@ void ENVIRONMENT::Read_From_Python(dWorldID world, dSpaceID space, Data *data)
 			std::cin >> data->dt;
 		else if ( strcmp(incomingString,"Gravity") == 0)
 			std::cin >> data->gravity;
+		else if ( strcmp(incomingString,"DisableFloor") == 0)
+			data->disableFloor = true;
 		else if ( strcmp(incomingString,"TexturePath") == 0)
 			std::cin >> data->texturePathStr;
 		else if ( strcmp(incomingString,"Debug") == 0)

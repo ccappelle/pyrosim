@@ -47,6 +47,9 @@ class Simulator(object):
     gravity     : float, optional
             The gravity in the system. Negative values implies normal downward 
             force of gravity. (default is -1.0)
+    disable_floor : bool, optional
+            Set to true to disable floor body & collisions. Floor texture will 
+            still be shown in graphical mode.
     window_size  : tuple or list of 2 ints, optional
             The initial window size for the visualization. Irrelevant if 
             blind=True. Default is (750, 500)
@@ -71,7 +74,7 @@ class Simulator(object):
 
     def __init__(self, play_blind=False, play_paused=False,
                  eval_time=evaluation_time, dt=dt,
-                 gravity=gravity,
+                 gravity=gravity, disable_floor=False,
                  window_size = (750,500),
                  xyz=xyz, hpr=hpr, use_textures=False,
                  debug=False, capture=0):
@@ -94,6 +97,7 @@ class Simulator(object):
         self.eval_time = eval_time
         self.dt = dt
         self.gravity = gravity
+        self.disable_floor = disable_floor
         self.debug = debug
         self.use_textures = use_textures
 
@@ -122,6 +126,10 @@ class Simulator(object):
         self._send('TimeInterval', self.dt)
         self._send('Gravity', self.gravity)
         self._send('WindowSize', *window_size)
+
+        if self.disable_floor:
+            self._send('DisableFloor')
+
         if (self.capture):
             self._send('Capture', 1)
         else:
