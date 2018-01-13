@@ -142,18 +142,18 @@ static void nearCallback (void *callbackData, dGeomID o1, dGeomID o2)
 
 static void captureFrame(int num) {
 
-    // FIXME: It appears to be a difference in pixel formats between MacOS and Linux
-    // (and I vaguely remember that having something to do with compositing).
-    // Figure out a way to autodetect the format and choose the right one for reading.
-    // Useful reading on glGet:
-    // https://www.khronos.org/opengl/wiki/GLAPI/glGet#Framebuffers
+	// FIXME: It appears to be a difference in pixel formats between MacOS and Linux
+	// (and I vaguely remember that having something to do with compositing).
+	// Figure out a way to autodetect the format and choose the right one for reading.
+	// Useful reading on glGet:
+	// https://www.khronos.org/opengl/wiki/GLAPI/glGet#Framebuffers
 
-    //GLint pf;
-    //glGetIntegerv(GL_PACK_ALIGNMENT, &pf);
-    //std::cerr << pf << " " << GL_RGB << std::endl;
+	//GLint pf;
+	//glGetIntegerv(GL_PACK_ALIGNMENT, &pf);
+	//std::cerr << pf << " " << GL_RGB << std::endl;
 
-    const int depth = 4;
-    GLenum pixelFormat = GL_RGBA;
+	const int depth = 4;
+	GLenum pixelFormat = GL_RGBA;
 
 	char s[10000];
 
@@ -178,7 +178,6 @@ static void captureFrame(int num) {
 	}
 	free(buf);
 	fclose(f);
-
 }
 
 
@@ -345,25 +344,26 @@ void Run_Blind(void) {
         Simulate_For_One_Time_Step();
 }
 
-int main (int argc, char **argv)
-{
-    data->runBlind = false;
+int main (int argc, char **argv) {
 
-    if ( (argc > 1) && (strcmp(argv[1],"-blind")==0) )
-        data->runBlind = true;
+	data->runBlind = false;
 
+	if ( (argc > 1) && (strcmp(argv[1],"-blind")==0) )
+		data->runBlind = true;
 
-    Initialize_ODE();
-    Initialize_Environment();
-    Read_From_Python();
-    dWorldSetGravity(world,0,0,data->gravity);
+	Initialize_ODE();
+	Initialize_Environment();
+	Read_From_Python();
+	dWorldSetGravity(world, 0, 0, data->gravity);
 
-    if ( data->runBlind )
-        Run_Blind();
-    else{
-      Initialize_Draw_Stuff();
+	if ( data->runBlind )
+		Run_Blind();
+	else{
 
-      dsSimulationLoop (argc,argv,data->windowWidth,data->windowHeight,&fn);
-  }
-  return 0;
+		Initialize_Draw_Stuff();
+
+		dsSimulationLoop (argc,argv,data->windowWidth,data->windowHeight,&fn);
+	}
+
+	return 0;
 }
