@@ -22,7 +22,7 @@ public:
 
 	void Create_In_Simulator(dWorldID world, OBJECT ** allObjects, int numObjects);
 
-	void Draw(void) const;
+	void Draw(void) const {}; // drawing is done by objects automatically
 
 	void Read_From_Python(void);
 };

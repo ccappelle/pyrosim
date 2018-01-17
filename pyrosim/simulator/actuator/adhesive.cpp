@@ -38,11 +38,6 @@ void ADHESIVE::Create_In_Simulator(dWorldID world, OBJECT ** allObjects, int num
 		first = allObjects[firstObject];
 }
 
-void ADHESIVE::Draw() const {
-
-	// FIXME: work over my artistic block here
-}
-
 void ADHESIVE::Read_From_Python(void) {
 
 	std::cin >> ID;

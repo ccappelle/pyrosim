@@ -42,6 +42,7 @@ private:
 	int collisionGroup;
 
 	double r, g, b;
+	double tr, tg, tb; // true values stored for situations when an object must change color temporarily
 
 	LIGHT_SENSOR *lightSensor;
 	POSITION_SENSOR *positionSensor;

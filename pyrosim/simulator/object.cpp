@@ -118,6 +118,10 @@ void OBJECT::Set_Adhesion(int adhesionKind) {
 				jointRecordIt->second.insert(adhesionKind);
 		}
 	}
+
+	// Turn blue as soon as the adhesion is enabled
+	// Color chosen in honor of the wonderful January 2018 Vermont weather
+	r = 0.; g = 0.; b = 1.;
 }
 
 void OBJECT::Unset_Adhesion(int adhesionKind) {
@@ -147,6 +151,9 @@ void OBJECT::Unset_Adhesion(int adhesionKind) {
 		dJointDestroy(*itUnJoint);
 		adhesiveJointsToTypes.erase(*itUnJoint);
 	}
+
+	// Restore the color to normal once the adhesion is disabled
+	r = tr; g = tg; b = tb;
 }
 
 void OBJECT::Process_Adhesive_Touch(dWorldID world, OBJECT* other) {
@@ -247,6 +254,8 @@ void OBJECT::Read_From_Python(dWorldID world, dSpaceID space, int shape) {
 	std::cin >> r;
 	std::cin >> g;
 	std::cin >> b;
+
+	tr = r; tg = g; tb = b;
 
     CreateBody(world, space);
 
