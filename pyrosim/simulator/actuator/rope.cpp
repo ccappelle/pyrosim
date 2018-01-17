@@ -23,7 +23,9 @@ void ROPE::Actuate(void) {
 
 	if(currentLength > relaxedLength) {
 
-		ftol = (springConstant * (currentLength-relaxedLength) / relaxedLength) / currentLength;
+		// std::cerr << "CL: " << currentLength << " PL: " << previousLength << " Dampening force: " << (dampeningCoefficient * (currentLength-previousLength) / relaxedLength) << std::endl;
+
+		ftol = ( springConstant * (currentLength-relaxedLength) / relaxedLength  + dampeningCoefficient * (currentLength-previousLength) / previousLength ) / currentLength;
 
 		fx = (pos2[0]-pos1[0])*ftol; fy = (pos2[1]-pos1[1])*ftol; fz = (pos2[2]-pos1[2])*ftol;
 
@@ -44,6 +46,7 @@ void ROPE::Create_In_Simulator(dWorldID world, OBJECT** allObjects, int numObjec
 		exit(EXIT_FAILURE);
 	}
 
+	currentLength = Get_Current_Length(); // this required addition to Update_Geometry() ensures that there is a sane value at currentLength when it is time to memorize it at previousLength
 	Update_Geometry();
 }
 
@@ -65,6 +68,7 @@ void ROPE::Read_From_Python(void) {
 	std::cin >> secondObject;
 	std::cin >> relaxedLength;
 	std::cin >> springConstant;
+	std::cin >> dampeningCoefficient;
 }
 
 /***** Private functions *****/
@@ -79,7 +83,8 @@ void ROPE::Update_Geometry(void) {
 		pos2[i] = body2pos[i];
 	}
 
-	currentLength = sqrt( (pos1[0]-pos2[0])*(pos1[0]-pos2[0]) + (pos1[1]-pos2[1])*(pos1[1]-pos2[1]) + (pos1[2]-pos2[2])*(pos1[2]-pos2[2]) );
+	previousLength = currentLength;
+	currentLength = Get_Current_Length();
 }
 
 #endif // _ACTUATOR_ROPE_CPP

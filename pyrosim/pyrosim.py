@@ -779,7 +779,7 @@ class Simulator(object):
         return joint_id
 
     def send_rope(self, first_body_id, second_body_id,
-                  length=1., spring_coefficient=1.):
+                  length=1., spring_coefficient=1., dampening_coefficient=10.):
         """Send an unactuated rope to the simulator
 
            Whenever the two bodies are further apart than the rope's
@@ -787,21 +787,29 @@ class Simulator(object):
            to its relative elongation. The rope is unbreakable, so there's
            no limit to the force it can exert.
 
+           Formula for the force:
+                F = k*(l-l0)/l0 - D*(l-l')/l' if l>l0 else 0
+           where k is the spring coefficient, D is the coefficient of
+           dampening, l0 is the relaxed length of the rope, l and l' are
+           distances between the centers of the bodies at the current and
+           previous time step, correspondingly.
+
 
         Parameters
         ----------
-        first_body_id      : int
+        first_body_id         : int
                 The body id of the first body the rope is connected to.
                 Must be a valid body id.
-        second_body_id     : int
+        second_body_id        : int
                 The body id of the first body the rope is connected to.
                 Must be a valid body id.
-        length             : float, optional
+        length                : float, optional
                 The length of the rope (default is 1.0).
-        spring_coefficient : float, optional
-                Coefficient of proportionality between the rope's
-                elongation and the force it exerts on the objects
-                (default is 1.0).
+        spring_coefficient    : float, optional
+                Spring coefficient (default is 1.0).
+        dampening_coefficient : float, optional
+                Coefficient of dampening (default is 10.0). Warning: very
+                strong dampening will make your simulation unstable!
 
         Returns
         -------
@@ -828,7 +836,8 @@ class Simulator(object):
                    rope_id,
                    first_body_id, second_body_id,
                    length,
-                   spring_coefficient)
+                   spring_coefficient,
+                   dampening_coefficient)
 
         return rope_id
 

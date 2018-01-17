@@ -29,7 +29,7 @@ fixed_joint_1 = sim.send_fixed_joint(cyl_1, cyl_2)
 fixed_joint_2 = sim.send_fixed_joint(cyl_3, box)
 
 rope = sim.send_rope(cyl_2, cyl_3,
-                     length=0.3, spring_coefficient=100.)
+                     length=0.3, spring_coefficient=100., dampening_coefficient=10.)
 
 sim.create_collision_matrix('all')
 
