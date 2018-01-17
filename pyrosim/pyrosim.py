@@ -778,6 +778,60 @@ class Simulator(object):
 
         return joint_id
 
+    def send_rope(self, first_body_id, second_body_id,
+                  length=1., spring_coefficient=1.):
+        """Send an unactuated rope to the simulator
+
+           Whenever the two bodies are further apart than the rope's
+           length, the rope will pull them together with force propotional
+           to its relative elongation. The rope is unbreakable, so there's
+           no limit to the force it can exert.
+
+
+        Parameters
+        ----------
+        first_body_id      : int
+                The body id of the first body the rope is connected to.
+                Must be a valid body id.
+        second_body_id     : int
+                The body id of the first body the rope is connected to.
+                Must be a valid body id.
+        length             : float, optional
+                The length of the rope (default is 1.0).
+        spring_coefficient : float, optional
+                Coefficient of proportionality between the rope's
+                elongation and the force it exerts on the objects
+                (default is 1.0).
+
+        Returns
+        -------
+        int
+                The id tag for the rope
+        """
+        assert first_body_id < self._num_bodies, 'Body with id ' + \
+            str(first_body_id) + ' has not been sent'
+        assert second_body_id < self._num_bodies, 'Body with id ' + \
+            str(second_body_id) + ' has not been sent'
+        assert length >= 0, ('Length of rope must be greater than or'
+                             ' equal to zero')
+        assert spring_coefficient >= 0, ('Spring coefficient of the '
+                                         'rope must be greater than '
+                                         'or equal to zero')
+        assert (first_body_id >= 0 or
+                second_body_id >= 0), ('Rope cannot connect the world'
+                                       ' to itself')
+
+        rope_id = self._num_joints
+        self._num_joints += 1
+
+        self._send('Rope',
+                   rope_id,
+                   first_body_id, second_body_id,
+                   length,
+                   spring_coefficient)
+
+        return rope_id
+
     def send_adhesive_joint(self, body_id, adhesion_kind=0):
         """Send an adhesive joint to the simulator.
 
