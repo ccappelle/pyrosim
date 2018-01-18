@@ -17,8 +17,6 @@ private:
 
 	int numberOfActuators;
 
-//	int type; // why is it here?
-
 	OBJECT ** objects;
 
 	ACTUATOR ** actuators;

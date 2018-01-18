@@ -56,7 +56,7 @@ bool ROTARY_ACTUATOR::Connect_Sensor_To_Sensor_Neuron(int sensorID , NEURON *sen
 	return false;
 }
 
-void ROTARY_ACTUATOR::Create_In_Simulator(dWorldID world, OBJECT** allObjects, int numObjects) {
+void ROTARY_ACTUATOR::Create_In_Simulator(dWorldID world, OBJECT** allObjects, int numObjects, ACTUATOR** allActuators, int numActuators) {
 
 	if ( firstObject >= 0 )
 		first = allObjects[firstObject];

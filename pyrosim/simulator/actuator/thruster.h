@@ -25,7 +25,7 @@ public:
 
 	void Actuate(void);
 
-	void Create_In_Simulator(dWorldID world, OBJECT ** allObjects, int numObjects);
+	void Create_In_Simulator(dWorldID world, OBJECT ** allObjects, int numObjects, ACTUATOR** allActuators, int numActuators);
 
 	void Draw(void) const;
 

@@ -47,7 +47,7 @@ void LINEAR_ACTUATOR::Actuate(void) {
 	dJointSetSliderParam(joint, dParamFMax, strength);
 }
 
-void LINEAR_ACTUATOR::Create_In_Simulator(dWorldID world, OBJECT ** allObjects, int numObjects) {
+void LINEAR_ACTUATOR::Create_In_Simulator(dWorldID world, OBJECT ** allObjects, int numObjects, ACTUATOR** allActuators, int numActuators) {
 
 	if ( firstObject >= 0 )
 		first = allObjects[firstObject];

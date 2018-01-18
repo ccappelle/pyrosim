@@ -320,7 +320,7 @@ void ENVIRONMENT::Create_Actuator( dWorldID world, dSpaceID space, int index, st
 
 	actuators[index]->Read_From_Python();
 
-	actuators[index]->Create_In_Simulator( world, objects, numberOfBodies );
+	actuators[index]->Create_In_Simulator( world, objects, numberOfBodies, actuators, numberOfActuators );
 
 	numberOfActuators++;
 }

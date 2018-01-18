@@ -34,7 +34,7 @@ void ROPE::Actuate(void) {
 	}
 }
 
-void ROPE::Create_In_Simulator(dWorldID world, OBJECT** allObjects, int numObjects) {
+void ROPE::Create_In_Simulator(dWorldID world, OBJECT** allObjects, int numObjects, ACTUATOR** allActuators, int numActuators) {
 
 	if ( firstObject >= 0  && secondObject >=0 ) {
 		first = allObjects[firstObject];
