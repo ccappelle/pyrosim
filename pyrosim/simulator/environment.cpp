@@ -13,25 +13,6 @@ extern const int CYLINDER;
 extern const int SPHERE;
 extern const int CAPSULE;
 
-extern const int MAX_OBJECTS;
-extern const int MAX_JOINTS;
-
-ENVIRONMENT::ENVIRONMENT(void) {
-
-	objects = new OBJECT * [MAX_OBJECTS];
-	actuators  = new ACTUATOR * [MAX_JOINTS];
-
-	numberOfBodies = 0;
-
-	numberOfActuators = 0;
-
-	neuralNetwork = NULL;
-}
-
-ENVIRONMENT::~ENVIRONMENT(void) {
-
-}
-
 void ENVIRONMENT::Actuate_Actuators(void) {
 
 	for (int j=0;j<numberOfActuators;j++)
@@ -203,9 +184,8 @@ void ENVIRONMENT::Poll_Sensors(int timeStep) {
 void ENVIRONMENT::Update_Neural_Network(int timeStep) {
 
 	Update_Sensor_Neurons(timeStep);
-	if ( neuralNetwork )
 
-		neuralNetwork->Update(timeStep);
+	neuralNetwork->Update(timeStep);
 }
 
 void ENVIRONMENT::Update_Forces(int timeStep){
@@ -250,10 +230,6 @@ void ENVIRONMENT::Create_Bias_Neuron(void) {
 
         std::cin >> ID;
 
-        if ( neuralNetwork == NULL )
-
-                Create_Neural_Network();
-
         neuralNetwork->Add_Bias_Neuron(ID);
 }
 
@@ -262,8 +238,6 @@ void ENVIRONMENT::Create_Function_Neuron(int evalPeriod) {
         int ID;
         std::cin >> ID;
 
-        if( neuralNetwork == NULL)
-                Create_Neural_Network();
         double *timeValues = new double[evalPeriod];
 
         for(int i=0; i<evalPeriod; i++)
@@ -284,9 +258,6 @@ void ENVIRONMENT::Create_Hidden_Neuron(void) {
 
     double alpha;
     std::cin >> alpha;
-
-    if ( neuralNetwork == NULL )
-        Create_Neural_Network();
 
 	neuralNetwork->Add_Hidden_Neuron(ID,tau,alpha);
 }
@@ -343,15 +314,7 @@ void ENVIRONMENT::Create_Motor_Neuron(void) {
     double start;
     std::cin >> start;
 
-    if ( neuralNetwork == NULL )
-        Create_Neural_Network();
-
     Add_Motor_Neuron(ID, actuatorID, tau, alpha, start);
-}
-
-void ENVIRONMENT::Create_Neural_Network(void) {
-
-	neuralNetwork = new NEURAL_NETWORK();
 }
 
 void ENVIRONMENT::Create_Object(dWorldID world, dSpaceID space, int index, int shape) {
@@ -450,18 +413,10 @@ void ENVIRONMENT::Create_Sensor_Neuron(void) {
 
         std::cin >> sensorValueIndex;
 
-	if ( neuralNetwork == NULL )
-
-		Create_Neural_Network();
-
 	Add_Sensor_Neuron(ID,sensorID,sensorValueIndex);
 }
 
 void ENVIRONMENT::Create_Synapse(void) {
-
-	if ( neuralNetwork == NULL )
-
-		Create_Neural_Network();
 
 	neuralNetwork->Add_Synapse();
 }

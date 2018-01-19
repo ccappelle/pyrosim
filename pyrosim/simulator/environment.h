@@ -7,6 +7,7 @@
 #include "object.h"
 #include "neuralNetwork.h"
 #include "datastruct.h"
+#include "constants.h"
 
 /***** ACTUATOR SUPPORT DEFINITIONS *****/
 
@@ -41,31 +42,32 @@ const StringToActuatorMapType stringToActuatorMap = {
 class ENVIRONMENT {
 
 private:
-
 	int numberOfBodies;
 
 	int numberOfActuators;
 
-	OBJECT ** objects;
+	OBJECT* objects[MAX_OBJECTS];
 
-	ACTUATOR ** actuators;
+	ACTUATOR* actuators[MAX_ACTUATORS];
 
-	NEURAL_NETWORK * neuralNetwork;
+	NEURAL_NETWORK* neuralNetwork;
 
 public:
-	ENVIRONMENT(void);
+	ENVIRONMENT(void) : numberOfBodies(0),
+	                    numberOfActuators(0),
+	                    neuralNetwork(new NEURAL_NETWORK) {};
 
-	~ENVIRONMENT(void);
+	~ENVIRONMENT(void) {}; // FIXME: destroy the neural network when its destructor is sane
 
 	void Actuate_Actuators(void);
 
 	void Draw(int debug=0);
 
-	void Get_Object_Position(float *xyz, int bodyID);
+	void Get_Object_Position(float* xyz, int bodyID);
 
 	void Poll_Sensors(int timeStep);
 
-    void Read_From_Python(dWorldID world, dSpaceID space, Data *data);
+    void Read_From_Python(dWorldID world, dSpaceID space, Data* data);
 
 	void Update_Neural_Network(int timeStep);
 
@@ -95,8 +97,6 @@ private:
 	void Create_Light_Source(void);
 
     void Create_Motor_Neuron(void);
-
-	void Create_Neural_Network(void);
 
 	void Create_Object(dWorldID world, dSpaceID space, int index, int objType);
 
