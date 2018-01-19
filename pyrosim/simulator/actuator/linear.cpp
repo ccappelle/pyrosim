@@ -15,7 +15,8 @@
 #define dsDrawCapsule dsDrawCapsuleD
 #endif
 
-extern int SLIDER; // FIXME: remove once proprioceptive sensors are fixed
+#include "constants.h"
+extern const int SLIDER; // FIXME: remove once proprioceptive sensors are fixed
 
 void LINEAR_ACTUATOR::Actuate(void) {
 

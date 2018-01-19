@@ -1,6 +1,23 @@
 #ifndef _NEURON_H
 #define _NEURON_H
 
+#include <string>
+#include <map>
+
+const int SENSOR_NEURON   = 0;
+const int BIAS_NEURON     = 1;
+const int HIDDEN_NEURON   = 2;
+const int MOTOR_NEURON    = 3;
+const int FUNCTION_NEURON = 4;
+
+const std::map<std::string, int> stringToNeuronTypeMap = {
+	{"BiasNeuron", BIAS_NEURON},
+	{"SensorNeuron", SENSOR_NEURON},
+	{"HiddenNeuron", HIDDEN_NEURON},
+	{"MotorNeuron", MOTOR_NEURON},
+	{"FunctionNeuron", FUNCTION_NEURON}
+};
+
 class NEURON {
 
 private:
@@ -19,11 +36,11 @@ private:
 	double alpha;
 
 	double *timeValues;
-	
-public:
-        NEURON(int myID, int neuronType, double tau, double a);
 
-	NEURON(int myID, int neuronType, int svIndex, double tau, double a);
+public:
+	NEURON(int myID, int neuronType, double tau, double a);
+
+	NEURON(int myID, int neuronType, int valueIndex, double tau, double a);
 
 	NEURON(int myID,  double *timeValues);
 
@@ -56,4 +73,4 @@ private:
 
 };
 
-#endif
+#endif // _NEURON_H

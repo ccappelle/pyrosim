@@ -1,44 +1,20 @@
 #ifndef _ENVIRONMENT_CPP
 #define _ENVIRONMENT_CPP
 
-#include "environment.h"
-
 #include <iostream>
 #include <map>
 #include <cstdlib>
 
-//// ACTUATOR_RELEVANT: expand the piece of code below whenever you create a new ACTUATOR class
+#include "environment.h"
+#include "constants.h"
 
-// We create a map from strings to a method that returns ACTUATOR*
-// More about this design pattern:
-// https://stackoverflow.com/questions/582331/is-there-a-way-to-instantiate-objects-from-a-string-holding-their-class-name
-template<typename actuatorClass> ACTUATOR * createActuatorInstance() { return static_cast<ACTUATOR *>( new actuatorClass ); }
-typedef std::map<std::string, ACTUATOR * (*) ()> StringToActuatorMapType;
+extern const int BOX;
+extern const int CYLINDER;
+extern const int SPHERE;
+extern const int CAPSULE;
 
-#include "actuator/rotary.h"
-#include "actuator/linear.h"
-#include "actuator/thruster.h"
-#include "actuator/adhesive.h"
-#include "actuator/rope.h"
-
-StringToActuatorMapType stringToActuatorMap = {
-	{"HingeJoint", &createActuatorInstance<ROTARY_ACTUATOR>},
-	{"SliderJoint", &createActuatorInstance<LINEAR_ACTUATOR>},
-	{"Thruster", &createActuatorInstance<THRUSTER>},
-	{"AdhesiveJoint", &createActuatorInstance<ADHESIVE>},
-	{"Rope", &createActuatorInstance<ROPE>}
-};
-
-//// /ACTUATOR_RELEVANT
-
-extern int BOX;
-extern int CYLINDER;
-extern int SPHERE;
-extern int CAPSULE;
-
-extern int MAX_OBJECTS;
-extern int MAX_JOINTS;
-
+extern const int MAX_OBJECTS;
+extern const int MAX_JOINTS;
 
 ENVIRONMENT::ENVIRONMENT(void) {
 
@@ -107,8 +83,6 @@ void ENVIRONMENT::Read_From_Python(dWorldID world, dSpaceID space, Data *data)
 			std::cin >> data->debug;
 		else if ( strcmp(incomingString,"ExternalForce") == 0){
 			int bodyID;
-			float x,y,z;
-			int time;
 			std::cin >> bodyID;
 			objects[bodyID]->Read_In_External_Force();
 		}
@@ -187,6 +161,9 @@ void ENVIRONMENT::Read_From_Python(dWorldID world, dSpaceID space, Data *data)
 			Create_Light_Source();
 
 		//Neurons
+//		else if ( stringToNeuronTypeMap.find(incomingString) != stringToActuatorMap.end() )
+//			Create_Actuator(world, space, numberOfActuators, incomingString);
+
 		else if ( strcmp(incomingString,"BiasNeuron") == 0 )
 			Create_Bias_Neuron();
 		else if ( strcmp(incomingString,"SensorNeuron") == 0 )
@@ -257,14 +234,14 @@ void ENVIRONMENT::Add_Motor_Neuron(int ID, int actuatorID, double tau, double al
 
 	NEURON * motorNeuron = neuralNetwork->Add_Motor_Neuron(ID, tau, alpha, start);
 
-	actuators[actuatorID]->Connect_To_Motor_Neuron( actuatorID, motorNeuron);
+	actuators[actuatorID]->Connect_To_Motor_Neuron(actuatorID, motorNeuron);
 }
 
 void ENVIRONMENT::Add_Sensor_Neuron(int ID, int sensorID, int sensorValueIndex) {
 
-        NEURON *sensorNeuron = neuralNetwork->Add_Sensor_Neuron(ID, sensorValueIndex);
+	NEURON *sensorNeuron = neuralNetwork->Add_Sensor_Neuron(ID, sensorValueIndex);
 
-        Connect_Sensor_To_Sensor_Neuron( sensorID, sensorNeuron );
+	Connect_Sensor_To_Sensor_Neuron(sensorID, sensorNeuron);
 }
 
 void ENVIRONMENT::Create_Bias_Neuron(void) {
@@ -316,7 +293,7 @@ void ENVIRONMENT::Create_Hidden_Neuron(void) {
 
 void ENVIRONMENT::Create_Actuator( dWorldID world, dSpaceID space, int index, std::string actuatorTypeString ) {
 
-	actuators[index] = stringToActuatorMap[actuatorTypeString]();
+	actuators[index] = stringToActuatorMap.at(actuatorTypeString)(); // WARNING: const at() is C++11-specific
 
 	actuators[index]->Read_From_Python();
 

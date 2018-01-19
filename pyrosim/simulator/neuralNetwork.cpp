@@ -1,19 +1,21 @@
 #ifndef _NEURAL_NETWORK_CPP
 #define _NEURAL_NETWORK_CPP
 
-#include "iostream"
+#include <iostream>
+#include <cmath>
 
 #include "neuralNetwork.h"
 
-#include "math.h"
+#include "constants.h"
 
-extern int MAX_NEURONS;
-extern int MAX_SYNAPSES;
-extern int SENSOR_NEURON;
-extern int BIAS_NEURON;
-extern int HIDDEN_NEURON;
-extern int MOTOR_NEURON;
-extern int FUNCTION_NEURON;
+extern const int MAX_NEURONS;
+extern const int MAX_SYNAPSES;
+
+extern const int SENSOR_NEURON;
+extern const int BIAS_NEURON;
+extern const int HIDDEN_NEURON;
+extern const int MOTOR_NEURON;
+extern const int FUNCTION_NEURON;
 
 NEURAL_NETWORK::NEURAL_NETWORK(void) {
 

@@ -4,10 +4,39 @@
 #include <string>
 #include <ode/ode.h>
 
-#include "actuator/actuator.h"
 #include "object.h"
 #include "neuralNetwork.h"
 #include "datastruct.h"
+
+/***** ACTUATOR SUPPORT DEFINITIONS *****/
+
+// Generic part:
+
+#include "actuator/actuator.h"
+
+// We create a map from strings to a function that returns ACTUATOR*
+// More about this design pattern:
+// https://stackoverflow.com/questions/582331/is-there-a-way-to-instantiate-objects-from-a-string-holding-their-class-name
+template<typename actuatorClass> ACTUATOR* createActuatorInstance() { return static_cast<ACTUATOR*>( new actuatorClass ); }
+typedef std::map<std::string, ACTUATOR* (*) ()> StringToActuatorMapType;
+
+// Expand the piece of code below whenever you create a new ACTUATOR class:
+
+#include "actuator/rotary.h"
+#include "actuator/linear.h"
+#include "actuator/thruster.h"
+#include "actuator/adhesive.h"
+#include "actuator/rope.h"
+
+const StringToActuatorMapType stringToActuatorMap = {
+	{"HingeJoint", &createActuatorInstance<ROTARY_ACTUATOR>},
+	{"SliderJoint", &createActuatorInstance<LINEAR_ACTUATOR>},
+	{"Thruster", &createActuatorInstance<THRUSTER>},
+	{"AdhesiveJoint", &createActuatorInstance<ADHESIVE>},
+	{"Rope", &createActuatorInstance<ROPE>}
+};
+
+/***** END ACTUATOR SUPPORT DEFINITIONS *****/
 
 class ENVIRONMENT {
 
@@ -90,4 +119,4 @@ private:
 	void Update_Sensor_Neurons(int timeStep);
 };
 
-#endif
+#endif // _ENVIRONMENT_H

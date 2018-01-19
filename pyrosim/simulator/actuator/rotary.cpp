@@ -15,7 +15,8 @@
 #define dsDrawCapsule dsDrawCapsuleD
 #endif
 
-extern int HINGE; // FIXME: remove once proprioceptive sensors are fixed
+#include "../constants.h"
+extern const int HINGE; // FIXME: remove once proprioceptive sensors are fixed
 
 void ROTARY_ACTUATOR::Actuate(void) {
 

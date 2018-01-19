@@ -1,18 +1,14 @@
 #ifndef _NEURON_CPP
 #define _NEURON_CPP
 
-#include "iostream"
+#include <iostream>
+#include <cmath>
 
 #include "neuron.h"
 
-#include "math.h"
-
-extern int SENSOR_NEURON;
-
-extern int BIAS_NEURON;
-
-extern int FUNCTION_NEURON;
-
+extern const int BIAS_NEURON;
+extern const int FUNCTION_NEURON;
+extern const int SENSOR_NEURON;
 
 NEURON::NEURON(int myID, int neuronType, double tau, double a) {
 
@@ -45,7 +41,7 @@ int  NEURON::Get_ID(void) {
 
 int  NEURON::Get_Sensor_Value_Index(void) {
 
-	if ( Get_Type() != SENSOR_NEURON ) 
+	if ( Get_Type() != SENSOR_NEURON )
 
 		return 0;
 

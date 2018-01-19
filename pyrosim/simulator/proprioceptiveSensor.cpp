@@ -5,10 +5,11 @@
 
 #include "proprioceptiveSensor.h"
 
+#include "constants.h"
 #include "neuron.h"
 
-extern int HINGE;
-extern int SLIDER;
+extern const int HINGE_ACTUATOR_ID;
+extern const int SLIDER_ACTUATOR_ID;
 
 PROPRIOCEPTIVE_SENSOR::PROPRIOCEPTIVE_SENSOR(int myID, int evalPeriod) {
 
