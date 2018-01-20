@@ -33,8 +33,8 @@ void NEURAL_NETWORK::Read_Neuron_From_Python(std::string neuronTypeStr, ENVIRONM
 	if(neuronTypeStr.compare("MotorNeuron") == 0) {
 
 		int actuatorInputIndex, actuatorID;
-		std::cin >> actuatorInputIndex;
 		std::cin >> actuatorID;
+		std::cin >> actuatorInputIndex;
 
 		ACTUATOR* act = env->Get_Actuator(actuatorID);
 		act->Connect_To_Motor_Neuron(actuatorInputIndex, neurons[numNeurons]);
@@ -43,8 +43,8 @@ void NEURAL_NETWORK::Read_Neuron_From_Python(std::string neuronTypeStr, ENVIRONM
 	if(neuronTypeStr.compare("SensorNeuron") == 0) {
 
 		int sensorValueIndex, sensorID;
-		std::cin >> sensorValueIndex;
 		std::cin >> sensorID;
+		std::cin >> sensorValueIndex;
 
 		// We attempt to connect the sensor neuron to every possible object and actuator
 		// FIXME: replace once a global list of sensors is added to the environment

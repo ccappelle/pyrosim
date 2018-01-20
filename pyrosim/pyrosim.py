@@ -938,10 +938,10 @@ class Simulator(object):
         return neuron_id
 
     def send_motor_neuron(self, joint_id=0, tau=1.0, alpha=1.0,
-                          start_value=0.0):
+                          start_value=0.0, input_index=0):
         """Send motor neurons to simulator
 
-        Motor neurons are neurons which connect to a specified joint and 
+        Motor neurons are neurons which connect to a specified joint and
         determine how the joint moves every time step of simulation
 
         Warning
@@ -950,7 +950,7 @@ class Simulator(object):
         is not in the middle of the 'hi' & 'lo' cutoffs will most likely cause
         instabilities in the simulation. For example creating a joint with
         either 'hi' or 'lo' to 0 and attaching a motor neuron to this joint
-        will cause the joint to break. 
+        will cause the joint to break.
 
         Parameters
         ----------
@@ -959,7 +959,7 @@ class Simulator(object):
         tau         : float, optional
                 The 'learning rate' of the neuron. Increasing tau increases
                 how much of value of the neuron at the current time step comes
-                from external inputs vs. the value of the neuron at the 
+                from external inputs vs. the value of the neuron at the
                 previous time step. (default 1)
         alpha       : float, optional
                 The 'remembrance rate' of the neuron. Usually 1 or 0.
@@ -968,9 +968,13 @@ class Simulator(object):
         start_value : float, optional
                 The starting value of the neuron. This value is specified
                 to mitigate the problem of a joint starting not on its midpoint
-                for positionally controlled joints. Set to +1 or greater for 
+                for positionally controlled joints. Set to +1 or greater for
                 close to the 'hi' range and -1 or less for close to 'lo' range
                 (default is 0.0)
+        input_index : int, optional
+                Index of the actuator input to which the motor neuron will be
+                attached. Most actuators only have one input and ignore this
+                value. Default is 0.
 
         Returns
         -------
@@ -980,20 +984,23 @@ class Simulator(object):
         assert tau >= 0, 'Tau must be positive'
         assert joint_id < self._num_joints, 'Joint with id ' + \
             str(joint_id)+' has not been sent'
+        assert input_index in range(1), 'For all currently implemented ' + \
+            'motors input_index must be in [0]'
 
         neuron_id = self._num_neurons
         self._num_neurons += 1
 
         self._send('MotorNeuron',
-                   neuron_id,  joint_id,
-                   tau, alpha, start_value)
+                   neuron_id,
+                   tau, alpha, start_value,
+                   joint_id, input_index)
 
         return neuron_id
 
     def send_sensor_neuron(self, sensor_id=0, svi=0):
         """Sends a sensor neuron to the simulator
 
-        Sensor neurons are input neurons which take the value of their 
+        Sensor neurons are input neurons which take the value of their
         associated sensor
 
         Parameters
@@ -1001,9 +1008,10 @@ class Simulator(object):
         sensor_id        : int, optional
                 The associated sensor id for the neuron to draw values from.
         svi : int, optional
-                The sensor value index is the offset index of the sensor. 
-                SVI is used for sensors which return a vector of values 
-                (position, ray sensors, etc.)
+                The sensor value index is the offset index of the sensor.
+                SVI is used for sensors which return a vector of values
+                (position, ray sensors, etc.), other sensors will ignore it.
+                Default is 0
 
         Returns
         -------
@@ -1012,13 +1020,15 @@ class Simulator(object):
         """
         assert sensor_id < self._num_sensors, 'Sensor with id ' + \
             str(sensor_id)+' has not been sent'
-        assert svi in range(4), 'SVI must be in [0,3]'
+        assert svi in range(4), 'For all currently implemented sensors ' + \
+            'SVI must be in [0,3]'
 
         neuron_id = self._num_neurons
         self._num_neurons += 1
 
         self._send('SensorNeuron',
-                   neuron_id, sensor_id, svi)
+                   neuron_id,
+                   sensor_id, svi)
 
         return neuron_id
 
