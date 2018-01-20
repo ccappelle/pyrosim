@@ -10,74 +10,50 @@ extern const int BIAS_NEURON;
 extern const int FUNCTION_NEURON;
 extern const int SENSOR_NEURON;
 
-NEURON::NEURON(int myID, int neuronType, double tau, double a) {
+void NEURON::Read_From_Python(std::string neuronTypeStr, Data* data) {
 
-	Initialize(myID,neuronType,tau,a);
-	if ( type == BIAS_NEURON)
+	type = stringToNeuronTypeMap.at(neuronTypeStr); // WARNING: C++11-only idiom
+
+	std::cin >> ID;
+
+	if(type == FUNCTION_NEURON) {
+		timeValues = new double[data->evaluationTime];
+		for(int i=0; i<data->evaluationTime; i++) {
+			std::cin >> timeValues[i];
+		}
+		return;
+	}
+
+	if(type == SENSOR_NEURON)
+		return;
+
+	if(type == BIAS_NEURON) {
 		value = 1.0;
-}
+		return;
+	}
 
-NEURON::NEURON(int myID, int neuronType, int svIndex, double tau, double a) {
+	std::cin >> tau;
+	std::cin >> alpha;
 
-	Initialize(myID,neuronType,tau, a);
-	sensorValueIndex = svIndex;
-}
+	if(type == HIDDEN_NEURON)
+		return;
 
-NEURON::NEURON(int myID, double *tv){
-	Initialize(myID, FUNCTION_NEURON, 1.0, 1.0);
+	if(type == MOTOR_NEURON) {
+		double start;
+		std::cin >> start;
+		Set(start);
+		return;
+	}
 
-	timeValues = tv;
-	value = timeValues[0];
-}
-
-NEURON::~NEURON(void) {
-
-}
-
-int  NEURON::Get_ID(void) {
-
-	return ID;
-}
-
-int  NEURON::Get_Sensor_Value_Index(void) {
-
-	if ( Get_Type() != SENSOR_NEURON )
-
-		return 0;
-
-	else
-		return sensorValueIndex;
-}
-
-int  NEURON::Get_Type(void) {
-
-	return type;
-}
-
-double NEURON::Get_Previous_Value(void) {
-
-	return previousValue;
-}
-
-double NEURON::Get_Tau(void) {
-
-	return tau;
-}
-
-double NEURON::Get_Value(void) {
-
-	return value;
+	std::cerr << "Unrecognized neuron type index " << type << std::endl;
 }
 
 void NEURON::Print(void) {
 
 	std::cerr << ID << " ";
-
-        std::cerr << type << " ";
-
-        std::cerr << sensorValueIndex << " ";
-
-        std::cerr << value << "\n";
+	std::cerr << type << " ";
+	std::cerr << sensorValueIndex << " ";
+	std::cerr << value << "\n";
 }
 
 void NEURON::Push_Current_Value_To_Previous_Value(void) {
@@ -93,7 +69,6 @@ void NEURON::Reset(int timeStep) {
         else if ( type == FUNCTION_NEURON)
         {
         	previousValue = value;
-        	
         	value = timeValues[timeStep];
         }
 	else if( timeStep >0)
@@ -118,24 +93,4 @@ void NEURON::Threshold(void) {
 	value = tanh(value);
 }
 
-// ------------------ Private methods -------------------
-
-void NEURON::Initialize(int myID, int neuronType, double t, double a) {
-
-        ID = myID;
-
-        type = neuronType;
-
-        sensorValueIndex = -1;
-
-	tau = t;
-        alpha = a;
-        value = 0.0;
-
-	previousValue = 0.0;
-
-	//timeValues = NULL;
-
-}
-
-#endif
+#endif // _NEURON_CPP

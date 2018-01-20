@@ -35,13 +35,12 @@ dsFunctions fn;
 
 int timer;
 
-ENVIRONMENT *environment;
+ENVIRONMENT* environment;
 int numberOfBodies = 0;
 bool initialized = false;
 static dGeomID ground;
 
-
-Data *data = new Data;//struct which keeps all user input values for various parameterss. see datastruct.h
+Data* data; // global struct which keeps all user input values for various parameters. see datastruct.h
 static float updated_xyz[3];
 int LAGSIZE = 20;
 static float average_z[20];
@@ -343,6 +342,7 @@ void Run_Blind(void) {
 
 int main (int argc, char **argv) {
 
+	data = new Data;
 	data->runBlind = false;
 
 	if ( (argc > 1) && (strcmp(argv[1],"-blind")==0) )

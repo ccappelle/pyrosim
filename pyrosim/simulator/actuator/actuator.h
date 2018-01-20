@@ -1,6 +1,8 @@
 #ifndef _ACTUATOR_ACTUATOR_H
 #define _ACTUATOR_ACTUATOR_H
 
+//#include "../datastruct.h"
+//#include "../environment.h"
 #include "../neuron.h"
 #include "../object.h"
 
@@ -19,6 +21,7 @@ public:
 	virtual void Write_To_Python(int evalPeriod) const {};
 	//! Supplies the data from sensors embedded into the actuator to Python through standard output
 
+//	virtual void Create_In_Simulator(dWorldID world, ENVIRONMENT* environment, Data* data) = 0;
 	virtual void Create_In_Simulator(dWorldID world, OBJECT** allObjects, int numObjects, ACTUATOR** allActuators, int numActuators) = 0;
 	//! Creates the actuator in simulation
 	virtual void Actuate(void) = 0;
@@ -26,17 +29,12 @@ public:
 	virtual void Draw(void) const = 0;
 	//! Draws the actuator. Notice the const!
 
-	virtual bool Connect_Sensor_To_Sensor_Neuron(int sensorID, NEURON *sNeuron) {return false;};
+	virtual bool Connect_Sensor_To_Sensor_Neuron(int sensorID, int sensorValueIndex, NEURON *sNeuron) {return false;};
 	//! Supplies the pointer to a sensor neuron to the sensor with id sensorID
-	bool Connect_To_Motor_Neuron(int actuatorID, NEURON *mNeuron)
+	virtual void Connect_To_Motor_Neuron(int actuatorInputIndex, NEURON *mNeuron)
 	{
-		if (actuatorID == ID)
-		{
-			motorNeuron = mNeuron;
-			return true;
-		}
-		else
-			return false;
+		// actuatorInputIndex is for use in actuators with multiple inputs; by default it is ignored
+		motorNeuron = mNeuron;
 	};
 	//! Stores the pointer to a motor neuron for future use
 

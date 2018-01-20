@@ -14,7 +14,7 @@ public:
     IS_SEEN_SENSOR(int myID, int evalPeriod);
     ~IS_SEEN_SENSOR();
 
-    void Connect_To_Sensor_Neuron(NEURON *sensorNeuron);
+    void Connect_To_Sensor_Neuron(int sensorValueIndex, NEURON *sensorNeuron);
 
     void Fires(int t);
 

@@ -18,7 +18,7 @@ LIGHT_SENSOR::~LIGHT_SENSOR(void) {
 
 }
 
-void LIGHT_SENSOR::Connect_To_Sensor_Neuron(NEURON *sensorNeuron) {
+void LIGHT_SENSOR::Connect_To_Sensor_Neuron(int sensorValueIndex, NEURON *sensorNeuron) {
 
 	mySensorNeuron = sensorNeuron;
 }

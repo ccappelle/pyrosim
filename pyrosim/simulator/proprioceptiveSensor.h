@@ -21,7 +21,7 @@ public:
 
 	~PROPRIOCEPTIVE_SENSOR(void);
 
-	void Connect_To_Sensor_Neuron(NEURON *sensorNeuron);
+	void Connect_To_Sensor_Neuron(int sensorValueIndex, NEURON *sensorNeuron);
 
 	int  Get_ID(void);
 

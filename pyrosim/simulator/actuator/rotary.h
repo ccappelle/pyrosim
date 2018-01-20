@@ -47,7 +47,7 @@ public:
 	// Virtual functiontions are declared that way for making very similar derivatives like LINEAR_ACTUATOR
 
 	virtual void Actuate(void);
-	bool Connect_Sensor_To_Sensor_Neuron(int sensorID, NEURON *sensorNeuron);
+	bool Connect_Sensor_To_Sensor_Neuron(int sensorID, int sensorValueIndex, NEURON *sensorNeuron);
 
 	virtual void Create_In_Simulator(dWorldID world, OBJECT** allObjects, int numObjects, ACTUATOR** allActuators, int numActuators);
 	bool Create_Proprioceptive_Sensor(int myID, int evalPeriod);

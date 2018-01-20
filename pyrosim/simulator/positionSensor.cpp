@@ -24,9 +24,9 @@ POSITION_SENSOR::~POSITION_SENSOR(void) {
 
 }
 
-void POSITION_SENSOR::Connect_To_Sensor_Neuron(NEURON *sensorNeuron) {
+void POSITION_SENSOR::Connect_To_Sensor_Neuron(int sensorValueIndex, NEURON *sensorNeuron) {
 
-	mySensorNeurons[ sensorNeuron->Get_Sensor_Value_Index() ] = sensorNeuron;
+	mySensorNeurons[ sensorValueIndex ] = sensorNeuron;
 }
 
 int  POSITION_SENSOR::Get_ID(void) {

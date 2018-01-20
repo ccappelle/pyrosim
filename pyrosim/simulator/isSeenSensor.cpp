@@ -18,7 +18,7 @@ IS_SEEN_SENSOR::IS_SEEN_SENSOR(int myID, int evalPeriod){
 
 IS_SEEN_SENSOR::~IS_SEEN_SENSOR(void){}
 
-void IS_SEEN_SENSOR::Connect_To_Sensor_Neuron(NEURON *sensorNeuron){
+void IS_SEEN_SENSOR::Connect_To_Sensor_Neuron(int sensorValueIndex, NEURON *sensorNeuron){
     mySensorNeuron = sensorNeuron;
 }
 

@@ -13,6 +13,12 @@ extern const int CYLINDER;
 extern const int SPHERE;
 extern const int CAPSULE;
 
+ENVIRONMENT::ENVIRONMENT(void) : numberOfBodies(0),
+                                 numberOfActuators(0),
+                                 neuralNetwork(new NEURAL_NETWORK) {};
+
+ENVIRONMENT::~ENVIRONMENT(void) {}; // FIXME: destroy the neural network when its destructor is sane
+
 void ENVIRONMENT::Actuate_Actuators(void) {
 
 	for (int j=0;j<numberOfActuators;j++)
@@ -41,7 +47,7 @@ void ENVIRONMENT::Get_Object_Position(float *xyz, int bodyID){
         xyz[2] = pos[2];
 }
 
-void ENVIRONMENT::Read_From_Python(dWorldID world, dSpaceID space, Data *data)
+void ENVIRONMENT::Read_From_Python(dWorldID world, dSpaceID space, Data* data)
 {
 	char incomingString[10000];
 	std::cin >> incomingString;
@@ -62,20 +68,18 @@ void ENVIRONMENT::Read_From_Python(dWorldID world, dSpaceID space, Data *data)
 			std::cin >> data->texturePathStr;
 		else if ( strcmp(incomingString,"Debug") == 0)
 			std::cin >> data->debug;
-		else if ( strcmp(incomingString,"ExternalForce") == 0){
+		else if ( strcmp(incomingString,"ExternalForce") == 0) {
 			int bodyID;
 			std::cin >> bodyID;
 			objects[bodyID]->Read_In_External_Force();
 		}
-		else if ( strcmp(incomingString,"WindowSize") == 0)
-		{
+		else if ( strcmp(incomingString,"WindowSize") == 0) {
 			std::cin >> data->windowWidth;
 			std::cin >> data->windowHeight;
 		}
 
 		//Camera
-		else if ( strcmp(incomingString,"Camera") == 0)
-		{
+		else if ( strcmp(incomingString,"Camera") == 0) {
 			std::cin >> data->xyz[0];
 			std::cin >> data->xyz[1];
 			std::cin >> data->xyz[2];
@@ -93,10 +97,10 @@ void ENVIRONMENT::Read_From_Python(dWorldID world, dSpaceID space, Data *data)
 			std::cin >> data->capture;
 
 		//Collision data
-		else if ( strcmp(incomingString,"CollisionMatrix")==0){
+		else if ( strcmp(incomingString,"CollisionMatrix")==0) {
 			std::cin >> data->numCollisionGroups;
-			for(int i=0;i<data->numCollisionGroups;i++){
-				for(int j=i;j<data->numCollisionGroups;j++){
+			for(int i=0;i<data->numCollisionGroups;i++) {
+				for(int j=i;j<data->numCollisionGroups;j++) {
 					data->collisionMatrix[i][j]=0;
 					data->collisionMatrix[j][i]=0;
 					std::cin >> data->collisionMatrix[i][j];
@@ -121,7 +125,7 @@ void ENVIRONMENT::Read_From_Python(dWorldID world, dSpaceID space, Data *data)
 
 		//Actuators
 		else if ( stringToActuatorMap.find(incomingString) != stringToActuatorMap.end() )
-			Create_Actuator(world, space, numberOfActuators, incomingString);
+			Create_Actuator(world, space, incomingString);
 
 		//Sensors
 		else if ( strcmp(incomingString,"IsSeenSensor") == 0)
@@ -141,24 +145,11 @@ void ENVIRONMENT::Read_From_Python(dWorldID world, dSpaceID space, Data *data)
 		else if ( strcmp(incomingString,"LightSource") == 0 )
 			Create_Light_Source();
 
-		//Neurons
-//		else if ( stringToNeuronTypeMap.find(incomingString) != stringToActuatorMap.end() )
-//			Create_Actuator(world, space, numberOfActuators, incomingString);
-
-		else if ( strcmp(incomingString,"BiasNeuron") == 0 )
-			Create_Bias_Neuron();
-		else if ( strcmp(incomingString,"SensorNeuron") == 0 )
-			Create_Sensor_Neuron();
-		else if ( strcmp(incomingString,"HiddenNeuron") == 0 )
-			Create_Hidden_Neuron();
-		else if ( strcmp(incomingString,"MotorNeuron") == 0 )
-			Create_Motor_Neuron();
-		else if ( strcmp(incomingString,"FunctionNeuron") == 0 )
-			Create_Function_Neuron(data->evaluationTime);
-
-		//Synapse
-		else if ( strcmp(incomingString,"Synapse") == 0 )
-			Create_Synapse();
+		//Neural network components: currently neurons and synapses
+		else if ( neuralNetwork->Is_A_Neuron_Type(incomingString) )
+			neuralNetwork->Read_Neuron_From_Python(incomingString, this, data);
+		else if ( neuralNetwork->Is_A_Synapse_Type(incomingString) )
+			neuralNetwork->Read_Synapse_From_Python(incomingString, this, data);
 
 		//If the string was not recognized, exit with error
 		else {
@@ -173,18 +164,15 @@ void ENVIRONMENT::Read_From_Python(dWorldID world, dSpaceID space, Data *data)
 void ENVIRONMENT::Poll_Sensors(int timeStep) {
 
 	for (int i=0;i<numberOfBodies;i++)
-
 		objects[i]->Poll_Sensors(numberOfBodies,objects,timeStep);
 
 	for (int j=0;j<numberOfActuators;j++)
-
 		actuators[j]->Poll_Sensors(timeStep);
 }
 
 void ENVIRONMENT::Update_Neural_Network(int timeStep) {
 
 	Update_Sensor_Neurons(timeStep);
-
 	neuralNetwork->Update(timeStep);
 }
 
@@ -210,119 +198,39 @@ void ENVIRONMENT::Write_Sensor_Data(int evalPeriod) {
 
 // ----------------------- Private methods ---------------------------
 
-void ENVIRONMENT::Add_Motor_Neuron(int ID, int actuatorID, double tau, double alpha, double start) {
+void ENVIRONMENT::Create_Actuator( dWorldID world, dSpaceID space, std::string actuatorTypeString ) {
 
-	NEURON * motorNeuron = neuralNetwork->Add_Motor_Neuron(ID, tau, alpha, start);
+	actuators[numberOfActuators] = stringToActuatorMap.at(actuatorTypeString)(); // WARNING: const at() is C++11-specific
 
-	actuators[actuatorID]->Connect_To_Motor_Neuron(actuatorID, motorNeuron);
-}
+	actuators[numberOfActuators]->Read_From_Python();
 
-void ENVIRONMENT::Add_Sensor_Neuron(int ID, int sensorID, int sensorValueIndex) {
-
-	NEURON *sensorNeuron = neuralNetwork->Add_Sensor_Neuron(ID, sensorValueIndex);
-
-	Connect_Sensor_To_Sensor_Neuron(sensorID, sensorNeuron);
-}
-
-void ENVIRONMENT::Create_Bias_Neuron(void) {
-
-        int ID;
-
-        std::cin >> ID;
-
-        neuralNetwork->Add_Bias_Neuron(ID);
-}
-
-void ENVIRONMENT::Create_Function_Neuron(int evalPeriod) {
-
-        int ID;
-        std::cin >> ID;
-
-        double *timeValues = new double[evalPeriod];
-
-        for(int i=0; i<evalPeriod; i++)
-        {
-                std::cin >> timeValues[i];
-        }
-
-        neuralNetwork->Add_Function_Neuron(ID, timeValues);
-}
-
-void ENVIRONMENT::Create_Hidden_Neuron(void) {
-
-    int ID;
-    std::cin >> ID;
-
-	double tau;
-	std::cin >> tau;
-
-    double alpha;
-    std::cin >> alpha;
-
-	neuralNetwork->Add_Hidden_Neuron(ID,tau,alpha);
-}
-
-void ENVIRONMENT::Create_Actuator( dWorldID world, dSpaceID space, int index, std::string actuatorTypeString ) {
-
-	actuators[index] = stringToActuatorMap.at(actuatorTypeString)(); // WARNING: const at() is C++11-specific
-
-	actuators[index]->Read_From_Python();
-
-	actuators[index]->Create_In_Simulator( world, objects, numberOfBodies, actuators, numberOfActuators );
+	actuators[numberOfActuators]->Create_In_Simulator( world, objects, numberOfBodies, actuators, numberOfActuators );
 
 	numberOfActuators++;
 }
 
 void ENVIRONMENT::Create_Light_Sensor(int evalPeriod) {
 
-        int objectIndex;
+	int objectIndex;
+	int ID;
+	std::cin >> ID;
+	std::cin >> objectIndex;
 
-        int ID;
-
-        std::cin >> ID;
-
-        std::cin >> objectIndex;
-
-        objects[objectIndex]->Create_Light_Sensor(ID,evalPeriod);
+	objects[objectIndex]->Create_Light_Sensor(ID,evalPeriod);
 }
 
 void ENVIRONMENT::Create_Light_Source(void) {
 
 	int objectIndex;
-
 	std::cin >> objectIndex;
 
 	objects[objectIndex]->Create_Light_Source();
 }
 
-void ENVIRONMENT::Create_Motor_Neuron(void) {
-
-    int ID;
-
-    std::cin >> ID;
-
-    int actuatorID;
-
-    std::cin >> actuatorID;
-
-    double tau;
-    std::cin >> tau;
-
-    double alpha;
-    std::cin >> alpha;
-
-    double start;
-    std::cin >> start;
-
-    Add_Motor_Neuron(ID, actuatorID, tau, alpha, start);
-}
-
 void ENVIRONMENT::Create_Object(dWorldID world, dSpaceID space, int index, int shape) {
 
     objects[index] = new OBJECT();
-
 	objects[index]->Read_From_Python(world, space, shape);
-
 	numberOfBodies++;
 }
 
@@ -382,53 +290,11 @@ void ENVIRONMENT::Create_Proprioceptive_Sensor(int evalPeriod) {
 	actuators[actuatorIndex]->Create_Proprioceptive_Sensor(ID, evalPeriod);
 }
 
-void ENVIRONMENT::Connect_Sensor_To_Sensor_Neuron( int sensorID , NEURON *sensorNeuron ) {
-
-        int done = false;
-
-        int objectIndex = 0;
-
-        while ( (done == false) && (objectIndex < numberOfBodies) )
-
-                done = objects[objectIndex++]->Connect_Sensor_To_Sensor_Neuron(sensorID,sensorNeuron);
-
-        int jointIndex = 0;
-
-        while ( (done == false) && (jointIndex < numberOfActuators) )
-
-                done = actuators[jointIndex++]->Connect_Sensor_To_Sensor_Neuron(sensorID,sensorNeuron);
-}
-
-void ENVIRONMENT::Create_Sensor_Neuron(void) {
-
-	int ID;
-
-	std::cin >> ID;
-
-	int sensorID;
-
-        std::cin >> sensorID;
-
-	int sensorValueIndex;
-
-        std::cin >> sensorValueIndex;
-
-	Add_Sensor_Neuron(ID,sensorID,sensorValueIndex);
-}
-
-void ENVIRONMENT::Create_Synapse(void) {
-
-	neuralNetwork->Add_Synapse();
-}
-
 void ENVIRONMENT::Create_Touch_Sensor(int evalPeriod) {
 
     int objectIndex;
-
     int ID;
-
-    std::cin >> ID;
-
+	std::cin >> ID;
     std::cin >> objectIndex;
 
     objects[objectIndex]->Create_Touch_Sensor(ID,evalPeriod);
@@ -436,25 +302,21 @@ void ENVIRONMENT::Create_Touch_Sensor(int evalPeriod) {
 
 void ENVIRONMENT::Create_Vestibular_Sensor(int evalPeriod) {
 
-        int objectIndex;
+	int objectIndex;
+	int ID;
+	std::cin >> ID;
+	std::cin >> objectIndex;
 
-        int ID;
-
-        std::cin >> ID;
-
-        std::cin >> objectIndex;
-
-        objects[objectIndex]->Create_Vestibular_Sensor(ID,evalPeriod);
+	objects[objectIndex]->Create_Vestibular_Sensor(ID,evalPeriod);
 }
 
 void ENVIRONMENT::Update_Sensor_Neurons(int timeStep) {
 
 	for (int i=0; i<numberOfBodies; i++)
-
 		objects[i]->Update_Sensor_Neurons(timeStep);
 
 	for (int j=0; j<numberOfActuators; j++)
-
 		actuators[j]->Update_Sensor_Neurons(timeStep);
 }
-#endif
+
+#endif // _ENVIRONMENT_CPP

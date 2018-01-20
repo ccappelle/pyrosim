@@ -18,7 +18,7 @@ VESTIBULAR_SENSOR::~VESTIBULAR_SENSOR(void) {
 
 }
 
-void VESTIBULAR_SENSOR::Connect_To_Sensor_Neuron(NEURON *sensorNeuron) {
+void VESTIBULAR_SENSOR::Connect_To_Sensor_Neuron(int sensorValueIndex, NEURON *sensorNeuron) {
 
         mySensorNeuron = sensorNeuron;
 }

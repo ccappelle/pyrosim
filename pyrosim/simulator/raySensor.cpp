@@ -63,9 +63,9 @@ void RAY_SENSOR::Add_To_Object(void) {
 	dGeomRaySetParams(ray, true, true);
 }
 
-void RAY_SENSOR::Connect_To_Sensor_Neuron(NEURON *sensorNeuron) {
+void RAY_SENSOR::Connect_To_Sensor_Neuron(int sensorValueIndex, NEURON *sensorNeuron) {
 
-        mySensorNeurons[ sensorNeuron->Get_Sensor_Value_Index() ] = sensorNeuron;
+        mySensorNeurons[ sensorValueIndex ] = sensorNeuron;
 }
 
 void RAY_SENSOR::Draw(double endX, double endY, double endZ, int t) {

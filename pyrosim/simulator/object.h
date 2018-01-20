@@ -79,7 +79,7 @@ public:
 
 	void Apply_Stored_Forces(int timeStep);
 
-	int  Connect_Sensor_To_Sensor_Neuron(int sensorID , NEURON *sensorNeuron);
+	int Connect_Sensor_To_Sensor_Neuron(int sensorID, int sensorValueIndex, NEURON *sensorNeuron);
 
 	void Create_IsSeen_Sensor(int myID, int evalPeriod);
 

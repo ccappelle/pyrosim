@@ -22,7 +22,7 @@ TOUCH_SENSOR::~TOUCH_SENSOR(void) {
 
 }
 
-void TOUCH_SENSOR::Connect_To_Sensor_Neuron(NEURON *sensorNeuron) {
+void TOUCH_SENSOR::Connect_To_Sensor_Neuron(int sensorValueIndex, NEURON *sensorNeuron) {
 
         mySensorNeuron = sensorNeuron;
 }

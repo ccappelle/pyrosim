@@ -3,8 +3,8 @@
 
 #define MAX_OBJECTS 1000
 #define MAX_ACTUATORS 1000
-const int	MAX_NEURONS	= 1000;
-const int	MAX_SYNAPSES	= 1000000;
+#define MAX_NEURONS	1000
+#define MAX_SYNAPSES 1000000
 
 const int	BOX		= 0;
 const int	CYLINDER	= 1;

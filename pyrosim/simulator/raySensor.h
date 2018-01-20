@@ -35,7 +35,7 @@ public:
 
 	void Add_To_Object(void);
 
-    void Connect_To_Sensor_Neuron(NEURON *sensorNeuron);
+    void Connect_To_Sensor_Neuron(int sensorValueIndex, NEURON *sensorNeuron);
 
 	void Draw(double endX, double endY, double endZ, int t);
 

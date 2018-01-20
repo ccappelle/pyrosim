@@ -45,12 +45,12 @@ void ROTARY_ACTUATOR::Actuate(void) {
 	dJointSetHingeParam(joint,dParamFMax, strength);
 }
 
-bool ROTARY_ACTUATOR::Connect_Sensor_To_Sensor_Neuron(int sensorID , NEURON *sensorNeuron) {
+bool ROTARY_ACTUATOR::Connect_Sensor_To_Sensor_Neuron(int sensorID, int sensorValueIndex, NEURON *sensorNeuron) {
 
 	if ( proprioceptiveSensor )
 		if ( proprioceptiveSensor->Get_ID() == sensorID ) {
 
-			proprioceptiveSensor->Connect_To_Sensor_Neuron(sensorNeuron);
+			proprioceptiveSensor->Connect_To_Sensor_Neuron(sensorValueIndex, sensorNeuron);
 			return true;
 		}
 
