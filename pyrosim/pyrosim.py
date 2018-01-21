@@ -825,9 +825,9 @@ class Simulator(object):
         assert spring_coefficient >= 0, ('Spring coefficient of the '
                                          'rope must be greater than '
                                          'or equal to zero')
-        assert (first_body_id >= 0 or
-                second_body_id >= 0), ('Rope cannot connect the world'
-                                       ' to itself')
+        assert (first_body_id >= 0 and
+                second_body_id >= 0), ('Rope cannot connect to ' + \
+                                       'the world')
 
         rope_id = self._num_joints
         self._num_joints += 1
@@ -840,6 +840,65 @@ class Simulator(object):
                    dampening_coefficient)
 
         return rope_id
+
+    def send_tether(self, first_body_id, second_body_id,
+                    force_coefficient=1., dampening_coefficient=10.):
+        """Send an actuated tether to the simulator.
+
+           The tether will continually pull the two bodies together with the
+           force proportional to the smallest input of the actuator. If
+           dampening coefficient is above zero, the force is additionally
+           is decreased if the bodies are moving towards each other. Formula:
+
+           Formula for the force:
+                F = k*min(i1,i2) - D*(l-l')/l' if l>l0 else 0
+           where k is the force coefficient, i1 and i2 are the inputs of the
+           actuator or, equivalently, the outputs of the motor neurons
+           connected to it, D is the coefficient of dampening, l and l' are
+           distances between the centers of the bodies at the current and
+           previous time step, correspondingly.
+
+
+        Parameters
+        ----------
+        first_body_id         : int
+                The body id of the first body the rope is connected to.
+                Must be a valid body id.
+        second_body_id        : int
+                The body id of the first body the rope is connected to.
+                Must be a valid body id.
+        force_coefficient    : float, optional
+                Force coefficient (default is 1.0).
+        dampening_coefficient : float, optional
+                Coefficient of dampening (default is 10.0). Warning: very
+                strong dampening will make your simulation unstable!
+
+        Returns
+        -------
+        int
+                The id tag for the rope
+        """
+        assert first_body_id < self._num_bodies, 'Body with id ' + \
+            str(first_body_id) + ' has not been sent'
+        assert second_body_id < self._num_bodies, 'Body with id ' + \
+            str(second_body_id) + ' has not been sent'
+        assert spring_coefficient >= 0, ('Force coefficient of the '
+                                         'tether must be greater than '
+                                         'or equal to zero')
+        assert (first_body_id >= 0 and
+                second_body_id >= 0), ('Tether cannot connect to ' + \
+                                       'the world')
+
+        tether_id = self._num_joints
+        self._num_joints += 1
+
+        self._send('Tether',
+                   tether_id,
+                   first_body_id, second_body_id,
+                   force_coefficient,
+                   dampening_coefficient)
+
+        return tether_id
 
     def send_adhesive_joint(self, body_id, adhesion_kind=0):
         """Send an adhesive joint to the simulator.
