@@ -10,7 +10,8 @@ private:
 	int	firstObject;
     int secondObject;
 
-	double pos1[3], pos2[3];
+	const double* pos1;
+	const double* pos2;
 	double relaxedLength, currentLength, previousLength;
 	double springConstant;
 	double dampeningCoefficient;

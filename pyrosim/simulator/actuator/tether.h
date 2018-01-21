@@ -10,13 +10,19 @@ private:
 	int	firstObject;
     int secondObject;
 
-	double pos1[3], pos2[3];
+	// double pos1[3], pos2[3];
+	const double* pos1;
+	const double* pos2;
+
 	double relaxedLength, currentLength, previousLength;
 	double springConstant;
 	double dampeningCoefficient;
 
 	OBJECT* first;
     OBJECT* second;
+
+	NEURON* firstMotorNeuron;
+	NEURON* secondMotorNeuron;
 
 public:
 	TETHER(void) : relaxedLength(1.0),
@@ -25,13 +31,21 @@ public:
 	             first(NULL),
 	             second(NULL) {};
 
-	void Actuate(void);
-
-	void Create_In_Simulator(dWorldID world, OBJECT** allObjects, int numObjects, ACTUATOR** allActuators, int numActuators);
-
-	void Draw(void) const;
+	// Since we're using multiple motor neurons, we will have to redefine all methods in actuator.h
 
 	void Read_From_Python(void);
+	void Write_To_Python(int evalPeriod) const {};
+
+	void Create_In_Simulator(dWorldID world, OBJECT** allObjects, int numObjects, ACTUATOR** allActuators, int numActuators);
+	void Actuate(void);
+	void Draw(void) const;
+
+	bool Connect_Sensor_To_Sensor_Neuron(int sensorID, int sensorValueIndex, NEURON *sNeuron) {return false;};
+	void Connect_To_Motor_Neuron(int actuatorInputIndex, NEURON *mNeuron) {};
+
+	void Poll_Sensors(int currentTimestep) {};
+	void Update_Sensor_Neurons(int t) {};
+	bool Create_Proprioceptive_Sensor(int sensorID, int evalPeriod) {return false;};
 
 private:
 	inline double Get_Current_Length(void) {

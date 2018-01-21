@@ -882,7 +882,7 @@ class Simulator(object):
             str(first_body_id) + ' has not been sent'
         assert second_body_id < self._num_bodies, 'Body with id ' + \
             str(second_body_id) + ' has not been sent'
-        assert spring_coefficient >= 0, ('Force coefficient of the '
+        assert force_coefficient >= 0, ('Force coefficient of the '
                                          'tether must be greater than '
                                          'or equal to zero')
         assert (first_body_id >= 0 and

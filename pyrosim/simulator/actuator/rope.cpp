@@ -46,6 +46,9 @@ void ROPE::Create_In_Simulator(dWorldID world, OBJECT** allObjects, int numObjec
 		exit(EXIT_FAILURE);
 	}
 
+	pos1 = dBodyGetPosition(first->Get_Body());
+	pos2 = dBodyGetPosition(second->Get_Body());
+
 	currentLength = Get_Current_Length(); // this required addition to Update_Geometry() ensures that there is a sane value at currentLength when it is time to memorize it at previousLength
 	Update_Geometry();
 }
@@ -74,14 +77,6 @@ void ROPE::Read_From_Python(void) {
 /***** Private functions *****/
 
 void ROPE::Update_Geometry(void) {
-
-	static const dReal* body1pos = dBodyGetPosition(first->Get_Body());
-	static const dReal* body2pos = dBodyGetPosition(second->Get_Body());
-
-	for(unsigned i=0; i<3; i++) {
-		pos1[i] = body1pos[i];
-		pos2[i] = body2pos[i];
-	}
 
 	previousLength = currentLength;
 	currentLength = Get_Current_Length();
