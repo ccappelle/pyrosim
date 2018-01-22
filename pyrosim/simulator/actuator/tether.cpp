@@ -3,6 +3,7 @@
 
 #include <drawstuff/drawstuff.h>
 #include <iostream>
+#include <algorithm>
 #include <cmath>
 #include <cstdlib>
 
@@ -12,26 +13,14 @@
 #define dsDrawLine dsDrawLineD
 #endif
 
-void TETHER::Actuate(void) {
+void TETHER::Read_From_Python(void) {
 
-	static double ftol;
-	static double fx;
-	static double fy;
-	static double fz;
+	std::cin >> ID;
 
-	Update_Geometry();
-
-	if(currentLength > relaxedLength) {
-
-		// std::cerr << "CL: " << currentLength << " PL: " << previousLength << " Dampening force: " << (dampeningCoefficient * (currentLength-previousLength) / relaxedLength) << std::endl;
-
-		ftol = ( springConstant * (currentLength-relaxedLength) / relaxedLength  + dampeningCoefficient * (currentLength-previousLength) / previousLength ) / currentLength;
-
-		fx = (pos2[0]-pos1[0])*ftol; fy = (pos2[1]-pos1[1])*ftol; fz = (pos2[2]-pos1[2])*ftol;
-
-		dBodyAddForce(first->Get_Body(), fx, fy, fz);
-		dBodyAddForce(second->Get_Body(), -fx, -fy, -fz);
-	}
+	std::cin >> firstObject;
+	std::cin >> secondObject;
+	std::cin >> forceConstant;
+	std::cin >> dampeningCoefficient;
 }
 
 void TETHER::Create_In_Simulator(dWorldID world, OBJECT** allObjects, int numObjects, ACTUATOR** allActuators, int numActuators) {
@@ -41,36 +30,63 @@ void TETHER::Create_In_Simulator(dWorldID world, OBJECT** allObjects, int numObj
 		second = allObjects[secondObject];
 	}
 	else {
-		std::cerr << "Failed to create rope in simulator!\n";
-		std::cerr << "Rope was intended to connect objects " << firstObject << " and " << secondObject << ", one of which does not exist\n";
+		std::cerr << "Failed to create tether in simulator!\n";
+		std::cerr << "Tether was intended to connect objects " << firstObject << " and " << secondObject << ", one of which does not exist\n";
 		exit(EXIT_FAILURE);
 	}
 
 	pos1 = dBodyGetPosition(first->Get_Body());
 	pos2 = dBodyGetPosition(second->Get_Body());
-
 	currentLength = Get_Current_Length(); // this required addition to Update_Geometry() ensures that there is a sane value at currentLength when it is time to memorize it at previousLength
+
 	Update_Geometry();
+}
+
+void TETHER::Actuate(void) {
+
+	if(firstMotorNeuron == NULL || secondMotorNeuron == NULL)
+		return;
+
+	static double minimumMotorNeuronOutput;
+	minimumMotorNeuronOutput = std::min(firstMotorNeuron->Get_Value(), secondMotorNeuron->Get_Value());
+
+	static double fx;
+	static double fy;
+	static double fz;
+
+	Update_Geometry();
+
+	// std::cerr << "MMO: " << minimumMotorNeuronOutput << " Dampening force: " << (dampeningCoefficient * (currentLength-previousLength) / relaxedLength) << std::endl;
+
+	currentTension = forceConstant * minimumMotorNeuronOutput + dampeningCoefficient * (currentLength-previousLength) / previousLength;
+	currentTension = currentTension>0 ? currentTension : 0.;
+
+	// std::cerr << "N0: " << firstMotorNeuron->Get_Value() << " N1: " << secondMotorNeuron->Get_Value() << " Tension: " << currentTension << std::endl;
+
+	fx = (pos2[0]-pos1[0]) * currentTension / currentLength;
+	fy = (pos2[1]-pos1[1]) * currentTension / currentLength;
+	fz = (pos2[2]-pos1[2]) * currentTension / currentLength;
+
+	dBodyAddForce(first->Get_Body(), fx, fy, fz);
+	dBodyAddForce(second->Get_Body(), -fx, -fy, -fz);
 }
 
 void TETHER::Draw() const {
 
-	if(currentLength > relaxedLength)
-		dsSetColorAlpha(0., 1., 1., 1.);
-	else
-		dsSetColorAlpha(1., 0., 1., 1.);
-
+	dsSetColorAlpha(currentTension / forceConstant, 0., 0., 0.);
 	dsDrawLine(pos1, pos2);
 }
 
-void TETHER::Read_From_Python(void) {
+void TETHER::Connect_To_Motor_Neuron(int actuatorInputIndex, NEURON *mNeuron) {
 
-	std::cin >> ID;
-
-	std::cin >> firstObject;
-	std::cin >> secondObject;
-	std::cin >> springConstant;
-	std::cin >> dampeningCoefficient;
+	if(actuatorInputIndex == 0)
+		firstMotorNeuron = mNeuron;
+	else if(actuatorInputIndex == 1)
+		secondMotorNeuron = mNeuron;
+	else {
+		std::cerr << "Failed to connect motor neuron to a tether. Index was " << actuatorInputIndex << std::endl;
+		exit(EXIT_FAILURE);
+	}
 }
 
 /***** Private functions *****/

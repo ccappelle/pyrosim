@@ -794,6 +794,10 @@ class Simulator(object):
            distances between the centers of the bodies at the current and
            previous time step, correspondingly.
 
+        Warning
+        -------
+        Very strong dampening and/or very large spring coefficient will
+        make simulation unstable.
 
         Parameters
         ----------
@@ -808,8 +812,7 @@ class Simulator(object):
         spring_coefficient    : float, optional
                 Spring coefficient (default is 1.0).
         dampening_coefficient : float, optional
-                Coefficient of dampening (default is 10.0). Warning: very
-                strong dampening will make your simulation unstable!
+                Coefficient of dampening (default is 10.0).
 
         Returns
         -------
@@ -858,6 +861,10 @@ class Simulator(object):
            distances between the centers of the bodies at the current and
            previous time step, correspondingly.
 
+        Warning
+        -------
+        Very strong dampening and/or very large force coefficient will
+        make simulation unstable.
 
         Parameters
         ----------
@@ -870,8 +877,7 @@ class Simulator(object):
         force_coefficient    : float, optional
                 Force coefficient (default is 1.0).
         dampening_coefficient : float, optional
-                Coefficient of dampening (default is 10.0). Warning: very
-                strong dampening will make your simulation unstable!
+                Coefficient of dampening (default is 10.0).
 
         Returns
         -------
@@ -1043,8 +1049,8 @@ class Simulator(object):
         assert tau >= 0, 'Tau must be positive'
         assert joint_id < self._num_joints, 'Joint with id ' + \
             str(joint_id)+' has not been sent'
-        assert input_index in range(1), 'For all currently implemented ' + \
-            'motors input_index must be in [0]'
+        assert input_index in range(2), 'For all currently implemented ' + \
+            'motors input_index must be in ' + str(range(2))
 
         neuron_id = self._num_neurons
         self._num_neurons += 1

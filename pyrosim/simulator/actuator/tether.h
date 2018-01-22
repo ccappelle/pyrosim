@@ -1,6 +1,8 @@
 #ifndef _ACTUATOR_TETHER_H
 #define _ACTUATOR_TETHER_H
 
+#include <cassert>
+
 #include "../object.h"
 #include "actuator.h"
 
@@ -14,9 +16,11 @@ private:
 	const double* pos1;
 	const double* pos2;
 
-	double relaxedLength, currentLength, previousLength;
-	double springConstant;
+	double currentLength, previousLength;
+	double forceConstant;
 	double dampeningCoefficient;
+
+	double currentTension;
 
 	OBJECT* first;
     OBJECT* second;
@@ -25,11 +29,10 @@ private:
 	NEURON* secondMotorNeuron;
 
 public:
-	TETHER(void) : relaxedLength(1.0),
-	             springConstant(1.0),
-	             dampeningCoefficient(10.),
-	             first(NULL),
-	             second(NULL) {};
+	TETHER(void) : forceConstant(1.0),
+	               dampeningCoefficient(10.),
+	               first(NULL),
+	               second(NULL) {};
 
 	// Since we're using multiple motor neurons, we will have to redefine all methods in actuator.h
 
@@ -41,7 +44,7 @@ public:
 	void Draw(void) const;
 
 	bool Connect_Sensor_To_Sensor_Neuron(int sensorID, int sensorValueIndex, NEURON *sNeuron) {return false;};
-	void Connect_To_Motor_Neuron(int actuatorInputIndex, NEURON *mNeuron) {};
+	void Connect_To_Motor_Neuron(int actuatorInputIndex, NEURON *mNeuron);
 
 	void Poll_Sensors(int currentTimestep) {};
 	void Update_Sensor_Neurons(int t) {};
