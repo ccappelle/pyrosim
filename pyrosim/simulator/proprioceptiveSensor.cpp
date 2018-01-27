@@ -1,69 +1,45 @@
 #ifndef _PROPRIOCEPTIVE_SENSOR_CPP
 #define _PROPRIOCEPTIVE_SENSOR_CPP
 
-#include "iostream"
+#include <iostream>
 
 #include "proprioceptiveSensor.h"
-
 #include "constants.h"
 #include "neuron.h"
 
 extern const int HINGE_ACTUATOR_ID;
 extern const int SLIDER_ACTUATOR_ID;
 
-PROPRIOCEPTIVE_SENSOR::PROPRIOCEPTIVE_SENSOR(int myID, int evalPeriod) {
-
-	ID = myID;
-
-	angles = new double[evalPeriod];
-
-        mySensorNeuron = NULL;
-}
-
-PROPRIOCEPTIVE_SENSOR::~PROPRIOCEPTIVE_SENSOR(void) {
-
-}
-
 void PROPRIOCEPTIVE_SENSOR::Connect_To_Sensor_Neuron(int sensorValueIndex, NEURON *sensorNeuron) {
 
-        mySensorNeuron = sensorNeuron;
-}
-
-int  PROPRIOCEPTIVE_SENSOR::Get_ID(void) {
-
-        return ID;
+	mySensorNeuron = sensorNeuron;
 }
 
 void PROPRIOCEPTIVE_SENSOR::Poll(dJointID joint, int type, int t) {
 
-        const dReal *pos;
-
-        if(type==HINGE)
-                angles[t] = dJointGetHingeAngle(joint);
-        else if(type==SLIDER)
-                angles[t] = dJointGetSliderPosition(joint);
-
+	if(type==HINGE_ACTUATOR_ID)
+		angles[t] = dJointGetHingeAngle(joint);
+	else if(type==SLIDER_ACTUATOR_ID)
+		angles[t] = dJointGetSliderPosition(joint);
 }
 
 void PROPRIOCEPTIVE_SENSOR::Update_Sensor_Neurons(int t) {
 
-        if ( mySensorNeuron )
-                mySensorNeuron->Set( angles[t] );
+	if ( mySensorNeuron )
+		mySensorNeuron->Set( angles[t] );
 }
 
 void PROPRIOCEPTIVE_SENSOR::Write_To_Python(int evalPeriod) {
 
-        char outString[1000000];
+	char outString[1000000];
+	sprintf(outString,"%d %d ",ID,1);
 
-        sprintf(outString,"%d %d ",ID,1);
+	for (int t = 0 ; t < evalPeriod ; t++)
+		sprintf(outString,"%s %f ",outString,angles[t]);
 
-        for ( int  t = 0 ; t < evalPeriod ; t++ ) 
+	sprintf(outString,"%s \n",outString);
 
-                sprintf(outString,"%s %f ",outString,angles[t]);
-
-        sprintf(outString,"%s \n",outString);
-
-        std::cout << outString;
+	std::cout << outString;
 }
 
-#endif
+#endif // _PROPRIOCEPTIVE_SENSOR_CPP

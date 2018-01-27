@@ -16,7 +16,7 @@
 #endif
 
 #include "constants.h"
-extern const int SLIDER; // FIXME: remove once proprioceptive sensors are fixed
+extern const int SLIDER_ACTUATOR_ID; // FIXME: remove once proprioceptive sensors are fixed
 
 void LINEAR_ACTUATOR::Actuate(void) {
 
@@ -154,7 +154,7 @@ void LINEAR_ACTUATOR::Poll_Sensors(int t) {
 
 	if ( proprioceptiveSensor )
 
-		proprioceptiveSensor->Poll(joint, SLIDER, t); // FIXME: change this once the sensors are fixed
+		proprioceptiveSensor->Poll(joint, SLIDER_ACTUATOR_ID, t); // FIXME: change this once the sensors are fixed
 }
 
 #endif // _ACTUATOR_LINEAR_CPP

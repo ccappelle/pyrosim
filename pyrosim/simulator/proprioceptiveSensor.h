@@ -11,19 +11,21 @@ private:
 
 	int ID;
 
-	double *angles;
+	double* angles;
 
-	NEURON *mySensorNeuron;
+	NEURON* mySensorNeuron;
 
 public:
 
-	PROPRIOCEPTIVE_SENSOR(int myID, int evalPeriod);
+	PROPRIOCEPTIVE_SENSOR(int myID, int evalPeriod) : ID(myID),
+	                                                  angles(new double[evalPeriod]),
+	                                                  mySensorNeuron(NULL) {};
 
-	~PROPRIOCEPTIVE_SENSOR(void);
+	~PROPRIOCEPTIVE_SENSOR(void) {};
 
-	void Connect_To_Sensor_Neuron(int sensorValueIndex, NEURON *sensorNeuron);
+	void Connect_To_Sensor_Neuron(int sensorValueIndex, NEURON* sensorNeuron);
 
-	int  Get_ID(void);
+	int Get_ID(void) {return ID;};
 
 	void Poll(dJointID joint, int type, int t);
 
