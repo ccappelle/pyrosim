@@ -2,7 +2,7 @@
 #define _RAY_SENSOR_CPP
 
 #include "iostream"
-#include "raySensor.h"
+#include "ray.h"
 #include "object.h"
 #include <drawstuff/drawstuff.h>
 #include "neuron.h"

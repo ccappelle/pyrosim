@@ -3,7 +3,7 @@
 
 #include <iostream>
 
-#include "proprioceptiveSensor.h"
+#include "proprioceptive.h"
 #include "constants.h"
 #include "neuron.h"
 

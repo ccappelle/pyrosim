@@ -3,7 +3,7 @@
 
 #include "actuator.h"
 #include "../object.h"
-#include "../proprioceptiveSensor.h"
+#include "../sensor/proprioceptive.h"
 
 class ROTARY_ACTUATOR : public ACTUATOR {
 

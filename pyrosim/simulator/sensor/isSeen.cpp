@@ -2,7 +2,7 @@
 #define _IS_SEEN_SENSOR_CPP
 
 #include "iostream"
-#include "isSeenSensor.h"
+#include "isSeen.h"
 #include "neuron.h"
 
 IS_SEEN_SENSOR::IS_SEEN_SENSOR(int myID, int evalPeriod){

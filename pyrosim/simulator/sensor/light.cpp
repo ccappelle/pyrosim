@@ -2,7 +2,7 @@
 #define _LIGHT_SENSOR_CPP
 
 #include "iostream"
-#include "lightSensor.h"
+#include "light.h"
 #include "neuron.h"
 
 LIGHT_SENSOR::LIGHT_SENSOR(int myID, int evalPeriod) {

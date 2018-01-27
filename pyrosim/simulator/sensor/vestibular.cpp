@@ -2,7 +2,7 @@
 #define _VESTIBULAR_SENSOR_CPP
 
 #include "iostream"
-#include "vestibularSensor.h"
+#include "vestibular.h"
 #include "neuron.h"
 
 VESTIBULAR_SENSOR::VESTIBULAR_SENSOR(int myID, int evalPeriod) {

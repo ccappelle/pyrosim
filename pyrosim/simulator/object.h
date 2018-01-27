@@ -2,12 +2,12 @@
 #define _OBJECT_H
 
 #include <ode/ode.h>
-#include "raySensor.h"
-#include "lightSensor.h"
-#include "positionSensor.h"
-#include "touchSensor.h"
-#include "vestibularSensor.h"
-#include "isSeenSensor.h"
+#include "sensor/ray.h"
+#include "sensor/light.h"
+#include "sensor/position.h"
+#include "sensor/touch.h"
+#include "sensor/vestibular.h"
+#include "sensor/isSeen.h"
 #include <map>
 #include <utility>
 #include <array>

@@ -2,7 +2,7 @@
 #define _POSITION_SENSOR_CPP
 
 #include "iostream"
-#include "positionSensor.h"
+#include "position.h"
 #include "neuron.h"
 
 POSITION_SENSOR::POSITION_SENSOR(int myID, int evalPeriod) {

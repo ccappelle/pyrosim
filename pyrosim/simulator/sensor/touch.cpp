@@ -4,7 +4,7 @@
 #include <iostream>
 #include <sstream>
 
-#include "touchSensor.h"
+#include "touch.h"
 #include "neuron.h"
 
 TOUCH_SENSOR::TOUCH_SENSOR(int myID, int evalPeriod) {
