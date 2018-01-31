@@ -1,10 +1,12 @@
-#ifndef _RAY_SENSOR_CPP
-#define _RAY_SENSOR_CPP
+#ifndef _SENSOR_RAY_CPP
+#define _SENSOR_RAY_CPP
 
-#include "iostream"
+#include <iostream>
+#include <string>
+#include <sstream>
+#include <drawstuff/drawstuff.h>
 #include "ray.h"
 #include "object.h"
-#include <drawstuff/drawstuff.h>
 #include "neuron.h"
 
 #ifdef dDOUBLE
@@ -42,10 +44,6 @@ RAY_SENSOR::RAY_SENSOR(dSpaceID space, OBJECT *myObj, int myID, int evalPeriod) 
         	mySensorNeurons[i] = NULL;
 }
 
-RAY_SENSOR::~RAY_SENSOR(void) {
-
-}
-
 void RAY_SENSOR::Add_To_Object(void) {
 
         dGeomSetBody(ray,obj->Get_Body());
@@ -79,11 +77,6 @@ void RAY_SENSOR::Draw(double endX, double endY, double endZ, int t) {
         dsDrawLine( start , end );
 }
 
-int  RAY_SENSOR::Get_ID(void) {
-
-        return ID;
-}
-
 void RAY_SENSOR::Initialize(int evalPeriod) {
 
         distances = new double[evalPeriod];
@@ -109,7 +102,7 @@ void RAY_SENSOR::Initialize(int evalPeriod) {
 void RAY_SENSOR::Set(double dist, OBJECT *objectThatWasHit,int t) {
 
 	if ( dist > distances[t] )
-	
+
 	// The ray sensor stops when it hits its first object.
 
 		return;
@@ -123,7 +116,7 @@ void RAY_SENSOR::Set(double dist, OBJECT *objectThatWasHit,int t) {
                 g[t] = objectThatWasHit->Get_Green_Component();
 
                 b[t] = objectThatWasHit->Get_Blue_Component();
-	       
+
                objectThatWasHit->IsSeen_Sensor_Fires(t);
         }
 }
@@ -149,17 +142,14 @@ void RAY_SENSOR::Update_Sensor_Neurons(int t) {
 
 void RAY_SENSOR::Write_To_Python(int evalPeriod) {
 
-	char outString[100000];
+	std::ostringstream oss;
 
-	sprintf(outString,"%d %d ",ID,4);
+	oss << ID << " " << 4 << " ";
+	for(int t=0; t<evalPeriod; t++)
+		oss << distances[t] << " " << r[t] << " " << g[t] << " " << b[t] << " ";
+	oss << "\n";
 
-	for ( int  t = 0 ; t < evalPeriod ; t++ ){
-	   sprintf(outString,"%s %f %f %f %f ",outString,distances[t],r[t],g[t],b[t]);
-       
-    }
-
-	sprintf(outString,"%s \n",outString);
-    std::cout << outString;
+	std::cout << oss.str();
 }
 
-#endif
+#endif // _SENSOR_RAY_CPP

@@ -1,28 +1,19 @@
-#ifndef _IS_SEEN_SENSOR_H
-#define _IS_SEEN_SENSOR_H
+#ifndef _SENSOR_IS_SEEN_H
+#define _SENSOR_IS_SEEN_H
 
 #include <ode/ode.h>
+#include "sensor.h"
+
 class NEURON;
 
-class IS_SEEN_SENSOR {
-private:
-    int ID;
-    int *values;
-    NEURON *mySensorNeuron;
+class IS_SEEN_SENSOR : public SENSOR {
 
 public:
     IS_SEEN_SENSOR(int myID, int evalPeriod);
-    ~IS_SEEN_SENSOR();
-
-    void Connect_To_Sensor_Neuron(int sensorValueIndex, NEURON *sensorNeuron);
+    ~IS_SEEN_SENSOR() {};
 
     void Fires(int t);
-
-    int Get_ID(void);
-
     void Update_Sensor_Neurons(int t);
-
-    void Write_To_Python(int evalPeriod);
 };
 
-#endif
+#endif // _SENSOR_IS_SEEN_H

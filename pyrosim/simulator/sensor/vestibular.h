@@ -1,34 +1,19 @@
-#ifndef _VESTIBULAR_SENSOR_H
-#define _VESTIBULAR_SENSOR_H
+#ifndef _SENSOR_VESTIBULAR_H
+#define _SENSOR_VESTIBULAR_H
 
 #include <ode/ode.h>
+#include "sensor.h"
 
 class NEURON;
 
-class VESTIBULAR_SENSOR {
-
-private:
-
-	int ID;
-
-	double *angles;
-
-        NEURON *mySensorNeuron;
+class VESTIBULAR_SENSOR : public SENSOR {
 
 public:
 	VESTIBULAR_SENSOR(int myID, int evalPeriod);
-
-	~VESTIBULAR_SENSOR(void);
-
-        void Connect_To_Sensor_Neuron(int sensorValueIndex, NEURON *sensorNeuron);
-
-        int  Get_ID(void);
+	~VESTIBULAR_SENSOR(void) {};
 
 	void Poll(dBodyID body, int t);
-
-        void Update_Sensor_Neurons(int t);
-
-	void Write_To_Python(int evalPeriod);
+	void Update_Sensor_Neurons(int t);
 };
 
-#endif
+#endif // _SENSOR_VESTIBULAR_H

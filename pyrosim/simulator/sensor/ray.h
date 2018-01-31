@@ -1,22 +1,20 @@
-#ifndef _RAY_SENSOR_H
-#define _RAY_SENSOR_H
+#ifndef _SENSOR_RAY_H
+#define _SENSOR_RAY_H
 
 #include <ode/ode.h>
+#include "sensor.h"
 
 class OBJECT;
-
 class NEURON;
 
-class RAY_SENSOR {
+class RAY_SENSOR : public SENSOR {
 
 private:
-	int ID;
-
 	double *distances;
 
 	OBJECT *obj;
 
-        dGeomID ray;
+	dGeomID ray;
 
 	double x, y, z;
 
@@ -31,7 +29,7 @@ private:
 public:
 	RAY_SENSOR(dSpaceID space, OBJECT *myObj, int myID, int evalPeriod);
 
-	~RAY_SENSOR(void);
+	~RAY_SENSOR(void) {};
 
 	void Add_To_Object(void);
 
@@ -39,17 +37,15 @@ public:
 
 	void Draw(double endX, double endY, double endZ, int t);
 
-        int  Get_ID(void);
-
 	void Initialize(int evalPeriod);
 
 	void Reset(void);
 
 	void Set(double distance, OBJECT *objectThatWasHit, int t);
 
-        void Update_Sensor_Neurons(int t);
+	void Update_Sensor_Neurons(int t);
 
 	void Write_To_Python(int evalPeriod);
 };
 
-#endif
+#endif // _SENSOR_RAY_H

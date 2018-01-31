@@ -1,37 +1,23 @@
-#ifndef _PROPRIOCEPTIVE_SENSOR_H
-#define _PROPRIOCEPTIVE_SENSOR_H
+#ifndef _SENSOR_PROPRIOCEPTIVE_H
+#define _SENSOR_PROPRIOCEPTIVE_H
 
 #include <ode/ode.h>
+#include "sensor.h"
 
 class NEURON;
 
-class PROPRIOCEPTIVE_SENSOR {
-
-private:
-
-	int ID;
-
-	double* angles;
-
-	NEURON* mySensorNeuron;
+class PROPRIOCEPTIVE_SENSOR : public SENSOR {
 
 public:
+	PROPRIOCEPTIVE_SENSOR(int myID, int evalPeriod) { ID = myID; values = new double[evalPeriod]; };
 
-	PROPRIOCEPTIVE_SENSOR(int myID, int evalPeriod) : ID(myID),
-	                                                  angles(new double[evalPeriod]),
-	                                                  mySensorNeuron(NULL) {};
-
-	~PROPRIOCEPTIVE_SENSOR(void) {};
-
-	void Connect_To_Sensor_Neuron(int sensorValueIndex, NEURON* sensorNeuron);
-
-	int Get_ID(void) {return ID;};
+//	void Connect_To_Sensor_Neuron(int sensorValueIndex, NEURON* sensorNeuron);
 
 	void Poll(dJointID joint, int type, int t);
 
 	void Update_Sensor_Neurons(int t);
 
-	void Write_To_Python(int evalPeriod);
+//	void Write_To_Python(int evalPeriod);
 };
 
-#endif // _PROPRIOCEPTIVE_SENSOR_H
+#endif // _SENSOR_PROPRIOCEPTIVE_H

@@ -1,31 +1,13 @@
 #ifndef _VESTIBULAR_SENSOR_CPP
 #define _VESTIBULAR_SENSOR_CPP
 
-#include "iostream"
+#include <iostream>
 #include "vestibular.h"
 #include "neuron.h"
 
 VESTIBULAR_SENSOR::VESTIBULAR_SENSOR(int myID, int evalPeriod) {
-
 	ID = myID;
-
-	angles = new double[evalPeriod];
-
-        mySensorNeuron = NULL;
-}
-
-VESTIBULAR_SENSOR::~VESTIBULAR_SENSOR(void) {
-
-}
-
-void VESTIBULAR_SENSOR::Connect_To_Sensor_Neuron(int sensorValueIndex, NEURON *sensorNeuron) {
-
-        mySensorNeuron = sensorNeuron;
-}
-
-int  VESTIBULAR_SENSOR::Get_ID(void) {
-
-        return ID;
+	values = new double[evalPeriod];
 }
 
 void VESTIBULAR_SENSOR::Poll(dBodyID body, int t) {
@@ -46,29 +28,14 @@ void VESTIBULAR_SENSOR::Poll(dBodyID body, int t) {
 
         double bLen = sqrt( pow(b[0],2.0) + pow(b[1],2.0) + pow(b[2],2.0) );
 
-        angles[t] = acos( dotProduct / bLen );
+        values[t] = acos( dotProduct / bLen );
 }
 
 void VESTIBULAR_SENSOR::Update_Sensor_Neurons(int t) {
 
         if ( mySensorNeuron )
 
-                mySensorNeuron->Set( angles[t] );
+                mySensorNeuron->Set( values[t] );
 }
 
-void VESTIBULAR_SENSOR::Write_To_Python(int evalPeriod) {
-
-        char outString[1000000];
-
-        sprintf(outString,"%d %d ",ID,1);
-
-        for ( int  t = 0 ; t < evalPeriod ; t++ )
-
-                sprintf(outString,"%s %f ",outString,angles[t]);
-
-        sprintf(outString,"%s \n",outString);
-
-        std::cout << outString;
-}
-
-#endif
+#endif // _VESTIBULAR_SENSOR_CPP

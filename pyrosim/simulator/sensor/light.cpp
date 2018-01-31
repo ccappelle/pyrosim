@@ -1,9 +1,9 @@
-#ifndef _LIGHT_SENSOR_CPP
-#define _LIGHT_SENSOR_CPP
+#ifndef _SENSOR_LIGHT_CPP
+#define _SENSOR_LIGHT_CPP
 
-#include "iostream"
+#include <iostream>
 #include "light.h"
-#include "neuron.h"
+#include "../neuron.h"
 
 LIGHT_SENSOR::LIGHT_SENSOR(int myID, int evalPeriod) {
 
@@ -12,20 +12,6 @@ LIGHT_SENSOR::LIGHT_SENSOR(int myID, int evalPeriod) {
 	values = new double[evalPeriod];
 
 	mySensorNeuron = NULL;
-}
-
-LIGHT_SENSOR::~LIGHT_SENSOR(void) {
-
-}
-
-void LIGHT_SENSOR::Connect_To_Sensor_Neuron(int sensorValueIndex, NEURON *sensorNeuron) {
-
-	mySensorNeuron = sensorNeuron;
-}
-
-int  LIGHT_SENSOR::Get_ID(void) {
-
-	return ID;
 }
 
 void LIGHT_SENSOR::Poll(dBodyID body, dBodyID lightSource, int t) {
@@ -54,19 +40,4 @@ void LIGHT_SENSOR::Update_Sensor_Neurons(int t) {
 		mySensorNeuron->Set( values[t] );
 }
 
-void LIGHT_SENSOR::Write_To_Python(int evalPeriod) {
-
-        char outString[1000000];
-
-        sprintf(outString,"%d %d ",ID,1);
-
-        for ( int  t = 0 ; t < evalPeriod ; t++ )
-
-                sprintf(outString,"%s %f ",outString,values[t]);
-
-        sprintf(outString,"%s \n",outString);
-
-        std::cout << outString;
-}
-
-#endif
+#endif // _SENSOR_LIGHT_CPP
