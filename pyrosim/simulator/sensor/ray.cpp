@@ -2,101 +2,49 @@
 #define _SENSOR_RAY_CPP
 
 #include <iostream>
-#include <string>
-#include <sstream>
 #include <drawstuff/drawstuff.h>
 #include "ray.h"
 #include "object.h"
-#include "neuron.h"
 
 #ifdef dDOUBLE
 #define dsDrawLine dsDrawLineD
 #endif
 
-RAY_SENSOR::RAY_SENSOR(dSpaceID space, OBJECT *myObj, int myID, int evalPeriod) {
+RAY_SENSOR::RAY_SENSOR(dSpaceID space, OBJECT *myObj, int myID, int evalPeriod) : SENSOR(myID, evalPeriod, 4),
+                                                                                  obj(myObj) {
 
-	ID = myID;
+	std::cin >> x;
+	std::cin >> y;
+	std::cin >> z;
 
-	obj = myObj;
+	std::cin >> r1;
+	std::cin >> r2;
+	std::cin >> r3;
 
-        std::cin >> x;
+	std::cin >> maxDistance;
 
-        std::cin >> y;
+	distances = values[0];
+	r = values[1]; g = values[2]; b = values[3];
 
-        std::cin >> z;
+	for(int t=0; t<evalPeriod; t++) {
+		distances[t] = maxDistance;
+		r[t] = 0.0; g[t] = 0.0; b[t] = 0.0;
+	}
 
-        std::cin >> r1;
-
-        std::cin >> r2;
-
-        std::cin >> r3;
-
-        std::cin >> maxDistance;
-
-	Initialize(evalPeriod);
-
-        ray = dCreateRay(space,maxDistance);
+	ray = dCreateRay(space,maxDistance);
 
 	Add_To_Object();
-
-	for (int i = 0 ; i < 4 ; i++ )
-
-        	mySensorNeurons[i] = NULL;
-}
-
-void RAY_SENSOR::Add_To_Object(void) {
-
-        dGeomSetBody(ray,obj->Get_Body());
-
-        dGeomSetOffsetWorldPosition(ray,x,y,z);
-
-	dMatrix3 R;
-
-	dRFromZAxis(R,r1,r2,r3);
-
-	dGeomSetOffsetWorldRotation(ray,R);
-
-	dGeomSetData(ray,obj);
-
-	dGeomRaySetParams(ray, true, true);
-}
-
-void RAY_SENSOR::Connect_To_Sensor_Neuron(int sensorValueIndex, NEURON *sensorNeuron) {
-
-        mySensorNeurons[ sensorValueIndex ] = sensorNeuron;
 }
 
 void RAY_SENSOR::Draw(double endX, double endY, double endZ, int t) {
 
-        const dReal *start = dGeomGetPosition( ray );
+	const dReal *start = dGeomGetPosition( ray );
 
 	double end[3] = {endX,endY,endZ};
 
-        dsSetColor(r[t],g[t],b[t]);
+	dsSetColor(r[t],g[t],b[t]);
 
-        dsDrawLine( start , end );
-}
-
-void RAY_SENSOR::Initialize(int evalPeriod) {
-
-        distances = new double[evalPeriod];
-
-        r = new double[evalPeriod];
-
-        g = new double[evalPeriod];
-
-        b = new double[evalPeriod];
-
-        for (int t=0;t<evalPeriod;t++) {
-
-                distances[t] = maxDistance;
-
-                r[t] = 0.0;
-
-                g[t] = 0.0;
-
-                b[t] = 0.0;
-        }
+	dsDrawLine( start , end );
 }
 
 void RAY_SENSOR::Set(double dist, OBJECT *objectThatWasHit,int t) {
@@ -121,35 +69,21 @@ void RAY_SENSOR::Set(double dist, OBJECT *objectThatWasHit,int t) {
         }
 }
 
-void RAY_SENSOR::Update_Sensor_Neurons(int t) {
+void RAY_SENSOR::Add_To_Object(void) {
 
-        if ( mySensorNeurons[0] )
+	dGeomSetBody(ray, obj->Get_Body());
 
-                mySensorNeurons[0]->Set( distances[t] );
+	dGeomSetOffsetWorldPosition(ray, x, y, z);
 
-        if ( mySensorNeurons[1] )
+	dMatrix3 R;
 
-                mySensorNeurons[1]->Set( r[t] );
+	dRFromZAxis(R, r1, r2, r3);
 
-        if ( mySensorNeurons[2] )
+	dGeomSetOffsetWorldRotation(ray, R);
 
-                mySensorNeurons[2]->Set( g[t] );
+	dGeomSetData(ray, obj);
 
-        if ( mySensorNeurons[3] )
-
-                mySensorNeurons[3]->Set( b[t] );
-}
-
-void RAY_SENSOR::Write_To_Python(int evalPeriod) {
-
-	std::ostringstream oss;
-
-	oss << ID << " " << 4 << " ";
-	for(int t=0; t<evalPeriod; t++)
-		oss << distances[t] << " " << r[t] << " " << g[t] << " " << b[t] << " ";
-	oss << "\n";
-
-	std::cout << oss.str();
+	dGeomRaySetParams(ray, true, true);
 }
 
 #endif // _SENSOR_RAY_CPP

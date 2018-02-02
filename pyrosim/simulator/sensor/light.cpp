@@ -1,18 +1,7 @@
 #ifndef _SENSOR_LIGHT_CPP
 #define _SENSOR_LIGHT_CPP
 
-#include <iostream>
 #include "light.h"
-#include "../neuron.h"
-
-LIGHT_SENSOR::LIGHT_SENSOR(int myID, int evalPeriod) {
-
-	ID = myID;
-
-	values = new double[evalPeriod];
-
-	mySensorNeuron = NULL;
-}
 
 void LIGHT_SENSOR::Poll(dBodyID body, dBodyID lightSource, int t) {
 
@@ -30,14 +19,7 @@ void LIGHT_SENSOR::Poll(dBodyID body, dBodyID lightSource, int t) {
 
 	// Light decays with the inverse of the square of the distance...
 
-	values[t] = 1.0 / pow(distance,2.0);
-}
-
-void LIGHT_SENSOR::Update_Sensor_Neurons(int t) {
-
-	if ( mySensorNeuron )
-
-		mySensorNeuron->Set( values[t] );
+	values[0][t] = 1.0 / pow(distance,2.0);
 }
 
 #endif // _SENSOR_LIGHT_CPP

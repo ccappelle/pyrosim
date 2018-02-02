@@ -50,7 +50,7 @@ bool ROTARY_ACTUATOR::Connect_Sensor_To_Sensor_Neuron(int sensorID, int sensorVa
 	if ( proprioceptiveSensor )
 		if ( proprioceptiveSensor->Get_ID() == sensorID ) {
 
-			proprioceptiveSensor->Connect_To_Sensor_Neuron(sensorValueIndex, sensorNeuron);
+			proprioceptiveSensor->Connect_To_Sensor_Neuron(sensorNeuron, sensorValueIndex);
 			return true;
 		}
 

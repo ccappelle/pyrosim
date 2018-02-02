@@ -47,32 +47,32 @@ int OBJECT::Connect_Sensor_To_Sensor_Neuron(int sensorID, int sensorValueIndex, 
 
     if ( lightSensor )
         if ( lightSensor->Get_ID() == sensorID ) {
-            lightSensor->Connect_To_Sensor_Neuron(sensorValueIndex, sensorNeuron);
+            lightSensor->Connect_To_Sensor_Neuron(sensorNeuron, sensorValueIndex);
             return true;
         }
     if ( positionSensor )
         if ( positionSensor->Get_ID() == sensorID ) {
-            positionSensor->Connect_To_Sensor_Neuron(sensorValueIndex, sensorNeuron);
+            positionSensor->Connect_To_Sensor_Neuron(sensorNeuron, sensorValueIndex);
             return true;
         }
     if ( raySensor )
         if ( raySensor->Get_ID() == sensorID ) {
-            raySensor->Connect_To_Sensor_Neuron(sensorValueIndex, sensorNeuron);
+            raySensor->Connect_To_Sensor_Neuron(sensorNeuron, sensorValueIndex);
             return true;
         }
     if ( touchSensor )
         if ( touchSensor->Get_ID() == sensorID ) {
-            touchSensor->Connect_To_Sensor_Neuron(sensorValueIndex, sensorNeuron);
+            touchSensor->Connect_To_Sensor_Neuron(sensorNeuron, sensorValueIndex);
             return true;
         }
     if ( vestibularSensor )
         if ( vestibularSensor->Get_ID() == sensorID ) {
-            vestibularSensor->Connect_To_Sensor_Neuron(sensorValueIndex, sensorNeuron);
+            vestibularSensor->Connect_To_Sensor_Neuron(sensorNeuron, sensorValueIndex);
             return true;
         }
     if ( isSeenSensor )
         if ( isSeenSensor->Get_ID() == sensorID) {
-            isSeenSensor->Connect_To_Sensor_Neuron(sensorValueIndex, sensorNeuron);
+            isSeenSensor->Connect_To_Sensor_Neuron(sensorNeuron, sensorValueIndex);
             return true;
         }
     return false;

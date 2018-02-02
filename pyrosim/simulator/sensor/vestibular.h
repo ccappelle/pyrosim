@@ -4,16 +4,12 @@
 #include <ode/ode.h>
 #include "sensor.h"
 
-class NEURON;
-
 class VESTIBULAR_SENSOR : public SENSOR {
 
 public:
-	VESTIBULAR_SENSOR(int myID, int evalPeriod);
-	~VESTIBULAR_SENSOR(void) {};
+	VESTIBULAR_SENSOR(int myID, int evalPeriod) : SENSOR(myID, evalPeriod) {};
 
 	void Poll(dBodyID body, int t);
-	void Update_Sensor_Neurons(int t);
 };
 
 #endif // _SENSOR_VESTIBULAR_H
