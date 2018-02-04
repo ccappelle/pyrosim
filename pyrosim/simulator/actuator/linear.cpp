@@ -86,8 +86,9 @@ void LINEAR_ACTUATOR::Create_In_Simulator(dWorldID world, OBJECT ** allObjects, 
 
 bool LINEAR_ACTUATOR::Create_Proprioceptive_Sensor(int myID, int evalPeriod) {
 
-	proprioceptiveSensor = static_cast<PROPRIOCEPTIVE_ROTARY_SENSOR>(new PROPRIOCEPTIVE_LINEAR_SENSOR(myID, evalPeriod));
-	return true;
+	PROPRIOCEPTIVE_LINEAR_SENSOR* ps = new PROPRIOCEPTIVE_LINEAR_SENSOR(myID, evalPeriod);
+	proprioceptiveSensor = static_cast<PROPRIOCEPTIVE_ROTARY_SENSOR*>(ps);
+	return false;
 }
 
 void LINEAR_ACTUATOR::Draw() const {

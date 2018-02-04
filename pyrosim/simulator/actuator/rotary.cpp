@@ -81,7 +81,7 @@ void ROTARY_ACTUATOR::Create_In_Simulator(dWorldID world, OBJECT** allObjects, i
 
 bool ROTARY_ACTUATOR::Create_Proprioceptive_Sensor(int sensorID, int evalPeriod) {
 
-	proprioceptiveRotarySensor = new PROPRIOCEPTIVE_ROTARY_SENSOR(sensorID, evalPeriod);
+	proprioceptiveSensor = new PROPRIOCEPTIVE_ROTARY_SENSOR(sensorID, evalPeriod);
 	return true;
 }
 
