@@ -27,5 +27,5 @@ all: $(OBJ)
 .PHONY: clean
 clean:
 	rm -f *.o */*.o
-	rm -f *.d */*.o
+	rm -f *.d */*.d
 	rm -f $(BIN)
