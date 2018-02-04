@@ -15,9 +15,6 @@
 #define dsDrawCapsule dsDrawCapsuleD
 #endif
 
-#include "../constants.h"
-extern const int HINGE_ACTUATOR_ID; // FIXME: remove once proprioceptive sensors are fixed
-
 void ROTARY_ACTUATOR::Actuate(void) {
 
 	if ( motorNeuron == NULL )
@@ -84,8 +81,7 @@ void ROTARY_ACTUATOR::Create_In_Simulator(dWorldID world, OBJECT** allObjects, i
 
 bool ROTARY_ACTUATOR::Create_Proprioceptive_Sensor(int sensorID, int evalPeriod) {
 
-	proprioceptiveSensor = new PROPRIOCEPTIVE_SENSOR(sensorID, evalPeriod); // FIXME: where's the corresponding delete?
-
+	proprioceptiveRotarySensor = new PROPRIOCEPTIVE_ROTARY_SENSOR(sensorID, evalPeriod);
 	return true;
 }
 
@@ -118,7 +114,7 @@ void ROTARY_ACTUATOR::Poll_Sensors(int t) {
 
 	if ( proprioceptiveSensor )
 
-		proprioceptiveSensor->Poll(joint, HINGE_ACTUATOR_ID, t); // FIXME: change this once the sensors are fixed
+		proprioceptiveSensor->Poll(joint, t); // FIXME: change this once the sensors are fixed
 }
 
 void ROTARY_ACTUATOR::Read_From_Python(void) {

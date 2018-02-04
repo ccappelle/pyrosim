@@ -119,6 +119,9 @@ public:
 	void Process_Adhesive_Touch(dWorldID world, OBJECT* other);
 	//! Connects the approapriate objects when they touch in nearCallback()
 
+	int Get_Num_Adhesion_Points(void) {return adhesiveJointsToTypes.size();};
+	//! Returns the number of adhesion points/glued items
+
 	void Draw(void);
 	void Draw_Ray_Sensor(double x, double y, double z, int t);
 

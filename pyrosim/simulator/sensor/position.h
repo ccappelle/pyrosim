@@ -16,7 +16,6 @@ public:
 	POSITION_SENSOR(int myID, int evalPeriod) : SENSOR(myID, evalPeriod, 3) {
 
 		x = values[0]; y = values[1]; z = values[2];
-//		std::cerr << "xyz values assigned: " << x << ' ' << y << ' ' << z << std::endl;
 	};
 
 	void Poll(dBodyID body, int t);
