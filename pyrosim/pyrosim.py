@@ -1448,8 +1448,7 @@ class Simulator(object):
         return sensor_id
 
 # ------Synapses------------------------------
-    def send_synapse(self, source_neuron_id=0, target_neuron_id=0,
-                     weight=0.0):
+    def send_synapse(self, source_neuron_id, target_neuron_id, weight):
         """Sends a synapse to the simulator
 
         Synapses are the edge connections between neurons
