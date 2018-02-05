@@ -46,4 +46,38 @@ void ADHESIVE::Read_From_Python(void) {
 	std::cin >> adhesionKind;
 }
 
+bool ADHESIVE::Create_Proprioceptive_Sensor(int sensorID, int evalPeriod) {
+
+	proprioceptiveSensor = new PROPRIOCEPTIVE_ADHESIVE_SENSOR(sensorID, evalPeriod);
+	return true;
+}
+
+void ADHESIVE::Poll_Sensors(int t) {
+
+	if(proprioceptiveSensor)
+		proprioceptiveSensor->Poll(first, t);
+}
+
+void ADHESIVE::Update_Sensor_Neurons(int t) {
+
+	if(proprioceptiveSensor)
+		proprioceptiveSensor->Update_Sensor_Neurons(t);
+}
+
+void ADHESIVE::Write_To_Python(int evalPeriod) const {
+
+	if(proprioceptiveSensor)
+		proprioceptiveSensor->Write_To_Python(evalPeriod);
+}
+
+bool ADHESIVE::Connect_Sensor_To_Sensor_Neuron(int sensorID, int sensorValueIndex, NEURON *sNeuron) {
+
+	if(proprioceptiveSensor)
+		if (proprioceptiveSensor->Get_ID() == sensorID) {
+			proprioceptiveSensor->Connect_To_Sensor_Neuron(sNeuron, sensorValueIndex);
+			return true;
+		}
+	return false;
+}
+
 #endif // _ACTUATOR_ADHESIVE_CPP

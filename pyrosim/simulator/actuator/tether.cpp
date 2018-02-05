@@ -89,6 +89,40 @@ void TETHER::Connect_To_Motor_Neuron(int actuatorInputIndex, NEURON *mNeuron) {
 	}
 }
 
+bool TETHER::Create_Proprioceptive_Sensor(int sensorID, int evalPeriod) {
+
+	proprioceptiveSensor = new PROPRIOCEPTIVE_TETHER_SENSOR(sensorID, evalPeriod);
+	return true;
+}
+
+void TETHER::Poll_Sensors(int currentTimestep) {
+
+	if(proprioceptiveSensor)
+		proprioceptiveSensor->Poll(currentTension, currentTimestep);
+}
+
+void TETHER::Update_Sensor_Neurons(int t) {
+
+	if(proprioceptiveSensor)
+		proprioceptiveSensor->Update_Sensor_Neurons(t);
+}
+
+void TETHER::Write_To_Python(int evalPeriod) const {
+
+	if(proprioceptiveSensor)
+		proprioceptiveSensor->Write_To_Python(evalPeriod);
+}
+
+bool TETHER::Connect_Sensor_To_Sensor_Neuron(int sensorID, int sensorValueIndex, NEURON *sNeuron) {
+
+	if(proprioceptiveSensor)
+		if (proprioceptiveSensor->Get_ID() == sensorID) {
+			proprioceptiveSensor->Connect_To_Sensor_Neuron(sNeuron, sensorValueIndex);
+			return true;
+		}
+	return false;
+}
+
 /***** Private functions *****/
 
 void TETHER::Update_Geometry(void) {

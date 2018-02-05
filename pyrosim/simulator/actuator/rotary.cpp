@@ -139,14 +139,12 @@ void ROTARY_ACTUATOR::Read_From_Python(void) {
 void ROTARY_ACTUATOR::Update_Sensor_Neurons(int t) {
 
 	if ( proprioceptiveSensor )
-
 		proprioceptiveSensor->Update_Sensor_Neurons(t);
 }
 
 void ROTARY_ACTUATOR::Write_To_Python(int evalPeriod) const {
 
 	if ( proprioceptiveSensor )
-
 		proprioceptiveSensor->Write_To_Python(evalPeriod);
 }
 
