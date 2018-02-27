@@ -59,6 +59,8 @@ private:
 	std::multiset< int > adhesionTypesExhibiting;
 	std::map< dJointID, std::multiset<int> > adhesiveJointsToTypes;
 
+	bool bodyCreated;
+
 public:
 	OBJECT(void) :
 		ID(0),
@@ -68,12 +70,12 @@ public:
 		touchSensor(NULL),
 		vestibularSensor(NULL),
 		isSeenSensor(NULL),
-		containsLightSource(false) {
-
+		containsLightSource(false),
+		bodyCreated(false) {
 		Set_Adhesion_Susceptibility(0);
 	};
 
-	~OBJECT(void) {};
+	~OBJECT(void);
 
 	void Add_External_Force(float x, float y, float z, int timeStep);
 
@@ -93,7 +95,7 @@ public:
 
 	void Create_Touch_Sensor(int myID, int evalPeriod);
 
-    void Create_Vestibular_Sensor(int myID, int evalPeriod);
+	void Create_Vestibular_Sensor(int myID, int evalPeriod);
 
 	void Set_Adhesion_Susceptibility(int adhesionKind) {adhesionTypesSusceptible.insert(adhesionKind);};
 	//! Makes object susceptible to adhesion of adhesionKind
@@ -137,9 +139,9 @@ public:
 	double Get_Green_Component(void) {return g;};
 	double Get_Blue_Component(void) {return b;};
 
-    void Poll_Sensors(int numObjects, OBJECT **objects, int t);
+	void Poll_Sensors(int numObjects, OBJECT **objects, int t);
 
-    void Read_In_External_Force(void);
+	void Read_In_External_Force(void);
 	void Read_From_Python(dWorldID world, dSpaceID space, int shape);
 	void Set_Ray_Sensor(double distance, OBJECT *objectThatWasHit, int t);
 

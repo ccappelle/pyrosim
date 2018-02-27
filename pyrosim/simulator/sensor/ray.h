@@ -22,6 +22,7 @@ private:
 
 public:
 	RAY_SENSOR(dSpaceID space, OBJECT *myObj, int myID, int evalPeriod);
+	~RAY_SENSOR(void);
 
 	void Draw(double endX, double endY, double endZ, int t);
 

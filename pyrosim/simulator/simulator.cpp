@@ -373,5 +373,8 @@ int main (int argc, char **argv) {
 		dsSimulationLoop (argc,argv,data->windowWidth,data->windowHeight,&fn);
 	}
 
+	if ( !data->disableFloor )
+		delete static_cast<GeomData*>(dGeomGetData(ground));
+
 	return 0;
 }

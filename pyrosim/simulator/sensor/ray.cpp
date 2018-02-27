@@ -11,6 +11,11 @@
 #define dsDrawLine dsDrawLineD
 #endif
 
+RAY_SENSOR::~RAY_SENSOR(void) {
+
+	delete static_cast<GeomData*>(dGeomGetData(ray));
+}
+
 RAY_SENSOR::RAY_SENSOR(dSpaceID space, OBJECT *myObj, int myID, int evalPeriod) : SENSOR(myID, evalPeriod, 4),
                                                                                   obj(myObj) {
 
