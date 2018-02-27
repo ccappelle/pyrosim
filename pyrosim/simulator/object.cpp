@@ -67,6 +67,11 @@ int OBJECT::Connect_Sensor_To_Sensor_Neuron(int sensorID, int sensorValueIndex, 
             raySensor->Connect_To_Sensor_Neuron(sensorNeuron, sensorValueIndex);
             return true;
         }
+    if ( proximitySensor )
+        if ( proximitySensor->Get_ID() == sensorID ) {
+            proximitySensor->Connect_To_Sensor_Neuron(sensorNeuron, sensorValueIndex);
+            return true;
+        }
     if ( touchSensor )
         if ( touchSensor->Get_ID() == sensorID ) {
             touchSensor->Connect_To_Sensor_Neuron(sensorNeuron, sensorValueIndex);
@@ -91,6 +96,10 @@ void OBJECT::Create_IsSeen_Sensor(int myID, int evalPeriod){
 
 void OBJECT::Create_Ray_Sensor(dSpaceID space, int myID, int evalPeriod) {
 	raySensor = new RAY_SENSOR(space,this,myID,evalPeriod);
+}
+
+void OBJECT::Create_Proximity_Sensor(dSpaceID space, int myID, int evalPeriod) {
+	proximitySensor = new PROXIMITY_SENSOR(space,this,myID,evalPeriod);
 }
 
 void OBJECT::Create_Light_Sensor(int myID, int evalPeriod) {
@@ -211,6 +220,12 @@ void OBJECT::Draw(void) {
         dsDrawSphere(pos,rot,radius);
 }
 
+void OBJECT::Draw_Proximity_Sensor(double x, double y, double z, int t) {
+
+	if ( proximitySensor )
+		proximitySensor->Draw(x,y,z,t);
+}
+
 void OBJECT::Draw_Ray_Sensor(double x, double y, double z, int t) {
 
 	if ( raySensor )
@@ -272,6 +287,11 @@ void OBJECT::Set_Ray_Sensor(double distance, OBJECT *objectThatWasHit, int t) {
 		raySensor->Set(distance,objectThatWasHit,t);
 }
 
+void OBJECT::Set_Proximity_Sensor(double distance, OBJECT *objectThatWasHit, int t) {
+	if ( proximitySensor )
+		proximitySensor->Set(distance,objectThatWasHit,t);
+}
+
 void OBJECT::Touch_Sensor_Fires(int t) {
 	if ( touchSensor )
 		touchSensor->Fires(t);
@@ -297,6 +317,9 @@ void OBJECT::Update_Sensor_Neurons(int t) {
 
     if ( vestibularSensor )
         vestibularSensor->Update_Sensor_Neurons(t);
+
+    if ( proximitySensor )
+        proximitySensor->Update_Sensor_Neurons(t);
 }
 
 void OBJECT::Write_To_Python(int evalPeriod) {
@@ -304,6 +327,11 @@ void OBJECT::Write_To_Python(int evalPeriod) {
 	if ( raySensor ){
         std::cerr << "  writing ray sensor to python "  << std::endl;
 		raySensor->Write_To_Python(evalPeriod);
+    }
+
+	if ( proximitySensor ){
+        std::cerr << "  writing proximity sensor to python "  << std::endl;
+		proximitySensor->Write_To_Python(evalPeriod);
     }
 
 	if ( lightSensor ){

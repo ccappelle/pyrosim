@@ -8,6 +8,7 @@
 #include "sensor/touch.h"
 #include "sensor/vestibular.h"
 #include "sensor/isSeen.h"
+#include "sensor/proximity.h"
 #include <map>
 #include <utility>
 #include <array>
@@ -44,12 +45,13 @@ private:
 	double r, g, b;
 	double tr, tg, tb; // true values stored for situations when an object must change color temporarily
 
-	LIGHT_SENSOR *lightSensor;
-	POSITION_SENSOR *positionSensor;
-	RAY_SENSOR *raySensor;
-	TOUCH_SENSOR *touchSensor;
-	VESTIBULAR_SENSOR *vestibularSensor;
-	IS_SEEN_SENSOR *isSeenSensor;
+	LIGHT_SENSOR* lightSensor;
+	POSITION_SENSOR* positionSensor;
+	RAY_SENSOR* raySensor;
+	TOUCH_SENSOR* touchSensor;
+	VESTIBULAR_SENSOR* vestibularSensor;
+	IS_SEEN_SENSOR* isSeenSensor;
+	PROXIMITY_SENSOR* proximitySensor;
 
 	int	containsLightSource;
 
@@ -70,6 +72,7 @@ public:
 		touchSensor(NULL),
 		vestibularSensor(NULL),
 		isSeenSensor(NULL),
+		proximitySensor(NULL),
 		containsLightSource(false),
 		bodyCreated(false) {
 		Set_Adhesion_Susceptibility(0);
@@ -86,6 +89,8 @@ public:
 	void Create_IsSeen_Sensor(int myID, int evalPeriod);
 
 	void Create_Ray_Sensor(dSpaceID space, int myID, int evalPeriod);
+
+	void Create_Proximity_Sensor(dSpaceID space, int myID, int evalPeriod);
 
 	void Create_Light_Sensor(int myID, int evalPeriod);
 
@@ -126,6 +131,7 @@ public:
 
 	void Draw(void);
 	void Draw_Ray_Sensor(double x, double y, double z, int t);
+	void Draw_Proximity_Sensor(double x, double y, double z, int t);
 
 	dBodyID Get_Body(void) {return body;};
 
@@ -144,6 +150,7 @@ public:
 	void Read_In_External_Force(void);
 	void Read_From_Python(dWorldID world, dSpaceID space, int shape);
 	void Set_Ray_Sensor(double distance, OBJECT *objectThatWasHit, int t);
+	void Set_Proximity_Sensor(double distance, OBJECT *objectThatWasHit, int t);
 
 	void Touch_Sensor_Fires(int t);
 

@@ -62,7 +62,7 @@ void Terminate(void);
 void Handle_Ray_Sensor(dGeomID o1, dGeomID o2) {
 
 	dContact contact;
-	int n = dCollide(o1,o2,1,&contact.geom,sizeof(dContact));
+	int n = dCollide(o1, o2, 1, &contact.geom, sizeof(dContact));
 
 	if ( n>0 ) {
 
@@ -77,7 +77,25 @@ void Handle_Ray_Sensor(dGeomID o1, dGeomID o2) {
 	}
 }
 
-void Handle_Collision_Sensors(dGeomID o1, dGeomID o2) {
+void Handle_Proximity_Sensor(dGeomID o1, dGeomID o2) {
+
+	dContact contact;
+	int n = dCollide(o1, o2, 1, &contact.geom, sizeof(dContact));
+
+	if ( n>0 ) {
+
+		OBJECT *obj1 = static_cast<GeomData*>(dGeomGetData(o1)) -> objectPtr;
+		OBJECT *obj2 = static_cast<GeomData*>(dGeomGetData(o2)) -> objectPtr;
+
+		obj1->Set_Proximity_Sensor(contact.geom.depth, obj2, timer);
+
+		if ( data->runBlind == false )
+			obj1->Draw_Proximity_Sensor(contact.geom.pos[0], contact.geom.pos[1], contact.geom.pos[2], timer);
+
+	}
+}
+
+bool Handle_Collision_Sensors(dGeomID o1, dGeomID o2) {
 
 	GeomData* gd1 = static_cast<GeomData*>(dGeomGetData(o1));
 	GeomData* gd2 = static_cast<GeomData*>(dGeomGetData(o2));
@@ -86,15 +104,22 @@ void Handle_Collision_Sensors(dGeomID o1, dGeomID o2) {
 		Handle_Ray_Sensor(o1,o2);
 	else if(gd2->geomType == SENSOR_RAY)
 		Handle_Ray_Sensor(o2,o1);
+	else if(gd1->geomType == SENSOR_PROXIMITY) // FIXME: in this arrangement the sensors can touch each other and rays
+		Handle_Proximity_Sensor(o1,o2);
+	else if(gd2->geomType == SENSOR_PROXIMITY)
+		Handle_Proximity_Sensor(o2,o1);
+	else
+		return false;
+
+	return true;
 }
 
 static void nearCallback (void *callbackData, dGeomID o1, dGeomID o2)
 {
 	int i, n;
 
-	Handle_Collision_Sensors(o1, o2);
 	// Cancel collisions between distance sensors and other objects.
-	if ( (dGeomGetClass(o1) == dRayClass) || (dGeomGetClass(o2) == dRayClass) ) return;
+	if( Handle_Collision_Sensors(o1, o2) ) return;
 
 	OBJECT *d1 = static_cast<GeomData*>(dGeomGetData(o1)) -> objectPtr;
 	OBJECT *d2 = static_cast<GeomData*>(dGeomGetData(o2)) -> objectPtr;
