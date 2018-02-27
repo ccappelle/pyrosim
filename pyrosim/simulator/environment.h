@@ -78,6 +78,7 @@ private:
 	void Create_IsSeen_Sensor(int evalPeriod);
 	void Create_Light_Sensor(int evalPeriod);
 	void Create_Ray_Sensor(dSpaceID space, int evalPeriod);
+	void Create_Proximity_Sensor(dSpaceID space, int evalPeriod);
 	void Create_Position_Sensor(int evalPeriod);
 	void Create_Proprioceptive_Sensor(int evalPeriod);
 	void Create_Touch_Sensor(int evalPeriod);

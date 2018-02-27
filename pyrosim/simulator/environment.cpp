@@ -136,6 +136,8 @@ void ENVIRONMENT::Read_From_Python(dWorldID world, dSpaceID space, Data* data)
 			Create_Touch_Sensor(data->evaluationTime);
 		else if ( strcmp(incomingString,"RaySensor") == 0 )
 			Create_Ray_Sensor(space,data->evaluationTime);
+		else if ( strcmp(incomingString,"ProximitySensor") == 0 )
+			Create_Proximity_Sensor(space,data->evaluationTime);
 		else if ( strcmp(incomingString,"ProprioceptiveSensor") == 0 )
 			Create_Proprioceptive_Sensor(data->evaluationTime);
 		else if ( strcmp(incomingString,"LightSensor") == 0 )
@@ -254,6 +256,17 @@ void ENVIRONMENT::Create_Ray_Sensor(dSpaceID space, int evalPeriod) {
     std::cin >> objectIndex;
 
     objects[objectIndex]->Create_Ray_Sensor(space,ID,evalPeriod);
+}
+
+void ENVIRONMENT::Create_Proximity_Sensor(dSpaceID space, int evalPeriod) {
+
+    int objectIndex;
+    int ID;
+
+    std::cin >> ID;
+    std::cin >> objectIndex;
+
+    objects[objectIndex]->Create_Proximity_Sensor(space,ID,evalPeriod);
 }
 
 void ENVIRONMENT::Create_IsSeen_Sensor(int evalPeriod){

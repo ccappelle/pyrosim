@@ -1396,6 +1396,48 @@ class Simulator(object):
 
         return sensor_id
 
+    def send_proximity_sensor(self, body_id=0,
+                        x=0, y=0, z=0,
+                        max_distance=10):
+        """Sends a proximity sensor to the simulator connected to a body
+
+        Proximity sensors return six values each time step, normalized
+        spherical coordinates of the touch point and color (r,g,b).
+
+        Parameters
+        ----------
+        body_id : int, optional
+                The body id of the associated body the proximity sensor
+                is connected to. When this body moves the proximity
+                sensor moves accordingly
+        x        : float, optional
+                The x position of the sensor
+        y        : float, optional
+                The y position of the sensor
+        z        : float, optional
+                The z position of the sensor
+        max_distance: float, optional
+                The maximum distance away the proximity can sense in
+                simulator units. (default is 10.0)
+
+        Returns
+        -------
+        int
+                The id tag of the sensor
+        """
+        assert body_id < self._num_bodies, 'Body with id ' + \
+            str(body_id) + ' has not been sent yet'
+
+        sensor_id = self._num_sensors
+        self._num_sensors += 1
+
+        self._send('ProximitySensor',
+                   sensor_id, body_id,
+                   x, y, z,
+                   max_distance)
+
+        return sensor_id
+
     def send_touch_sensor(self, body_id=0):
         """Send touch sensor to a body in the simulator
 
