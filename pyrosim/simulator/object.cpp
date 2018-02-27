@@ -9,6 +9,7 @@
 #include "constants.h"
 #include "object.h"
 #include "texturepath.h"
+#include "geomData.h"
 
 #ifdef dDOUBLE
 #define dsDrawLine dsDrawLineD
@@ -361,7 +362,10 @@ void OBJECT::CreateBody(dWorldID world, dSpaceID space){
 
     dGeomSetBody (geom,body);
 
-    dGeomSetData(geom,this);
+		GeomData* gd = new GeomData();
+		gd->geomType = DEFAULT;
+		gd->objectPtr = this;
+    dGeomSetData(geom, static_cast<void*>(gd));
 
 }
 

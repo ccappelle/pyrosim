@@ -15,6 +15,7 @@
 #include "texturepath.h"
 #include "environment.h"
 #include "datastruct.h"
+#include "geomData.h"
 
 #ifdef _MSC_VER
 #pragma warning(disable:4244 4305)  // for VC++, no precision loss complaints
@@ -60,43 +61,43 @@ void Terminate(void);
 
 void Handle_Ray_Sensor(dGeomID o1, dGeomID o2) {
 
-    if ( dGeomGetClass(o1) == dRayClass ) {
+	dContact contact;
+	int n = dCollide(o1,o2,1,&contact.geom,sizeof(dContact));
 
-        dContact contact;
+	if ( n>0 ) {
 
-        int n = dCollide(o1,o2,1,&contact.geom,sizeof(dContact));
+		OBJECT *obj = static_cast<GeomData*>(dGeomGetData(o1)) -> objectPtr;
+		OBJECT *obj2 = static_cast<GeomData*>(dGeomGetData(o2)) -> objectPtr;
 
-        if ( n>0 ) {
+		obj->Set_Ray_Sensor(contact.geom.depth,obj2,timer);
 
-            OBJECT *obj = (OBJECT *)dGeomGetData(o1);
-            OBJECT *obj2 = (OBJECT *)dGeomGetData(o2);
+		if ( data->runBlind == false )
+			obj->Draw_Ray_Sensor(contact.geom.pos[0],contact.geom.pos[1],contact.geom.pos[2],timer);
 
-            obj->Set_Ray_Sensor(contact.geom.depth,obj2,timer);
-
-            if ( data->runBlind == false )
-                obj->Draw_Ray_Sensor(contact.geom.pos[0],contact.geom.pos[1],contact.geom.pos[2],timer);
-
-        }
-    }
+	}
 }
 
-void Handle_Ray_Sensors(dGeomID o1, dGeomID o2) {
+void Handle_Collision_Sensors(dGeomID o1, dGeomID o2) {
 
-    Handle_Ray_Sensor(o1,o2);
+	GeomData* gd1 = static_cast<GeomData*>(dGeomGetData(o1));
+	GeomData* gd2 = static_cast<GeomData*>(dGeomGetData(o2));
 
-    Handle_Ray_Sensor(o2,o1);
+	if(gd1->geomType == SENSOR_RAY)
+		Handle_Ray_Sensor(o1,o2);
+	else if(gd2->geomType == SENSOR_RAY)
+		Handle_Ray_Sensor(o2,o1);
 }
 
 static void nearCallback (void *callbackData, dGeomID o1, dGeomID o2)
 {
 	int i, n;
 
-	Handle_Ray_Sensors(o1, o2);
+	Handle_Collision_Sensors(o1, o2);
 	// Cancel collisions between distance sensors and other objects.
 	if ( (dGeomGetClass(o1) == dRayClass) || (dGeomGetClass(o2) == dRayClass) ) return;
 
-	OBJECT *d1 = (OBJECT *)dGeomGetData(o1);
-	OBJECT *d2 = (OBJECT *)dGeomGetData(o2);
+	OBJECT *d1 = static_cast<GeomData*>(dGeomGetData(o1)) -> objectPtr;
+	OBJECT *d2 = static_cast<GeomData*>(dGeomGetData(o2)) -> objectPtr;
 
 	if ( d1 && d2 ){
 		if (dAreConnected (d1->Get_Body(),d2->Get_Body())) return; //no collision between joint connected bodies
@@ -354,7 +355,11 @@ int main (int argc, char **argv) {
 
 	if ( !data->disableFloor ) {
 		ground = dCreatePlane (space,0,0,1,0);
-		dGeomSetData(ground,NULL);
+
+		GeomData* gd = new GeomData();
+		gd->geomType = GROUND;
+		gd->objectPtr = NULL;
+		dGeomSetData(ground, static_cast<void*>(gd));
 	}
 
 	dWorldSetGravity(world, 0, 0, data->gravity);

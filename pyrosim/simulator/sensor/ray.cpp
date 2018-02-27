@@ -5,6 +5,7 @@
 #include <drawstuff/drawstuff.h>
 #include "ray.h"
 #include "object.h"
+#include "../geomData.h"
 
 #ifdef dDOUBLE
 #define dsDrawLine dsDrawLineD
@@ -81,7 +82,10 @@ void RAY_SENSOR::Add_To_Object(void) {
 
 	dGeomSetOffsetWorldRotation(ray, R);
 
-	dGeomSetData(ray, obj);
+	GeomData* gd = new GeomData();
+	gd->geomType = SENSOR_RAY;
+	gd->objectPtr = obj;
+	dGeomSetData(ray, static_cast<void*>(gd));
 
 	dGeomRaySetParams(ray, true, true);
 }

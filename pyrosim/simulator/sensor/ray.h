@@ -5,7 +5,6 @@
 #include "sensor.h"
 
 class OBJECT;
-class NEURON;
 
 class RAY_SENSOR : public SENSOR {
 
@@ -19,7 +18,7 @@ private:
 	double x, y, z;
 	double r1, r2, r3;
 
-    double maxDistance;
+	double maxDistance;
 
 public:
 	RAY_SENSOR(dSpaceID space, OBJECT *myObj, int myID, int evalPeriod);
