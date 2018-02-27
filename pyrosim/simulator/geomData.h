@@ -3,6 +3,8 @@
 
 #include "object.h"
 
+class OBJECT;
+
 enum GeomType { DEFAULT, GROUND, SENSOR_RAY, SENSOR_PROXIMITY };
 
 struct GeomData {

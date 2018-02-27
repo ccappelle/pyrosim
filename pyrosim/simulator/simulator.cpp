@@ -66,10 +66,10 @@ void Handle_Ray_Sensor(dGeomID o1, dGeomID o2) {
 
 	if ( n>0 ) {
 
-		OBJECT *obj = static_cast<GeomData*>(dGeomGetData(o1)) -> objectPtr;
-		OBJECT *obj2 = static_cast<GeomData*>(dGeomGetData(o2)) -> objectPtr;
+		OBJECT* obj = static_cast<GeomData*>(dGeomGetData(o1)) -> objectPtr;
+		OBJECT* obj2 = static_cast<GeomData*>(dGeomGetData(o2)) -> objectPtr;
 
-		obj->Set_Ray_Sensor(contact.geom.depth,obj2,timer);
+		obj->Set_Ray_Sensor(contact.geom.depth, obj2, timer);
 
 		if ( data->runBlind == false )
 			obj->Draw_Ray_Sensor(contact.geom.pos[0],contact.geom.pos[1],contact.geom.pos[2],timer);
@@ -79,13 +79,35 @@ void Handle_Ray_Sensor(dGeomID o1, dGeomID o2) {
 
 void Handle_Proximity_Sensor(dGeomID o1, dGeomID o2) {
 
+//	std::cerr << "Proximity sensor is being handled!\n";
+
 	dContact contact;
 	int n = dCollide(o1, o2, 1, &contact.geom, sizeof(dContact));
 
+//	std::cerr << "Number of contacts found: " << n << "\n";
+
 	if ( n>0 ) {
 
-		OBJECT *obj1 = static_cast<GeomData*>(dGeomGetData(o1)) -> objectPtr;
-		OBJECT *obj2 = static_cast<GeomData*>(dGeomGetData(o2)) -> objectPtr;
+		OBJECT* obj1 = static_cast<GeomData*>(dGeomGetData(o1)) -> objectPtr;
+		OBJECT* obj2 = static_cast<GeomData*>(dGeomGetData(o2)) -> objectPtr;
+
+/*
+		std::cerr << "Contact depth: " << contact.geom.depth << "\n";
+		const dReal* sensorpos = dGeomGetPosition(o1);
+		std::cerr << "Sensor position: " << sensorpos[0] << " " << sensorpos[1] << " " << sensorpos[2] << "\n";
+		std::cerr << "Contact position: " << contact.geom.pos[0] << " " << contact.geom.pos[1] << " " << contact.geom.pos[2] << "\n";
+		std::cerr << "The other object has type ";
+		switch(static_cast<GeomData*>(dGeomGetData(o2)) -> geomType) {
+			case GROUND: std::cerr << "GROUND\n";
+				break;
+			case DEFAULT: std::cerr << "DEFAULT\n";
+				break;
+			case SENSOR_RAY: std::cerr << "SENSOR_RAY\n";
+				break;
+			case SENSOR_PROXIMITY: std::cerr << "SENSOR_PROXIMITY\n";
+				break;
+		}
+*/
 
 		obj1->Set_Proximity_Sensor(contact.geom.depth, obj2, timer);
 
@@ -93,6 +115,8 @@ void Handle_Proximity_Sensor(dGeomID o1, dGeomID o2) {
 			obj1->Draw_Proximity_Sensor(contact.geom.pos[0], contact.geom.pos[1], contact.geom.pos[2], timer);
 
 	}
+
+//	std::cerr << "\n";
 }
 
 bool Handle_Collision_Sensors(dGeomID o1, dGeomID o2) {

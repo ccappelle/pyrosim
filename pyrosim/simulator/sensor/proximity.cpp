@@ -30,7 +30,7 @@ PROXIMITY_SENSOR::PROXIMITY_SENSOR(dSpaceID space, OBJECT* myObj, int myID, int 
 
 	dGeomSetBody(sensorVolume, basisObject->Get_Body());
 
-	dGeomSetOffsetWorldPosition(sensorVolume, ox, oy, oz);
+	dGeomSetOffsetPosition(sensorVolume, ox, oy, oz);
 
 	GeomData* gd = new GeomData();
 	gd->geomType = SENSOR_PROXIMITY;

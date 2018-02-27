@@ -1411,11 +1411,14 @@ class Simulator(object):
                 is connected to. When this body moves the proximity
                 sensor moves accordingly
         x        : float, optional
-                The x position of the sensor
+                The x position of the sensor in the object's coordinate
+                system
         y        : float, optional
-                The y position of the sensor
+                The y position of the sensor in the object's coordinate
+                system
         z        : float, optional
-                The z position of the sensor
+                The z position of the sensor in the object's coordinate
+                system
         max_distance: float, optional
                 The maximum distance away the proximity can sense in
                 simulator units. (default is 10.0)
@@ -1703,7 +1706,9 @@ class Simulator(object):
     def _collect_sensor_data(self, data_from_simulator):
         """Get sensor data back from ODE and store it in numpy array"""
 
-        self.data = np.zeros([self._num_sensors, 4,
+        # NOTE: update the line below every time the maximum number of
+        # sensor channels increases.
+        self.data = np.zeros([self._num_sensors, 6,
                               self.eval_time], dtype='f')
 
         debug_output = data_from_simulator[1]
