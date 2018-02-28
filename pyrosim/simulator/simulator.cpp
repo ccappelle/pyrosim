@@ -109,11 +109,7 @@ void Handle_Proximity_Sensor(dGeomID o1, dGeomID o2) {
 		}
 */
 
-		obj1->Set_Proximity_Sensor(contact.geom.depth, obj2, timer);
-
-		if ( data->runBlind == false )
-			obj1->Draw_Proximity_Sensor(contact.geom.pos[0], contact.geom.pos[1], contact.geom.pos[2], timer);
-
+		obj1->Set_Proximity_Sensor(contact.geom.depth, contact.geom.pos, obj2, timer);
 	}
 
 //	std::cerr << "\n";

@@ -29,12 +29,18 @@ private:
 	double sensorRadius;
 	dGeomID sensorVolume;
 
+	// current contact point position
+	double cpx, cpy, cpz;
+
+	// current timestep
+	int ts;
+
 public:
 	PROXIMITY_SENSOR(dSpaceID space, OBJECT *myObj, int myID, int evalPeriod);
 	~PROXIMITY_SENSOR();
 
-	void Draw(double endX, double endY, double endZ, int tt);
-	void Set(double distance, OBJECT* objectThatWasHit, int tt);
+	void Draw(void);
+	void Set(double distance, dVector3 contactPoint, OBJECT* objectThatWasHit, int tt);
 };
 
 #endif // _SENSOR_PROXIMITY_H

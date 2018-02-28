@@ -13,7 +13,8 @@
 #endif
 
 PROXIMITY_SENSOR::PROXIMITY_SENSOR(dSpaceID space, OBJECT* myObj, int myID, int evalPeriod) : SENSOR(myID, evalPeriod, 6),
-                                                                                              basisObject(myObj) {
+                                                                                              basisObject(myObj),
+                                                                                              cpx(0.), cpy(0.), cpz(0.), ts(0) {
 	std::cin >> ox;
 	std::cin >> oy;
 	std::cin >> oz;
@@ -44,23 +45,27 @@ PROXIMITY_SENSOR::~PROXIMITY_SENSOR() {
 	delete static_cast<GeomData*>(dGeomGetData(sensorVolume));
 }
 
-void PROXIMITY_SENSOR::Draw(double endX, double endY, double endZ, int tt) {
+void PROXIMITY_SENSOR::Draw(void) {
 
-	const dReal *start = dGeomGetPosition(sensorVolume);
+	const dReal* start = dGeomGetPosition(sensorVolume);
 
-	double end[3] = {endX,endY,endZ};
+	double end[3] = {cpx, cpy, cpz};
 
-	dsSetColor(cr[tt], cg[tt], cb[tt]);
+	dsSetColor(cr[ts], cg[ts], cb[ts]);
 
 	dsDrawLine(start, end);
 }
 
-void PROXIMITY_SENSOR::Set(double dist, OBJECT* objectThatWasHit, int tt) {
+void PROXIMITY_SENSOR::Set(double depth, dVector3 contactPoint, OBJECT* objectThatWasHit, int tt) {
 
-	if ( dist > sensorRadius*(1.-r[tt]) )
+	ts = tt;
+
+	if ( depth/sensorRadius < r[tt] )
 		return; // The proximity sensor stops when it hits its first object.
 
-	r[tt] = 1. - dist/sensorRadius;
+	r[tt] = depth/sensorRadius;
+
+	cpx = contactPoint[0]; cpy = contactPoint[1]; cpz = contactPoint[2];
 
 	if ( objectThatWasHit ) {
 
@@ -69,6 +74,10 @@ void PROXIMITY_SENSOR::Set(double dist, OBJECT* objectThatWasHit, int tt) {
 		cb[tt] = objectThatWasHit->Get_Blue_Component();
 
 		objectThatWasHit->IsSeen_Sensor_Fires(tt);
+	}
+	else {
+
+		cr[tt] = 0.; cg[tt] = 0.; cb[tt] = 0.;
 	}
 }
 

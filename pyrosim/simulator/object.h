@@ -131,7 +131,6 @@ public:
 
 	void Draw(void);
 	void Draw_Ray_Sensor(double x, double y, double z, int t);
-	void Draw_Proximity_Sensor(double x, double y, double z, int t);
 
 	dBodyID Get_Body(void) {return body;};
 
@@ -150,7 +149,7 @@ public:
 	void Read_In_External_Force(void);
 	void Read_From_Python(dWorldID world, dSpaceID space, int shape);
 	void Set_Ray_Sensor(double distance, OBJECT *objectThatWasHit, int t);
-	void Set_Proximity_Sensor(double distance, OBJECT *objectThatWasHit, int t);
+	void Set_Proximity_Sensor(double distance, dVector3 contactPoint, OBJECT *objectThatWasHit, int t);
 
 	void Touch_Sensor_Fires(int t);
 

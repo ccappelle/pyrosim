@@ -203,27 +203,24 @@ void OBJECT::Process_Adhesive_Touch(dWorldID world, OBJECT* other) {
 
 void OBJECT::Draw(void) {
 
-    dsSetColor(r,g,b);
-    const dReal *pos = dBodyGetPosition(body);
-    const dReal *rot = dBodyGetRotation(body);
+	dsSetColor(r,g,b);
+	const dReal *pos = dBodyGetPosition(body);
+	const dReal *rot = dBodyGetRotation(body);
 
-    // dsSetTexture (DS_WOOD);
-    if (myShape == BOX){
-        dReal sides[3] = {length,width,height};
-        dsDrawBox (pos,rot,sides);
-    }
-    else if (myShape == CYLINDER)
-        dsDrawCylinder(pos,rot,length,radius);
-    else if (myShape == CAPSULE)
-        dsDrawCapsule(pos,rot,length,radius);
-    else if (myShape == SPHERE)
-        dsDrawSphere(pos,rot,radius);
-}
+	// dsSetTexture (DS_WOOD);
+	if (myShape == BOX){
+		dReal sides[3] = {length,width,height};
+		dsDrawBox (pos,rot,sides);
+	}
+	else if (myShape == CYLINDER)
+		dsDrawCylinder(pos,rot,length,radius);
+	else if (myShape == CAPSULE)
+		dsDrawCapsule(pos,rot,length,radius);
+	else if (myShape == SPHERE)
+		dsDrawSphere(pos,rot,radius);
 
-void OBJECT::Draw_Proximity_Sensor(double x, double y, double z, int t) {
-
-	if ( proximitySensor )
-		proximitySensor->Draw(x,y,z,t);
+	if(proximitySensor)
+		proximitySensor->Draw();
 }
 
 void OBJECT::Draw_Ray_Sensor(double x, double y, double z, int t) {
@@ -287,9 +284,9 @@ void OBJECT::Set_Ray_Sensor(double distance, OBJECT *objectThatWasHit, int t) {
 		raySensor->Set(distance,objectThatWasHit,t);
 }
 
-void OBJECT::Set_Proximity_Sensor(double distance, OBJECT *objectThatWasHit, int t) {
+void OBJECT::Set_Proximity_Sensor(double distance, dVector3 contactPoint, OBJECT *objectThatWasHit, int t) {
 	if ( proximitySensor )
-		proximitySensor->Set(distance,objectThatWasHit,t);
+		proximitySensor->Set(distance, contactPoint, objectThatWasHit, t);
 }
 
 void OBJECT::Touch_Sensor_Fires(int t) {
