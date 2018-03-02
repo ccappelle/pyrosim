@@ -32,6 +32,7 @@ typedef std::map<std::string, ACTUATOR* (*) ()> StringToActuatorMapType;
 #include "actuator/adhesive.h"
 #include "actuator/rope.h"
 #include "actuator/tether.h"
+#include "actuator/reactionControlWheels.h"
 
 const StringToActuatorMapType stringToActuatorMap = {
 	{"HingeJoint", &createActuatorInstance<ROTARY_ACTUATOR>},
@@ -39,7 +40,8 @@ const StringToActuatorMapType stringToActuatorMap = {
 	{"Thruster", &createActuatorInstance<THRUSTER>},
 	{"AdhesiveJoint", &createActuatorInstance<ADHESIVE>},
 	{"Rope", &createActuatorInstance<ROPE>},
-	{"Tether", &createActuatorInstance<TETHER>}
+	{"Tether", &createActuatorInstance<TETHER>},
+	{"ReactionControlWheels", &createActuatorInstance<REACTION_CONTROL_WHEELS>}
 };
 
 /***** END ACTUATOR SUPPORT DEFINITIONS *****/
