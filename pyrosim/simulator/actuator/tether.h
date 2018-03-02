@@ -11,7 +11,7 @@ class TETHER : public ACTUATOR {
 
 private:
 	int	firstObject;
-    int secondObject;
+	int secondObject;
 
 	// double pos1[3], pos2[3];
 	const double* pos1;
@@ -24,7 +24,7 @@ private:
 	double currentTension;
 
 	OBJECT* first;
-    OBJECT* second;
+	OBJECT* second;
 
 	NEURON* firstMotorNeuron;
 	NEURON* secondMotorNeuron;
