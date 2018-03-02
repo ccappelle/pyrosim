@@ -37,7 +37,7 @@ void NEURAL_NETWORK::Read_Neuron_From_Python(std::string neuronTypeStr, ENVIRONM
 		std::cin >> actuatorInputIndex;
 
 		ACTUATOR* act = env->Get_Actuator(actuatorID);
-		act->Connect_To_Motor_Neuron(actuatorInputIndex, neurons[numNeurons]);
+		act->Connect_To_Motor_Neuron(neurons[numNeurons], actuatorInputIndex);
 	}
 
 	if(neuronTypeStr.compare("SensorNeuron") == 0) {

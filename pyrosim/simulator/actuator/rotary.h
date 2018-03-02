@@ -11,14 +11,9 @@ protected:
 	int	firstObject;
 	int	secondObject;
 
-	double x;
-	double y;
-	double z;
-	double normalX;
-	double normalY;
-	double normalZ;
-	double lowStop;
-	double highStop;
+	double x, y, z;
+	double normalX, normalY, normalZ;
+	double lowStop, highStop;
 	int	positionControl;
 
 	double speed;
@@ -33,6 +28,7 @@ protected:
 
 public:
 	ROTARY_ACTUATOR(void) :
+	  ACTUATOR(1),
 		firstObject(-1), secondObject(-1),
 		x(0), y(0), z(0),
 		normalX(0), normalY(0), normalZ(0),
@@ -46,7 +42,7 @@ public:
 
 	~ROTARY_ACTUATOR(void) {
 		if(proprioceptiveSensor)
-			delete proprioceptiveSensor; // BEWARE! You have to overload this if you inherit from this class and add data members
+			delete proprioceptiveSensor;
 	};
 
 	// Functiontions are declared as virtual for making very similar derivatives like LINEAR_ACTUATOR

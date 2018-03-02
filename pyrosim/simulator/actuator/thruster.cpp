@@ -17,11 +17,10 @@
 
 void THRUSTER::Actuate(void) {
 
-	if ( motorNeuron == NULL )
-
+	if ( motorNeurons[0] == NULL )
 		return;
 
-	double motorNeuronValue = motorNeuron->Get_Value();
+	double motorNeuronValue = motorNeurons[0]->Get_Value();
 
 	double zeroToOne = motorNeuronValue/2.0 + 0.5;
 

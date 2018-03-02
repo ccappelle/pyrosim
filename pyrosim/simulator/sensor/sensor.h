@@ -30,7 +30,7 @@ public:
 		}
 	};
 
-	~SENSOR() {
+	virtual ~SENSOR(void) {
 
 		for(int i=0; i<numChannels; i++)
 			delete [] values[i];

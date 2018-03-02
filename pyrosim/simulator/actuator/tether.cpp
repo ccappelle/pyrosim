@@ -44,11 +44,11 @@ void TETHER::Create_In_Simulator(dWorldID world, OBJECT** allObjects, int numObj
 
 void TETHER::Actuate(void) {
 
-	if(firstMotorNeuron == NULL || secondMotorNeuron == NULL)
+	if(motorNeurons[0] == NULL || motorNeurons[1] == NULL)
 		return;
 
 	static double minimumMotorNeuronOutput;
-	minimumMotorNeuronOutput = std::min(firstMotorNeuron->Get_Value(), secondMotorNeuron->Get_Value());
+	minimumMotorNeuronOutput = std::min(motorNeurons[0]->Get_Value(), motorNeurons[1]->Get_Value());
 
 	static double fx;
 	static double fy;
@@ -61,7 +61,7 @@ void TETHER::Actuate(void) {
 	currentTension = forceConstant * minimumMotorNeuronOutput + dampeningCoefficient * (currentLength-previousLength) / previousLength;
 	currentTension = currentTension>0 ? currentTension : 0.;
 
-	// std::cerr << "N0: " << firstMotorNeuron->Get_Value() << " N1: " << secondMotorNeuron->Get_Value() << " Tension: " << currentTension << std::endl;
+	// std::cerr << "N0: " << motorNeurons[0]->Get_Value() << " N1: " << motorNeurons[1]->Get_Value() << " Tension: " << currentTension << std::endl;
 
 	fx = (pos2[0]-pos1[0]) * currentTension / currentLength;
 	fy = (pos2[1]-pos1[1]) * currentTension / currentLength;
@@ -75,18 +75,6 @@ void TETHER::Draw() const {
 
 	dsSetColorAlpha(currentTension / forceConstant, 0., 0., 0.);
 	dsDrawLine(pos1, pos2);
-}
-
-void TETHER::Connect_To_Motor_Neuron(int actuatorInputIndex, NEURON *mNeuron) {
-
-	if(actuatorInputIndex == 0)
-		firstMotorNeuron = mNeuron;
-	else if(actuatorInputIndex == 1)
-		secondMotorNeuron = mNeuron;
-	else {
-		std::cerr << "Failed to connect motor neuron to a tether. Index was " << actuatorInputIndex << std::endl;
-		exit(EXIT_FAILURE);
-	}
 }
 
 bool TETHER::Create_Proprioceptive_Sensor(int sensorID, int evalPeriod) {

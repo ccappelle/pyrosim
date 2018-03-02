@@ -17,15 +17,16 @@ private:
 
 	double lastDesired;
 
-	OBJECT * first;
+	OBJECT* first;
 
 public:
-	THRUSTER(void) : lastDesired(0.0),
+	THRUSTER(void) : ACTUATOR(1),
+	                 lastDesired(0.0),
 	                 first(NULL) {};
 
 	void Actuate(void);
 
-	void Create_In_Simulator(dWorldID world, OBJECT ** allObjects, int numObjects, ACTUATOR** allActuators, int numActuators);
+	void Create_In_Simulator(dWorldID world, OBJECT** allObjects, int numObjects, ACTUATOR** allActuators, int numActuators);
 
 	void Draw(void) const;
 

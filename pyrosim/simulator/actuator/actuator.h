@@ -1,6 +1,8 @@
 #ifndef _ACTUATOR_ACTUATOR_H
 #define _ACTUATOR_ACTUATOR_H
 
+#include <cstdlib>
+
 #include "../neuron.h"
 #include "../object.h"
 
@@ -8,11 +10,24 @@ class ACTUATOR {
 
 protected:
 	/********* WARNING: DO NOT REDECLARE OR REINITIALIZE THOSE VARIABLES IN DERIVATIVE CLASSES *********/
+	const int numChannels;
 	int ID;
-	NEURON* motorNeuron;
+	NEURON** motorNeurons;
 
 public:
-	ACTUATOR(void) : ID(-1), motorNeuron(NULL) {};
+	ACTUATOR(int channels = 1) : numChannels(channels),
+	                             ID(-1),
+	                             motorNeurons(new NEURON*[channels]) {
+
+		for(unsigned i=0; i<channels; i++)
+			motorNeurons[i] = NULL;
+	};
+
+	virtual ~ACTUATOR(void) {
+
+		// This destructor is always implicitly called when the daughter class destructor is called
+		delete [] motorNeurons;
+	};
 
 	virtual void Read_From_Python(void) = 0;
 	//! Reads the actuator data supplied by the Python module through standard input
@@ -26,9 +41,17 @@ public:
 	virtual void Draw(void) const = 0;
 	//! Draws the actuator. Notice the const!
 
-	virtual bool Connect_Sensor_To_Sensor_Neuron(int sensorID, int sensorValueIndex, NEURON *sNeuron) {return false;};
+	virtual bool Connect_Sensor_To_Sensor_Neuron(int sensorID, int sensorValueIndex, NEURON* sNeuron) {return false;};
 	//! Supplies the pointer to a sensor neuron to the sensor with id sensorID
-	virtual void Connect_To_Motor_Neuron(int actuatorInputIndex, NEURON *mNeuron) {motorNeuron = mNeuron;};
+	virtual void Connect_To_Motor_Neuron(NEURON* mNeuron, int actuatorInputIndex = 0) {
+
+		if(actuatorInputIndex < numChannels)
+			motorNeurons[actuatorInputIndex] = mNeuron;
+		else {
+			std::cerr << "Failed to connect motor neuron to an actuator. Index was " << actuatorInputIndex << ", actuator has " << numChannels << " channels\n";
+			exit(EXIT_FAILURE);
+		}
+	};
 	//! Stores the pointer to a motor neuron for future use
 	/*! actuatorInputIndex is for use in actuators with multiple inputs; by default it is ignored.
 	*/

@@ -9,17 +9,17 @@ class ADHESIVE : public ACTUATOR {
 
 private:
 	int	firstObject;
-
 	OBJECT *first;
-
 	int adhesionKind;
-
 	bool enabledNow;
-
 	PROPRIOCEPTIVE_ADHESIVE_SENSOR* proprioceptiveSensor;
 
 public:
-	ADHESIVE(void) : first(NULL), adhesionKind(0), enabledNow(false), proprioceptiveSensor(NULL) {};
+	ADHESIVE(void) : ACTUATOR(1),
+	                 first(NULL),
+	                 adhesionKind(0),
+	                 enabledNow(false),
+	                 proprioceptiveSensor(NULL) {};
 
 	~ADHESIVE(void) {
 
@@ -29,7 +29,7 @@ public:
 
 	void Actuate(void);
 
-	void Create_In_Simulator(dWorldID world, OBJECT ** allObjects, int numObjects, ACTUATOR** allActuators, int numActuators);
+	void Create_In_Simulator(dWorldID world, OBJECT** allObjects, int numObjects, ACTUATOR** allActuators, int numActuators);
 
 	void Draw(void) const {}; // drawing is done by objects automatically
 
@@ -39,7 +39,7 @@ public:
 	void Poll_Sensors(int currentTimestep);
 	void Update_Sensor_Neurons(int t);
 	void Write_To_Python(int evalPeriod) const;
-	bool Connect_Sensor_To_Sensor_Neuron(int sensorID, int sensorValueIndex, NEURON *sNeuron);
+	bool Connect_Sensor_To_Sensor_Neuron(int sensorID, int sensorValueIndex, NEURON* sNeuron);
 };
 
 #endif // _ACTUATOR_ADHESIVE_H

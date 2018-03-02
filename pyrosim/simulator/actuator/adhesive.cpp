@@ -9,11 +9,11 @@
 void ADHESIVE::Actuate(void) {
 
 	// If no motor neuron is connected, do nothing
-	if ( motorNeuron == NULL )
+	if ( motorNeurons[0] == NULL )
 		return;
 
 	// Update the adhesion groups according to the output of the motor neuron
-	double neuVal = motorNeuron->Get_Value();
+	double neuVal = motorNeurons[0]->Get_Value();
 
 //	std::cerr << neuVal << std::endl;
 

@@ -8,7 +8,7 @@ class ROPE : public ACTUATOR {
 
 private:
 	int	firstObject;
-    int secondObject;
+	int secondObject;
 
 	const double* pos1;
 	const double* pos2;
@@ -17,10 +17,11 @@ private:
 	double dampeningCoefficient;
 
 	OBJECT* first;
-    OBJECT* second;
+	OBJECT* second;
 
 public:
-	ROPE(void) : relaxedLength(1.0),
+	ROPE(void) : ACTUATOR(0),
+	             relaxedLength(1.0),
 	             springConstant(1.0),
 	             dampeningCoefficient(10.),
 	             first(NULL),
@@ -28,7 +29,7 @@ public:
 
 	void Actuate(void);
 
-	void Create_In_Simulator(dWorldID world, OBJECT ** allObjects, int numObjects, ACTUATOR** allActuators, int numActuators);
+	void Create_In_Simulator(dWorldID world, OBJECT** allObjects, int numObjects, ACTUATOR** allActuators, int numActuators);
 
 	void Draw(void) const;
 
