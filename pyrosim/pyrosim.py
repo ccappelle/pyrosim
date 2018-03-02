@@ -851,7 +851,7 @@ class Simulator(object):
            The tether will continually pull the two bodies together with the
            force proportional to the smallest input of the actuator. If
            dampening coefficient is above zero, the force is additionally
-           is decreased if the bodies are moving towards each other. Formula:
+           is decreased if the bodies are moving towards each other.
 
            Formula for the force:
                 F = k*min(i1,i2) - D*(l-l')/l' if l>l0 else 0
@@ -905,6 +905,49 @@ class Simulator(object):
                    dampening_coefficient)
 
         return tether_id
+
+    def send_reaction_control_wheel(self, body_id, max_torque=1., momentum_budgets=(1.,1.,1.)):
+        """Send a reaction control wheel to the simulator.
+
+           Reaction control wheel will apply a torque linearly related to its
+           inputs to the body it is attached to. Given three inputs ix, iy, iz,
+           a torque of [(ix-0.5)*max_torque, (iy-0.5)*max_torque,
+           (iz-0.5)*max_torque] will be applied. If any input of the motor is
+           not connected to the neural network, the corresponding component of
+           the torque will be set to zero.
+
+        Parameters
+        ----------
+        body_id       : int
+                The body id of the body to which reaction control wheels are
+                attached. Must be a valid body id.
+        max_torque    : float, optional
+                Maximum for each torque component (default is 1.0).
+
+        Returns
+        -------
+        int
+                The id tag for the reaction control wheel
+        """
+        assert body_id < self._num_bodies, 'Body with id ' + \
+                              str(body_id) + ' has not been sent'
+        assert max_torque >= 0, 'Max torque of reaction control wheel ' \
+                                 'must be greater than or equal to zero'
+        assert body_id >= 0, 'Reaction control wheel cannot connect to ' \
+                             'the world or any object with negative id'
+
+        rcw_id = self._num_joints
+        self._num_joints += 1
+
+        mbx, mby, mbz = momentum_budgets
+
+        self._send('ReactionControlWheels',
+                   rcw_id,
+                   body_id,
+                   mbx, mby, mbz,
+                   max_torque)
+
+        return rcw_id
 
     def send_adhesive_joint(self, body_id, adhesion_kind=0):
         """Send an adhesive joint to the simulator.

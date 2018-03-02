@@ -17,6 +17,8 @@ void REACTION_CONTROL_WHEELS::Actuate(void) {
 		torque[i] = motorNeurons[i] != NULL ?
 		            (motorNeurons[i]->Get_Value() - 0.5)*maxTorque :
 		            0.;
+
+//	std::cerr << "Object: " << firstObject << " id: " << firstObjectID << " torque: " << torque[0] << " " << torque[1] << " " << torque[2] << "\n";
 	dBodyAddRelTorque(firstObject->Get_Body(), torque[0], torque[1], torque[2]);
 }
 
@@ -28,6 +30,7 @@ void REACTION_CONTROL_WHEELS::Create_In_Simulator(dWorldID world, OBJECT** allOb
 		std::cerr << "Cannot attach a reaction control wheel to an object with id " << firstObjectID << "\n";
 		exit(EXIT_FAILURE);
 	}
+//	std::cerr << "RCW created in simulator. Object id: " << firstObjectID << " pointer: " << firstObject << "\n";
 }
 
 void REACTION_CONTROL_WHEELS::Read_From_Python(void) {
