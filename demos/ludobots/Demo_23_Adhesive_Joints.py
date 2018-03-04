@@ -90,9 +90,9 @@ def send_to_simulator(sim, weight_matrix):
 
     adhesive_joint1 = sim.send_adhesive_joint(body_id=shins[0], adhesion_kind=1)
     adhesive_joint2 = sim.send_adhesive_joint(body_id=shins[0]) # adhesion_kind=0 by default
-    adhesive_neuron1 = sim.send_motor_neuron(adhesive_joint1)
-    adhesive_neuron2 = sim.send_motor_neuron(adhesive_joint2)
-    fneuron = sim.send_function_neuron(lambda x: math.sin(0.1*x))
+    adhesive_neuron1 = sim.send_motor_neuron(adhesive_joint1, alpha=0.)
+    adhesive_neuron2 = sim.send_motor_neuron(adhesive_joint2, alpha=0.)
+    fneuron = sim.send_function_neuron(lambda x: math.sin(0.2*x))
     bneuron = sim.send_bias_neuron()
     sim.send_synapse(fneuron, adhesive_neuron1, 1.0)
     sim.send_synapse(bneuron, adhesive_neuron2, synapse_to_adhesive_joint_of_zeroth_kind)
@@ -114,7 +114,7 @@ def send_to_simulator(sim, weight_matrix):
 
 if __name__ == "__main__":
 
-    seconds = 100.0
+    seconds = 50.0
     dt = 0.05
     eval_time = int(seconds/dt)
     print(eval_time)

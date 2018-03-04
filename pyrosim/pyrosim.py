@@ -849,12 +849,12 @@ class Simulator(object):
         """Send an actuated tether to the simulator.
 
            The tether will continually pull the two bodies together with the
-           force proportional to the smallest input of the actuator. If
+           force proportional to the smallest positive input of the actuator. If
            dampening coefficient is above zero, the force is additionally
            is decreased if the bodies are moving towards each other.
 
            Formula for the force:
-                F = k*min(i1,i2) - D*(l-l')/l' if l>l0 else 0
+                F = k*min(i1,i2) - D*(l-l')/l' if l>l0 and min(i1,i2)>0 else 0
            where k is the force coefficient, i1 and i2 are the inputs of the
            actuator or, equivalently, the outputs of the motor neurons
            connected to it, D is the coefficient of dampening, l and l' are
@@ -954,6 +954,8 @@ class Simulator(object):
 
            Whenever it is actuated, all bodies that are touched by the body
            that has this joint will stick (form a rigid joint) to it.
+           Stickiness is enabled for all positive values of the motor neuron
+           and disabled for all negative values.
 
         Parameters
         ----------
@@ -1018,7 +1020,6 @@ class Simulator(object):
             The id handle of the thruster
         """
         self._assert_non_zero('Jet', x, y, z)
-        assert hi >= lo, 'Hi parameter must be geq to lo parameter'
         assert body_id < self._num_bodies, 'Body must exist'
 
         joint_id = self._num_joints

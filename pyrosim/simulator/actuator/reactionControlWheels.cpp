@@ -15,7 +15,7 @@ void REACTION_CONTROL_WHEELS::Actuate(void) {
 	dVector3 torque;
 	for(unsigned i=0; i<3; i++)
 		torque[i] = motorNeurons[i] != NULL ?
-		            (motorNeurons[i]->Get_Value() - 0.5)*maxTorque :
+		            (motorNeurons[i]->Get_Value())*maxTorque :
 		            0.;
 
 //	std::cerr << "Object: " << firstObject << " id: " << firstObjectID << " torque: " << torque[0] << " " << torque[1] << " " << torque[2] << "\n";

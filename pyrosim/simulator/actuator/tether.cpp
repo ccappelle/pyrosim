@@ -47,28 +47,27 @@ void TETHER::Actuate(void) {
 	if(motorNeurons[0] == NULL || motorNeurons[1] == NULL)
 		return;
 
-	static double minimumMotorNeuronOutput;
+	double minimumMotorNeuronOutput;
 	minimumMotorNeuronOutput = std::min(motorNeurons[0]->Get_Value(), motorNeurons[1]->Get_Value());
-
-	static double fx;
-	static double fy;
-	static double fz;
 
 	Update_Geometry();
 
 	// std::cerr << "MMO: " << minimumMotorNeuronOutput << " Dampening force: " << (dampeningCoefficient * (currentLength-previousLength) / relaxedLength) << std::endl;
 
-	currentTension = forceConstant * minimumMotorNeuronOutput + dampeningCoefficient * (currentLength-previousLength) / previousLength;
-	currentTension = currentTension>0 ? currentTension : 0.;
+	if(minimumMotorNeuronOutput > 0.) {
+		currentTension = forceConstant * minimumMotorNeuronOutput + dampeningCoefficient * (currentLength-previousLength) / previousLength;
+		currentTension = currentTension>0 ? currentTension : 0.;
 
-	// std::cerr << "N0: " << motorNeurons[0]->Get_Value() << " N1: " << motorNeurons[1]->Get_Value() << " Tension: " << currentTension << std::endl;
+		// std::cerr << "N0: " << motorNeurons[0]->Get_Value() << " N1: " << motorNeurons[1]->Get_Value() << " Tension: " << currentTension << std::endl;
 
-	fx = (pos2[0]-pos1[0]) * currentTension / currentLength;
-	fy = (pos2[1]-pos1[1]) * currentTension / currentLength;
-	fz = (pos2[2]-pos1[2]) * currentTension / currentLength;
+		double fx, fy, fz;
+		fx = (pos2[0]-pos1[0]) * currentTension / currentLength;
+		fy = (pos2[1]-pos1[1]) * currentTension / currentLength;
+		fz = (pos2[2]-pos1[2]) * currentTension / currentLength;
 
-	dBodyAddForce(first->Get_Body(), fx, fy, fz);
-	dBodyAddForce(second->Get_Body(), -fx, -fy, -fz);
+		dBodyAddForce(first->Get_Body(), fx, fy, fz);
+		dBodyAddForce(second->Get_Body(), -fx, -fy, -fz);
+	}
 }
 
 void TETHER::Draw() const {

@@ -18,10 +18,10 @@ world_joint = sim.send_fixed_joint(pyrosim.Simulator.WORLD, box_0)
 tether = sim.send_tether(box_0, box_1,
                          force_coefficient=10., dampening_coefficient=10.)
 
-mneuron_0 = sim.send_motor_neuron(tether, input_index=0)
-mneuron_1 = sim.send_motor_neuron(tether, input_index=1)
+mneuron_0 = sim.send_motor_neuron(tether, input_index=0, alpha=0.)
+mneuron_1 = sim.send_motor_neuron(tether, input_index=1, alpha=0.)
 
-fnueron = sim.send_function_neuron(lambda x: (math.sin(x)+0.5)/2 )
+fnueron = sim.send_function_neuron(lambda x: math.sin(x) )
 
 sim.send_synapse(fnueron, mneuron_0, 1.0)
 sim.send_synapse(fnueron, mneuron_1, 1.0)

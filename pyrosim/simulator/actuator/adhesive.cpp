@@ -17,16 +17,16 @@ void ADHESIVE::Actuate(void) {
 
 //	std::cerr << neuVal << std::endl;
 
-	if ( enabledNow && neuVal < 0.5 ) {
+	if ( enabledNow && neuVal <= 0.0 ) {
 
-//		std::cerr << "Unsetting adhesion\n";
+		std::cerr << "Unsetting adhesion\n";
 		first->Unset_Adhesion(adhesionKind);
 		enabledNow = false;
 	}
 
-	if ( !enabledNow && neuVal >= 0.5 ) {
+	if ( !enabledNow && neuVal > 0.0 ) {
 
-//		std::cerr << "Setting adhesion\n";
+		std::cerr << "Setting adhesion\n";
 		first->Set_Adhesion(adhesionKind);
 		enabledNow = true;
 	}
