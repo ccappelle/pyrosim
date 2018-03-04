@@ -1,6 +1,9 @@
 #ifndef _NEURON_H
 #define _NEURON_H
 
+// CTRNN neuron
+// See neuralNetwork.h for the update formula
+
 #include <string>
 #include <map>
 

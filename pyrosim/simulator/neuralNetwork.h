@@ -1,6 +1,10 @@
 #ifndef _NEURAL_NETWORK_H
 #define _NEURAL_NETWORK_H
 
+// CTRNN
+// Updates:
+// v_i(t+dt) = tanh(\alpha*v_i(t) + \tau*\sum_{j,w_{ij}\neq 0} w_{ij}(t)*v_j(t))
+
 #include <string>
 
 #include "neuron.h"
