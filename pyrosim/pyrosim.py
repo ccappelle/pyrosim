@@ -985,7 +985,7 @@ class Simulator(object):
 
         return joint_id
 
-    def send_thruster(self, body_id, x=0, y=0, z=-1, lo=-10.0, hi=10.0):
+    def send_thruster(self, body_id, x=0, y=0, z=-1, lo=-10.0, hi=10.0, threshold=-1.):
         """Send a thruster engine to the specified body
 
         The thruster engine provides a linear force to the center of
@@ -1001,11 +1001,16 @@ class Simulator(object):
             The z value of the directional vector (default is 1)
         lo      : float, optional
             The amount of force when the associated motor
-            neuron is -1. Negative implies force in the 
-            opposit direction. (default is -10)
+            neuron is at the shutoff threshold (-1 by default).
+		        Negative implies force in the opposite direction.
+		        (default is -10)
         hi      : float, optioal
             The amount of force when the associated motor
             neuron is +1. (default is 10)
+		    threshold : float, optional
+		        Specifies a shutoff threshold for the thruster.
+		        If output of the motor neuron falls below this
+		        number, the thruster is shut down.
 
         Returns
         -------
@@ -1022,7 +1027,7 @@ class Simulator(object):
         self._send('Thruster', joint_id,
                    body_id,
                    x, y, z,
-                   lo, hi)
+                   lo, hi, threshold)
 
         return joint_id
 

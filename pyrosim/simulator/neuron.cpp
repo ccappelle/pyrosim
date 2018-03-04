@@ -63,15 +63,13 @@ void NEURON::Push_Current_Value_To_Previous_Value(void) {
 
 void NEURON::Reset(int timeStep) {
 
-        if ( type == BIAS_NEURON )
-
-                value = 1.0;
-        else if ( type == FUNCTION_NEURON)
-        {
-        	previousValue = value;
-        	value = timeValues[timeStep];
-        }
-	else if( timeStep >0)
+	if ( type == BIAS_NEURON )
+		value = 1.0;
+	else if ( type == FUNCTION_NEURON) {
+		previousValue = value;
+		value = timeValues[timeStep];
+	}
+	else if( timeStep >= 0)
 		value = 0.0;
 }
 
@@ -85,8 +83,10 @@ void NEURON::Set(double v) {
 void NEURON::Threshold(void) {
 
 	if ( (Get_Type() == SENSOR_NEURON) || (Get_Type() == BIAS_NEURON) || (Get_Type() == FUNCTION_NEURON))
-
 		return;
+
+//	if(ID == 7)
+//	std::cerr << "Thresholding params: alpha " << alpha << " previous value " << previousValue << " tau " << tau << " value " << value << "\n";
 
 	value = alpha * previousValue + tau * value;
 

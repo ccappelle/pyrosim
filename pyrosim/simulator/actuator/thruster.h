@@ -14,6 +14,7 @@ private:
 	double	z;
 	double  lowStop;
 	double  highStop;
+	double  shutoffThreshold;
 
 	double lastDesired;
 

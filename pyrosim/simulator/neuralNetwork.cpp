@@ -84,29 +84,26 @@ void NEURAL_NETWORK::Update(int timeStep) {
 
 void NEURAL_NETWORK::Push_Current_Values_To_Previous_Values(void) {
 
-        for (int n = 0 ; n < numNeurons ; n++ )
-
+	for (int n = 0 ; n < numNeurons ; n++ )
 		neurons[n]->Push_Current_Value_To_Previous_Value();
 }
 
 void NEURAL_NETWORK::Reset_Neuron_Values(int timeStep) {
 
 	for ( int n = 0 ; n < numNeurons ; n++ )
-
 		neurons[n]->Reset(timeStep);
 }
 
 void NEURAL_NETWORK::Threshold_Neurons(void) {
 
-        for ( int n = 0 ; n < numNeurons ; n++ )
-
+	for ( int n = 0 ; n < numNeurons ; n++ )
 		neurons[n]->Threshold();
 }
 
 void NEURAL_NETWORK::Update_Synapses(int timeStep){
-	for (int s=0; s<numSynapses; s++){
+
+	for (int s=0; s<numSynapses; s++)
 		synapses[s]->Update_Weight(timeStep);
-	}
 }
 
 void NEURAL_NETWORK::Update_Neurons(void) {
@@ -117,6 +114,11 @@ void NEURAL_NETWORK::Update_Neurons(void) {
 		int tni = synapses[s]->Get_Target_Neuron_Index();
 		double w = synapses[s]->Get_Weight();
 		double influence = w * neurons[sni]->Get_Previous_Value();
+
+//		int testNeuronID = 7;
+//		if(tni == testNeuronID)
+//			std::cerr << "Neuron " << sni << " influenced neuron " << tni << " by " << influence << "\n";
+
 		neurons[tni]->Set( neurons[tni]->Get_Value() + influence );
 	}
 

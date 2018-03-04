@@ -4,6 +4,7 @@
 #include <drawstuff/drawstuff.h>
 #include <iostream>
 #include <cmath>
+#include <cstdlib>
 
 #include "thruster.h"
 
@@ -22,7 +23,10 @@ void THRUSTER::Actuate(void) {
 
 	double motorNeuronValue = motorNeurons[0]->Get_Value();
 
-	double zeroToOne = motorNeuronValue/2.0 + 0.5;
+	if ( motorNeuronValue < shutoffThreshold )
+		return;
+
+	double zeroToOne = (motorNeuronValue - shutoffThreshold)/(1. - shutoffThreshold);
 
 	double diff;
 
@@ -36,6 +40,9 @@ void THRUSTER::Actuate(void) {
 	xDir = R[0]*x + R[1]*y + R[2]*z;
 	yDir = R[4]*x + R[5]*y + R[6]*z;
 	zDir = R[8]*x + R[9]*y + R[10]*z;
+
+//	std::cerr << "Thrust: " << desiredTarget << " motor neuron val: " << motorNeuronValue << "\n";
+//	motorNeurons[0]->Print();
 
 	dBodyAddForce(first->Get_Body(), -xDir*desiredTarget, -yDir*desiredTarget, -zDir*desiredTarget);
 	lastDesired = desiredTarget;
@@ -124,6 +131,7 @@ void THRUSTER::Read_From_Python(void) {
 	std::cin >> z;
 	std::cin >> lowStop;
 	std::cin >> highStop;
+	std::cin >> shutoffThreshold;
 }
 
 #endif // _ACTUATOR_THRUSTER_CPP
