@@ -1092,8 +1092,8 @@ class Simulator(object):
         assert tau >= 0, 'Tau must be positive'
         assert joint_id < self._num_joints, 'Joint with id ' + \
             str(joint_id)+' has not been sent'
-        assert input_index in range(2), 'For all currently implemented ' + \
-            'motors input_index must be in ' + str(range(2))
+        assert input_index in range(3), 'For all currently implemented ' + \
+            'motors input_index must be in ' + str(range(3))
 
         neuron_id = self._num_neurons
         self._num_neurons += 1
