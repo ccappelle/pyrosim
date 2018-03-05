@@ -35,6 +35,9 @@ private:
 	// current timestep
 	int ts;
 
+	// any collisions recently?
+	bool justFired;
+
 public:
 	PROXIMITY_SENSOR(dSpaceID space, OBJECT *myObj, int myID, int evalPeriod);
 	~PROXIMITY_SENSOR();
