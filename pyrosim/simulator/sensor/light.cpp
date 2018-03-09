@@ -1,25 +1,23 @@
 #ifndef _SENSOR_LIGHT_CPP
 #define _SENSOR_LIGHT_CPP
 
+#include <iostream>
+#include <cmath>
 #include "light.h"
 
-void LIGHT_SENSOR::Poll(dBodyID body, dBodyID lightSource, int t) {
+LIGHT_SENSOR::LIGHT_SENSOR(int myID, int evalPeriod) : SENSOR(myID, evalPeriod),
+                                                       sensitivityKind(0),
+                                                       logarithmic(false) {};
 
-	const dReal *myPos = dBodyGetPosition(body);
+void LIGHT_SENSOR::Read_From_Python(void) {
 
-	const dReal *lightPos = dBodyGetPosition(lightSource);
+	std::cin >> sensitivityKind;
+	std::cin >> logarithmic;
+}
 
-	double xDiff = myPos[0] - lightPos[0];
+void LIGHT_SENSOR::Poll(dReal luminousity, int t) {
 
-        double yDiff = myPos[1] - lightPos[1];
-
-        double zDiff = myPos[2] - lightPos[2];
-
-	double distance = sqrt( pow(xDiff,2.0) + pow(yDiff,2.0) + pow(zDiff,2.0) );
-
-	// Light decays with the inverse of the square of the distance...
-
-	values[0][t] = 1.0 / pow(distance,2.0);
+	values[0][t] = logarithmic ? log(luminousity) : luminousity;
 }
 
 #endif // _SENSOR_LIGHT_CPP

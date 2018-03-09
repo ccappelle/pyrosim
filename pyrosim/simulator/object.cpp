@@ -103,11 +103,13 @@ void OBJECT::Create_Proximity_Sensor(dSpaceID space, int myID, int evalPeriod) {
 }
 
 void OBJECT::Create_Light_Sensor(int myID, int evalPeriod) {
-    lightSensor = new LIGHT_SENSOR(myID,evalPeriod);
+	lightSensor = new LIGHT_SENSOR(myID, evalPeriod);
+	lightSensor->Read_From_Python();
 }
 
-void OBJECT::Create_Light_Source(void) {
-	containsLightSource = true;
+void OBJECT::Create_Light_Source(int myID) {
+	lightSources.push_back(LIGHT_SOURCE(myID, body));
+	lightSources.back().Read_From_Python();
 }
 
 void OBJECT::Create_Position_Sensor(int myID, int evalPeriod) {
@@ -221,6 +223,8 @@ void OBJECT::Draw(void) {
 
 	if(proximitySensor)
 		proximitySensor->Draw();
+
+	// TODO: add light sensor drawing
 }
 
 void OBJECT::Draw_Ray_Sensor(double x, double y, double z, int t) {
@@ -229,15 +233,19 @@ void OBJECT::Draw_Ray_Sensor(double x, double y, double z, int t) {
 		raySensor->Draw(x,y,z,t);
 }
 
-void OBJECT::Poll_Sensors(int numObjects, OBJECT **objects, int t) {
+void OBJECT::Poll_Sensors(int numObjects, OBJECT** objects, int t) {
 
 	if ( lightSensor ) {
-		OBJECT *closestLightSource = Find_Closest_Light_Source(numObjects,objects);
-		lightSensor->Poll(body,closestLightSource->Get_Body(),t);
+		int lightSensitivityKind = lightSensor->Get_Sensitivity_Kind();
+		dReal luminousity = 0.;
+		const dReal* lightSensorPos = dBodyGetPosition(body);
+		for(int i=0; i<numObjects; i++)
+			luminousity += objects[i]->Get_Luminousity_Produced_At(lightSensorPos, lightSensitivityKind);
+		lightSensor->Poll(luminousity, t);
 	}
 
-    if ( positionSensor )
-        positionSensor->Poll(body,t);
+	if ( positionSensor )
+		positionSensor->Poll(body,t);
 
 	if ( vestibularSensor )
 		vestibularSensor->Poll(body,t);
@@ -295,28 +303,28 @@ void OBJECT::Touch_Sensor_Fires(int t) {
 }
 
 void OBJECT::IsSeen_Sensor_Fires(int t){
-    if ( isSeenSensor )
-        isSeenSensor->Fires(t);
+	if ( isSeenSensor )
+		isSeenSensor->Fires(t);
 }
 
 void OBJECT::Update_Sensor_Neurons(int t) {
-    if ( raySensor )
-        raySensor->Update_Sensor_Neurons(t);
+	if ( raySensor )
+		raySensor->Update_Sensor_Neurons(t);
 
-    if ( lightSensor )
-        lightSensor->Update_Sensor_Neurons(t);
+	if ( lightSensor )
+		lightSensor->Update_Sensor_Neurons(t);
 
-    if ( positionSensor )
-        positionSensor->Update_Sensor_Neurons(t);
+	if ( positionSensor )
+		positionSensor->Update_Sensor_Neurons(t);
 
-    if ( touchSensor )
-        touchSensor->Update_Sensor_Neurons(t);
+	if ( touchSensor )
+		touchSensor->Update_Sensor_Neurons(t);
 
-    if ( vestibularSensor )
-        vestibularSensor->Update_Sensor_Neurons(t);
+	if ( vestibularSensor )
+		vestibularSensor->Update_Sensor_Neurons(t);
 
-    if ( proximitySensor )
-        proximitySensor->Update_Sensor_Neurons(t);
+	if ( proximitySensor )
+		proximitySensor->Update_Sensor_Neurons(t);
 }
 
 void OBJECT::Write_To_Python(int evalPeriod) {
@@ -355,10 +363,9 @@ void OBJECT::Write_To_Python(int evalPeriod) {
 
 // ------------------------------- Private methods ------------------------------
 
-int OBJECT::Contains_A_Light_Source(void) {
-
-	return containsLightSource;
-}
+//int OBJECT::Contains_A_Light_Source(void) {
+//	return containsLightSource;
+//}
 
 void OBJECT::CreateBody(dWorldID world, dSpaceID space){
 
@@ -400,6 +407,7 @@ void OBJECT::CreateBody(dWorldID world, dSpaceID space){
 	bodyCreated = true;
 }
 
+/*
 double OBJECT::Distance_To(OBJECT *otherObject) {
 
 	const dReal *myPos = dBodyGetPosition( body );
@@ -411,24 +419,14 @@ double OBJECT::Distance_To(OBJECT *otherObject) {
 
 	return sqrt( pow(xDiff,2.0) + pow(yDiff,2.0) + pow(zDiff,2.0) );
 }
+*/
 
+dReal OBJECT::Get_Luminousity_Produced_At(const dReal* pos, int kindOfLight) {
 
-OBJECT* OBJECT::Find_Closest_Light_Source(int numObjects, OBJECT **objects) {
-
-	double distance = 10000.0;
-	int    closestLightSource = 0;
-
-	for (int i=0;i<numObjects;i++){
-		if ( objects[i]->Contains_A_Light_Source() ) {
-			double distanceToObject = Distance_To(objects[i]);
-			if ( distanceToObject < distance ) {
-				distance = distanceToObject;
-				closestLightSource = i;
-			}
-		}
-    }
-
-	return objects[closestLightSource];
+	dReal luminousity = 0.;
+	for(std::vector<LIGHT_SOURCE>::iterator lsit=lightSources.begin(); lsit!=lightSources.end(); lsit++)
+		luminousity += lsit->Luminousity_At(pos[0], pos[1], pos[2], kindOfLight);
+	return luminousity;
 }
 
 #endif // _OBJECT_CPP

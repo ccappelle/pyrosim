@@ -88,6 +88,7 @@ class Simulator(object):
         self._num_joints = 0
         self._num_sensors = 0
         self._num_neurons = 0
+        self._num_light_sources = 0
         self._collision_groups = []
         self._collision_matrix = None
         self._matrix_created = False
@@ -1272,26 +1273,44 @@ class Simulator(object):
 
         return True
 
-    def send_light_source(self, body_id=0):
-        """Attaches light source to a body in simulation
+    def send_light_source(self, body_id, x=0., y=0., z=0., kind_of_light=0):
+        """Attaches light source to a body in simulation.
 
         Parameters
         ----------
-        body_id : int, optional
-                The body id of the body to attach the light to
+        body_id : int
+            The body id of the body to attach the light to
+        x       : float, optional
+            X-component of the position of the light source in the body's
+            coordinate system.
+        y       : float, optional
+            Y-component of the position of the light source in the body's
+            coordinate system.
+        z       : float, optional
+            Z-component of the position of the light source in the body's
+            coordinate system.
+        kind_of_light: int, optional
+            Integer ID of the type of emitted light. Light sources with
+            ID=0 are visible to all light sensors.
 
         Returns
         -------
         int
-                The id tag of the body the light source is attached to.
+                The id tag of the light source
         """
         assert body_id < self._num_bodies, 'Body id ' + \
             str(body_id)+' has not been sent'
 
-        self._send('LightSource',
-                   body_id)
+        light_source_id = self._num_light_sources
+        self._num_light_sources += 1
 
-        return body_id
+        self._send('LightSource',
+                   light_source_id,
+                   body_id,
+                   x,y,z,
+                   kind_of_light)
+
+        return light_source_id
 
 # ----------Sensors----------------------
     def send_is_seen_sensor(self, body_id):
@@ -1317,13 +1336,19 @@ class Simulator(object):
 
         return sensor_id
 
-    def send_light_sensor(self, body_id):
+    def send_light_sensor(self, body_id, kind_of_light=0, logarithmic=False):
         """Attaches a light sensor to a body in simulation
 
         Parameters
         ----------
-        body_id : int, optional
-                The body id of the body to connect the sensor to
+        body_id       : int
+            The body id of the body to connect the sensor to
+        kind_of_light : int, optional
+            Integer ID of the type of emitted light. Light sensors with
+            ID=0 perceive all light sources.
+        logarithmic   : bool, optional
+            If True, the sensor outputs natural logarithm of luminousity
+            instead of its absolute value.
 
         Returns
         -------
@@ -1337,7 +1362,10 @@ class Simulator(object):
         self._num_sensors += 1
 
         self._send('LightSensor',
-                   sensor_id, body_id)
+                   sensor_id,
+                   body_id,
+                   kind_of_light,
+                   1 if logarithmic else 0)
 
         return sensor_id
 
@@ -1446,7 +1474,7 @@ class Simulator(object):
         return sensor_id
 
     def send_proximity_sensor(self, body_id=0,
-                        x=0, y=0, z=0,
+                        x=0., y=0., z=0.,
                         max_distance=10):
         """Sends a proximity sensor to the simulator connected to a body
 
@@ -1496,7 +1524,7 @@ class Simulator(object):
         Parameters
         ----------
         body_id : int, optional
-                The body id of the associated body 
+                The body id of the associated body
 
         Returns
         -------

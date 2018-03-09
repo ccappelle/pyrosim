@@ -9,10 +9,12 @@
 #include "sensor/vestibular.h"
 #include "sensor/isSeen.h"
 #include "sensor/proximity.h"
+#include "lightSource.h"
 #include <map>
 #include <utility>
 #include <array>
 #include <set>
+#include <vector>
 
 class NEURON;
 
@@ -21,27 +23,16 @@ class OBJECT {
 private:
 
 	int	ID;
-
 	int	myShape;
-
 	dBodyID body;
-
 	dGeomID geom;
-
 	double x, y, z;
-
 	double mass;
-
 	double r1, r2, r3;
-
 	double length, width, height;
-
 	double radius;
-
 	double dim1, dim2, dim3;
-
 	int collisionGroup;
-
 	double r, g, b;
 	double tr, tg, tb; // true values stored for situations when an object must change color temporarily
 
@@ -53,7 +44,7 @@ private:
 	IS_SEEN_SENSOR* isSeenSensor;
 	PROXIMITY_SENSOR* proximitySensor;
 
-	int	containsLightSource;
+	std::vector< LIGHT_SOURCE > lightSources;
 
 	std::map< int, std::array<float,3> > forces;
 
@@ -73,7 +64,6 @@ public:
 		vestibularSensor(NULL),
 		isSeenSensor(NULL),
 		proximitySensor(NULL),
-		containsLightSource(false),
 		bodyCreated(false) {
 		Set_Adhesion_Susceptibility(0);
 	};
@@ -81,25 +71,15 @@ public:
 	~OBJECT(void);
 
 	void Add_External_Force(float x, float y, float z, int timeStep);
-
 	void Apply_Stored_Forces(int timeStep);
-
 	int Connect_Sensor_To_Sensor_Neuron(int sensorID, int sensorValueIndex, NEURON *sensorNeuron);
-
 	void Create_IsSeen_Sensor(int myID, int evalPeriod);
-
 	void Create_Ray_Sensor(dSpaceID space, int myID, int evalPeriod);
-
 	void Create_Proximity_Sensor(dSpaceID space, int myID, int evalPeriod);
-
 	void Create_Light_Sensor(int myID, int evalPeriod);
-
-	void Create_Light_Source(void);
-
+	void Create_Light_Source(int myID);
 	void Create_Position_Sensor(int myID, int evalPeriod);
-
 	void Create_Touch_Sensor(int myID, int evalPeriod);
-
 	void Create_Vestibular_Sensor(int myID, int evalPeriod);
 
 	void Set_Adhesion_Susceptibility(int adhesionKind) {adhesionTypesSusceptible.insert(adhesionKind);};
@@ -159,12 +139,9 @@ public:
 	void Write_To_Python(int evalPeriod);
 
 private:
-	int  Contains_A_Light_Source(void);
-	double Distance_To(OBJECT *otherObject);
 	void CreateBody(dWorldID world, dSpaceID space);
-
-	OBJECT *Find_Closest_Light_Source(int numObjects, OBJECT **objects);
-
+	dReal Get_Luminousity_Produced_At(const dReal* pos, int kindOfLight);
+	//! Returns cumulative luminousity that all light sources from this object produce at pos
 };
 
 #endif

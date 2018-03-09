@@ -218,20 +218,20 @@ void ENVIRONMENT::Create_Light_Sensor(int evalPeriod) {
 	std::cin >> ID;
 	std::cin >> objectIndex;
 
-	objects[objectIndex]->Create_Light_Sensor(ID,evalPeriod);
+	objects[objectIndex]->Create_Light_Sensor(ID, evalPeriod);
 }
 
 void ENVIRONMENT::Create_Light_Source(void) {
 
-	int objectIndex;
+	int objectIndex, ID;
+	std::cin >> ID;
 	std::cin >> objectIndex;
-
-	objects[objectIndex]->Create_Light_Source();
+	objects[objectIndex]->Create_Light_Source(ID);
 }
 
 void ENVIRONMENT::Create_Object(dWorldID world, dSpaceID space, int index, int shape) {
 
-    objects[index] = new OBJECT();
+  objects[index] = new OBJECT();
 	objects[index]->Read_From_Python(world, space, shape);
 	numberOfBodies++;
 }
@@ -276,7 +276,7 @@ void ENVIRONMENT::Create_IsSeen_Sensor(int evalPeriod){
 
 	std::cin >> ID;
 	std::cin >> objectIndex;
-	std::cerr << "Creating is seen " << ID << std::endl;
+	// std::cerr << "Creating is seen " << ID << std::endl;
 
 	objects[objectIndex]->Create_IsSeen_Sensor(ID, evalPeriod);
 }
@@ -305,12 +305,12 @@ void ENVIRONMENT::Create_Proprioceptive_Sensor(int evalPeriod) {
 
 void ENVIRONMENT::Create_Touch_Sensor(int evalPeriod) {
 
-    int objectIndex;
-    int ID;
+	int objectIndex;
+	int ID;
 	std::cin >> ID;
-    std::cin >> objectIndex;
+	std::cin >> objectIndex;
 
-    objects[objectIndex]->Create_Touch_Sensor(ID,evalPeriod);
+	objects[objectIndex]->Create_Touch_Sensor(ID,evalPeriod);
 }
 
 void ENVIRONMENT::Create_Vestibular_Sensor(int evalPeriod) {
