@@ -224,6 +224,8 @@ void OBJECT::Draw(void) {
 	if(proximitySensor)
 		proximitySensor->Draw();
 
+	for(std::vector<LIGHT_SOURCE>::iterator lsit=lightSources.begin(); lsit!=lightSources.end(); lsit++)
+		lsit->Draw();
 	// TODO: add light sensor drawing
 }
 
