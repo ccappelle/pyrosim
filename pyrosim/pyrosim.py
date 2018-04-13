@@ -173,7 +173,7 @@ class Simulator(object):
             self._collision_matrix[indices] = 1
         elif collision_type == 'intra':
             self._collision_matrix += 1
-            indices = np.diag_indices
+            indices = np.diag_indices(num_groups)
             self._collision_matrix[indices] = 0
         elif collision_type == 'none':
             pass
