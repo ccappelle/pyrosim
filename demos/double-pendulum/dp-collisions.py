@@ -1,5 +1,4 @@
 import pyrosim
-import math
 import random
 
 # basically same code as previous examples with a few parameter tweaks
@@ -47,7 +46,7 @@ ball = sim.send_sphere(x=1.25, y=0, z=4, radius=.3,
 SIZE = 1.0
 for i in range(3):
     color = random.random()
-    sim.send_box(x=3, y=0, z=(i+SIZE/2.0)*SIZE,
+    sim.send_box(x=3, y=0, z=(i + SIZE / 2.0) * SIZE,
                  width=SIZE, height=SIZE, length=SIZE,
                  mass=.2, r=.1, g=color, b=color,
                  collision_group='env')

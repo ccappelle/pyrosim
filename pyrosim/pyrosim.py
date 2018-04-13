@@ -8,17 +8,21 @@ import subprocess
 
 import errno
 import shutil
-
 from datetime import datetime
 
-#simulator init constants
-evaluation_time = 100;
-dt = 0.05;
-hpr=[121,-27.5000,0.0000];
-xyz=[0.8317,-0.9817,0.8000];
-gravity = -1.0;
+
+# simulator init constants
+WINDOW_SIZE = (750, 500)
+evaluation_time = 100
+dt = 0.05
+hpr = [121, -27.5000, 0.0000]
+xyz = [0.8317, -0.9817, 0.8000]
+gravity = -1.0
+
 
 def make_sure_path_exists(path):
+    """checks to se if path exists, if not creates path"""
+
     try:
         shutil.rmtree(path, ignore_errors=True)
         os.makedirs(path)
@@ -33,37 +37,37 @@ class Simulator(object):
     Attributes
     ----------
     play_blind   : bool, optional
-            If True the simulation runs without graphics (headless) else if 
+            If True the simulation runs without graphics (headless) else if
             False the simulation runs with graphics (the default is False)
     play_paused : bool, optional
-            If True the simulation starts paused else if False the simulation 
-            starts running. With simulation window in focus use Ctrl-p to 
+            If True the simulation starts paused else if False the simulation
+            starts running. With simulation window in focus use Ctrl-p to
             toggle pausing the simulation. (the default is False)
     eval_time    : int, optional
             The number of discrete steps in the simulation (the default is 100)
     dt          : float, optional
-            The time in seconds between physics world steps. Larger dt values 
+            The time in seconds between physics world steps. Larger dt values
             create more unstable physics. (the default is 0.05)
     gravity     : float, optional
-            The gravity in the system. Negative values implies normal downward 
+            The gravity in the system. Negative values implies normal downward
             force of gravity. (default is -1.0)
     window_size  : tuple or list of 2 ints, optional
-            The initial window size for the visualization. Irrelevant if 
+            The initial window size for the visualization. Irrelevant if
             blind=True. Default is (750, 500)
     xyz         : list of 3 floats
             The xyz position of the camera (default is [0.8317,-0.9817,0.8000])
     hpr         : float, optional
-            The heading, pitch, and roll of the camera 
+            The heading, pitch, and roll of the camera
             (default is [121,-27.5,0.0])
     use_textures : bool, optional
-            Draw default ODE textures or not during simulation. 
+            Draw default ODE textures or not during simulation.
             (default is False)
     debug       : bool, optional
-            If True print out every string command sent through the pipe to 
+            If True print out every string command sent through the pipe to
             the simulator (the default is False)
     capture     : bool, optional
             If True captures frames of the simulation every capture
-            timesteps.  Meaningless if playing blind.  (the default is False) 
+            timesteps.  Meaningless if playing blind.  (the default is False)
     """
 
     WORLD = -1
@@ -72,10 +76,10 @@ class Simulator(object):
     def __init__(self, play_blind=False, play_paused=False,
                  eval_time=evaluation_time, dt=dt,
                  gravity=gravity,
-                 window_size = (750,500),
+                 window_size=WINDOW_SIZE,
                  xyz=xyz, hpr=hpr, use_textures=False,
                  debug=False, capture=0):
-        assert play_blind == False or eval_time > 0, ('Cannot run'
+        assert play_blind is False or eval_time > 0, ('Cannot run'
                                                       ' blind forever')
         assert eval_time > 0, ('Cannot run forever: FIXXX MEEE')
 
@@ -105,7 +109,7 @@ class Simulator(object):
         self.collision_matrix_sent = False
 
         self.pyrosim_path = os.path.dirname(
-            os.path.abspath(__file__))+'/simulator'
+            os.path.abspath(__file__)) + '/simulator'
 
         self.body_to_follow = -1
 
@@ -113,11 +117,11 @@ class Simulator(object):
             print ('Simulator exec location ', self.pyrosim_path, '\n')
             print ('Python send commands: ')
 
-        if (self.play_paused == True and self.play_blind == True):
+        if (self.play_paused is True and self.play_blind is True):
             self.play_paused = False
 
         # Initial simulator commands
-        self._send('TexturePath', self.pyrosim_path+'/textures')
+        self._send('TexturePath', self.pyrosim_path + '/textures')
         self._send('EvaluationTime', self.eval_time)
         self._send('TimeInterval', self.dt)
         self._send('Gravity', self.gravity)
@@ -140,7 +144,7 @@ class Simulator(object):
         Parameters
         ----------
         collision_type : str, optional
-            Creates a collision matrix specifying the type of 
+            Creates a collision matrix specifying the type of
             collision between groups desired. There are 4 options
             'none' - no collision
             'inter' - collisions on only between different groups
@@ -205,22 +209,36 @@ class Simulator(object):
         return True
 
     def remove_collision(self, group_1, group_2):
-        """Turn off collision potential between group 1 and 2"""
+        """Turn off collision potential between group 1 and 2
+        Parameters
+        ----------
+        group_1 : str
+            The string handle of group 1
+        group_2 : str
+            The string handle of group 2
 
+        Returns
+        -------
+        bool
+            True if successful
+        """
         if not self._matrix_created:
             self.create_collision_matrix()
             self._matrix_created = True
 
-        group1 = self.get_group_id(group1)
-        group2 = self.get_group_id(group2)
+        group1_id = self.get_group_id(group_1)
+        group2_id = self.get_group_id(group_2)
 
-        self._collision_matrix[group1, group2] = 0
-        self._collision_matrix[group2, group1] = 0
+        self._collision_matrix[group1_id, group2_id] = 0
+        self._collision_matrix[group2_id, group1_id] = 0
+
+        return True
+
 # ------Getters--------------------------
 
     def get_data(self):
         """Get all sensor data back as numpy matrix"""
-        assert self.evaluated == True, 'Simulation has not run yet'
+        assert self.evaluated is True, 'Simulation has not run yet'
         return self.data
 
     def get_group_id(self, group):
@@ -263,8 +281,8 @@ class Simulator(object):
         sensor_id : int
                 the sensors id tag
         svi      : int , optional
-                The sensor value index. Certain sensors have multiple values 
-                (e.g. the position sensor) and the svi specifies which to 
+                The sensor value index. Certain sensors have multiple values
+                (e.g. the position sensor) and the svi specifies which to
                 access (e.g. for a position sensor, svi=0 corresponds to the
                 x value of that sensor)
 
@@ -273,7 +291,7 @@ class Simulator(object):
         list of float
                 Returns the list of sensor values over the simulation.
         """
-        assert self.evaluated == True, 'Simulation has not run yet'
+        assert self.evaluated is True, 'Simulation has not run yet'
         return self.data[sensor_id, svi, :]
 
 # -----Camera---------------------------
@@ -286,7 +304,7 @@ class Simulator(object):
                 A length 3 list specifying the x,y,z position of the camera
                 in simulation
         hpr : list of floats
-                A length 3 list specifying the heading, pitch, 
+                A length 3 list specifying the heading, pitch,
                 and roll of the camera in degrees
 
         Returns
@@ -303,15 +321,16 @@ class Simulator(object):
     def film_body(self, body_id, method='follow'):
         """Sets the camera to film a body
 
-        Camera has two modes: 'follow' moves the camera's position based on where
-        the body is moving and 'track' rotates the camera to look at the body
+        Camera has two modes: 'follow' moves the camera's position based on
+        where the body is moving and 'track' rotates the camera to look at
+        the body
 
         Parameters
         ----------
         body_id : int
                 The id tag of the body to be filmed
         method  : str, optional
-                The way the camera should move to film the body. 
+                The way the camera should move to film the body.
                 Either 'follow' or 'track' (default is 'follow')
 
         Returns
@@ -351,7 +370,7 @@ class Simulator(object):
                 The y position coordinate of the center (default 0)
         z        : float, optional
                 The z position coordinate of the center (default 0)
-        mass  : float, optional 
+        mass  : float, optional
                 The mass of the body (default is 1.0)
         length   : float, optional
                 The length of the box
@@ -416,7 +435,7 @@ class Simulator(object):
                 The y position of the center
         z        : float, optional
                 The z position of the center
-        mass  : float, optional 
+        mass  : float, optional
                 The mass of the body (default is 1.0)
         radius   : float, optional
                 The radius of the sphere (default is 0.5)
@@ -433,7 +452,7 @@ class Simulator(object):
 
         Returns
         -------
-        int     
+        int
                 The id tag of the sphere
         """
         assert radius >= 0, 'Radius of Sphere must be >= 0'
@@ -476,7 +495,7 @@ class Simulator(object):
                 The y position coordinate of the center (default is 0)
         z        : float, optional
                 The z position coordinate of the center (default is 0)
-        mass  : float, optional 
+        mass  : float, optional
                 The mass of the body (default is 1.0)
         r1       : float, optional
                 The orientation along the x axis. The vector [r1,r2,r3]
@@ -548,7 +567,7 @@ class Simulator(object):
     def send_fixed_joint(self, first_body_id, second_body_id):
         """Fix two bodies (or a body and space) together
 
-         This is implemented by using a hing joint and setting the hi and low 
+         This is implemented by using a hinge joint and setting the hi and low
          stop parameter to 0. This is probably not the best way to do it...
 
          Parameters
@@ -556,11 +575,11 @@ class Simulator(object):
          first_body_id   : int
                  The body id of the first body the joint is connected to.
                  If set equal to -1, the joint is connected to a point in
-                 space 
+                 space
          second_body_id  : int
                  The body id of the second body the joint is connected to.
                  If set equal to -1, the joint is connected to a point in
-                 space 
+                 space
 
          Returns
          -------
@@ -577,7 +596,7 @@ class Simulator(object):
 
     def send_hinge_joint(self, first_body_id, second_body_id, x=0, y=0, z=0,
                          n1=0, n2=0, n3=1,
-                         lo=-math.pi/4.0, hi=+math.pi/4.0,
+                         lo=(-math.pi / 4.0), hi=(math.pi / 4.0),
                          speed=1.0, torque=10.0, position_control=True):
         """Send a hinge joint to the simulator
 
@@ -588,11 +607,11 @@ class Simulator(object):
         first_body_id   : int
                 The body id of the first body the joint is connected to.
                 If set equal to -1, the joint is connected to a point in
-                space 
+                space
         second_body_id  : int
                 The body id of the second body the joint is connected to.
                 If set equal to -1, the joint is connected to a point in
-                space 
+                space
         x               : float, optional
                 The x position coordinate of the joint (default is 0)
         y               : float, optional
@@ -628,7 +647,7 @@ class Simulator(object):
 
         Returns
         -------
-        int 
+        int
                 The id tag for the hinge joint
         """
         assert first_body_id < self._num_bodies, 'Body with id ' + \
@@ -676,25 +695,25 @@ class Simulator(object):
         first_body_id   : int
                 The body id of the first body the joint is connected to.
                 If set equal to -1, the joint is connected to a point in
-                space 
+                space
         second_body_id  : int
                 The body id of the second body the joint is connected to.
                 If set equal to -1, the joint is connected to a point in
-                space 
+                space
         x          : float, optional
                 The orientation along the x axis.
                 (default is 0)
         y           : float, optional
-                The orientation along the y axis. 
+                The orientation along the y axis.
                 (default is 0)
         z          : float, optional
-                The orientation along the z axis. 
+                The orientation along the z axis.
                 (default is 1)
         lo              : float, optional
                 The lower limit in simulator units of the joint
                 (default is -1.0)
         hi              : float, optional
-                The upper limit in simulator units of the joint 
+                The upper limit in simulator units of the joint
                 (default is 1.0)
         speed           : float, optional
                 The speed of the motor of the joint (default is 10.0)
@@ -709,7 +728,7 @@ class Simulator(object):
 
         Returns
         -------
-        int 
+        int
                 The id tag for the hinge joint
         """
         assert first_body_id < self._num_bodies, 'Body with id ' + \
@@ -756,7 +775,7 @@ class Simulator(object):
             The z value of the directional vector (default is 1)
         lo      : float, optional
             The amount of force when the associated motor
-            neuron is -1. Negative implies force in the 
+            neuron is -1. Negative implies force in the
             opposit direction. (default is -10)
         hi      : float, optioal
             The amount of force when the associated motor
@@ -804,7 +823,7 @@ class Simulator(object):
                           start_value=0.0):
         """Send motor neurons to simulator
 
-        Motor neurons are neurons which connect to a specified joint and 
+        Motor neurons are neurons which connect to a specified joint and
         determine how the joint moves every time step of simulation
 
         Warning
@@ -813,7 +832,7 @@ class Simulator(object):
         is not in the middle of the 'hi' & 'lo' cutoffs will most likely cause
         instabilities in the simulation. For example creating a joint with
         either 'hi' or 'lo' to 0 and attaching a motor neuron to this joint
-        will cause the joint to break. 
+        will cause the joint to break.
 
         Parameters
         ----------
@@ -822,7 +841,7 @@ class Simulator(object):
         tau         : float, optional
                 The 'learning rate' of the neuron. Increasing tau increases
                 how much of value of the neuron at the current time step comes
-                from external inputs vs. the value of the neuron at the 
+                from external inputs vs. the value of the neuron at the
                 previous time step. (default 1)
         alpha       : float, optional
                 The 'remembrance rate' of the neuron. Usually 1 or 0.
@@ -831,7 +850,7 @@ class Simulator(object):
         start_value : float, optional
                 The starting value of the neuron. This value is specified
                 to mitigate the problem of a joint starting not on its midpoint
-                for positionally controlled joints. Set to +1 or greater for 
+                for positionally controlled joints. Set to +1 or greater for
                 close to the 'hi' range and -1 or less for close to 'lo' range
                 (default is 0.0)
 
@@ -842,13 +861,13 @@ class Simulator(object):
         """
         assert tau >= 0, 'Tau must be positive'
         assert joint_id < self._num_joints, 'Joint with id ' + \
-            str(joint_id)+' has not been sent'
+            str(joint_id) + ' has not been sent'
 
         neuron_id = self._num_neurons
         self._num_neurons += 1
 
         self._send('MotorNeuron',
-                   neuron_id,  joint_id,
+                   neuron_id, joint_id,
                    tau, alpha, start_value)
 
         return neuron_id
@@ -856,7 +875,7 @@ class Simulator(object):
     def send_sensor_neuron(self, sensor_id=0, svi=0):
         """Sends a sensor neuron to the simulator
 
-        Sensor neurons are input neurons which take the value of their 
+        Sensor neurons are input neurons which take the value of their
         associated sensor
 
         Parameters
@@ -864,8 +883,8 @@ class Simulator(object):
         sensor_id        : int, optional
                 The associated sensor id for the neuron to draw values from.
         svi : int, optional
-                The sensor value index is the offset index of the sensor. 
-                SVI is used for sensors which return a vector of values 
+                The sensor value index is the offset index of the sensor.
+                SVI is used for sensors which return a vector of values
                 (position, ray sensors, etc.)
 
         Returns
@@ -873,8 +892,8 @@ class Simulator(object):
         int
                 The id tag of the neuron
         """
-        assert sensor_id < self._num_sensors, 'Sensor with id ' + \
-            str(sensor_id)+' has not been sent'
+        assert sensor_id < self._num_sensors, ('Sensor with id ' + sensor_id +
+                                               ' has not been sent')
         assert svi in range(4), 'SVI must be in [0,3]'
 
         neuron_id = self._num_neurons
@@ -891,8 +910,8 @@ class Simulator(object):
         Parameters
         ----------
         in_values : list of floats or float, optional
-                The user specified values for the neuron. If length of 
-                values < the number of time steps, the values are 
+                The user specified values for the neuron. If length of
+                values < the number of time steps, the values are
                 continually looped through until every time step
                 has a corresponding value
 
@@ -904,11 +923,11 @@ class Simulator(object):
         try:
             iter(in_values)
         except TypeError:
-            in_values = [in_values]*self.eval_time
+            in_values = [in_values] * self.eval_time
 
         # if values is shorter than eval_time repeat until sufficient
         if len(in_values) < self.eval_time:
-            out_values = [0]*self.eval_time
+            out_values = [0] * self.eval_time
             for i in range(self.eval_time):
                 out_values[i] = in_values[i % len(in_values)]
         else:
@@ -924,15 +943,15 @@ class Simulator(object):
     def send_function_neuron(self, function=math.sin):
         """Send neuron to simulator which takes its value from the  function
 
-        The function is mapped to the specific time in the simulation based on 
-        both the discrete evaluation time and the dt space between time steps. 
-        For example if evalTime=100 and dt=0.05 the function will be evaluated 
+        The function is mapped to the specific time in the simulation based on
+        both the discrete evaluation time and the dt space between time steps.
+        For example if evalTime=100 and dt=0.05 the function will be evaluated
         at [0,0.05,...,5]
 
         Parameters
         ----------
         function : function, optional
-                The function which defines the neuron value. Valid functions 
+                The function which defines the neuron value. Valid functions
                 return a single float value over the time domain.
 
         Returns
@@ -943,7 +962,7 @@ class Simulator(object):
         assert self.eval_time >= 0, ('Cannot send function neuron'
                                      ' in infinite mode')
 
-        end_time = self.eval_time*self.dt
+        end_time = self.eval_time * self.dt
         time_vals = np.arange(0, end_time, self.dt)
         output_vals = list(map(function, time_vals))
 
@@ -952,8 +971,8 @@ class Simulator(object):
     def send_hidden_neuron(self, tau=1.0, alpha=1.0):
         """Send a hidden neuron to the simulator
 
-        Hidden neurons are basic neurons which can have inputs and outputs. 
-        They 'hidden' between input neurons (sensors, bias, function) and 
+        Hidden neurons are basic neurons which can have inputs and outputs.
+        They 'hidden' between input neurons (sensors, bias, function) and
         output neurons (motors)
 
         Parameters
@@ -961,7 +980,7 @@ class Simulator(object):
         tau : float, optional
             The 'learning rate' of the neuron. Increasing tau increases
             how much of value of the neuron at the current time step comes
-            from external inputs vs. the value of the neuron at the 
+            from external inputs vs. the value of the neuron at the
             previous time step.
         alpha    :
             The 'remembrance rate' of the neuron. Usually 1 or 0.
@@ -1001,8 +1020,8 @@ class Simulator(object):
         bool
             True if successful, False otherwise
         """
-        assert body_id < self._num_bodies, ('Body with id ' +
-                                            body_id+' has not been sent')
+        assert body_id < self._num_bodies, ('Body with id ' + body_id +
+                                            ' has not been sent')
         assert time >= 0 and time <= self.eval_time, (
             'Time step must be within eval time')
         self._assert_non_zero('Force', x, y, z)
@@ -1024,8 +1043,8 @@ class Simulator(object):
         int
                 The id tag of the body the light source is attached to.
         """
-        assert body_id < self._num_bodies, 'Body id ' + \
-            str(body_id)+' has not been sent'
+        assert body_id < self._num_bodies, ('Body with id ' + body_id +
+                                            ' has not been sent')
 
         self._send('LightSource',
                    body_id)
@@ -1046,8 +1065,8 @@ class Simulator(object):
         int
             The id tag of the sensor
         """
-        assert body_id < self._num_bodies, 'Body id ' + \
-            str(body_id)+' has not been sent'
+        assert body_id < self._num_bodies, ('Body with id ' + body_id +
+                                            ' has not been sent')
 
         sensor_id = self._num_sensors
         self._num_sensors += 1
@@ -1069,8 +1088,8 @@ class Simulator(object):
         int
             The id tag of the sensor
         """
-        assert body_id < self._num_bodies, 'Body id ' + \
-            str(body_id)+' has not been sent'
+        assert body_id < self._num_bodies, ('Body with id ' + str(body_id) +
+                                            ' has not been sent')
 
         sensor_id = self._num_sensors
         self._num_sensors += 1
@@ -1093,8 +1112,8 @@ class Simulator(object):
         int
                 The id tag of the sensor
         """
-        assert body_id < self._num_bodies, 'Body with id ' + \
-            str(body_id)+' has not been sent'
+        assert body_id < self._num_bodies, ('Body with id ' + str(body_id) +
+                                            ' has not been sent')
 
         sensor_id = self._num_sensors
         self._num_sensors += 1
@@ -1107,7 +1126,7 @@ class Simulator(object):
     def send_proprioceptive_sensor(self, joint_id=0):
         """Attaches a proprioceptive sensor to a joint in simulation
 
-        Proprioceptive sensors returns the angle of the joint at 
+        Proprioceptive sensors returns the angle of the joint at
         each time step
 
         Parameters
@@ -1120,8 +1139,8 @@ class Simulator(object):
         int
                 The id tag of the sensor
         """
-        assert joint_id < self._num_joints, 'Joint with id ' + \
-            str(joint_id)+' has not been sent'
+        assert joint_id < self._num_joints, ('Joint with id ' + str(joint_id) +
+                                             ' has not been sent')
 
         sensor_id = self._num_sensors
         self._num_sensors += 1
@@ -1137,13 +1156,13 @@ class Simulator(object):
                         max_distance=10):
         """Sends a ray sensor to the simulator connected to a body
 
-        Ray sensors return four values each time step, the distance and 
+        Ray sensors return four values each time step, the distance and
         color (r,g,b).
 
         Parameters
         ----------
         body_id : int, optional
-                The body id of the associated body the ray sensor is connected 
+                The body id of the associated body the ray sensor is connected
                 to. When this body moves the ray sensor moves accordingly
         x        : float, optional
                 The x position of the sensor
@@ -1152,13 +1171,13 @@ class Simulator(object):
         z        : float, optional
                 The z position of the sensor
         r1       : float, optional
-                The x direction of the sensor. The array [r1,r2,r3] is the 
+                The x direction of the sensor. The array [r1,r2,r3] is the
                 direction the ray sensor is pointing in the time step.
         r2       : float, optional
-                The y direction of the sensor. The array [r1,r2,r3] 
+                The y direction of the sensor. The array [r1,r2,r3]
                 is the direction the ray sensor is pointing in the time step.
         r3       : float, optional
-                The z direction of the sensor. The array [r1,r2,r3] is the 
+                The z direction of the sensor. The array [r1,r2,r3] is the
                 direction the ray sensor is pointing in the time step.
         max_distance: float, optional
                 The maximum distance away the ray can sense in simulator
@@ -1169,8 +1188,8 @@ class Simulator(object):
         int
                 The id tag of the sensor
         """
-        assert body_id < self._num_bodies, 'Body with id ' + \
-            str(body_id) + ' has not been sent yet'
+        assert body_id < self._num_bodies, ('Body with id ' + body_id +
+                                            ' has not been sent')
         self._assert_non_zero('Ray Sensor', r1, r2, r3)
 
         sensor_id = self._num_sensors
@@ -1190,16 +1209,15 @@ class Simulator(object):
         Parameters
         ----------
         body_id : int, optional
-                The body id of the associated body 
+                The body id of the associated body
 
         Returns
         -------
         int
                 The id tag of the sensor
         """
-        assert body_id < self._num_bodies, ('Body with id '+body_id+' has'
-                                            ' not been sent'
-                                            )
+        assert body_id < self._num_bodies, ('Body with id ' + body_id +
+                                            ' has not been sent')
         sensor_id = self._num_sensors
         self._num_sensors += 1
 
@@ -1211,21 +1229,20 @@ class Simulator(object):
     def send_vestibular_sensor(self, body_id=0):
         """Connects a vestibular sensor to a body
 
-        Vestibular sensors return a bodies orrientation in space
+        Vestibular sensors return a bodies orientation in space
 
         Parameters
         ----------
         body_id : int, optional
-                The body id of the associated body 
+                The body id of the associated body
 
         Returns
         -------
         int
                 The id tag of the sensor
         """
-        assert body_id < self._num_bodies, ('Body with id '+body_id+' has'
-                                            ' not been sent'
-                                            )
+        assert body_id < self._num_bodies, ('Body with id ' + body_id + ' has'
+                                            ' not been sent')
 
         sensor_id = self._num_sensors
         self._num_sensors += 1
@@ -1257,9 +1274,9 @@ class Simulator(object):
                 True if successful, False otherwise
         """
         assert source_neuron_id < self._num_neurons, 'Neuron with id ' + \
-            str(source_neuron_id)+' has not been sent'
+            str(source_neuron_id) + ' has not been sent'
         assert target_neuron_id < self._num_neurons, 'Neuron with id ' + \
-            str(target_neuron_id)+' has not been sent'
+            str(target_neuron_id) + ' has not been sent'
 
         return self.send_developing_synapse(source_neuron_id=source_neuron_id,
                                             target_neuron_id=target_neuron_id,
@@ -1273,7 +1290,7 @@ class Simulator(object):
                                 start_time=0., end_time=1.0):
         """Sends a synapse to the simulator
 
-        Developing synapses are synapses which change over time. 
+        Developing synapses are synapses which change over time.
         The synapse will interpolate between the start_weight and end_weight
         over the desired time range dictated by start_time and end_time.
         start_time and end_time are in [0,1] where 0 maps to time step 0
@@ -1313,8 +1330,8 @@ class Simulator(object):
         if start_time >= end_time:
             end_time = start_time
 
-        start_time = int(start_time * (self.eval_time-1))
-        end_time = int(end_time * (self.eval_time-1))
+        start_time = int(start_time * (self.eval_time - 1))
+        end_time = int(end_time * (self.eval_time - 1))
 
         self._send('Synapse',
                    source_neuron_id, target_neuron_id,
@@ -1324,7 +1341,7 @@ class Simulator(object):
         return True
 
 # -----I/OCommands----------------------------
-    def make_movie(self,  movie_name=''):
+    def make_movie(self, movie_name=''):
         """Takes captured image files and converts them into a movie
 
         Uses ffmpeg to convert images. ffmpeg needs to be installed
@@ -1342,7 +1359,7 @@ class Simulator(object):
         bool
             True if successful, False otherwise
         """
-        assert self.capture == True, (
+        assert self.capture is True, (
             'No frames captured, set capture to true')
 
         if movie_name == '':
@@ -1366,7 +1383,7 @@ class Simulator(object):
     def start(self):
         """Starts the simulation"""
 
-        assert self.evaluated == False, (
+        assert self.evaluated is False, (
             'Simulation has already been evaluated')
 
         if (not self.collision_matrix_sent and self.get_num_groups() != 0):
@@ -1374,16 +1391,17 @@ class Simulator(object):
 
         # build initial commands
         commands = [self.pyrosim_path + '/simulator']
-        if (self.play_blind == True):
+        if (self.play_blind is True):
             commands.append('-blind')
         else:
-            if self.use_textures == False:
+            if self.use_textures is False:
                 commands.append('-notex')
 
-        if (self.play_paused == True):
+        if (self.play_paused is True):
             commands.append('-pause')
 
-        self.pipe = Popen(commands, bufsize=0,stdout=PIPE, stdin=PIPE, stderr=PIPE, universal_newlines=True)
+        self.pipe = Popen(commands, bufsize=0, stdout=PIPE, stdin=PIPE,
+                          stderr=PIPE, universal_newlines=True)
 
         for string_to_send in self.strings_to_send:
             self.pipe.stdin.write(string_to_send)
@@ -1403,7 +1421,7 @@ class Simulator(object):
         Returns
         -------
         numpy matrix
-                A matrix of the sensor values for each time step of 
+                A matrix of the sensor values for each time step of
                 the simulation
         """
 
@@ -1444,7 +1462,7 @@ class Simulator(object):
             if arg != 0:
                 flag = True
 
-        assert flag == True, ('Vector parameters of ' + name +
+        assert flag is True, ('Vector parameters of ' + name +
                               ' cannot be all zeros')
 
     def _collect_sensor_data(self, data_from_simulator):
@@ -1457,7 +1475,7 @@ class Simulator(object):
 
         if self.debug:
             chop_start = debug_output.find('Simulation test environment')
-            chop_end = debug_output.find('sideways and up')+15
+            chop_end = debug_output.find('sideways and up') + 15
             if chop_start > 0:
                 print (debug_output[:chop_start], debug_output[chop_end:-1])
             else:
@@ -1485,11 +1503,9 @@ class Simulator(object):
                         print (index, data_from_simulator)
                         print (debug_output)
                         raise IndexError
-
-
                     self.data[sensor_id, s, t] = sensor_value
                     index = index + 1
-
+        # print(self.data)
     def _send_collision_matrix(self):
         """sends the collision matrix"""
 

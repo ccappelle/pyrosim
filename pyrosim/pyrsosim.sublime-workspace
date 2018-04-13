@@ -1,0 +1,967 @@
+{
+	"auto_complete":
+	{
+		"selected_items":
+		[
+			[
+				"tar",
+				"target_theta2"
+			],
+			[
+				"thet",
+				"theta1"
+			],
+			[
+				"targ",
+				"target_theta2"
+			],
+			[
+				"cm",
+				"cmake_minimum_required"
+			],
+			[
+				"tp",
+				"tp_dir"
+			],
+			[
+				"bui",
+				"build_dir"
+			],
+			[
+				"inc",
+				"include_dir"
+			],
+			[
+				"vict",
+				"victoryQuad"
+			],
+			[
+				"RESE",
+				"RESET_JUMP"
+			],
+			[
+				"isT",
+				"isTouchingSpecial"
+			],
+			[
+				"ba",
+				"backgroundSprite"
+			],
+			[
+				"right",
+				"rightRotate"
+			],
+			[
+				"pres",
+				"joystick_present"
+			],
+			[
+				"jo",
+				"joystick_present"
+			],
+			[
+				"tim",
+				"timeSinceJump"
+			],
+			[
+				"ed",
+				"edgeQuad"
+			],
+			[
+				"JU",
+				"JUMP_VEL"
+			],
+			[
+				"JM",
+				"JUMP_VEL"
+			],
+			[
+				"fri",
+				"frictionImpulse"
+			],
+			[
+				"refer",
+				"reference"
+			],
+			[
+				"Lo",
+				"LoadTexture"
+			],
+			[
+				"timeS",
+				"timeSinceSwitch"
+			],
+			[
+				"To",
+				"TOTAL_POWERS"
+			],
+			[
+				"coll",
+				"collisionPoints"
+			],
+			[
+				"invM",
+				"invMassSum"
+			],
+			[
+				"Rota",
+				"RotationVelocity"
+			],
+			[
+				"Ke",
+				"KeyboardInput"
+			],
+			[
+				"err_",
+				"err_F4〔variable〕"
+			],
+			[
+				"r_F",
+				"r_F4"
+			],
+			[
+				"c_F",
+				"c_F4"
+			],
+			[
+				"end",
+				"end{bmatrix}\tMath237_HW11_Cappelle.tex"
+			],
+			[
+				"SE1_",
+				"SE1_f4"
+			],
+			[
+				"res",
+				"residual1_f3〔variable〕"
+			],
+			[
+				"SE",
+				"SE2_f4〔variable〕"
+			],
+			[
+				"fit2_",
+				"fit2_f4"
+			],
+			[
+				"c1_f",
+				"c1_F4〔variable〕"
+			],
+			[
+				"in",
+				"includegraphics[options]{name}\tlatex-document"
+			],
+			[
+				"rende",
+				"render_tree"
+			],
+			[
+				"Shap",
+				"ShapeContainsOrigin"
+			],
+			[
+				"pos",
+				"Position"
+			],
+			[
+				"upp",
+				"upper_pt"
+			],
+			[
+				"low",
+				"lower_pt"
+			],
+			[
+				"num_ed",
+				"num_edges_to_remove〔variable〕"
+			],
+			[
+				"num_nod",
+				"num_nodes_to_add〔variable〕"
+			],
+			[
+				"remov",
+				"remove_nodes"
+			],
+			[
+				"add_",
+				"add_edges"
+			],
+			[
+				"prob_mut",
+				"prob_mutate_edge_weight"
+			],
+			[
+				"num_nodes_t",
+				"num_nodes_to_remove"
+			],
+			[
+				"prob_rem",
+				"prob_remove_node"
+			],
+			[
+				"num_no",
+				"num_nodes_to_add"
+			],
+			[
+				"incom",
+				"incomingActualString"
+			],
+			[
+				"eul",
+				"eulers〔function〕"
+			],
+			[
+				"qua",
+				"quadProjection"
+			],
+			[
+				"playre",
+				"playerProjections"
+			],
+			[
+				"play",
+				"playerY"
+			],
+			[
+				"playe",
+				"playerX"
+			],
+			[
+				"playr",
+				"playerProjections"
+			],
+			[
+				"player",
+				"playerProjections"
+			],
+			[
+				"Ro",
+				"RotationVelocity"
+			],
+			[
+				"str",
+				"stretched_vec〔variable〕"
+			],
+			[
+				"rem",
+				"remove_random_node〔function〕"
+			],
+			[
+				"cal",
+				"calc_network_weights〔function〕"
+			],
+			[
+				"eva",
+				"eval_time〔argument〕"
+			],
+			[
+				"forw",
+				"forward_error〔function〕"
+			],
+			[
+				"bac",
+				"backward_error〔function〕"
+			],
+			[
+				"for",
+				"forward_error〔function〕"
+			],
+			[
+				"muta",
+				"mutate_edge_weight〔function〕"
+			],
+			[
+				"mut",
+				"mutate_function〔function〕"
+			],
+			[
+				"add_ra",
+				"add_random_edge2"
+			],
+			[
+				"act",
+				"activation_functions〔variable〕"
+			],
+			[
+				"lv",
+				"lvlHeight"
+			],
+			[
+				"ROT",
+				"ROTATE_CW"
+			],
+			[
+				"Key",
+				"KeyboardAction"
+			],
+			[
+				"sim",
+				"simpsons_adaptive〔function〕"
+			],
+			[
+				"simp",
+				"simpsons_adaptive〔function〕"
+			],
+			[
+				"gau",
+				"gaussian_quadrature3〔function〕"
+			],
+			[
+				"calcu",
+				"calculate_node_value"
+			],
+			[
+				"ad",
+				"adaptive_simpsons_recursion"
+			],
+			[
+				"cend",
+				"centered_diff_2nd〔function〕"
+			],
+			[
+				"cent",
+				"centered_diff_2nd〔function〕"
+			],
+			[
+				"10",
+				"10E6"
+			],
+			[
+				"spl",
+				"spline_plot〔function〕"
+			],
+			[
+				"q0",
+				"q07〔function〕"
+			],
+			[
+				"gen",
+				"generator_func"
+			],
+			[
+				"form",
+				"format_string〔variable〕"
+			],
+			[
+				"pl",
+				"playerY"
+			],
+			[
+				"usepa",
+				"usepackage{package}\tlatex-document"
+			],
+			[
+				"spr",
+				"spriteSheet"
+			],
+			[
+				"Textu",
+				"Texture2D"
+			],
+			[
+				"Text",
+				"Texture2D"
+			],
+			[
+				"Fi",
+				"Filter_Min"
+			],
+			[
+				"FIL",
+				"Filter_Max"
+			],
+			[
+				"geo",
+				"geometryShader"
+			],
+			[
+				"ge",
+				"geometryShader"
+			],
+			[
+				"gSH",
+				"gShaderCode"
+			],
+			[
+				"chec",
+				"checkCompileErrors"
+			],
+			[
+				"glGetPro",
+				"glGetProgramInfoLog"
+			],
+			[
+				"che",
+				"checkCompileErrors"
+			],
+			[
+				"fSh",
+				"fShaderCode"
+			],
+			[
+				"gSh",
+				"gShaderFile"
+			],
+			[
+				"fShad",
+				"fShaderStream"
+			],
+			[
+				"fra",
+				"fragmentCode"
+			],
+			[
+				"vS",
+				"vShaderStream"
+			],
+			[
+				"transform",
+				"transformLoc"
+			],
+			[
+				"tra",
+				"transformLoc"
+			],
+			[
+				"progr",
+				"programID"
+			],
+			[
+				"frag",
+				"fragmentShader"
+			],
+			[
+				"shad",
+				"shaderProgram"
+			],
+			[
+				"fr",
+				"fragmentShaderSource"
+			],
+			[
+				"ly",
+				"lycheral_sieve〔variable〕"
+			],
+			[
+				"rev",
+				"reverse_and_add〔function〕"
+			],
+			[
+				"dec",
+				"decimal_list"
+			],
+			[
+				"retu",
+				"return_dict"
+			],
+			[
+				"co",
+				"collision_group〔variable〕"
+			],
+			[
+				"M",
+				"MAIN_WIDTH"
+			],
+			[
+				"mne",
+				"mneuron2"
+			],
+			[
+				"thr",
+				"thruster2〔variable〕"
+			],
+			[
+				"dsDr",
+				"dsDrawCylinder"
+			],
+			[
+				"_ass",
+				"_assert_non_zero"
+			],
+			[
+				"sec",
+				"secondObject"
+			],
+			[
+				"_colli",
+				"_collision_matrix"
+			],
+			[
+				"front_se",
+				"front_sensor_neuron〔variable〕"
+			],
+			[
+				"fro",
+				"front_peg〔variable〕"
+			],
+			[
+				"prop_s",
+				"prop_sensor_results〔variable〕"
+			],
+			[
+				"ves",
+				"vestib_sensor_results〔variable〕"
+			],
+			[
+				"num",
+				"numberOfBodies"
+			],
+			[
+				"_as",
+				"_assert_normalizable"
+			],
+			[
+				"collis",
+				"collision_group"
+			]
+		]
+	},
+	"buffers":
+	[
+		{
+			"file": "pyrosim.py",
+			"settings":
+			{
+				"buffer_size": 53215,
+				"encoding": "UTF-8",
+				"line_ending": "Unix"
+			}
+		}
+	],
+	"build_system": "",
+	"build_system_choices":
+	[
+		[
+			[
+				[
+					"Packages/LaTeXing/LaTeX.sublime-build",
+					""
+				],
+				[
+					"Packages/LaTeXing/LaTeX.sublime-build",
+					"Clean up Files"
+				],
+				[
+					"Packages/User/LaTeX.sublime-build",
+					""
+				]
+			],
+			[
+				"Packages/LaTeXing/LaTeX.sublime-build",
+				""
+			]
+		],
+		[
+			[
+				[
+					"Packages/Makefile/Make.sublime-build",
+					""
+				],
+				[
+					"Packages/Makefile/Make.sublime-build",
+					"Clean"
+				]
+			],
+			[
+				"Packages/Makefile/Make.sublime-build",
+				""
+			]
+		],
+		[
+			[
+				[
+					"Packages/Python/Python.sublime-build",
+					""
+				],
+				[
+					"Packages/Python/Python.sublime-build",
+					"Syntax Check"
+				]
+			],
+			[
+				"Packages/Python/Python.sublime-build",
+				""
+			]
+		]
+	],
+	"build_varint": "",
+	"command_palette":
+	{
+		"height": 392.0,
+		"last_filter": "insta",
+		"selected_items":
+		[
+			[
+				"insta",
+				"Package Control: Install Package"
+			],
+			[
+				"reinden",
+				"Indentation: Reindent Lines"
+			],
+			[
+				"reindent",
+				"Indentation: Reindent Lines"
+			],
+			[
+				"Instal",
+				"Package Control: Install Package"
+			],
+			[
+				"PEP8",
+				"AutoPEP8: Format Code"
+			],
+			[
+				"Package Control: Install Package",
+				"Package Control: Install Package"
+			],
+			[
+				"Package Control: In",
+				"Package Control: Install Package"
+			],
+			[
+				"Package Control: Insta",
+				"Package Control: Install Package"
+			],
+			[
+				"Package Control: I",
+				"Package Control: Install Package"
+			],
+			[
+				"Insta",
+				"Package Control: Install Package"
+			],
+			[
+				"Pac",
+				"Install Package Control"
+			]
+		],
+		"width": 444.0
+	},
+	"console":
+	{
+		"height": 0.0,
+		"history":
+		[
+		]
+	},
+	"distraction_free":
+	{
+		"menu_visible": true,
+		"show_minimap": false,
+		"show_open_files": false,
+		"show_tabs": false,
+		"side_bar_visible": false,
+		"status_bar_visible": false
+	},
+	"expanded_folders":
+	[
+		"/Users/collin/Documents/pyrosim"
+	],
+	"file_history":
+	[
+		"/Users/collin/.emacs",
+		"/Users/collin/.bash_profile",
+		"/Users/collin/.bashrc",
+		"/Users/collin/.bashrc~",
+		"/Users/collin/.bash_profile~",
+		"/Users/collin/.bash_profile-anaconda2.bak",
+		"/Users/collin/.bash_history",
+		"/Users/collin/Documents/Animations/basic_pyglet.py",
+		"/Users/collin/Documents/Animations/water_spring_model.py",
+		"/Users/collin/.slate",
+		"/Users/collin/Desktop/hypothesis.txt",
+		"/Users/collin/Google Drive/Animations/water_spring_model.py",
+		"/Users/collin/Desktop/Horde3D/Build/Binaries/Content/shaders/model.shader",
+		"/Users/collin/anaconda2/lib/python2.7/site-packages/numpydoc-0.6.0-py2.7.egg/numpydoc/phantom_import.py",
+		"/Users/collin/Documents/dev/src/game.cpp",
+		"/Users/collin/Documents/dev/build/Makefile",
+		"/Users/collin/Documents/dev/main.cpp",
+		"/Users/collin/Documents/dev/Makefile",
+		"/Users/collin/Documents/dev/src/main.cpp",
+		"/Users/collin/Documents/ODE/ode-0.15.2/INSTALL.txt",
+		"/Users/collin/Documents/Glitter/Build/Glitter/rsc/lvl/0_fair.lvl",
+		"/Users/collin/Documents/Glitter/Build/Glitter/rsc/lvl/2_fair.lvl",
+		"/Users/collin/Documents/Glitter/Build/Glitter/rsc/lvl/3_fair.lvl",
+		"/Users/collin/Documents/Glitter/Build/Glitter/rsc/lvl/1_fair.lvl",
+		"/Users/collin/Documents/Glitter/Glitter/Sources/manager.cpp",
+		"/Users/collin/Documents/Glitter/Glitter/Headers/game_level.hpp",
+		"/Users/collin/Documents/Glitter/Build/Glitter/rsc/lvl/00_tester.lvl",
+		"/Users/collin/Documents/Glitter/Glitter/Headers/game.hpp",
+		"/Users/collin/Documents/Glitter/Glitter/Headers/sprite_renderer.hpp",
+		"/Users/collin/Documents/Glitter/Glitter/Sources/sprite_renderer.cpp",
+		"/Users/collin/Documents/Glitter/Glitter/Sources/game.cpp",
+		"/Users/collin/Documents/Glitter/Glitter/Sources/game_level.cpp",
+		"/Users/collin/Documents/Glitter/Glitter/Sources/physics.cpp",
+		"/Users/collin/Documents/Glitter/Glitter/Sources/game_quads.cpp",
+		"/Users/collin/Documents/Glitter/Glitter/Headers/game_quads.hpp",
+		"/Users/collin/Documents/Glitter/Glitter/Headers/physics.hpp",
+		"/Users/collin/Documents/Glitter/Glitter/Headers/texture.hpp",
+		"/Users/collin/Documents/Glitter/Glitter/Shaders/sprite.frag",
+		"/Users/collin/Documents/Glitter/Glitter/Shaders/sprite.vert",
+		"/Users/collin/Documents/Glitter/Glitter/Headers/manager.hpp",
+		"/Users/collin/Documents/Glitter/Glitter/Sources/main.cpp",
+		"/Users/collin/Google Drive/School/Phys_256/Project/00_presentation.pdf",
+		"/Users/collin/Google Drive/School/Phys_256/Project/00_presentation.tex",
+		"/Users/collin/Desktop/Physics 256 – Semester Project Guidelines(1).docx",
+		"/Users/collin/Google Drive/School/Phys_256/Project/nbody.py",
+		"/Users/collin/Google Drive/School/Phys_256/Project/octrees.py",
+		"/Users/collin/Documents/Glitter/CMakeLists.txt",
+		"/Users/collin/Desktop/swinger.m",
+		"/Users/collin/Documents/Glitter/Glitter/Sources/10_rk.py",
+		"/Users/collin/Desktop/dp-sensors.txt",
+		"/Users/collin/Documents/mypyrosim/pyrosim/pyrosim/simulator/makefile",
+		"/Users/collin/Documents/mypyrosim/pyrosim/pyrosim/simulator/ode-0.12/ode-config",
+		"/Users/collin/Documents/mypyrosim/pyrosim/pyrosim/simulator/ode-0.12/install-sh",
+		"/Users/collin/Documents/mypyrosim/pyrosim/pyrosim/simulator/ode-0.12/INSTALL.txt",
+		"/Users/collin/Documents/mypyrosim/pyrosim/pyrosim/simulator/synapse.cpp",
+		"/Users/collin/Documents/mypyrosim/pyrosim/pyrosim/simulator/object.h",
+		"/Users/collin/Documents/mypyrosim/pyrosim/pyrosim/simulator/neuron.h",
+		"/Users/collin/Documents/mypyrosim/pyrosim/pyrosim/simulator/neuralNetwork.h",
+		"/Users/collin/Documents/mypyrosim/pyrosim/pyrosim/pyrosim.py",
+		"/Users/collin/Documents/mypyrosim/pyrosim/pyrosim/simulator/proprioceptiveSensor.cpp",
+		"/Users/collin/Documents/mypyrosim/pyrosim/pyrosim/simulator/neuron.cpp",
+		"/Users/collin/Documents/mypyrosim/pyrosim/pyrosim/simulator/joint.cpp",
+		"/Users/collin/Documents/mypyrosim/pyrosim/pyrosim/simulator/joint.h",
+		"/Users/collin/Documents/mypyrosim/pyrosim/pyrosim/simulator/environment.h",
+		"/Users/collin/Documents/mypyrosim/pyrosim/pyrosim/simulator/object.cpp",
+		"/Users/collin/Documents/mypyrosim/pyrosim/pyrosim/simulator/proprioceptiveSensor.h",
+		"/Users/collin/Documents/mypyrosim/pyrosim/pyrosim/simulator/neuralNetwork.cpp",
+		"/Users/collin/Documents/mypyrosim/pyrosim/pyrosim/simulator/constants.oneday",
+		"/Users/collin/Documents/mypyrosim/pyrosim/pyrosim/simulator/quick_test.py",
+		"/Users/collin/Documents/mypyrosim/pyrosim/pyrosim/simulator/simulator.cpp",
+		"/Users/collin/Documents/mypyrosim/pyrosim/pyrosim/simulator/datastruct.h",
+		"/Users/collin/Documents/mypyrosim/pyrosim/pyrosim/simulator/isSeenSensor.cpp",
+		"/Users/collin/Documents/mypyrosim/pyrosim/pyrosim/simulator/environment.cpp",
+		"/Users/collin/Documents/mypyrosim/pyrosim/pyrosim/simulator/vestibularSensor.cpp",
+		"/Users/collin/Documents/mypyrosim/pyrosim/pyrosim/simulator/positionSensor.cpp",
+		"/Users/collin/Documents/mypyrosim/pyrosim/docs/00_presentation.tex",
+		"/Users/collin/Documents/2017_ModularityTrees/networks.py",
+		"/Users/collin/Documents/2017_ModularityTrees/runner.py",
+		"/Users/collin/Google Drive/School/Math_237/code/hw9_q3.m",
+		"/Users/collin/Documents/Glitter/Glitter/Headers/collision_manager.hpp",
+		"/Users/collin/Documents/Glitter/Glitter/Sources/collision_manager.cpp",
+		"/Users/collin/Desktop/test.py",
+		"/Users/collin/Documents/Glitter/Glitter/Shaders/transform.vert",
+		"/Users/collin/Desktop/svdfigure.m",
+		"/Users/collin/Google Drive/School/Math_237/code/08_img.py",
+		"/Users/collin/Desktop/numba_test.py",
+		"/Users/collin/Desktop/cuda_test.py",
+		"/Users/collin/Google Drive/School/Math_237/Math237_HW05_Cappelle.tex",
+		"/Users/collin/Google Drive/School/PHYS_256/ProjectProposal.tex",
+		"/Users/collin/Google Drive/School/Math_237/Math237_HW03_Cappelle.tex",
+		"/Users/collin/Documents/mypyrosim/pyrosim/pyrosim/simulator/touchSensor.cpp",
+		"/Users/collin/Documents/mypyrosim/pyrosim/pyrosim/simulator/isSeenSensor.h",
+		"/Users/collin/Documents/mypyrosim/pyrosim/pyrosim/simulator/touchSensor.h",
+		"/Users/collin/Documents/mypyrosim/pyrosim/pyrosim/simulator/vestibularSensor.h",
+		"/Users/collin/Library/Application Support/Sublime Text 3/Packages/User/AutoPep8.sublime-settings",
+		"/Users/collin/Library/Application Support/Sublime Text 3/Packages/AutoPEP8/AutoPep8.sublime-settings",
+		"/Users/collin/Documents/2017_ModularityTrees/population.py",
+		"/Users/collin/Google Drive/School/Math_237/Math237_HW02_Cappelle.tex",
+		"/Users/collin/Google Drive/School/Math_237/code/02_03_plot_cubic.py",
+		"/Users/collin/Google Drive/School/Stat_330/02_hw/04_problem.py",
+		"/Users/collin/Downloads/makearray_solution.m",
+		"/Users/collin/Downloads/mytaylor_solution.m",
+		"/Users/collin/Documents/Glitter/Glitter/Headers/00_tester.lvl",
+		"/Users/collin/Documents/Glitter/Build/Glitter/Images/01_sprite_sheet.jpg",
+		"/Users/collin/Google Drive/School/Math_237/Math237_01_Cappelle.tex",
+		"/Users/collin/Documents/Glitter/Glitter/Headers/env_quad.hpp",
+		"/Users/collin/Documents/Glitter/Glitter/Sources/env_quad.cpp",
+		"/Users/collin/Documents/Glitter/Glitter/Headers/camera.hpp",
+		"/Users/collin/Documents/Glitter/Glitter/Sources/shader.cpp",
+		"/Users/collin/Documents/Glitter/Glitter/Headers/shader.hpp",
+		"/Users/collin/Documents/Glitter/Glitter/Shaders/transform.frag",
+		"/Users/collin/Documents/Glitter/Glitter/Headers/player.hpp",
+		"/Users/collin/Documents/Glitter/Glitter/Sources/player.cpp",
+		"/Users/collin/Documents/Glitter/Glitter/Vendor/assimp/code/OgreStructs.cpp",
+		"/Users/collin/Documents/Glitter/Glitter/Sources/envObjects.cpp",
+		"/Users/collin/Documents/Glitter/Glitter/Headers/spriteRenderer.hpp",
+		"/Users/collin/Documents/Glitter/Glitter/Headers/glitter.hpp",
+		"/Users/collin/Documents/Glitter/Glitter/Headers/shapes.hpp",
+		"/Users/collin/Documents/Glitter/Build/Glitter/Shaders/transform.frag",
+		"/Users/collin/Documents/Glitter/Build/Glitter/Shaders/basic.vert",
+		"/Users/collin/Documents/Glitter/Build/Glitter/Shaders/basic.frag",
+		"/Users/collin/Documents/Glitter/Glitter/Sources/basic.frag",
+		"/Users/collin/Documents/Glitter/Build/Glitter/basic.vert",
+		"/Users/collin/Documents/Glitter/Build/run.sh",
+		"/Users/collin/Documents/Glitter/Build/Glitter/basic.frag",
+		"/Users/collin/Documents/Glitter/Glitter/Sources/basic.vert",
+		"/Users/collin/Google Drive/Project_Euler/primes.txt",
+		"/Users/collin/Documents/mypyrosim/pyrosim/demos/robots/quadruped.py"
+	],
+	"find":
+	{
+		"height": 42.0
+	},
+	"find_in_files":
+	{
+		"height": 93.0,
+		"where_history":
+		[
+		]
+	},
+	"find_state":
+	{
+		"case_sensitive": false,
+		"find_history":
+		[
+		],
+		"highlight": true,
+		"in_selection": false,
+		"preserve_case": false,
+		"regex": false,
+		"replace_history":
+		[
+		],
+		"reverse": false,
+		"show_context": true,
+		"use_buffer2": true,
+		"whole_word": false,
+		"wrap": true
+	},
+	"groups":
+	[
+		{
+			"selected": 0,
+			"sheets":
+			[
+				{
+					"buffer": 0,
+					"file": "pyrosim.py",
+					"semi_transient": false,
+					"settings":
+					{
+						"buffer_size": 53215,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								548,
+								548
+							]
+						],
+						"settings":
+						{
+							"auto_complete_triggers":
+							[
+								{
+									"characters": "<",
+									"selector": "text.html"
+								},
+								{
+									"characters": ".",
+									"selector": "source.python - string - constant.numeric"
+								}
+							],
+							"syntax": "Packages/Python/Python.sublime-syntax",
+							"tab_size": 4,
+							"translate_tabs_to_spaces": true
+						},
+						"translation.x": 0.0,
+						"translation.y": 3.0,
+						"zoom_level": 1.0
+					},
+					"stack_index": 0,
+					"type": "text"
+				}
+			]
+		}
+	],
+	"incremental_find":
+	{
+		"height": 29.0
+	},
+	"input":
+	{
+		"height": 45.0
+	},
+	"layout":
+	{
+		"cells":
+		[
+			[
+				0,
+				0,
+				1,
+				1
+			]
+		],
+		"cols":
+		[
+			0.0,
+			1.0
+		],
+		"rows":
+		[
+			0.0,
+			1.0
+		]
+	},
+	"menu_visible": true,
+	"output.autopep8":
+	{
+		"height": 112.0
+	},
+	"output.exec":
+	{
+		"height": 195.0
+	},
+	"output.find_results":
+	{
+		"height": 0.0
+	},
+	"pinned_build_system": "",
+	"project": "pyrsosim.sublime-project",
+	"replace":
+	{
+		"height": 54.0
+	},
+	"save_all_on_build": true,
+	"select_file":
+	{
+		"height": 0.0,
+		"last_filter": "",
+		"selected_items":
+		[
+			[
+				"",
+				"untitled"
+			]
+		],
+		"width": 0.0
+	},
+	"select_project":
+	{
+		"height": 500.0,
+		"last_filter": "",
+		"selected_items":
+		[
+		],
+		"width": 380.0
+	},
+	"select_symbol":
+	{
+		"height": 392.0,
+		"last_filter": "",
+		"selected_items":
+		[
+		],
+		"width": 508.0
+	},
+	"selected_group": 0,
+	"settings":
+	{
+	},
+	"show_minimap": true,
+	"show_open_files": false,
+	"show_tabs": true,
+	"side_bar_visible": true,
+	"side_bar_width": 193.0,
+	"status_bar_visible": true,
+	"template_settings":
+	{
+	}
+}

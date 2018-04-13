@@ -22,26 +22,26 @@ box = sim.send_box(x=-1.0, y=0.0, z=2.0,
 # (x,y,z) refers to the anchor position
 # (n1,n2,n3) refers to the joint axis
 world_joint = sim.send_hinge_joint(first_body_id=pyrosim.Simulator.WORLD,
-                                     second_body_id=cyl_1,
-                                     x=0.0, y=0.0, z=2.0,
-                                     n1=0, n2=1, n3=0,
-                                     lo=-math.pi, hi=math.pi)
+                                   second_body_id=cyl_1,
+                                   x=0.0, y=0.0, z=2.0,
+                                   n1=0, n2=1, n3=0,
+                                   lo=-math.pi, hi=math.pi)
 
 # hinge connects cylinders together
 hinge_joint = sim.send_hinge_joint(first_body_id=cyl_1,
-                                     second_body_id=cyl_2,
-                                     x=-0.5, y=0.0, z=2.0,
-                                     n1=0, n2=1, n3=0,
-                                     lo=-math.pi, hi=math.pi)
+                                   second_body_id=cyl_2,
+                                   x=-0.5, y=0.0, z=2.0,
+                                   n1=0, n2=1, n3=0,
+                                   lo=-math.pi, hi=math.pi)
 
 # slider joint joins second cylinder and box.
 # Contrary to the hinge joint, the parameters
 # (x,y,z) refer to the joint axis in the case
 # of the slider joint.
 slider_joint = sim.send_slider_joint(first_body_id=cyl_2,
-                                      second_body_id=box,
-                                      x=1.0, y=0.0, z=0.0,
-                                      lo=-0.5,hi=0.5)
+                                     second_body_id=box,
+                                     x=1.0, y=0.0, z=0.0,
+                                     lo=-0.5, hi=0.5)
 
 pos_sensor = sim.send_position_sensor(cyl_1)
 vestib_sensor = sim.send_vestibular_sensor(cyl_2)
@@ -72,4 +72,3 @@ for t in range(500):
     output = ('{:3d}:: x:{: 3.1f}, y:{: 3.1f}, z:{: 3.1f}, ' +
               'vestib:{: 3.1f}, prop:{: 3.1f}').format(t, x, y, z, v, p)
     print output
-

@@ -1,5 +1,4 @@
 import pyrosim
-import math
 
 sim = pyrosim.Simulator(play_paused=True, debug=True, use_textures=True,
                         xyz=[3.0, 2.0, 2.0], hpr=[-150.0, -15.0, 0.0],

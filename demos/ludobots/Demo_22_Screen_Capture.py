@@ -1,17 +1,21 @@
 import sys
 sys.path.insert(0, '../..')
+import pyrosim # noqa
 
-import pyrosim
+pass
+# ---- ONLY DO THIS IF YOU KNOW WHAT YOU ARE DOING -------
 
-# the capture option creates a frame every time step 
+# the capture option creates a frame every time step
 # you must have play_blind=False
 # capture creates a directory called 'frames' and stores the image
 # files there
-sim = pyrosim.Simulator(eval_time=100, play_blind=False,capture=True)
+# sim = pyrosim.Simulator(eval_time=100, play_blind=False, capture=True)
 
-sim.send_cylinder()
+# Uncomment below to use
 
-sim.start()
-sim.wait_to_finish()
+# sim.send_cylinder()
 
-sim.make_movie()
+# sim.start()
+# sim.wait_to_finish()
+
+# sim.make_movie()
