@@ -27,24 +27,19 @@
   
 
   
-  
     <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
-  
-
-  
-
-  
-    <link rel="top" title="pyrosim 0.1.1 documentation" href="../index.html"/>
-        <link rel="up" title="Advanced Options" href="../advanced.html"/>
-        <link rel="next" title="Videos" href="../videos.html"/>
-        <link rel="prev" title="External Forces" href="00_forces.html"/> 
+  <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="Videos" href="../videos.html" />
+    <link rel="prev" title="External Forces" href="00_forces.html" /> 
 
   
   <script src="../_static/js/modernizr.min.js"></script>
 
 </head>
 
-<body class="wy-body-for-nav" role="document">
+<body class="wy-body-for-nav">
 
    
   <div class="wy-grid-for-nav">
@@ -115,7 +110,7 @@
     <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
 
       
-      <nav class="wy-nav-top" role="navigation" aria-label="top navigation">
+      <nav class="wy-nav-top" aria-label="top navigation">
         
           <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
           <a href="../index.html">pyrosim</a>
@@ -123,9 +118,10 @@
       </nav>
 
 
-      
       <div class="wy-nav-content">
+        
         <div class="rst-content">
+        
           
 
 
@@ -180,9 +176,9 @@ This means thrusters can be seamlessly integrated into any neural network.</p>
 </div>
 <div class="section" id="spaceship">
 <h2>Spaceship<a class="headerlink" href="#spaceship" title="Permalink to this headline">¶</a></h2>
-<p>The natural example for thrusters is, of course, a spaceship. Here we recreate space-x by launching a rocket and having it return safely to ground (and then still thrusting upwards because it actuates on a sine wave, so it&#8217;s not really like space-x but we are trying to get on the bandwagon).</p>
-<div class="literal-block-wrapper container" id="rocket-ship-py">
-<div class="code-block-caption"><span class="caption-text">rocket_ship.py</span><a class="headerlink" href="#rocket-ship-py" title="Permalink to this code">¶</a></div>
+<p>The natural example for thrusters is, of course, a spaceship. Here we recreate space-x by launching a rocket and having it return safely to ground (and then still thrusting upwards because it actuates on a sine wave, so it’s not really like space-x but we are trying to get on the bandwagon).</p>
+<div class="literal-block-wrapper docutils container" id="id1">
+<div class="code-block-caption"><span class="caption-text">rocket_ship.py</span><a class="headerlink" href="#id1" title="Permalink to this code">¶</a></div>
 <div class="highlight-default"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">pyrosim</span>
 <span class="kn">import</span> <span class="nn">math</span>
 
@@ -243,9 +239,7 @@ This means thrusters can be seamlessly integrated into any neural network.</p>
 
 
            </div>
-           <div class="articleComments">
-            
-           </div>
+           
           </div>
           <footer>
   
@@ -267,7 +261,7 @@ This means thrusters can be seamlessly integrated into any neural network.</p>
 
     </p>
   </div>
-  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/snide/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
 
 </footer>
 
@@ -286,16 +280,17 @@ This means thrusters can be seamlessly integrated into any neural network.</p>
         var DOCUMENTATION_OPTIONS = {
             URL_ROOT:'../',
             VERSION:'0.1.1',
+            LANGUAGE:'None',
             COLLAPSE_INDEX:false,
             FILE_SUFFIX:'.html',
             HAS_SOURCE:  true,
-            SOURCELINK_SUFFIX: ''
+            SOURCELINK_SUFFIX: '.txt'
         };
     </script>
       <script type="text/javascript" src="../_static/jquery.js"></script>
       <script type="text/javascript" src="../_static/underscore.js"></script>
       <script type="text/javascript" src="../_static/doctools.js"></script>
-      <script type="text/javascript" src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+      <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
 
   
 
@@ -304,14 +299,13 @@ This means thrusters can be seamlessly integrated into any neural network.</p>
     <script type="text/javascript" src="../_static/js/theme.js"></script>
   
 
-  
-  
   <script type="text/javascript">
       jQuery(function () {
-          SphinxRtdTheme.StickyNav.enable();
+          
+          SphinxRtdTheme.Navigation.enableSticky();
+          
       });
-  </script>
-   
+  </script> 
 
 </body>
 </html>

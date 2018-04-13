@@ -27,24 +27,19 @@
   
 
   
-  
     <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
-  
-
-  
-
-  
-    <link rel="top" title="pyrosim 0.1.1 documentation" href="../index.html"/>
-        <link rel="up" title="Getting Started" href="../start.html"/>
-        <link rel="next" title="Collision Matrix" href="05_collision.html"/>
-        <link rel="prev" title="Sensors" href="03_sensors.html"/> 
+  <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="Collision Matrix" href="05_collision.html" />
+    <link rel="prev" title="Sensors" href="03_sensors.html" /> 
 
   
   <script src="../_static/js/modernizr.min.js"></script>
 
 </head>
 
-<body class="wy-body-for-nav" role="document">
+<body class="wy-body-for-nav">
 
    
   <div class="wy-grid-for-nav">
@@ -127,7 +122,7 @@
     <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
 
       
-      <nav class="wy-nav-top" role="navigation" aria-label="top navigation">
+      <nav class="wy-nav-top" aria-label="top navigation">
         
           <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
           <a href="../index.html">pyrosim</a>
@@ -135,9 +130,10 @@
       </nav>
 
 
-      
       <div class="wy-nav-content">
+        
         <div class="rst-content">
+        
           
 
 
@@ -182,7 +178,7 @@
   <div class="section" id="neural-network">
 <span id="network"></span><h1>Neural Network<a class="headerlink" href="#neural-network" title="Permalink to this headline">¶</a></h1>
 <p>Pyrosim currently <strong>only uses an artificial neural networks</strong> to control the robots.
-This page is meant to be less of a tutorial on ANNs and more about pyrosim&#8217;s specific
+This page is meant to be less of a tutorial on ANNs and more about pyrosim’s specific
 implementation of ANNs. However, there should be enough information to supply a basic
 understanding of how simple ANNs function. There are many resources for learning more
 about neural networks and <a href="http://colah.github.io/" target="_blank">Christopher Olah's blog</a> is one of the prettier ones.</p>
@@ -231,7 +227,7 @@ vector of values.</p>
 <div class="section" id="hidden-neurons">
 <h3>Hidden Neurons<a class="headerlink" href="#hidden-neurons" title="Permalink to this headline">¶</a></h3>
 <p>Hidden neurons are basic neuron units which update according to the normal rules. They are called
-&#8216;hidden&#8217; because there value at any given time step is not known or important to the user.</p>
+‘hidden’ because there value at any given time step is not known or important to the user.</p>
 </div>
 <div class="section" id="motor-neurons">
 <h3>Motor Neurons<a class="headerlink" href="#motor-neurons" title="Permalink to this headline">¶</a></h3>
@@ -271,10 +267,9 @@ follows:</p>
 </div>
 <div class="section" id="double-pendulum-part-iii">
 <h2>Double Pendulum Part III<a class="headerlink" href="#double-pendulum-part-iii" title="Permalink to this headline">¶</a></h2>
-<div class="literal-block-wrapper container" id="dp-network-py">
-<div class="code-block-caption"><span class="caption-text">dp-network.py</span><a class="headerlink" href="#dp-network-py" title="Permalink to this code">¶</a></div>
-<div class="highlight-default"><div class="highlight"><pre><span></span><span class="c1"># network is designed to actuate hinge joints in</span>
-<span class="c1"># response to the slider joint moving</span>
+<div class="literal-block-wrapper docutils container" id="id2">
+<div class="code-block-caption"><span class="caption-text">dp-network.py</span><a class="headerlink" href="#id2" title="Permalink to this code">¶</a></div>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="c1"># response to the slider joint moving</span>
 <span class="n">bias_neuron</span> <span class="o">=</span> <span class="n">sim</span><span class="o">.</span><span class="n">send_bias_neuron</span><span class="p">()</span>
 <span class="n">sensor_neuron</span> <span class="o">=</span> <span class="n">sim</span><span class="o">.</span><span class="n">send_sensor_neuron</span><span class="p">(</span><span class="n">prop_sensor</span><span class="p">)</span>
 <span class="n">motor_1_neuron</span> <span class="o">=</span> <span class="n">sim</span><span class="o">.</span><span class="n">send_motor_neuron</span><span class="p">(</span><span class="n">world_joint</span><span class="p">)</span>
@@ -297,9 +292,7 @@ follows:</p>
 
 
            </div>
-           <div class="articleComments">
-            
-           </div>
+           
           </div>
           <footer>
   
@@ -321,7 +314,7 @@ follows:</p>
 
     </p>
   </div>
-  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/snide/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
 
 </footer>
 
@@ -340,16 +333,17 @@ follows:</p>
         var DOCUMENTATION_OPTIONS = {
             URL_ROOT:'../',
             VERSION:'0.1.1',
+            LANGUAGE:'None',
             COLLAPSE_INDEX:false,
             FILE_SUFFIX:'.html',
             HAS_SOURCE:  true,
-            SOURCELINK_SUFFIX: ''
+            SOURCELINK_SUFFIX: '.txt'
         };
     </script>
       <script type="text/javascript" src="../_static/jquery.js"></script>
       <script type="text/javascript" src="../_static/underscore.js"></script>
       <script type="text/javascript" src="../_static/doctools.js"></script>
-      <script type="text/javascript" src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+      <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
 
   
 
@@ -358,14 +352,13 @@ follows:</p>
     <script type="text/javascript" src="../_static/js/theme.js"></script>
   
 
-  
-  
   <script type="text/javascript">
       jQuery(function () {
-          SphinxRtdTheme.StickyNav.enable();
+          
+          SphinxRtdTheme.Navigation.enableSticky();
+          
       });
-  </script>
-   
+  </script> 
 
 </body>
 </html>

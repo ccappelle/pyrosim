@@ -27,24 +27,19 @@
   
 
   
-  
     <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
-  
-
-  
-
-  
-    <link rel="top" title="pyrosim 0.1.1 documentation" href="../index.html"/>
-        <link rel="up" title="Getting Started" href="../start.html"/>
-        <link rel="next" title="Advanced Options" href="../advanced.html"/>
-        <link rel="prev" title="Neural Network" href="04_networks.html"/> 
+  <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="Advanced Options" href="../advanced.html" />
+    <link rel="prev" title="Neural Network" href="04_networks.html" /> 
 
   
   <script src="../_static/js/modernizr.min.js"></script>
 
 </head>
 
-<body class="wy-body-for-nav" role="document">
+<body class="wy-body-for-nav">
 
    
   <div class="wy-grid-for-nav">
@@ -120,7 +115,7 @@
     <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
 
       
-      <nav class="wy-nav-top" role="navigation" aria-label="top navigation">
+      <nav class="wy-nav-top" aria-label="top navigation">
         
           <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
           <a href="../index.html">pyrosim</a>
@@ -128,9 +123,10 @@
       </nav>
 
 
-      
       <div class="wy-nav-content">
+        
         <div class="rst-content">
+        
           
 
 
@@ -177,24 +173,23 @@
 <p>By default, collisions are turned off in pyrosim. To turn on collisions between rigid bodies they must be assigned collision groups and a collision matrix defining the interactions between those groups must be sent.</p>
 <div class="section" id="collision-groups">
 <h2>Collision Groups<a class="headerlink" href="#collision-groups" title="Permalink to this headline">¶</a></h2>
-<p>A collision group is a collection of bodies which all collide (or don&#8217;t) the same way with other collision groups. For example, if you do not want a robot to collide with its body parts, but want it to collide with objects in the environment, then all the bodies in the robot would be in one collision group and all the bodies in the environment would be in another.</p>
-<p>When sending a body, you can assign a collision group name to the body by setting the <code class="code docutils literal"><span class="pre">collision_group</span></code> parameter when the body is sent. The default name is &#8216;default&#8217;. After you have sent all the bodies you want in the simulation you use the name tag to define collisions</p>
+<p>A collision group is a collection of bodies which all collide (or don’t) the same way with other collision groups. For example, if you do not want a robot to collide with its body parts, but want it to collide with objects in the environment, then all the bodies in the robot would be in one collision group and all the bodies in the environment would be in another.</p>
+<p>When sending a body, you can assign a collision group name to the body by setting the <code class="code docutils literal"><span class="pre">collision_group</span></code> parameter when the body is sent. The default name is ‘default’. After you have sent all the bodies you want in the simulation you use the name tag to define collisions</p>
 </div>
 <div class="section" id="defining-collisions-between-groups">
 <h2>Defining Collisions Between Groups<a class="headerlink" href="#defining-collisions-between-groups" title="Permalink to this headline">¶</a></h2>
 <p>If we imagine each collision group as a node on a network, then it is easy to see the collision matrix as an adjacency matrix for this network where there is an edge between two groups if they collide and none if they do not.
-To go back to our robot/environment example above, we would want a connection between the &#8216;robot&#8217; and &#8216;env&#8217; collision groups and a loop connection on the &#8216;env&#8217; node. Loops specify intra-group collision while edges between two different nodes specify inter-group collision.</p>
-<p>If you do not want to specify every collision between every group you can use the predefined collision matrices provided by pyrosim. By using the <code class="code docutils literal"><span class="pre">sim.create_collision_matrix(collision_type)</span></code> command you can choose from four different collision types: &#8216;none&#8217;, &#8216;inter&#8217;, &#8216;intra&#8217;, and &#8216;all&#8217;. They are depicted using the &#8216;env&#8217; and &#8216;robot&#8217; groups by the following figure:</p>
+To go back to our robot/environment example above, we would want a connection between the ‘robot’ and ‘env’ collision groups and a loop connection on the ‘env’ node. Loops specify intra-group collision while edges between two different nodes specify inter-group collision.</p>
+<p>If you do not want to specify every collision between every group you can use the predefined collision matrices provided by pyrosim. By using the <code class="code docutils literal"><span class="pre">sim.create_collision_matrix(collision_type)</span></code> command you can choose from four different collision types: ‘none’, ‘inter’, ‘intra’, and ‘all’. They are depicted using the ‘env’ and ‘robot’ groups by the following figure:</p>
 <a class="reference internal image-reference" href="../_images/graph-pyrosim.png"><img alt="Different predefined collisions" class="align-center" src="../_images/graph-pyrosim.png" style="width: 100%;" /></a>
 <p>Regardless of how groups are defined and connected, the collisions between bodies which are attached by joints are disabled automatically. If they were enabled the simulation would most likely break.</p>
 </div>
 <div class="section" id="double-pendulum-part-iv">
 <h2>Double Pendulum Part IV<a class="headerlink" href="#double-pendulum-part-iv" title="Permalink to this headline">¶</a></h2>
 <p>We have taken our double pendulum code and removed the sensors and turned the network it to a simple forward actuation about its connection in space. This simulation should show the pendulum actuate and hit a ball in the environment into the target blocks.</p>
-<div class="literal-block-wrapper container" id="dp-collisions-py">
-<div class="code-block-caption"><span class="caption-text">dp-collisions.py</span><a class="headerlink" href="#dp-collisions-py" title="Permalink to this code">¶</a></div>
+<div class="literal-block-wrapper docutils container" id="id1">
+<div class="code-block-caption"><span class="caption-text">dp-collisions.py</span><a class="headerlink" href="#id1" title="Permalink to this code">¶</a></div>
 <div class="highlight-default"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">pyrosim</span>
-<span class="kn">import</span> <span class="nn">math</span>
 <span class="kn">import</span> <span class="nn">random</span>
 
 <span class="c1"># basically same code as previous examples with a few parameter tweaks</span>
@@ -242,7 +237,7 @@ To go back to our robot/environment example above, we would want a connection be
 <span class="n">SIZE</span> <span class="o">=</span> <span class="mf">1.0</span>
 <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">3</span><span class="p">):</span>
     <span class="n">color</span> <span class="o">=</span> <span class="n">random</span><span class="o">.</span><span class="n">random</span><span class="p">()</span>
-    <span class="n">sim</span><span class="o">.</span><span class="n">send_box</span><span class="p">(</span><span class="n">x</span><span class="o">=</span><span class="mi">3</span><span class="p">,</span> <span class="n">y</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">z</span><span class="o">=</span><span class="p">(</span><span class="n">i</span><span class="o">+</span><span class="n">SIZE</span><span class="o">/</span><span class="mf">2.0</span><span class="p">)</span><span class="o">*</span><span class="n">SIZE</span><span class="p">,</span>
+    <span class="n">sim</span><span class="o">.</span><span class="n">send_box</span><span class="p">(</span><span class="n">x</span><span class="o">=</span><span class="mi">3</span><span class="p">,</span> <span class="n">y</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">z</span><span class="o">=</span><span class="p">(</span><span class="n">i</span> <span class="o">+</span> <span class="n">SIZE</span> <span class="o">/</span> <span class="mf">2.0</span><span class="p">)</span> <span class="o">*</span> <span class="n">SIZE</span><span class="p">,</span>
                  <span class="n">width</span><span class="o">=</span><span class="n">SIZE</span><span class="p">,</span> <span class="n">height</span><span class="o">=</span><span class="n">SIZE</span><span class="p">,</span> <span class="n">length</span><span class="o">=</span><span class="n">SIZE</span><span class="p">,</span>
                  <span class="n">mass</span><span class="o">=.</span><span class="mi">2</span><span class="p">,</span> <span class="n">r</span><span class="o">=.</span><span class="mi">1</span><span class="p">,</span> <span class="n">g</span><span class="o">=</span><span class="n">color</span><span class="p">,</span> <span class="n">b</span><span class="o">=</span><span class="n">color</span><span class="p">,</span>
                  <span class="n">collision_group</span><span class="o">=</span><span class="s1">&#39;env&#39;</span><span class="p">)</span>
@@ -273,9 +268,7 @@ To go back to our robot/environment example above, we would want a connection be
 
 
            </div>
-           <div class="articleComments">
-            
-           </div>
+           
           </div>
           <footer>
   
@@ -297,7 +290,7 @@ To go back to our robot/environment example above, we would want a connection be
 
     </p>
   </div>
-  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/snide/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
 
 </footer>
 
@@ -316,16 +309,17 @@ To go back to our robot/environment example above, we would want a connection be
         var DOCUMENTATION_OPTIONS = {
             URL_ROOT:'../',
             VERSION:'0.1.1',
+            LANGUAGE:'None',
             COLLAPSE_INDEX:false,
             FILE_SUFFIX:'.html',
             HAS_SOURCE:  true,
-            SOURCELINK_SUFFIX: ''
+            SOURCELINK_SUFFIX: '.txt'
         };
     </script>
       <script type="text/javascript" src="../_static/jquery.js"></script>
       <script type="text/javascript" src="../_static/underscore.js"></script>
       <script type="text/javascript" src="../_static/doctools.js"></script>
-      <script type="text/javascript" src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+      <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
 
   
 
@@ -334,14 +328,13 @@ To go back to our robot/environment example above, we would want a connection be
     <script type="text/javascript" src="../_static/js/theme.js"></script>
   
 
-  
-  
   <script type="text/javascript">
       jQuery(function () {
-          SphinxRtdTheme.StickyNav.enable();
+          
+          SphinxRtdTheme.Navigation.enableSticky();
+          
       });
-  </script>
-   
+  </script> 
 
 </body>
 </html>

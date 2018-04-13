@@ -27,22 +27,17 @@
   
 
   
-  
     <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
-  
-
-  
-
-  
-    <link rel="top" title="pyrosim 0.1.1 documentation" href="../index.html"/>
-        <link rel="up" title="Module code" href="index.html"/> 
+  <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" /> 
 
   
   <script src="../_static/js/modernizr.min.js"></script>
 
 </head>
 
-<body class="wy-body-for-nav" role="document">
+<body class="wy-body-for-nav">
 
    
   <div class="wy-grid-for-nav">
@@ -105,7 +100,7 @@
     <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
 
       
-      <nav class="wy-nav-top" role="navigation" aria-label="top navigation">
+      <nav class="wy-nav-top" aria-label="top navigation">
         
           <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
           <a href="../index.html">pyrosim</a>
@@ -113,9 +108,10 @@
       </nav>
 
 
-      
       <div class="wy-nav-content">
+        
         <div class="rst-content">
+        
           
 
 
@@ -145,8 +141,6 @@
     
       <li class="wy-breadcrumbs-aside">
         
-            
-        
       </li>
     
   </ul>
@@ -168,23 +162,27 @@
 
 <span class="kn">import</span> <span class="nn">errno</span>
 <span class="kn">import</span> <span class="nn">shutil</span>
-
 <span class="kn">from</span> <span class="nn">datetime</span> <span class="k">import</span> <span class="n">datetime</span>
 
-<span class="c1">#simulator init constants</span>
-<span class="n">evaluation_time</span> <span class="o">=</span> <span class="mi">100</span><span class="p">;</span>
-<span class="n">dt</span> <span class="o">=</span> <span class="mf">0.05</span><span class="p">;</span>
-<span class="n">hpr</span><span class="o">=</span><span class="p">[</span><span class="mi">121</span><span class="p">,</span><span class="o">-</span><span class="mf">27.5000</span><span class="p">,</span><span class="mf">0.0000</span><span class="p">];</span>
-<span class="n">xyz</span><span class="o">=</span><span class="p">[</span><span class="mf">0.8317</span><span class="p">,</span><span class="o">-</span><span class="mf">0.9817</span><span class="p">,</span><span class="mf">0.8000</span><span class="p">];</span>
-<span class="n">gravity</span> <span class="o">=</span> <span class="o">-</span><span class="mf">1.0</span><span class="p">;</span>
 
-<span class="k">def</span> <span class="nf">make_sure_path_exists</span><span class="p">(</span><span class="n">path</span><span class="p">):</span>
+<span class="c1"># simulator init constants</span>
+<span class="n">WINDOW_SIZE</span> <span class="o">=</span> <span class="p">(</span><span class="mi">750</span><span class="p">,</span> <span class="mi">500</span><span class="p">)</span>
+<span class="n">evaluation_time</span> <span class="o">=</span> <span class="mi">100</span>
+<span class="n">dt</span> <span class="o">=</span> <span class="mf">0.05</span>
+<span class="n">hpr</span> <span class="o">=</span> <span class="p">[</span><span class="mi">121</span><span class="p">,</span> <span class="o">-</span><span class="mf">27.5000</span><span class="p">,</span> <span class="mf">0.0000</span><span class="p">]</span>
+<span class="n">xyz</span> <span class="o">=</span> <span class="p">[</span><span class="mf">0.8317</span><span class="p">,</span> <span class="o">-</span><span class="mf">0.9817</span><span class="p">,</span> <span class="mf">0.8000</span><span class="p">]</span>
+<span class="n">gravity</span> <span class="o">=</span> <span class="o">-</span><span class="mf">1.0</span>
+
+
+<div class="viewcode-block" id="make_sure_path_exists"><a class="viewcode-back" href="../code.html#pyrosim.make_sure_path_exists">[docs]</a><span class="k">def</span> <span class="nf">make_sure_path_exists</span><span class="p">(</span><span class="n">path</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;checks to se if path exists, if not creates path&quot;&quot;&quot;</span>
+
     <span class="k">try</span><span class="p">:</span>
         <span class="n">shutil</span><span class="o">.</span><span class="n">rmtree</span><span class="p">(</span><span class="n">path</span><span class="p">,</span> <span class="n">ignore_errors</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
         <span class="n">os</span><span class="o">.</span><span class="n">makedirs</span><span class="p">(</span><span class="n">path</span><span class="p">)</span>
     <span class="k">except</span> <span class="ne">OSError</span> <span class="k">as</span> <span class="n">exception</span><span class="p">:</span>
         <span class="k">if</span> <span class="n">exception</span><span class="o">.</span><span class="n">errno</span> <span class="o">!=</span> <span class="n">errno</span><span class="o">.</span><span class="n">EEXIST</span><span class="p">:</span>
-            <span class="k">raise</span>
+            <span class="k">raise</span></div>
 
 
 <div class="viewcode-block" id="Simulator"><a class="viewcode-back" href="../code.html#pyrosim.Simulator">[docs]</a><span class="k">class</span> <span class="nc">Simulator</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
@@ -193,34 +191,37 @@
 <span class="sd">    Attributes</span>
 <span class="sd">    ----------</span>
 <span class="sd">    play_blind   : bool, optional</span>
-<span class="sd">            If True the simulation runs without graphics (headless) else if </span>
+<span class="sd">            If True the simulation runs without graphics (headless) else if</span>
 <span class="sd">            False the simulation runs with graphics (the default is False)</span>
 <span class="sd">    play_paused : bool, optional</span>
-<span class="sd">            If True the simulation starts paused else if False the simulation </span>
-<span class="sd">            starts running. With simulation window in focus use Ctrl-p to </span>
+<span class="sd">            If True the simulation starts paused else if False the simulation</span>
+<span class="sd">            starts running. With simulation window in focus use Ctrl-p to</span>
 <span class="sd">            toggle pausing the simulation. (the default is False)</span>
 <span class="sd">    eval_time    : int, optional</span>
 <span class="sd">            The number of discrete steps in the simulation (the default is 100)</span>
 <span class="sd">    dt          : float, optional</span>
-<span class="sd">            The time in seconds between physics world steps. Larger dt values </span>
+<span class="sd">            The time in seconds between physics world steps. Larger dt values</span>
 <span class="sd">            create more unstable physics. (the default is 0.05)</span>
 <span class="sd">    gravity     : float, optional</span>
-<span class="sd">            The gravity in the system. Negative values implies normal downward </span>
+<span class="sd">            The gravity in the system. Negative values implies normal downward</span>
 <span class="sd">            force of gravity. (default is -1.0)</span>
+<span class="sd">    window_size  : tuple or list of 2 ints, optional</span>
+<span class="sd">            The initial window size for the visualization. Irrelevant if</span>
+<span class="sd">            blind=True. Default is (750, 500)</span>
 <span class="sd">    xyz         : list of 3 floats</span>
 <span class="sd">            The xyz position of the camera (default is [0.8317,-0.9817,0.8000])</span>
 <span class="sd">    hpr         : float, optional</span>
-<span class="sd">            The heading, pitch, and roll of the camera </span>
+<span class="sd">            The heading, pitch, and roll of the camera</span>
 <span class="sd">            (default is [121,-27.5,0.0])</span>
 <span class="sd">    use_textures : bool, optional</span>
-<span class="sd">            Draw default ODE textures or not during simulation. </span>
+<span class="sd">            Draw default ODE textures or not during simulation.</span>
 <span class="sd">            (default is False)</span>
 <span class="sd">    debug       : bool, optional</span>
-<span class="sd">            If True print out every string command sent through the pipe to </span>
+<span class="sd">            If True print out every string command sent through the pipe to</span>
 <span class="sd">            the simulator (the default is False)</span>
 <span class="sd">    capture     : bool, optional</span>
 <span class="sd">            If True captures frames of the simulation every capture</span>
-<span class="sd">            timesteps.  Meaningless if playing blind.  (the default is False) </span>
+<span class="sd">            timesteps.  Meaningless if playing blind.  (the default is False)</span>
 <span class="sd">    &quot;&quot;&quot;</span>
 
     <span class="n">WORLD</span> <span class="o">=</span> <span class="o">-</span><span class="mi">1</span>
@@ -229,9 +230,10 @@
     <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">play_blind</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">play_paused</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
                  <span class="n">eval_time</span><span class="o">=</span><span class="n">evaluation_time</span><span class="p">,</span> <span class="n">dt</span><span class="o">=</span><span class="n">dt</span><span class="p">,</span>
                  <span class="n">gravity</span><span class="o">=</span><span class="n">gravity</span><span class="p">,</span>
+                 <span class="n">window_size</span><span class="o">=</span><span class="n">WINDOW_SIZE</span><span class="p">,</span>
                  <span class="n">xyz</span><span class="o">=</span><span class="n">xyz</span><span class="p">,</span> <span class="n">hpr</span><span class="o">=</span><span class="n">hpr</span><span class="p">,</span> <span class="n">use_textures</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
                  <span class="n">debug</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">capture</span><span class="o">=</span><span class="mi">0</span><span class="p">):</span>
-        <span class="k">assert</span> <span class="n">play_blind</span> <span class="o">==</span> <span class="kc">False</span> <span class="ow">or</span> <span class="n">eval_time</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">,</span> <span class="p">(</span><span class="s1">&#39;Cannot run&#39;</span>
+        <span class="k">assert</span> <span class="n">play_blind</span> <span class="ow">is</span> <span class="kc">False</span> <span class="ow">or</span> <span class="n">eval_time</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">,</span> <span class="p">(</span><span class="s1">&#39;Cannot run&#39;</span>
                                                       <span class="s1">&#39; blind forever&#39;</span><span class="p">)</span>
         <span class="k">assert</span> <span class="n">eval_time</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">,</span> <span class="p">(</span><span class="s1">&#39;Cannot run forever: FIXXX MEEE&#39;</span><span class="p">)</span>
 
@@ -261,7 +263,7 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">collision_matrix_sent</span> <span class="o">=</span> <span class="kc">False</span>
 
         <span class="bp">self</span><span class="o">.</span><span class="n">pyrosim_path</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">dirname</span><span class="p">(</span>
-            <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">abspath</span><span class="p">(</span><span class="n">__file__</span><span class="p">))</span><span class="o">+</span><span class="s1">&#39;/simulator&#39;</span>
+            <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">abspath</span><span class="p">(</span><span class="vm">__file__</span><span class="p">))</span> <span class="o">+</span> <span class="s1">&#39;/simulator&#39;</span>
 
         <span class="bp">self</span><span class="o">.</span><span class="n">body_to_follow</span> <span class="o">=</span> <span class="o">-</span><span class="mi">1</span>
 
@@ -269,14 +271,15 @@
             <span class="nb">print</span> <span class="p">(</span><span class="s1">&#39;Simulator exec location &#39;</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">pyrosim_path</span><span class="p">,</span> <span class="s1">&#39;</span><span class="se">\n</span><span class="s1">&#39;</span><span class="p">)</span>
             <span class="nb">print</span> <span class="p">(</span><span class="s1">&#39;Python send commands: &#39;</span><span class="p">)</span>
 
-        <span class="k">if</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">play_paused</span> <span class="o">==</span> <span class="kc">True</span> <span class="ow">and</span> <span class="bp">self</span><span class="o">.</span><span class="n">play_blind</span> <span class="o">==</span> <span class="kc">True</span><span class="p">):</span>
+        <span class="k">if</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">play_paused</span> <span class="ow">is</span> <span class="kc">True</span> <span class="ow">and</span> <span class="bp">self</span><span class="o">.</span><span class="n">play_blind</span> <span class="ow">is</span> <span class="kc">True</span><span class="p">):</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">play_paused</span> <span class="o">=</span> <span class="kc">False</span>
 
         <span class="c1"># Initial simulator commands</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">_send</span><span class="p">(</span><span class="s1">&#39;TexturePath&#39;</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">pyrosim_path</span><span class="o">+</span><span class="s1">&#39;/textures&#39;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_send</span><span class="p">(</span><span class="s1">&#39;TexturePath&#39;</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">pyrosim_path</span> <span class="o">+</span> <span class="s1">&#39;/textures&#39;</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_send</span><span class="p">(</span><span class="s1">&#39;EvaluationTime&#39;</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">eval_time</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_send</span><span class="p">(</span><span class="s1">&#39;TimeInterval&#39;</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">dt</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_send</span><span class="p">(</span><span class="s1">&#39;Gravity&#39;</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">gravity</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_send</span><span class="p">(</span><span class="s1">&#39;WindowSize&#39;</span><span class="p">,</span> <span class="o">*</span><span class="n">window_size</span><span class="p">)</span>
         <span class="k">if</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">capture</span><span class="p">):</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">_send</span><span class="p">(</span><span class="s1">&#39;Capture&#39;</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
         <span class="k">else</span><span class="p">:</span>
@@ -295,7 +298,7 @@
 <span class="sd">        Parameters</span>
 <span class="sd">        ----------</span>
 <span class="sd">        collision_type : str, optional</span>
-<span class="sd">            Creates a collision matrix specifying the type of </span>
+<span class="sd">            Creates a collision matrix specifying the type of</span>
 <span class="sd">            collision between groups desired. There are 4 options</span>
 <span class="sd">            &#39;none&#39; - no collision</span>
 <span class="sd">            &#39;inter&#39; - collisions on only between different groups</span>
@@ -360,22 +363,36 @@
         <span class="k">return</span> <span class="kc">True</span></div>
 
 <div class="viewcode-block" id="Simulator.remove_collision"><a class="viewcode-back" href="../code.html#pyrosim.Simulator.remove_collision">[docs]</a>    <span class="k">def</span> <span class="nf">remove_collision</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">group_1</span><span class="p">,</span> <span class="n">group_2</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;Turn off collision potential between group 1 and 2&quot;&quot;&quot;</span>
+        <span class="sd">&quot;&quot;&quot;Turn off collision potential between group 1 and 2</span>
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        group_1 : str</span>
+<span class="sd">            The string handle of group 1</span>
+<span class="sd">        group_2 : str</span>
+<span class="sd">            The string handle of group 2</span>
 
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        bool</span>
+<span class="sd">            True if successful</span>
+<span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">if</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">_matrix_created</span><span class="p">:</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">create_collision_matrix</span><span class="p">()</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">_matrix_created</span> <span class="o">=</span> <span class="kc">True</span>
 
-        <span class="n">group1</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_group_id</span><span class="p">(</span><span class="n">group1</span><span class="p">)</span>
-        <span class="n">group2</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_group_id</span><span class="p">(</span><span class="n">group2</span><span class="p">)</span>
+        <span class="n">group1_id</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_group_id</span><span class="p">(</span><span class="n">group_1</span><span class="p">)</span>
+        <span class="n">group2_id</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_group_id</span><span class="p">(</span><span class="n">group_2</span><span class="p">)</span>
 
-        <span class="bp">self</span><span class="o">.</span><span class="n">_collision_matrix</span><span class="p">[</span><span class="n">group1</span><span class="p">,</span> <span class="n">group2</span><span class="p">]</span> <span class="o">=</span> <span class="mi">0</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">_collision_matrix</span><span class="p">[</span><span class="n">group2</span><span class="p">,</span> <span class="n">group1</span><span class="p">]</span> <span class="o">=</span> <span class="mi">0</span></div>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_collision_matrix</span><span class="p">[</span><span class="n">group1_id</span><span class="p">,</span> <span class="n">group2_id</span><span class="p">]</span> <span class="o">=</span> <span class="mi">0</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_collision_matrix</span><span class="p">[</span><span class="n">group2_id</span><span class="p">,</span> <span class="n">group1_id</span><span class="p">]</span> <span class="o">=</span> <span class="mi">0</span>
+
+        <span class="k">return</span> <span class="kc">True</span></div>
+
 <span class="c1"># ------Getters--------------------------</span>
 
 <div class="viewcode-block" id="Simulator.get_data"><a class="viewcode-back" href="../code.html#pyrosim.Simulator.get_data">[docs]</a>    <span class="k">def</span> <span class="nf">get_data</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;Get all sensor data back as numpy matrix&quot;&quot;&quot;</span>
-        <span class="k">assert</span> <span class="bp">self</span><span class="o">.</span><span class="n">evaluated</span> <span class="o">==</span> <span class="kc">True</span><span class="p">,</span> <span class="s1">&#39;Simulation has not run yet&#39;</span>
+        <span class="k">assert</span> <span class="bp">self</span><span class="o">.</span><span class="n">evaluated</span> <span class="ow">is</span> <span class="kc">True</span><span class="p">,</span> <span class="s1">&#39;Simulation has not run yet&#39;</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">data</span></div>
 
 <div class="viewcode-block" id="Simulator.get_group_id"><a class="viewcode-back" href="../code.html#pyrosim.Simulator.get_group_id">[docs]</a>    <span class="k">def</span> <span class="nf">get_group_id</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">group</span><span class="p">):</span>
@@ -418,8 +435,8 @@
 <span class="sd">        sensor_id : int</span>
 <span class="sd">                the sensors id tag</span>
 <span class="sd">        svi      : int , optional</span>
-<span class="sd">                The sensor value index. Certain sensors have multiple values </span>
-<span class="sd">                (e.g. the position sensor) and the svi specifies which to </span>
+<span class="sd">                The sensor value index. Certain sensors have multiple values</span>
+<span class="sd">                (e.g. the position sensor) and the svi specifies which to</span>
 <span class="sd">                access (e.g. for a position sensor, svi=0 corresponds to the</span>
 <span class="sd">                x value of that sensor)</span>
 
@@ -428,7 +445,7 @@
 <span class="sd">        list of float</span>
 <span class="sd">                Returns the list of sensor values over the simulation.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
-        <span class="k">assert</span> <span class="bp">self</span><span class="o">.</span><span class="n">evaluated</span> <span class="o">==</span> <span class="kc">True</span><span class="p">,</span> <span class="s1">&#39;Simulation has not run yet&#39;</span>
+        <span class="k">assert</span> <span class="bp">self</span><span class="o">.</span><span class="n">evaluated</span> <span class="ow">is</span> <span class="kc">True</span><span class="p">,</span> <span class="s1">&#39;Simulation has not run yet&#39;</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">data</span><span class="p">[</span><span class="n">sensor_id</span><span class="p">,</span> <span class="n">svi</span><span class="p">,</span> <span class="p">:]</span></div>
 
 <span class="c1"># -----Camera---------------------------</span>
@@ -441,8 +458,8 @@
 <span class="sd">                A length 3 list specifying the x,y,z position of the camera</span>
 <span class="sd">                in simulation</span>
 <span class="sd">        hpr : list of floats</span>
-<span class="sd">                A length 3 list specifying the heading, pitch, </span>
-<span class="sd">                and roll of the camera</span>
+<span class="sd">                A length 3 list specifying the heading, pitch,</span>
+<span class="sd">                and roll of the camera in degrees</span>
 
 <span class="sd">        Returns</span>
 <span class="sd">        -------</span>
@@ -458,15 +475,16 @@
 <div class="viewcode-block" id="Simulator.film_body"><a class="viewcode-back" href="../code.html#pyrosim.Simulator.film_body">[docs]</a>    <span class="k">def</span> <span class="nf">film_body</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">body_id</span><span class="p">,</span> <span class="n">method</span><span class="o">=</span><span class="s1">&#39;follow&#39;</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;Sets the camera to film a body</span>
 
-<span class="sd">        Camera has two modes: &#39;follow&#39; moves the camera&#39;s position based on where</span>
-<span class="sd">        the body is moving and &#39;track&#39; rotates the camera to look at the body</span>
+<span class="sd">        Camera has two modes: &#39;follow&#39; moves the camera&#39;s position based on</span>
+<span class="sd">        where the body is moving and &#39;track&#39; rotates the camera to look at</span>
+<span class="sd">        the body</span>
 
 <span class="sd">        Parameters</span>
 <span class="sd">        ----------</span>
 <span class="sd">        body_id : int</span>
 <span class="sd">                The id tag of the body to be filmed</span>
 <span class="sd">        method  : str, optional</span>
-<span class="sd">                The way the camera should move to film the body. </span>
+<span class="sd">                The way the camera should move to film the body.</span>
 <span class="sd">                Either &#39;follow&#39; or &#39;track&#39; (default is &#39;follow&#39;)</span>
 
 <span class="sd">        Returns</span>
@@ -506,7 +524,7 @@
 <span class="sd">                The y position coordinate of the center (default 0)</span>
 <span class="sd">        z        : float, optional</span>
 <span class="sd">                The z position coordinate of the center (default 0)</span>
-<span class="sd">        mass  : float, optional </span>
+<span class="sd">        mass  : float, optional</span>
 <span class="sd">                The mass of the body (default is 1.0)</span>
 <span class="sd">        length   : float, optional</span>
 <span class="sd">                The length of the box</span>
@@ -571,7 +589,7 @@
 <span class="sd">                The y position of the center</span>
 <span class="sd">        z        : float, optional</span>
 <span class="sd">                The z position of the center</span>
-<span class="sd">        mass  : float, optional </span>
+<span class="sd">        mass  : float, optional</span>
 <span class="sd">                The mass of the body (default is 1.0)</span>
 <span class="sd">        radius   : float, optional</span>
 <span class="sd">                The radius of the sphere (default is 0.5)</span>
@@ -588,7 +606,7 @@
 
 <span class="sd">        Returns</span>
 <span class="sd">        -------</span>
-<span class="sd">        int     </span>
+<span class="sd">        int</span>
 <span class="sd">                The id tag of the sphere</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">assert</span> <span class="n">radius</span> <span class="o">&gt;=</span> <span class="mi">0</span><span class="p">,</span> <span class="s1">&#39;Radius of Sphere must be &gt;= 0&#39;</span>
@@ -631,7 +649,7 @@
 <span class="sd">                The y position coordinate of the center (default is 0)</span>
 <span class="sd">        z        : float, optional</span>
 <span class="sd">                The z position coordinate of the center (default is 0)</span>
-<span class="sd">        mass  : float, optional </span>
+<span class="sd">        mass  : float, optional</span>
 <span class="sd">                The mass of the body (default is 1.0)</span>
 <span class="sd">        r1       : float, optional</span>
 <span class="sd">                The orientation along the x axis. The vector [r1,r2,r3]</span>
@@ -703,7 +721,7 @@
 <div class="viewcode-block" id="Simulator.send_fixed_joint"><a class="viewcode-back" href="../code.html#pyrosim.Simulator.send_fixed_joint">[docs]</a>    <span class="k">def</span> <span class="nf">send_fixed_joint</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">first_body_id</span><span class="p">,</span> <span class="n">second_body_id</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;Fix two bodies (or a body and space) together</span>
 
-<span class="sd">         This is implemented by using a hing joint and setting the hi and low </span>
+<span class="sd">         This is implemented by using a hinge joint and setting the hi and low</span>
 <span class="sd">         stop parameter to 0. This is probably not the best way to do it...</span>
 
 <span class="sd">         Parameters</span>
@@ -711,11 +729,11 @@
 <span class="sd">         first_body_id   : int</span>
 <span class="sd">                 The body id of the first body the joint is connected to.</span>
 <span class="sd">                 If set equal to -1, the joint is connected to a point in</span>
-<span class="sd">                 space </span>
+<span class="sd">                 space</span>
 <span class="sd">         second_body_id  : int</span>
 <span class="sd">                 The body id of the second body the joint is connected to.</span>
 <span class="sd">                 If set equal to -1, the joint is connected to a point in</span>
-<span class="sd">                 space </span>
+<span class="sd">                 space</span>
 
 <span class="sd">         Returns</span>
 <span class="sd">         -------</span>
@@ -732,7 +750,7 @@
 
 <div class="viewcode-block" id="Simulator.send_hinge_joint"><a class="viewcode-back" href="../code.html#pyrosim.Simulator.send_hinge_joint">[docs]</a>    <span class="k">def</span> <span class="nf">send_hinge_joint</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">first_body_id</span><span class="p">,</span> <span class="n">second_body_id</span><span class="p">,</span> <span class="n">x</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">y</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">z</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span>
                          <span class="n">n1</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">n2</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">n3</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span>
-                         <span class="n">lo</span><span class="o">=-</span><span class="n">math</span><span class="o">.</span><span class="n">pi</span><span class="o">/</span><span class="mf">4.0</span><span class="p">,</span> <span class="n">hi</span><span class="o">=+</span><span class="n">math</span><span class="o">.</span><span class="n">pi</span><span class="o">/</span><span class="mf">4.0</span><span class="p">,</span>
+                         <span class="n">lo</span><span class="o">=</span><span class="p">(</span><span class="o">-</span><span class="n">math</span><span class="o">.</span><span class="n">pi</span> <span class="o">/</span> <span class="mf">4.0</span><span class="p">),</span> <span class="n">hi</span><span class="o">=</span><span class="p">(</span><span class="n">math</span><span class="o">.</span><span class="n">pi</span> <span class="o">/</span> <span class="mf">4.0</span><span class="p">),</span>
                          <span class="n">speed</span><span class="o">=</span><span class="mf">1.0</span><span class="p">,</span> <span class="n">torque</span><span class="o">=</span><span class="mf">10.0</span><span class="p">,</span> <span class="n">position_control</span><span class="o">=</span><span class="kc">True</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;Send a hinge joint to the simulator</span>
 
@@ -743,11 +761,11 @@
 <span class="sd">        first_body_id   : int</span>
 <span class="sd">                The body id of the first body the joint is connected to.</span>
 <span class="sd">                If set equal to -1, the joint is connected to a point in</span>
-<span class="sd">                space </span>
+<span class="sd">                space</span>
 <span class="sd">        second_body_id  : int</span>
 <span class="sd">                The body id of the second body the joint is connected to.</span>
 <span class="sd">                If set equal to -1, the joint is connected to a point in</span>
-<span class="sd">                space </span>
+<span class="sd">                space</span>
 <span class="sd">        x               : float, optional</span>
 <span class="sd">                The x position coordinate of the joint (default is 0)</span>
 <span class="sd">        y               : float, optional</span>
@@ -783,7 +801,7 @@
 
 <span class="sd">        Returns</span>
 <span class="sd">        -------</span>
-<span class="sd">        int </span>
+<span class="sd">        int</span>
 <span class="sd">                The id tag for the hinge joint</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">assert</span> <span class="n">first_body_id</span> <span class="o">&lt;</span> <span class="bp">self</span><span class="o">.</span><span class="n">_num_bodies</span><span class="p">,</span> <span class="s1">&#39;Body with id &#39;</span> <span class="o">+</span> \
@@ -831,25 +849,25 @@
 <span class="sd">        first_body_id   : int</span>
 <span class="sd">                The body id of the first body the joint is connected to.</span>
 <span class="sd">                If set equal to -1, the joint is connected to a point in</span>
-<span class="sd">                space </span>
+<span class="sd">                space</span>
 <span class="sd">        second_body_id  : int</span>
 <span class="sd">                The body id of the second body the joint is connected to.</span>
 <span class="sd">                If set equal to -1, the joint is connected to a point in</span>
-<span class="sd">                space </span>
+<span class="sd">                space</span>
 <span class="sd">        x          : float, optional</span>
 <span class="sd">                The orientation along the x axis.</span>
 <span class="sd">                (default is 0)</span>
 <span class="sd">        y           : float, optional</span>
-<span class="sd">                The orientation along the y axis. </span>
+<span class="sd">                The orientation along the y axis.</span>
 <span class="sd">                (default is 0)</span>
 <span class="sd">        z          : float, optional</span>
-<span class="sd">                The orientation along the z axis. </span>
+<span class="sd">                The orientation along the z axis.</span>
 <span class="sd">                (default is 1)</span>
 <span class="sd">        lo              : float, optional</span>
 <span class="sd">                The lower limit in simulator units of the joint</span>
 <span class="sd">                (default is -1.0)</span>
 <span class="sd">        hi              : float, optional</span>
-<span class="sd">                The upper limit in simulator units of the joint </span>
+<span class="sd">                The upper limit in simulator units of the joint</span>
 <span class="sd">                (default is 1.0)</span>
 <span class="sd">        speed           : float, optional</span>
 <span class="sd">                The speed of the motor of the joint (default is 10.0)</span>
@@ -864,7 +882,7 @@
 
 <span class="sd">        Returns</span>
 <span class="sd">        -------</span>
-<span class="sd">        int </span>
+<span class="sd">        int</span>
 <span class="sd">                The id tag for the hinge joint</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">assert</span> <span class="n">first_body_id</span> <span class="o">&lt;</span> <span class="bp">self</span><span class="o">.</span><span class="n">_num_bodies</span><span class="p">,</span> <span class="s1">&#39;Body with id &#39;</span> <span class="o">+</span> \
@@ -911,7 +929,7 @@
 <span class="sd">            The z value of the directional vector (default is 1)</span>
 <span class="sd">        lo      : float, optional</span>
 <span class="sd">            The amount of force when the associated motor</span>
-<span class="sd">            neuron is -1. Negative implies force in the </span>
+<span class="sd">            neuron is -1. Negative implies force in the</span>
 <span class="sd">            opposit direction. (default is -10)</span>
 <span class="sd">        hi      : float, optioal</span>
 <span class="sd">            The amount of force when the associated motor</span>
@@ -959,7 +977,7 @@
                           <span class="n">start_value</span><span class="o">=</span><span class="mf">0.0</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;Send motor neurons to simulator</span>
 
-<span class="sd">        Motor neurons are neurons which connect to a specified joint and </span>
+<span class="sd">        Motor neurons are neurons which connect to a specified joint and</span>
 <span class="sd">        determine how the joint moves every time step of simulation</span>
 
 <span class="sd">        Warning</span>
@@ -968,7 +986,7 @@
 <span class="sd">        is not in the middle of the &#39;hi&#39; &amp; &#39;lo&#39; cutoffs will most likely cause</span>
 <span class="sd">        instabilities in the simulation. For example creating a joint with</span>
 <span class="sd">        either &#39;hi&#39; or &#39;lo&#39; to 0 and attaching a motor neuron to this joint</span>
-<span class="sd">        will cause the joint to break. </span>
+<span class="sd">        will cause the joint to break.</span>
 
 <span class="sd">        Parameters</span>
 <span class="sd">        ----------</span>
@@ -977,7 +995,7 @@
 <span class="sd">        tau         : float, optional</span>
 <span class="sd">                The &#39;learning rate&#39; of the neuron. Increasing tau increases</span>
 <span class="sd">                how much of value of the neuron at the current time step comes</span>
-<span class="sd">                from external inputs vs. the value of the neuron at the </span>
+<span class="sd">                from external inputs vs. the value of the neuron at the</span>
 <span class="sd">                previous time step. (default 1)</span>
 <span class="sd">        alpha       : float, optional</span>
 <span class="sd">                The &#39;remembrance rate&#39; of the neuron. Usually 1 or 0.</span>
@@ -986,7 +1004,7 @@
 <span class="sd">        start_value : float, optional</span>
 <span class="sd">                The starting value of the neuron. This value is specified</span>
 <span class="sd">                to mitigate the problem of a joint starting not on its midpoint</span>
-<span class="sd">                for positionally controlled joints. Set to +1 or greater for </span>
+<span class="sd">                for positionally controlled joints. Set to +1 or greater for</span>
 <span class="sd">                close to the &#39;hi&#39; range and -1 or less for close to &#39;lo&#39; range</span>
 <span class="sd">                (default is 0.0)</span>
 
@@ -997,13 +1015,13 @@
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">assert</span> <span class="n">tau</span> <span class="o">&gt;=</span> <span class="mi">0</span><span class="p">,</span> <span class="s1">&#39;Tau must be positive&#39;</span>
         <span class="k">assert</span> <span class="n">joint_id</span> <span class="o">&lt;</span> <span class="bp">self</span><span class="o">.</span><span class="n">_num_joints</span><span class="p">,</span> <span class="s1">&#39;Joint with id &#39;</span> <span class="o">+</span> \
-            <span class="nb">str</span><span class="p">(</span><span class="n">joint_id</span><span class="p">)</span><span class="o">+</span><span class="s1">&#39; has not been sent&#39;</span>
+            <span class="nb">str</span><span class="p">(</span><span class="n">joint_id</span><span class="p">)</span> <span class="o">+</span> <span class="s1">&#39; has not been sent&#39;</span>
 
         <span class="n">neuron_id</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_num_neurons</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_num_neurons</span> <span class="o">+=</span> <span class="mi">1</span>
 
         <span class="bp">self</span><span class="o">.</span><span class="n">_send</span><span class="p">(</span><span class="s1">&#39;MotorNeuron&#39;</span><span class="p">,</span>
-                   <span class="n">neuron_id</span><span class="p">,</span>  <span class="n">joint_id</span><span class="p">,</span>
+                   <span class="n">neuron_id</span><span class="p">,</span> <span class="n">joint_id</span><span class="p">,</span>
                    <span class="n">tau</span><span class="p">,</span> <span class="n">alpha</span><span class="p">,</span> <span class="n">start_value</span><span class="p">)</span>
 
         <span class="k">return</span> <span class="n">neuron_id</span></div>
@@ -1011,7 +1029,7 @@
 <div class="viewcode-block" id="Simulator.send_sensor_neuron"><a class="viewcode-back" href="../code.html#pyrosim.Simulator.send_sensor_neuron">[docs]</a>    <span class="k">def</span> <span class="nf">send_sensor_neuron</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">sensor_id</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">svi</span><span class="o">=</span><span class="mi">0</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;Sends a sensor neuron to the simulator</span>
 
-<span class="sd">        Sensor neurons are input neurons which take the value of their </span>
+<span class="sd">        Sensor neurons are input neurons which take the value of their</span>
 <span class="sd">        associated sensor</span>
 
 <span class="sd">        Parameters</span>
@@ -1019,8 +1037,8 @@
 <span class="sd">        sensor_id        : int, optional</span>
 <span class="sd">                The associated sensor id for the neuron to draw values from.</span>
 <span class="sd">        svi : int, optional</span>
-<span class="sd">                The sensor value index is the offset index of the sensor. </span>
-<span class="sd">                SVI is used for sensors which return a vector of values </span>
+<span class="sd">                The sensor value index is the offset index of the sensor.</span>
+<span class="sd">                SVI is used for sensors which return a vector of values</span>
 <span class="sd">                (position, ray sensors, etc.)</span>
 
 <span class="sd">        Returns</span>
@@ -1028,8 +1046,8 @@
 <span class="sd">        int</span>
 <span class="sd">                The id tag of the neuron</span>
 <span class="sd">        &quot;&quot;&quot;</span>
-        <span class="k">assert</span> <span class="n">sensor_id</span> <span class="o">&lt;</span> <span class="bp">self</span><span class="o">.</span><span class="n">_num_sensors</span><span class="p">,</span> <span class="s1">&#39;Sensor with id &#39;</span> <span class="o">+</span> \
-            <span class="nb">str</span><span class="p">(</span><span class="n">sensor_id</span><span class="p">)</span><span class="o">+</span><span class="s1">&#39; has not been sent&#39;</span>
+        <span class="k">assert</span> <span class="n">sensor_id</span> <span class="o">&lt;</span> <span class="bp">self</span><span class="o">.</span><span class="n">_num_sensors</span><span class="p">,</span> <span class="p">(</span><span class="s1">&#39;Sensor with id &#39;</span> <span class="o">+</span> <span class="n">sensor_id</span> <span class="o">+</span>
+                                               <span class="s1">&#39; has not been sent&#39;</span><span class="p">)</span>
         <span class="k">assert</span> <span class="n">svi</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">4</span><span class="p">),</span> <span class="s1">&#39;SVI must be in [0,3]&#39;</span>
 
         <span class="n">neuron_id</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_num_neurons</span>
@@ -1046,8 +1064,8 @@
 <span class="sd">        Parameters</span>
 <span class="sd">        ----------</span>
 <span class="sd">        in_values : list of floats or float, optional</span>
-<span class="sd">                The user specified values for the neuron. If length of </span>
-<span class="sd">                values &lt; the number of time steps, the values are </span>
+<span class="sd">                The user specified values for the neuron. If length of</span>
+<span class="sd">                values &lt; the number of time steps, the values are</span>
 <span class="sd">                continually looped through until every time step</span>
 <span class="sd">                has a corresponding value</span>
 
@@ -1059,11 +1077,11 @@
         <span class="k">try</span><span class="p">:</span>
             <span class="nb">iter</span><span class="p">(</span><span class="n">in_values</span><span class="p">)</span>
         <span class="k">except</span> <span class="ne">TypeError</span><span class="p">:</span>
-            <span class="n">in_values</span> <span class="o">=</span> <span class="p">[</span><span class="n">in_values</span><span class="p">]</span><span class="o">*</span><span class="bp">self</span><span class="o">.</span><span class="n">eval_time</span>
+            <span class="n">in_values</span> <span class="o">=</span> <span class="p">[</span><span class="n">in_values</span><span class="p">]</span> <span class="o">*</span> <span class="bp">self</span><span class="o">.</span><span class="n">eval_time</span>
 
         <span class="c1"># if values is shorter than eval_time repeat until sufficient</span>
         <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">in_values</span><span class="p">)</span> <span class="o">&lt;</span> <span class="bp">self</span><span class="o">.</span><span class="n">eval_time</span><span class="p">:</span>
-            <span class="n">out_values</span> <span class="o">=</span> <span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">*</span><span class="bp">self</span><span class="o">.</span><span class="n">eval_time</span>
+            <span class="n">out_values</span> <span class="o">=</span> <span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">*</span> <span class="bp">self</span><span class="o">.</span><span class="n">eval_time</span>
             <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">eval_time</span><span class="p">):</span>
                 <span class="n">out_values</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="n">in_values</span><span class="p">[</span><span class="n">i</span> <span class="o">%</span> <span class="nb">len</span><span class="p">(</span><span class="n">in_values</span><span class="p">)]</span>
         <span class="k">else</span><span class="p">:</span>
@@ -1079,15 +1097,15 @@
 <div class="viewcode-block" id="Simulator.send_function_neuron"><a class="viewcode-back" href="../code.html#pyrosim.Simulator.send_function_neuron">[docs]</a>    <span class="k">def</span> <span class="nf">send_function_neuron</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">function</span><span class="o">=</span><span class="n">math</span><span class="o">.</span><span class="n">sin</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;Send neuron to simulator which takes its value from the  function</span>
 
-<span class="sd">        The function is mapped to the specific time in the simulation based on </span>
-<span class="sd">        both the discrete evaluation time and the dt space between time steps. </span>
-<span class="sd">        For example if evalTime=100 and dt=0.05 the function will be evaluated </span>
+<span class="sd">        The function is mapped to the specific time in the simulation based on</span>
+<span class="sd">        both the discrete evaluation time and the dt space between time steps.</span>
+<span class="sd">        For example if evalTime=100 and dt=0.05 the function will be evaluated</span>
 <span class="sd">        at [0,0.05,...,5]</span>
 
 <span class="sd">        Parameters</span>
 <span class="sd">        ----------</span>
 <span class="sd">        function : function, optional</span>
-<span class="sd">                The function which defines the neuron value. Valid functions </span>
+<span class="sd">                The function which defines the neuron value. Valid functions</span>
 <span class="sd">                return a single float value over the time domain.</span>
 
 <span class="sd">        Returns</span>
@@ -1098,7 +1116,7 @@
         <span class="k">assert</span> <span class="bp">self</span><span class="o">.</span><span class="n">eval_time</span> <span class="o">&gt;=</span> <span class="mi">0</span><span class="p">,</span> <span class="p">(</span><span class="s1">&#39;Cannot send function neuron&#39;</span>
                                      <span class="s1">&#39; in infinite mode&#39;</span><span class="p">)</span>
 
-        <span class="n">end_time</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">eval_time</span><span class="o">*</span><span class="bp">self</span><span class="o">.</span><span class="n">dt</span>
+        <span class="n">end_time</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">eval_time</span> <span class="o">*</span> <span class="bp">self</span><span class="o">.</span><span class="n">dt</span>
         <span class="n">time_vals</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">end_time</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">dt</span><span class="p">)</span>
         <span class="n">output_vals</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="nb">map</span><span class="p">(</span><span class="n">function</span><span class="p">,</span> <span class="n">time_vals</span><span class="p">))</span>
 
@@ -1107,8 +1125,8 @@
 <div class="viewcode-block" id="Simulator.send_hidden_neuron"><a class="viewcode-back" href="../code.html#pyrosim.Simulator.send_hidden_neuron">[docs]</a>    <span class="k">def</span> <span class="nf">send_hidden_neuron</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">tau</span><span class="o">=</span><span class="mf">1.0</span><span class="p">,</span> <span class="n">alpha</span><span class="o">=</span><span class="mf">1.0</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;Send a hidden neuron to the simulator</span>
 
-<span class="sd">        Hidden neurons are basic neurons which can have inputs and outputs. </span>
-<span class="sd">        They &#39;hidden&#39; between input neurons (sensors, bias, function) and </span>
+<span class="sd">        Hidden neurons are basic neurons which can have inputs and outputs.</span>
+<span class="sd">        They &#39;hidden&#39; between input neurons (sensors, bias, function) and</span>
 <span class="sd">        output neurons (motors)</span>
 
 <span class="sd">        Parameters</span>
@@ -1116,7 +1134,7 @@
 <span class="sd">        tau : float, optional</span>
 <span class="sd">            The &#39;learning rate&#39; of the neuron. Increasing tau increases</span>
 <span class="sd">            how much of value of the neuron at the current time step comes</span>
-<span class="sd">            from external inputs vs. the value of the neuron at the </span>
+<span class="sd">            from external inputs vs. the value of the neuron at the</span>
 <span class="sd">            previous time step.</span>
 <span class="sd">        alpha    :</span>
 <span class="sd">            The &#39;remembrance rate&#39; of the neuron. Usually 1 or 0.</span>
@@ -1156,8 +1174,8 @@
 <span class="sd">        bool</span>
 <span class="sd">            True if successful, False otherwise</span>
 <span class="sd">        &quot;&quot;&quot;</span>
-        <span class="k">assert</span> <span class="n">body_id</span> <span class="o">&lt;</span> <span class="bp">self</span><span class="o">.</span><span class="n">_num_bodies</span><span class="p">,</span> <span class="p">(</span><span class="s1">&#39;Body with id &#39;</span> <span class="o">+</span>
-                                            <span class="n">body_id</span><span class="o">+</span><span class="s1">&#39; has not been sent&#39;</span><span class="p">)</span>
+        <span class="k">assert</span> <span class="n">body_id</span> <span class="o">&lt;</span> <span class="bp">self</span><span class="o">.</span><span class="n">_num_bodies</span><span class="p">,</span> <span class="p">(</span><span class="s1">&#39;Body with id &#39;</span> <span class="o">+</span> <span class="n">body_id</span> <span class="o">+</span>
+                                            <span class="s1">&#39; has not been sent&#39;</span><span class="p">)</span>
         <span class="k">assert</span> <span class="n">time</span> <span class="o">&gt;=</span> <span class="mi">0</span> <span class="ow">and</span> <span class="n">time</span> <span class="o">&lt;=</span> <span class="bp">self</span><span class="o">.</span><span class="n">eval_time</span><span class="p">,</span> <span class="p">(</span>
             <span class="s1">&#39;Time step must be within eval time&#39;</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_assert_non_zero</span><span class="p">(</span><span class="s1">&#39;Force&#39;</span><span class="p">,</span> <span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">z</span><span class="p">)</span>
@@ -1179,8 +1197,8 @@
 <span class="sd">        int</span>
 <span class="sd">                The id tag of the body the light source is attached to.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
-        <span class="k">assert</span> <span class="n">body_id</span> <span class="o">&lt;</span> <span class="bp">self</span><span class="o">.</span><span class="n">_num_bodies</span><span class="p">,</span> <span class="s1">&#39;Body id &#39;</span> <span class="o">+</span> \
-            <span class="nb">str</span><span class="p">(</span><span class="n">body_id</span><span class="p">)</span><span class="o">+</span><span class="s1">&#39; has not been sent&#39;</span>
+        <span class="k">assert</span> <span class="n">body_id</span> <span class="o">&lt;</span> <span class="bp">self</span><span class="o">.</span><span class="n">_num_bodies</span><span class="p">,</span> <span class="p">(</span><span class="s1">&#39;Body with id &#39;</span> <span class="o">+</span> <span class="n">body_id</span> <span class="o">+</span>
+                                            <span class="s1">&#39; has not been sent&#39;</span><span class="p">)</span>
 
         <span class="bp">self</span><span class="o">.</span><span class="n">_send</span><span class="p">(</span><span class="s1">&#39;LightSource&#39;</span><span class="p">,</span>
                    <span class="n">body_id</span><span class="p">)</span>
@@ -1201,8 +1219,8 @@
 <span class="sd">        int</span>
 <span class="sd">            The id tag of the sensor</span>
 <span class="sd">        &quot;&quot;&quot;</span>
-        <span class="k">assert</span> <span class="n">body_id</span> <span class="o">&lt;</span> <span class="bp">self</span><span class="o">.</span><span class="n">_num_bodies</span><span class="p">,</span> <span class="s1">&#39;Body id &#39;</span> <span class="o">+</span> \
-            <span class="nb">str</span><span class="p">(</span><span class="n">body_id</span><span class="p">)</span><span class="o">+</span><span class="s1">&#39; has not been sent&#39;</span>
+        <span class="k">assert</span> <span class="n">body_id</span> <span class="o">&lt;</span> <span class="bp">self</span><span class="o">.</span><span class="n">_num_bodies</span><span class="p">,</span> <span class="p">(</span><span class="s1">&#39;Body with id &#39;</span> <span class="o">+</span> <span class="n">body_id</span> <span class="o">+</span>
+                                            <span class="s1">&#39; has not been sent&#39;</span><span class="p">)</span>
 
         <span class="n">sensor_id</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_num_sensors</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_num_sensors</span> <span class="o">+=</span> <span class="mi">1</span>
@@ -1224,8 +1242,8 @@
 <span class="sd">        int</span>
 <span class="sd">            The id tag of the sensor</span>
 <span class="sd">        &quot;&quot;&quot;</span>
-        <span class="k">assert</span> <span class="n">body_id</span> <span class="o">&lt;</span> <span class="bp">self</span><span class="o">.</span><span class="n">_num_bodies</span><span class="p">,</span> <span class="s1">&#39;Body id &#39;</span> <span class="o">+</span> \
-            <span class="nb">str</span><span class="p">(</span><span class="n">body_id</span><span class="p">)</span><span class="o">+</span><span class="s1">&#39; has not been sent&#39;</span>
+        <span class="k">assert</span> <span class="n">body_id</span> <span class="o">&lt;</span> <span class="bp">self</span><span class="o">.</span><span class="n">_num_bodies</span><span class="p">,</span> <span class="p">(</span><span class="s1">&#39;Body with id &#39;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">body_id</span><span class="p">)</span> <span class="o">+</span>
+                                            <span class="s1">&#39; has not been sent&#39;</span><span class="p">)</span>
 
         <span class="n">sensor_id</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_num_sensors</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_num_sensors</span> <span class="o">+=</span> <span class="mi">1</span>
@@ -1248,8 +1266,8 @@
 <span class="sd">        int</span>
 <span class="sd">                The id tag of the sensor</span>
 <span class="sd">        &quot;&quot;&quot;</span>
-        <span class="k">assert</span> <span class="n">body_id</span> <span class="o">&lt;</span> <span class="bp">self</span><span class="o">.</span><span class="n">_num_bodies</span><span class="p">,</span> <span class="s1">&#39;Body with id &#39;</span> <span class="o">+</span> \
-            <span class="nb">str</span><span class="p">(</span><span class="n">body_id</span><span class="p">)</span><span class="o">+</span><span class="s1">&#39; has not been sent&#39;</span>
+        <span class="k">assert</span> <span class="n">body_id</span> <span class="o">&lt;</span> <span class="bp">self</span><span class="o">.</span><span class="n">_num_bodies</span><span class="p">,</span> <span class="p">(</span><span class="s1">&#39;Body with id &#39;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">body_id</span><span class="p">)</span> <span class="o">+</span>
+                                            <span class="s1">&#39; has not been sent&#39;</span><span class="p">)</span>
 
         <span class="n">sensor_id</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_num_sensors</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_num_sensors</span> <span class="o">+=</span> <span class="mi">1</span>
@@ -1262,7 +1280,7 @@
 <div class="viewcode-block" id="Simulator.send_proprioceptive_sensor"><a class="viewcode-back" href="../code.html#pyrosim.Simulator.send_proprioceptive_sensor">[docs]</a>    <span class="k">def</span> <span class="nf">send_proprioceptive_sensor</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">joint_id</span><span class="o">=</span><span class="mi">0</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;Attaches a proprioceptive sensor to a joint in simulation</span>
 
-<span class="sd">        Proprioceptive sensors returns the angle of the joint at </span>
+<span class="sd">        Proprioceptive sensors returns the angle of the joint at</span>
 <span class="sd">        each time step</span>
 
 <span class="sd">        Parameters</span>
@@ -1275,8 +1293,8 @@
 <span class="sd">        int</span>
 <span class="sd">                The id tag of the sensor</span>
 <span class="sd">        &quot;&quot;&quot;</span>
-        <span class="k">assert</span> <span class="n">joint_id</span> <span class="o">&lt;</span> <span class="bp">self</span><span class="o">.</span><span class="n">_num_joints</span><span class="p">,</span> <span class="s1">&#39;Joint with id &#39;</span> <span class="o">+</span> \
-            <span class="nb">str</span><span class="p">(</span><span class="n">joint_id</span><span class="p">)</span><span class="o">+</span><span class="s1">&#39; has not been sent&#39;</span>
+        <span class="k">assert</span> <span class="n">joint_id</span> <span class="o">&lt;</span> <span class="bp">self</span><span class="o">.</span><span class="n">_num_joints</span><span class="p">,</span> <span class="p">(</span><span class="s1">&#39;Joint with id &#39;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">joint_id</span><span class="p">)</span> <span class="o">+</span>
+                                             <span class="s1">&#39; has not been sent&#39;</span><span class="p">)</span>
 
         <span class="n">sensor_id</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_num_sensors</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_num_sensors</span> <span class="o">+=</span> <span class="mi">1</span>
@@ -1292,13 +1310,13 @@
                         <span class="n">max_distance</span><span class="o">=</span><span class="mi">10</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;Sends a ray sensor to the simulator connected to a body</span>
 
-<span class="sd">        Ray sensors return four values each time step, the distance and </span>
+<span class="sd">        Ray sensors return four values each time step, the distance and</span>
 <span class="sd">        color (r,g,b).</span>
 
 <span class="sd">        Parameters</span>
 <span class="sd">        ----------</span>
 <span class="sd">        body_id : int, optional</span>
-<span class="sd">                The body id of the associated body the ray sensor is connected </span>
+<span class="sd">                The body id of the associated body the ray sensor is connected</span>
 <span class="sd">                to. When this body moves the ray sensor moves accordingly</span>
 <span class="sd">        x        : float, optional</span>
 <span class="sd">                The x position of the sensor</span>
@@ -1307,13 +1325,13 @@
 <span class="sd">        z        : float, optional</span>
 <span class="sd">                The z position of the sensor</span>
 <span class="sd">        r1       : float, optional</span>
-<span class="sd">                The x direction of the sensor. The array [r1,r2,r3] is the </span>
+<span class="sd">                The x direction of the sensor. The array [r1,r2,r3] is the</span>
 <span class="sd">                direction the ray sensor is pointing in the time step.</span>
 <span class="sd">        r2       : float, optional</span>
-<span class="sd">                The y direction of the sensor. The array [r1,r2,r3] </span>
+<span class="sd">                The y direction of the sensor. The array [r1,r2,r3]</span>
 <span class="sd">                is the direction the ray sensor is pointing in the time step.</span>
 <span class="sd">        r3       : float, optional</span>
-<span class="sd">                The z direction of the sensor. The array [r1,r2,r3] is the </span>
+<span class="sd">                The z direction of the sensor. The array [r1,r2,r3] is the</span>
 <span class="sd">                direction the ray sensor is pointing in the time step.</span>
 <span class="sd">        max_distance: float, optional</span>
 <span class="sd">                The maximum distance away the ray can sense in simulator</span>
@@ -1324,8 +1342,8 @@
 <span class="sd">        int</span>
 <span class="sd">                The id tag of the sensor</span>
 <span class="sd">        &quot;&quot;&quot;</span>
-        <span class="k">assert</span> <span class="n">body_id</span> <span class="o">&lt;</span> <span class="bp">self</span><span class="o">.</span><span class="n">_num_bodies</span><span class="p">,</span> <span class="s1">&#39;Body with id &#39;</span> <span class="o">+</span> \
-            <span class="nb">str</span><span class="p">(</span><span class="n">body_id</span><span class="p">)</span> <span class="o">+</span> <span class="s1">&#39; has not been sent yet&#39;</span>
+        <span class="k">assert</span> <span class="n">body_id</span> <span class="o">&lt;</span> <span class="bp">self</span><span class="o">.</span><span class="n">_num_bodies</span><span class="p">,</span> <span class="p">(</span><span class="s1">&#39;Body with id &#39;</span> <span class="o">+</span> <span class="n">body_id</span> <span class="o">+</span>
+                                            <span class="s1">&#39; has not been sent&#39;</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_assert_non_zero</span><span class="p">(</span><span class="s1">&#39;Ray Sensor&#39;</span><span class="p">,</span> <span class="n">r1</span><span class="p">,</span> <span class="n">r2</span><span class="p">,</span> <span class="n">r3</span><span class="p">)</span>
 
         <span class="n">sensor_id</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_num_sensors</span>
@@ -1345,16 +1363,15 @@
 <span class="sd">        Parameters</span>
 <span class="sd">        ----------</span>
 <span class="sd">        body_id : int, optional</span>
-<span class="sd">                The body id of the associated body </span>
+<span class="sd">                The body id of the associated body</span>
 
 <span class="sd">        Returns</span>
 <span class="sd">        -------</span>
 <span class="sd">        int</span>
 <span class="sd">                The id tag of the sensor</span>
 <span class="sd">        &quot;&quot;&quot;</span>
-        <span class="k">assert</span> <span class="n">body_id</span> <span class="o">&lt;</span> <span class="bp">self</span><span class="o">.</span><span class="n">_num_bodies</span><span class="p">,</span> <span class="p">(</span><span class="s1">&#39;Body with id &#39;</span><span class="o">+</span><span class="n">body_id</span><span class="o">+</span><span class="s1">&#39; has&#39;</span>
-                                            <span class="s1">&#39; not been sent&#39;</span>
-                                            <span class="p">)</span>
+        <span class="k">assert</span> <span class="n">body_id</span> <span class="o">&lt;</span> <span class="bp">self</span><span class="o">.</span><span class="n">_num_bodies</span><span class="p">,</span> <span class="p">(</span><span class="s1">&#39;Body with id &#39;</span> <span class="o">+</span> <span class="n">body_id</span> <span class="o">+</span>
+                                            <span class="s1">&#39; has not been sent&#39;</span><span class="p">)</span>
         <span class="n">sensor_id</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_num_sensors</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_num_sensors</span> <span class="o">+=</span> <span class="mi">1</span>
 
@@ -1366,21 +1383,20 @@
 <div class="viewcode-block" id="Simulator.send_vestibular_sensor"><a class="viewcode-back" href="../code.html#pyrosim.Simulator.send_vestibular_sensor">[docs]</a>    <span class="k">def</span> <span class="nf">send_vestibular_sensor</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">body_id</span><span class="o">=</span><span class="mi">0</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;Connects a vestibular sensor to a body</span>
 
-<span class="sd">        Vestibular sensors return a bodies orrientation in space</span>
+<span class="sd">        Vestibular sensors return a bodies orientation in space</span>
 
 <span class="sd">        Parameters</span>
 <span class="sd">        ----------</span>
 <span class="sd">        body_id : int, optional</span>
-<span class="sd">                The body id of the associated body </span>
+<span class="sd">                The body id of the associated body</span>
 
 <span class="sd">        Returns</span>
 <span class="sd">        -------</span>
 <span class="sd">        int</span>
 <span class="sd">                The id tag of the sensor</span>
 <span class="sd">        &quot;&quot;&quot;</span>
-        <span class="k">assert</span> <span class="n">body_id</span> <span class="o">&lt;</span> <span class="bp">self</span><span class="o">.</span><span class="n">_num_bodies</span><span class="p">,</span> <span class="p">(</span><span class="s1">&#39;Body with id &#39;</span><span class="o">+</span><span class="n">body_id</span><span class="o">+</span><span class="s1">&#39; has&#39;</span>
-                                            <span class="s1">&#39; not been sent&#39;</span>
-                                            <span class="p">)</span>
+        <span class="k">assert</span> <span class="n">body_id</span> <span class="o">&lt;</span> <span class="bp">self</span><span class="o">.</span><span class="n">_num_bodies</span><span class="p">,</span> <span class="p">(</span><span class="s1">&#39;Body with id &#39;</span> <span class="o">+</span> <span class="n">body_id</span> <span class="o">+</span> <span class="s1">&#39; has&#39;</span>
+                                            <span class="s1">&#39; not been sent&#39;</span><span class="p">)</span>
 
         <span class="n">sensor_id</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_num_sensors</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_num_sensors</span> <span class="o">+=</span> <span class="mi">1</span>
@@ -1412,9 +1428,9 @@
 <span class="sd">                True if successful, False otherwise</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">assert</span> <span class="n">source_neuron_id</span> <span class="o">&lt;</span> <span class="bp">self</span><span class="o">.</span><span class="n">_num_neurons</span><span class="p">,</span> <span class="s1">&#39;Neuron with id &#39;</span> <span class="o">+</span> \
-            <span class="nb">str</span><span class="p">(</span><span class="n">source_neuron_id</span><span class="p">)</span><span class="o">+</span><span class="s1">&#39; has not been sent&#39;</span>
+            <span class="nb">str</span><span class="p">(</span><span class="n">source_neuron_id</span><span class="p">)</span> <span class="o">+</span> <span class="s1">&#39; has not been sent&#39;</span>
         <span class="k">assert</span> <span class="n">target_neuron_id</span> <span class="o">&lt;</span> <span class="bp">self</span><span class="o">.</span><span class="n">_num_neurons</span><span class="p">,</span> <span class="s1">&#39;Neuron with id &#39;</span> <span class="o">+</span> \
-            <span class="nb">str</span><span class="p">(</span><span class="n">target_neuron_id</span><span class="p">)</span><span class="o">+</span><span class="s1">&#39; has not been sent&#39;</span>
+            <span class="nb">str</span><span class="p">(</span><span class="n">target_neuron_id</span><span class="p">)</span> <span class="o">+</span> <span class="s1">&#39; has not been sent&#39;</span>
 
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">send_developing_synapse</span><span class="p">(</span><span class="n">source_neuron_id</span><span class="o">=</span><span class="n">source_neuron_id</span><span class="p">,</span>
                                             <span class="n">target_neuron_id</span><span class="o">=</span><span class="n">target_neuron_id</span><span class="p">,</span>
@@ -1428,7 +1444,7 @@
                                 <span class="n">start_time</span><span class="o">=</span><span class="mf">0.</span><span class="p">,</span> <span class="n">end_time</span><span class="o">=</span><span class="mf">1.0</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;Sends a synapse to the simulator</span>
 
-<span class="sd">        Developing synapses are synapses which change over time. </span>
+<span class="sd">        Developing synapses are synapses which change over time.</span>
 <span class="sd">        The synapse will interpolate between the start_weight and end_weight</span>
 <span class="sd">        over the desired time range dictated by start_time and end_time.</span>
 <span class="sd">        start_time and end_time are in [0,1] where 0 maps to time step 0</span>
@@ -1468,8 +1484,8 @@
         <span class="k">if</span> <span class="n">start_time</span> <span class="o">&gt;=</span> <span class="n">end_time</span><span class="p">:</span>
             <span class="n">end_time</span> <span class="o">=</span> <span class="n">start_time</span>
 
-        <span class="n">start_time</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">start_time</span> <span class="o">*</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">eval_time</span><span class="o">-</span><span class="mi">1</span><span class="p">))</span>
-        <span class="n">end_time</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">end_time</span> <span class="o">*</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">eval_time</span><span class="o">-</span><span class="mi">1</span><span class="p">))</span>
+        <span class="n">start_time</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">start_time</span> <span class="o">*</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">eval_time</span> <span class="o">-</span> <span class="mi">1</span><span class="p">))</span>
+        <span class="n">end_time</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">end_time</span> <span class="o">*</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">eval_time</span> <span class="o">-</span> <span class="mi">1</span><span class="p">))</span>
 
         <span class="bp">self</span><span class="o">.</span><span class="n">_send</span><span class="p">(</span><span class="s1">&#39;Synapse&#39;</span><span class="p">,</span>
                    <span class="n">source_neuron_id</span><span class="p">,</span> <span class="n">target_neuron_id</span><span class="p">,</span>
@@ -1479,7 +1495,7 @@
         <span class="k">return</span> <span class="kc">True</span></div>
 
 <span class="c1"># -----I/OCommands----------------------------</span>
-<div class="viewcode-block" id="Simulator.make_movie"><a class="viewcode-back" href="../code.html#pyrosim.Simulator.make_movie">[docs]</a>    <span class="k">def</span> <span class="nf">make_movie</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span>  <span class="n">movie_name</span><span class="o">=</span><span class="s1">&#39;&#39;</span><span class="p">):</span>
+<div class="viewcode-block" id="Simulator.make_movie"><a class="viewcode-back" href="../code.html#pyrosim.Simulator.make_movie">[docs]</a>    <span class="k">def</span> <span class="nf">make_movie</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">movie_name</span><span class="o">=</span><span class="s1">&#39;&#39;</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;Takes captured image files and converts them into a movie</span>
 
 <span class="sd">        Uses ffmpeg to convert images. ffmpeg needs to be installed</span>
@@ -1497,7 +1513,7 @@
 <span class="sd">        bool</span>
 <span class="sd">            True if successful, False otherwise</span>
 <span class="sd">        &quot;&quot;&quot;</span>
-        <span class="k">assert</span> <span class="bp">self</span><span class="o">.</span><span class="n">capture</span> <span class="o">==</span> <span class="kc">True</span><span class="p">,</span> <span class="p">(</span>
+        <span class="k">assert</span> <span class="bp">self</span><span class="o">.</span><span class="n">capture</span> <span class="ow">is</span> <span class="kc">True</span><span class="p">,</span> <span class="p">(</span>
             <span class="s1">&#39;No frames captured, set capture to true&#39;</span><span class="p">)</span>
 
         <span class="k">if</span> <span class="n">movie_name</span> <span class="o">==</span> <span class="s1">&#39;&#39;</span><span class="p">:</span>
@@ -1521,7 +1537,7 @@
 <div class="viewcode-block" id="Simulator.start"><a class="viewcode-back" href="../code.html#pyrosim.Simulator.start">[docs]</a>    <span class="k">def</span> <span class="nf">start</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;Starts the simulation&quot;&quot;&quot;</span>
 
-        <span class="k">assert</span> <span class="bp">self</span><span class="o">.</span><span class="n">evaluated</span> <span class="o">==</span> <span class="kc">False</span><span class="p">,</span> <span class="p">(</span>
+        <span class="k">assert</span> <span class="bp">self</span><span class="o">.</span><span class="n">evaluated</span> <span class="ow">is</span> <span class="kc">False</span><span class="p">,</span> <span class="p">(</span>
             <span class="s1">&#39;Simulation has already been evaluated&#39;</span><span class="p">)</span>
 
         <span class="k">if</span> <span class="p">(</span><span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">collision_matrix_sent</span> <span class="ow">and</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_num_groups</span><span class="p">()</span> <span class="o">!=</span> <span class="mi">0</span><span class="p">):</span>
@@ -1529,16 +1545,17 @@
 
         <span class="c1"># build initial commands</span>
         <span class="n">commands</span> <span class="o">=</span> <span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">pyrosim_path</span> <span class="o">+</span> <span class="s1">&#39;/simulator&#39;</span><span class="p">]</span>
-        <span class="k">if</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">play_blind</span> <span class="o">==</span> <span class="kc">True</span><span class="p">):</span>
+        <span class="k">if</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">play_blind</span> <span class="ow">is</span> <span class="kc">True</span><span class="p">):</span>
             <span class="n">commands</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="s1">&#39;-blind&#39;</span><span class="p">)</span>
         <span class="k">else</span><span class="p">:</span>
-            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">use_textures</span> <span class="o">==</span> <span class="kc">False</span><span class="p">:</span>
+            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">use_textures</span> <span class="ow">is</span> <span class="kc">False</span><span class="p">:</span>
                 <span class="n">commands</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="s1">&#39;-notex&#39;</span><span class="p">)</span>
 
-        <span class="k">if</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">play_paused</span> <span class="o">==</span> <span class="kc">True</span><span class="p">):</span>
+        <span class="k">if</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">play_paused</span> <span class="ow">is</span> <span class="kc">True</span><span class="p">):</span>
             <span class="n">commands</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="s1">&#39;-pause&#39;</span><span class="p">)</span>
 
-        <span class="bp">self</span><span class="o">.</span><span class="n">pipe</span> <span class="o">=</span> <span class="n">Popen</span><span class="p">(</span><span class="n">commands</span><span class="p">,</span> <span class="n">stdout</span><span class="o">=</span><span class="n">PIPE</span><span class="p">,</span> <span class="n">stdin</span><span class="o">=</span><span class="n">PIPE</span><span class="p">,</span> <span class="n">stderr</span><span class="o">=</span><span class="n">PIPE</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">pipe</span> <span class="o">=</span> <span class="n">Popen</span><span class="p">(</span><span class="n">commands</span><span class="p">,</span> <span class="n">bufsize</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">stdout</span><span class="o">=</span><span class="n">PIPE</span><span class="p">,</span> <span class="n">stdin</span><span class="o">=</span><span class="n">PIPE</span><span class="p">,</span>
+                          <span class="n">stderr</span><span class="o">=</span><span class="n">PIPE</span><span class="p">,</span> <span class="n">universal_newlines</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
 
         <span class="k">for</span> <span class="n">string_to_send</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">strings_to_send</span><span class="p">:</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">pipe</span><span class="o">.</span><span class="n">stdin</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="n">string_to_send</span><span class="p">)</span>
@@ -1558,7 +1575,7 @@
 <span class="sd">        Returns</span>
 <span class="sd">        -------</span>
 <span class="sd">        numpy matrix</span>
-<span class="sd">                A matrix of the sensor values for each time step of </span>
+<span class="sd">                A matrix of the sensor values for each time step of</span>
 <span class="sd">                the simulation</span>
 <span class="sd">        &quot;&quot;&quot;</span>
 
@@ -1599,7 +1616,7 @@
             <span class="k">if</span> <span class="n">arg</span> <span class="o">!=</span> <span class="mi">0</span><span class="p">:</span>
                 <span class="n">flag</span> <span class="o">=</span> <span class="kc">True</span>
 
-        <span class="k">assert</span> <span class="n">flag</span> <span class="o">==</span> <span class="kc">True</span><span class="p">,</span> <span class="p">(</span><span class="s1">&#39;Vector parameters of &#39;</span> <span class="o">+</span> <span class="n">name</span> <span class="o">+</span>
+        <span class="k">assert</span> <span class="n">flag</span> <span class="ow">is</span> <span class="kc">True</span><span class="p">,</span> <span class="p">(</span><span class="s1">&#39;Vector parameters of &#39;</span> <span class="o">+</span> <span class="n">name</span> <span class="o">+</span>
                               <span class="s1">&#39; cannot be all zeros&#39;</span><span class="p">)</span>
 
     <span class="k">def</span> <span class="nf">_collect_sensor_data</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">data_from_simulator</span><span class="p">):</span>
@@ -1612,7 +1629,7 @@
 
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">debug</span><span class="p">:</span>
             <span class="n">chop_start</span> <span class="o">=</span> <span class="n">debug_output</span><span class="o">.</span><span class="n">find</span><span class="p">(</span><span class="s1">&#39;Simulation test environment&#39;</span><span class="p">)</span>
-            <span class="n">chop_end</span> <span class="o">=</span> <span class="n">debug_output</span><span class="o">.</span><span class="n">find</span><span class="p">(</span><span class="s1">&#39;sideways and up&#39;</span><span class="p">)</span><span class="o">+</span><span class="mi">15</span>
+            <span class="n">chop_end</span> <span class="o">=</span> <span class="n">debug_output</span><span class="o">.</span><span class="n">find</span><span class="p">(</span><span class="s1">&#39;sideways and up&#39;</span><span class="p">)</span> <span class="o">+</span> <span class="mi">15</span>
             <span class="k">if</span> <span class="n">chop_start</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">:</span>
                 <span class="nb">print</span> <span class="p">(</span><span class="n">debug_output</span><span class="p">[:</span><span class="n">chop_start</span><span class="p">],</span> <span class="n">debug_output</span><span class="p">[</span><span class="n">chop_end</span><span class="p">:</span><span class="o">-</span><span class="mi">1</span><span class="p">])</span>
             <span class="k">else</span><span class="p">:</span>
@@ -1640,11 +1657,9 @@
                         <span class="nb">print</span> <span class="p">(</span><span class="n">index</span><span class="p">,</span> <span class="n">data_from_simulator</span><span class="p">)</span>
                         <span class="nb">print</span> <span class="p">(</span><span class="n">debug_output</span><span class="p">)</span>
                         <span class="k">raise</span> <span class="ne">IndexError</span>
-
-
                     <span class="bp">self</span><span class="o">.</span><span class="n">data</span><span class="p">[</span><span class="n">sensor_id</span><span class="p">,</span> <span class="n">s</span><span class="p">,</span> <span class="n">t</span><span class="p">]</span> <span class="o">=</span> <span class="n">sensor_value</span>
                     <span class="n">index</span> <span class="o">=</span> <span class="n">index</span> <span class="o">+</span> <span class="mi">1</span>
-
+        <span class="c1"># print(self.data)</span>
     <span class="k">def</span> <span class="nf">_send_collision_matrix</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;sends the collision matrix&quot;&quot;&quot;</span>
 
@@ -1681,9 +1696,7 @@
 </pre></div>
 
            </div>
-           <div class="articleComments">
-            
-           </div>
+           
           </div>
           <footer>
   
@@ -1696,7 +1709,7 @@
 
     </p>
   </div>
-  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/snide/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
 
 </footer>
 
@@ -1715,16 +1728,17 @@
         var DOCUMENTATION_OPTIONS = {
             URL_ROOT:'../',
             VERSION:'0.1.1',
+            LANGUAGE:'None',
             COLLAPSE_INDEX:false,
             FILE_SUFFIX:'.html',
             HAS_SOURCE:  true,
-            SOURCELINK_SUFFIX: ''
+            SOURCELINK_SUFFIX: '.txt'
         };
     </script>
       <script type="text/javascript" src="../_static/jquery.js"></script>
       <script type="text/javascript" src="../_static/underscore.js"></script>
       <script type="text/javascript" src="../_static/doctools.js"></script>
-      <script type="text/javascript" src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+      <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
 
   
 
@@ -1733,14 +1747,13 @@
     <script type="text/javascript" src="../_static/js/theme.js"></script>
   
 
-  
-  
   <script type="text/javascript">
       jQuery(function () {
-          SphinxRtdTheme.StickyNav.enable();
+          
+          SphinxRtdTheme.Navigation.enableSticky();
+          
       });
-  </script>
-   
+  </script> 
 
 </body>
 </html>

@@ -27,24 +27,19 @@
   
 
   
-  
     <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
-  
-
-  
-
-  
-    <link rel="top" title="pyrosim 0.1.1 documentation" href="../index.html"/>
-        <link rel="up" title="Getting Started" href="../start.html"/>
-        <link rel="next" title="Neural Network" href="04_networks.html"/>
-        <link rel="prev" title="Joints" href="02_joints.html"/> 
+  <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="Neural Network" href="04_networks.html" />
+    <link rel="prev" title="Joints" href="02_joints.html" /> 
 
   
   <script src="../_static/js/modernizr.min.js"></script>
 
 </head>
 
-<body class="wy-body-for-nav" role="document">
+<body class="wy-body-for-nav">
 
    
   <div class="wy-grid-for-nav">
@@ -119,7 +114,7 @@
     <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
 
       
-      <nav class="wy-nav-top" role="navigation" aria-label="top navigation">
+      <nav class="wy-nav-top" aria-label="top navigation">
         
           <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
           <a href="../index.html">pyrosim</a>
@@ -127,9 +122,10 @@
       </nav>
 
 
-      
       <div class="wy-nav-content">
+        
         <div class="rst-content">
+        
           
 
 
@@ -194,8 +190,8 @@ respectively.</p>
 <h2>Double Pendulum Cont.<a class="headerlink" href="#double-pendulum-cont" title="Permalink to this headline">¶</a></h2>
 <p>We add sensors to the double pendulum and evaluate the print the output.
 Insert the following code after the joints have been sent.</p>
-<div class="literal-block-wrapper container" id="dp-sensors-py">
-<div class="code-block-caption"><span class="caption-text">dp-sensors.py</span><a class="headerlink" href="#dp-sensors-py" title="Permalink to this code">¶</a></div>
+<div class="literal-block-wrapper docutils container" id="id2">
+<div class="code-block-caption"><span class="caption-text">dp-sensors.py</span><a class="headerlink" href="#id2" title="Permalink to this code">¶</a></div>
 <div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">pos_sensor</span> <span class="o">=</span> <span class="n">sim</span><span class="o">.</span><span class="n">send_position_sensor</span><span class="p">(</span><span class="n">cyl_1</span><span class="p">)</span>
 <span class="n">vestib_sensor</span> <span class="o">=</span> <span class="n">sim</span><span class="o">.</span><span class="n">send_vestibular_sensor</span><span class="p">(</span><span class="n">cyl_2</span><span class="p">)</span>
 <span class="n">prop_sensor</span> <span class="o">=</span> <span class="n">sim</span><span class="o">.</span><span class="n">send_proprioceptive_sensor</span><span class="p">(</span><span class="n">slider_joint</span><span class="p">)</span>
@@ -225,7 +221,6 @@ Insert the following code after the joints have been sent.</p>
     <span class="n">output</span> <span class="o">=</span> <span class="p">(</span><span class="s1">&#39;</span><span class="si">{:3d}</span><span class="s1">:: x:</span><span class="si">{: 3.1f}</span><span class="s1">, y:</span><span class="si">{: 3.1f}</span><span class="s1">, z:</span><span class="si">{: 3.1f}</span><span class="s1">, &#39;</span> <span class="o">+</span>
               <span class="s1">&#39;vestib:</span><span class="si">{: 3.1f}</span><span class="s1">, prop:</span><span class="si">{: 3.1f}</span><span class="s1">&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">t</span><span class="p">,</span> <span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">z</span><span class="p">,</span> <span class="n">v</span><span class="p">,</span> <span class="n">p</span><span class="p">)</span>
     <span class="nb">print</span> <span class="n">output</span>
-
 </pre></div>
 </div>
 </div>
@@ -316,9 +311,7 @@ Insert the following code after the joints have been sent.</p>
 
 
            </div>
-           <div class="articleComments">
-            
-           </div>
+           
           </div>
           <footer>
   
@@ -340,7 +333,7 @@ Insert the following code after the joints have been sent.</p>
 
     </p>
   </div>
-  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/snide/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
 
 </footer>
 
@@ -359,16 +352,17 @@ Insert the following code after the joints have been sent.</p>
         var DOCUMENTATION_OPTIONS = {
             URL_ROOT:'../',
             VERSION:'0.1.1',
+            LANGUAGE:'None',
             COLLAPSE_INDEX:false,
             FILE_SUFFIX:'.html',
             HAS_SOURCE:  true,
-            SOURCELINK_SUFFIX: ''
+            SOURCELINK_SUFFIX: '.txt'
         };
     </script>
       <script type="text/javascript" src="../_static/jquery.js"></script>
       <script type="text/javascript" src="../_static/underscore.js"></script>
       <script type="text/javascript" src="../_static/doctools.js"></script>
-      <script type="text/javascript" src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+      <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
 
   
 
@@ -377,14 +371,13 @@ Insert the following code after the joints have been sent.</p>
     <script type="text/javascript" src="../_static/js/theme.js"></script>
   
 
-  
-  
   <script type="text/javascript">
       jQuery(function () {
-          SphinxRtdTheme.StickyNav.enable();
+          
+          SphinxRtdTheme.Navigation.enableSticky();
+          
       });
-  </script>
-   
+  </script> 
 
 </body>
 </html>

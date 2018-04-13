@@ -27,24 +27,19 @@
   
 
   
-  
     <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
-  
-
-  
-
-  
-    <link rel="top" title="pyrosim 0.1.1 documentation" href="../index.html"/>
-        <link rel="up" title="Advanced Options" href="../advanced.html"/>
-        <link rel="next" title="Internal Thruster" href="01_thruster.html"/>
-        <link rel="prev" title="Advanced Options" href="../advanced.html"/> 
+  <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="Internal Thruster" href="01_thruster.html" />
+    <link rel="prev" title="Advanced Options" href="../advanced.html" /> 
 
   
   <script src="../_static/js/modernizr.min.js"></script>
 
 </head>
 
-<body class="wy-body-for-nav" role="document">
+<body class="wy-body-for-nav">
 
    
   <div class="wy-grid-for-nav">
@@ -115,7 +110,7 @@
     <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
 
       
-      <nav class="wy-nav-top" role="navigation" aria-label="top navigation">
+      <nav class="wy-nav-top" aria-label="top navigation">
         
           <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
           <a href="../index.html">pyrosim</a>
@@ -123,9 +118,10 @@
       </nav>
 
 
-      
       <div class="wy-nav-content">
+        
         <div class="rst-content">
+        
           
 
 
@@ -177,9 +173,9 @@ For example if you wanted to throw a block at time step fifty in the <em>z</em> 
 </div>
 <div class="section" id="quadruped">
 <h2>Quadruped<a class="headerlink" href="#quadruped" title="Permalink to this headline">¶</a></h2>
-<p>Here we present our famed mascot being hit by a box thrown with external forces. This example also showcases <a class="reference internal" href="../start/04_networks.html#id1"><span class="std std-ref">developing synapses</span></a>.</p>
-<div class="literal-block-wrapper container" id="quadruped-py">
-<div class="code-block-caption"><span class="caption-text">quadruped.py</span><a class="headerlink" href="#quadruped-py" title="Permalink to this code">¶</a></div>
+<p>Here we present our famed mascot being hit by a box thrown with external forces. This example also showcases <a class="reference internal" href="../start/04_networks.html#synapses"><span class="std std-ref">developing synapses</span></a>.</p>
+<div class="literal-block-wrapper docutils container" id="id3">
+<div class="code-block-caption"><span class="caption-text">quadruped.py</span><a class="headerlink" href="#id3" title="Permalink to this code">¶</a></div>
 <div class="highlight-default"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">math</span>
 <span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
 <span class="kn">import</span> <span class="nn">math</span>
@@ -280,23 +276,28 @@ For example if you wanted to throw a block at time step fifty in the <em>z</em> 
     <span class="c1"># send the box towards the origin with specified force</span>
     <span class="c1"># proportional to its mass</span>
     <span class="n">MASS</span> <span class="o">=</span> <span class="mi">3</span>
-    <span class="n">sim</span><span class="o">.</span><span class="n">send_external_force</span><span class="p">(</span><span class="n">env_box</span><span class="p">,</span> <span class="n">x</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">y</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">z</span><span class="o">=</span><span class="n">MASS</span><span class="o">*</span><span class="mf">20.</span><span class="p">,</span> <span class="n">time</span><span class="o">=</span><span class="mi">300</span><span class="p">)</span>
-    <span class="n">sim</span><span class="o">.</span><span class="n">send_external_force</span><span class="p">(</span><span class="n">env_box</span><span class="p">,</span> <span class="n">x</span><span class="o">=-</span><span class="n">MASS</span><span class="o">*</span><span class="mf">70.</span><span class="p">,</span> <span class="n">y</span><span class="o">=</span><span class="n">MASS</span><span class="o">*</span><span class="mf">73.</span><span class="p">,</span> <span class="n">z</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">time</span><span class="o">=</span><span class="mi">320</span><span class="p">)</span>
+    <span class="c1"># sim.send_external_force(env_box, x=0, y=0, z=MASS*20., time=300)</span>
+    <span class="c1"># sim.send_external_force(env_box, x=-MASS*70., y=MASS*73., z=0, time=320)</span>
 
     <span class="n">sim</span><span class="o">.</span><span class="n">create_collision_matrix</span><span class="p">(</span><span class="s1">&#39;all&#39;</span><span class="p">)</span>
 
     <span class="k">return</span> <span class="n">layout</span>
 
-<span class="k">if</span> <span class="n">__name__</span> <span class="o">==</span> <span class="s2">&quot;__main__&quot;</span><span class="p">:</span>
+<span class="k">if</span> <span class="vm">__name__</span> <span class="o">==</span> <span class="s2">&quot;__main__&quot;</span><span class="p">:</span>
 
-    <span class="n">eval_time</span> <span class="o">=</span> <span class="mi">1000</span>
+    <span class="n">seconds</span> <span class="o">=</span> <span class="mf">10.0</span>
+    <span class="n">dt</span> <span class="o">=</span> <span class="mf">0.05</span>
+    <span class="n">eval_time</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">seconds</span><span class="o">/</span><span class="n">dt</span><span class="p">)</span>
+    <span class="nb">print</span><span class="p">(</span><span class="n">eval_time</span><span class="p">)</span>
     <span class="n">gravity</span> <span class="o">=</span> <span class="o">-</span><span class="mf">1.0</span>
+
     <span class="n">sim</span> <span class="o">=</span> <span class="n">pyrosim</span><span class="o">.</span><span class="n">Simulator</span><span class="p">(</span><span class="n">eval_time</span><span class="o">=</span><span class="n">eval_time</span><span class="p">,</span> <span class="n">debug</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
                                <span class="n">play_paused</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
                                <span class="n">gravity</span><span class="o">=</span><span class="n">gravity</span><span class="p">,</span>
                                <span class="n">play_blind</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
                                <span class="n">use_textures</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
-                               <span class="n">capture</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+                               <span class="n">capture</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+                               <span class="n">dt</span><span class="o">=</span><span class="n">dt</span><span class="p">)</span>
     <span class="n">num_sensors</span> <span class="o">=</span> <span class="mi">5</span>
     <span class="n">num_motors</span> <span class="o">=</span> <span class="mi">8</span>
 
@@ -309,6 +310,8 @@ For example if you wanted to throw a block at time step fifty in the <em>z</em> 
 
     <span class="n">layout</span> <span class="o">=</span> <span class="n">send_to_simulator</span><span class="p">(</span><span class="n">sim</span><span class="p">,</span> <span class="n">weight_matrix</span><span class="o">=</span><span class="n">weight_matrix</span><span class="p">)</span>
     <span class="n">sim</span><span class="o">.</span><span class="n">start</span><span class="p">()</span>
+
+    <span class="n">sim</span><span class="o">.</span><span class="n">wait_to_finish</span><span class="p">()</span>
 </pre></div>
 </div>
 </div>
@@ -317,9 +320,7 @@ For example if you wanted to throw a block at time step fifty in the <em>z</em> 
 
 
            </div>
-           <div class="articleComments">
-            
-           </div>
+           
           </div>
           <footer>
   
@@ -341,7 +342,7 @@ For example if you wanted to throw a block at time step fifty in the <em>z</em> 
 
     </p>
   </div>
-  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/snide/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
 
 </footer>
 
@@ -360,16 +361,17 @@ For example if you wanted to throw a block at time step fifty in the <em>z</em> 
         var DOCUMENTATION_OPTIONS = {
             URL_ROOT:'../',
             VERSION:'0.1.1',
+            LANGUAGE:'None',
             COLLAPSE_INDEX:false,
             FILE_SUFFIX:'.html',
             HAS_SOURCE:  true,
-            SOURCELINK_SUFFIX: ''
+            SOURCELINK_SUFFIX: '.txt'
         };
     </script>
       <script type="text/javascript" src="../_static/jquery.js"></script>
       <script type="text/javascript" src="../_static/underscore.js"></script>
       <script type="text/javascript" src="../_static/doctools.js"></script>
-      <script type="text/javascript" src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+      <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
 
   
 
@@ -378,14 +380,13 @@ For example if you wanted to throw a block at time step fifty in the <em>z</em> 
     <script type="text/javascript" src="../_static/js/theme.js"></script>
   
 
-  
-  
   <script type="text/javascript">
       jQuery(function () {
-          SphinxRtdTheme.StickyNav.enable();
+          
+          SphinxRtdTheme.Navigation.enableSticky();
+          
       });
-  </script>
-   
+  </script> 
 
 </body>
 </html>

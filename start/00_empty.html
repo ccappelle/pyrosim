@@ -27,24 +27,19 @@
   
 
   
-  
     <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
-  
-
-  
-
-  
-    <link rel="top" title="pyrosim 0.1.1 documentation" href="../index.html"/>
-        <link rel="up" title="Getting Started" href="../start.html"/>
-        <link rel="next" title="Bodies" href="01_body.html"/>
-        <link rel="prev" title="Getting Started" href="../start.html"/> 
+  <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="Bodies" href="01_body.html" />
+    <link rel="prev" title="Getting Started" href="../start.html" /> 
 
   
   <script src="../_static/js/modernizr.min.js"></script>
 
 </head>
 
-<body class="wy-body-for-nav" role="document">
+<body class="wy-body-for-nav">
 
    
   <div class="wy-grid-for-nav">
@@ -91,6 +86,7 @@
             
             
               <ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../installation.html">Installation</a></li>
 <li class="toctree-l1 current"><a class="reference internal" href="../start.html">Getting Started</a><ul class="current">
 <li class="toctree-l2 current"><a class="current reference internal" href="#">Simulator Settings</a><ul>
 <li class="toctree-l3"><a class="reference internal" href="#empty-simulator">Empty Simulator</a></li>
@@ -103,8 +99,10 @@
 <li class="toctree-l2"><a class="reference internal" href="02_joints.html">Joints</a></li>
 <li class="toctree-l2"><a class="reference internal" href="03_sensors.html">Sensors</a></li>
 <li class="toctree-l2"><a class="reference internal" href="04_networks.html">Neural Network</a></li>
+<li class="toctree-l2"><a class="reference internal" href="05_collision.html">Collision Matrix</a></li>
 </ul>
 </li>
+<li class="toctree-l1"><a class="reference internal" href="../advanced.html">Advanced Options</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../videos.html">Videos</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../code.html">Simulator Documentation</a></li>
 </ul>
@@ -118,7 +116,7 @@
     <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
 
       
-      <nav class="wy-nav-top" role="navigation" aria-label="top navigation">
+      <nav class="wy-nav-top" aria-label="top navigation">
         
           <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
           <a href="../index.html">pyrosim</a>
@@ -126,9 +124,10 @@
       </nav>
 
 
-      
       <div class="wy-nav-content">
+        
         <div class="rst-content">
+        
           
 
 
@@ -174,7 +173,7 @@
 <span id="simulator"></span><h1>Simulator Settings<a class="headerlink" href="#simulator-settings" title="Permalink to this headline">¶</a></h1>
 <div class="section" id="empty-simulator">
 <h2>Empty Simulator<a class="headerlink" href="#empty-simulator" title="Permalink to this headline">¶</a></h2>
-<p>Let&#8217;s start by just making an empty simulation.
+<p>Let’s start by just making an empty simulation.
 The following python code opens up an empty simulation and
 runs it for a few seconds before exiting.</p>
 <div class="highlight-python"><div class="highlight"><pre><span></span><span class="c1">#creates simulator object</span>
@@ -220,10 +219,10 @@ stable, yet slower, simulation.</p>
 <p>You can set the initial camera position of the simulation by changing
 its position (<em>xyz</em>) and its heading (also called yaw), pitch, and roll (<em>hpr</em>).
 <em>hpr</em> values are in degrees.
-ODE uses a Z-up coordinate system. This means the z axis is in the &#8216;up&#8217; direction.</p>
+ODE uses a Z-up coordinate system. This means the z axis is in the ‘up’ direction.</p>
 <a class="reference internal image-reference" href="../_images/hpr-camera.png"><img alt="../_images/hpr-camera.png" class="align-center" src="../_images/hpr-camera.png" style="width: 300px; height: 300px;" /></a>
 <p>The following sets the camera at position (0,0,5) looking straight at the ground
-(0,-90,0). You can also use the default textures provided by ODE&#8217;s rendering package
+(0,-90,0). You can also use the default textures provided by ODE’s rendering package
 by altering <em>use_textures</em></p>
 <div class="highlight-python"><div class="highlight"><pre><span></span><span class="n">sim</span> <span class="o">=</span> <span class="n">pyrosim</span><span class="o">.</span><span class="n">Simulator</span><span class="p">(</span><span class="n">xyz</span><span class="o">=</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">5</span><span class="p">],</span> <span class="n">hpr</span><span class="o">=</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span><span class="o">-</span><span class="mi">90</span><span class="p">,</span><span class="mi">0</span><span class="p">],</span> <span class="n">use_textures</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>
 <span class="n">sim</span><span class="o">.</span><span class="n">start</span><span class="p">()</span>
@@ -238,9 +237,7 @@ is in the <em>+y</em> direction.</p>
 
 
            </div>
-           <div class="articleComments">
-            
-           </div>
+           
           </div>
           <footer>
   
@@ -262,7 +259,7 @@ is in the <em>+y</em> direction.</p>
 
     </p>
   </div>
-  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/snide/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
 
 </footer>
 
@@ -281,16 +278,17 @@ is in the <em>+y</em> direction.</p>
         var DOCUMENTATION_OPTIONS = {
             URL_ROOT:'../',
             VERSION:'0.1.1',
+            LANGUAGE:'None',
             COLLAPSE_INDEX:false,
             FILE_SUFFIX:'.html',
             HAS_SOURCE:  true,
-            SOURCELINK_SUFFIX: ''
+            SOURCELINK_SUFFIX: '.txt'
         };
     </script>
       <script type="text/javascript" src="../_static/jquery.js"></script>
       <script type="text/javascript" src="../_static/underscore.js"></script>
       <script type="text/javascript" src="../_static/doctools.js"></script>
-      <script type="text/javascript" src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+      <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
 
   
 
@@ -299,14 +297,13 @@ is in the <em>+y</em> direction.</p>
     <script type="text/javascript" src="../_static/js/theme.js"></script>
   
 
-  
-  
   <script type="text/javascript">
       jQuery(function () {
-          SphinxRtdTheme.StickyNav.enable();
+          
+          SphinxRtdTheme.Navigation.enableSticky();
+          
       });
-  </script>
-   
+  </script> 
 
 </body>
 </html>
