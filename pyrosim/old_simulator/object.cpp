@@ -9,6 +9,7 @@
 #include "constants.h"
 #include "object.h"
 #include "texturepath.h"
+#include "geomData.h"
 
 #ifdef dDOUBLE
 #define dsDrawLine dsDrawLineD
@@ -18,11 +19,17 @@
 #define dsDrawCapsule dsDrawCapsuleD
 #endif
 
+OBJECT::~OBJECT(){
+
+	if(bodyCreated)
+		delete static_cast<GeomData*>(dGeomGetData(geom));
+}
+
 void OBJECT::Add_External_Force(float x, float y, float z, int timeStep){
 
-    forces[timeStep][0] = x;
-    forces[timeStep][1] = y;
-    forces[timeStep][2] = z;
+	forces[timeStep][0] = x;
+	forces[timeStep][1] = y;
+	forces[timeStep][2] = z;
 }
 
 void OBJECT::Read_In_External_Force(void){
@@ -43,36 +50,41 @@ void OBJECT::Apply_Stored_Forces(int timeStep){
 
 }
 
-int OBJECT::Connect_Sensor_To_Sensor_Neuron(int sensorID , NEURON *sensorNeuron) {
+int OBJECT::Connect_Sensor_To_Sensor_Neuron(int sensorID, int sensorValueIndex, NEURON *sensorNeuron) {
 
     if ( lightSensor )
         if ( lightSensor->Get_ID() == sensorID ) {
-            lightSensor->Connect_To_Sensor_Neuron(sensorNeuron);
+            lightSensor->Connect_To_Sensor_Neuron(sensorNeuron, sensorValueIndex);
             return true;
         }
     if ( positionSensor )
         if ( positionSensor->Get_ID() == sensorID ) {
-            positionSensor->Connect_To_Sensor_Neuron(sensorNeuron);
+            positionSensor->Connect_To_Sensor_Neuron(sensorNeuron, sensorValueIndex);
             return true;
         }
     if ( raySensor )
         if ( raySensor->Get_ID() == sensorID ) {
-            raySensor->Connect_To_Sensor_Neuron(sensorNeuron);
+            raySensor->Connect_To_Sensor_Neuron(sensorNeuron, sensorValueIndex);
+            return true;
+        }
+    if ( proximitySensor )
+        if ( proximitySensor->Get_ID() == sensorID ) {
+            proximitySensor->Connect_To_Sensor_Neuron(sensorNeuron, sensorValueIndex);
             return true;
         }
     if ( touchSensor )
         if ( touchSensor->Get_ID() == sensorID ) {
-            touchSensor->Connect_To_Sensor_Neuron(sensorNeuron);
+            touchSensor->Connect_To_Sensor_Neuron(sensorNeuron, sensorValueIndex);
             return true;
         }
     if ( vestibularSensor )
         if ( vestibularSensor->Get_ID() == sensorID ) {
-            vestibularSensor->Connect_To_Sensor_Neuron(sensorNeuron);
+            vestibularSensor->Connect_To_Sensor_Neuron(sensorNeuron, sensorValueIndex);
             return true;
         }
     if ( isSeenSensor )
         if ( isSeenSensor->Get_ID() == sensorID) {
-            isSeenSensor->Connect_To_Sensor_Neuron(sensorNeuron);
+            isSeenSensor->Connect_To_Sensor_Neuron(sensorNeuron, sensorValueIndex);
             return true;
         }
     return false;
@@ -86,12 +98,18 @@ void OBJECT::Create_Ray_Sensor(dSpaceID space, int myID, int evalPeriod) {
 	raySensor = new RAY_SENSOR(space,this,myID,evalPeriod);
 }
 
-void OBJECT::Create_Light_Sensor(int myID, int evalPeriod) {
-    lightSensor = new LIGHT_SENSOR(myID,evalPeriod);
+void OBJECT::Create_Proximity_Sensor(dSpaceID space, int myID, int evalPeriod) {
+	proximitySensor = new PROXIMITY_SENSOR(space,this,myID,evalPeriod);
 }
 
-void OBJECT::Create_Light_Source(void) {
-	containsLightSource = true;
+void OBJECT::Create_Light_Sensor(int myID, int evalPeriod) {
+	lightSensor = new LIGHT_SENSOR(myID, evalPeriod);
+	lightSensor->Read_From_Python();
+}
+
+void OBJECT::Create_Light_Source(int myID) {
+	lightSources.push_back(LIGHT_SOURCE(myID, body));
+	lightSources.back().Read_From_Python();
 }
 
 void OBJECT::Create_Position_Sensor(int myID, int evalPeriod) {
@@ -118,6 +136,10 @@ void OBJECT::Set_Adhesion(int adhesionKind) {
 				jointRecordIt->second.insert(adhesionKind);
 		}
 	}
+
+	// Turn blue as soon as the adhesion is enabled
+	// Color chosen in honor of the wonderful January 2018 Vermont weather
+	r = 0.; g = 0.; b = 1.;
 }
 
 void OBJECT::Unset_Adhesion(int adhesionKind) {
@@ -147,6 +169,9 @@ void OBJECT::Unset_Adhesion(int adhesionKind) {
 		dJointDestroy(*itUnJoint);
 		adhesiveJointsToTypes.erase(*itUnJoint);
 	}
+
+	// Restore the color to normal once the adhesion is disabled
+	r = tr; g = tg; b = tb;
 }
 
 void OBJECT::Process_Adhesive_Touch(dWorldID world, OBJECT* other) {
@@ -180,21 +205,28 @@ void OBJECT::Process_Adhesive_Touch(dWorldID world, OBJECT* other) {
 
 void OBJECT::Draw(void) {
 
-    dsSetColor(r,g,b);
-    const dReal *pos = dBodyGetPosition(body);
-    const dReal *rot = dBodyGetRotation(body);
+	dsSetColor(r,g,b);
+	const dReal *pos = dBodyGetPosition(body);
+	const dReal *rot = dBodyGetRotation(body);
 
-    // dsSetTexture (DS_WOOD);
-    if (myShape == BOX){
-        dReal sides[3] = {length,width,height};
-        dsDrawBox (pos,rot,sides);
-    }
-    else if (myShape == CYLINDER)
-        dsDrawCylinder(pos,rot,length,radius);
-    else if (myShape == CAPSULE)
-        dsDrawCapsule(pos,rot,length,radius);
-    else if (myShape == SPHERE)
-        dsDrawSphere(pos,rot,radius);
+	// dsSetTexture (DS_WOOD);
+	if (myShape == BOX){
+		dReal sides[3] = {length,width,height};
+		dsDrawBox (pos,rot,sides);
+	}
+	else if (myShape == CYLINDER)
+		dsDrawCylinder(pos,rot,length,radius);
+	else if (myShape == CAPSULE)
+		dsDrawCapsule(pos,rot,length,radius);
+	else if (myShape == SPHERE)
+		dsDrawSphere(pos,rot,radius);
+
+	if(proximitySensor)
+		proximitySensor->Draw();
+
+	for(std::vector<LIGHT_SOURCE>::iterator lsit=lightSources.begin(); lsit!=lightSources.end(); lsit++)
+		lsit->Draw();
+	// TODO: add light sensor drawing
 }
 
 void OBJECT::Draw_Ray_Sensor(double x, double y, double z, int t) {
@@ -203,15 +235,19 @@ void OBJECT::Draw_Ray_Sensor(double x, double y, double z, int t) {
 		raySensor->Draw(x,y,z,t);
 }
 
-void OBJECT::Poll_Sensors(int numObjects, OBJECT **objects, int t) {
+void OBJECT::Poll_Sensors(int numObjects, OBJECT** objects, int t) {
 
 	if ( lightSensor ) {
-		OBJECT *closestLightSource = Find_Closest_Light_Source(numObjects,objects);
-		lightSensor->Poll(body,closestLightSource->Get_Body(),t);
+		int lightSensitivityKind = lightSensor->Get_Sensitivity_Kind();
+		dReal luminousity = 0.;
+		const dReal* lightSensorPos = dBodyGetPosition(body);
+		for(int i=0; i<numObjects; i++)
+			luminousity += objects[i]->Get_Luminousity_Produced_At(lightSensorPos, lightSensitivityKind);
+		lightSensor->Poll(luminousity, t);
 	}
 
-    if ( positionSensor )
-        positionSensor->Poll(body,t);
+	if ( positionSensor )
+		positionSensor->Poll(body,t);
 
 	if ( vestibularSensor )
 		vestibularSensor->Poll(body,t);
@@ -248,13 +284,19 @@ void OBJECT::Read_From_Python(dWorldID world, dSpaceID space, int shape) {
 	std::cin >> g;
 	std::cin >> b;
 
-    CreateBody(world, space);
+	tr = r; tg = g; tb = b;
 
+	CreateBody(world, space);
 }
 
 void OBJECT::Set_Ray_Sensor(double distance, OBJECT *objectThatWasHit, int t) {
 	if ( raySensor )
 		raySensor->Set(distance,objectThatWasHit,t);
+}
+
+void OBJECT::Set_Proximity_Sensor(double distance, dVector3 contactPoint, OBJECT *objectThatWasHit, int t) {
+	if ( proximitySensor )
+		proximitySensor->Set(distance, contactPoint, objectThatWasHit, t);
 }
 
 void OBJECT::Touch_Sensor_Fires(int t) {
@@ -263,25 +305,28 @@ void OBJECT::Touch_Sensor_Fires(int t) {
 }
 
 void OBJECT::IsSeen_Sensor_Fires(int t){
-    if ( isSeenSensor )
-        isSeenSensor->Fires(t);
+	if ( isSeenSensor )
+		isSeenSensor->Fires(t);
 }
 
 void OBJECT::Update_Sensor_Neurons(int t) {
-    if ( raySensor )
-        raySensor->Update_Sensor_Neurons(t);
+	if ( raySensor )
+		raySensor->Update_Sensor_Neurons(t);
 
-    if ( lightSensor )
-        lightSensor->Update_Sensor_Neurons(t);
+	if ( lightSensor )
+		lightSensor->Update_Sensor_Neurons(t);
 
-    if ( positionSensor )
-        positionSensor->Update_Sensor_Neurons(t);
+	if ( positionSensor )
+		positionSensor->Update_Sensor_Neurons(t);
 
-    if ( touchSensor )
-        touchSensor->Update_Sensor_Neurons(t);
+	if ( touchSensor )
+		touchSensor->Update_Sensor_Neurons(t);
 
-    if ( vestibularSensor )
-        vestibularSensor->Update_Sensor_Neurons(t);
+	if ( vestibularSensor )
+		vestibularSensor->Update_Sensor_Neurons(t);
+
+	if ( proximitySensor )
+		proximitySensor->Update_Sensor_Neurons(t);
 }
 
 void OBJECT::Write_To_Python(int evalPeriod) {
@@ -289,6 +334,11 @@ void OBJECT::Write_To_Python(int evalPeriod) {
 	if ( raySensor ){
         std::cerr << "  writing ray sensor to python "  << std::endl;
 		raySensor->Write_To_Python(evalPeriod);
+    }
+
+	if ( proximitySensor ){
+        std::cerr << "  writing proximity sensor to python "  << std::endl;
+		proximitySensor->Write_To_Python(evalPeriod);
     }
 
 	if ( lightSensor ){
@@ -315,76 +365,70 @@ void OBJECT::Write_To_Python(int evalPeriod) {
 
 // ------------------------------- Private methods ------------------------------
 
-int OBJECT::Contains_A_Light_Source(void) {
-
-	return containsLightSource;
-}
+//int OBJECT::Contains_A_Light_Source(void) {
+//	return containsLightSource;
+//}
 
 void OBJECT::CreateBody(dWorldID world, dSpaceID space){
 
-    dMass m;
+	dMass m;
 
-    body = dBodyCreate (world);
-    dBodySetPosition (body,x,y,z);
+	body = dBodyCreate (world);
+	dBodySetPosition (body,x,y,z);
 
-    dMatrix3 R;
-    dRFromZAxis(R,r1,r2,r3);
-    dBodySetRotation(body,R);
+	dMatrix3 R;
+	dRFromZAxis(R,r1,r2,r3);
+	dBodySetRotation(body,R);
 
-    if(myShape == BOX){
-        dMassSetBoxTotal (&m,mass,length,width,height);
-        geom = dCreateBox(space,length,width,height);
-    }
-    else if(myShape == CAPSULE){
-        dMassSetCapsuleTotal(&m,mass,3,radius,length);
-        geom = dCreateCapsule(space,radius,length);
-    }
-    else if(myShape == CYLINDER){
-        dMassSetCylinderTotal(&m,mass,3,radius,length);
-        geom = dCreateCylinder(space,radius,length);
-    }
-    else if(myShape == SPHERE){
-        dMassSetSphereTotal(&m,mass,radius);
-        geom = dCreateSphere(space,radius);
-    }
-    dMassRotate(&m, R);
-    dBodySetMass (body,&m);
+	if(myShape == BOX){
+		dMassSetBoxTotal (&m,mass,length,width,height);
+		geom = dCreateBox(space,length,width,height);
+	}
+	else if(myShape == CAPSULE){
+		dMassSetCapsuleTotal(&m,mass,3,radius,length);
+		geom = dCreateCapsule(space,radius,length);
+	}
+	else if(myShape == CYLINDER){
+		dMassSetCylinderTotal(&m,mass,3,radius,length);
+		geom = dCreateCylinder(space,radius,length);
+	}
+	else if(myShape == SPHERE){
+		dMassSetSphereTotal(&m,mass,radius);
+		geom = dCreateSphere(space,radius);
+	}
+	dMassRotate(&m, R);
+	dBodySetMass (body,&m);
 
-    dGeomSetBody (geom,body);
+	dGeomSetBody (geom,body);
 
-    dGeomSetData(geom,this);
+	GeomData* gd = new GeomData();
+	gd->geomType = DEFAULT;
+	gd->objectPtr = this;
+	dGeomSetData(geom, static_cast<void*>(gd));
 
+	bodyCreated = true;
 }
 
+/*
 double OBJECT::Distance_To(OBJECT *otherObject) {
 
 	const dReal *myPos = dBodyGetPosition( body );
 	const dReal *hisPos = dBodyGetPosition( otherObject->Get_Body() );
 
 	double xDiff = myPos[0] - hisPos[0];
-    double yDiff = myPos[1] - hisPos[1];
-    double zDiff = myPos[2] - hisPos[2];
+	double yDiff = myPos[1] - hisPos[1];
+	double zDiff = myPos[2] - hisPos[2];
 
 	return sqrt( pow(xDiff,2.0) + pow(yDiff,2.0) + pow(zDiff,2.0) );
 }
+*/
 
+dReal OBJECT::Get_Luminousity_Produced_At(const dReal* pos, int kindOfLight) {
 
-OBJECT* OBJECT::Find_Closest_Light_Source(int numObjects, OBJECT **objects) {
-
-	double distance = 10000.0;
-	int    closestLightSource = 0;
-
-	for (int i=0;i<numObjects;i++){
-		if ( objects[i]->Contains_A_Light_Source() ) {
-			double distanceToObject = Distance_To(objects[i]);
-			if ( distanceToObject < distance ) {
-				distance = distanceToObject;
-				closestLightSource = i;
-			}
-		}
-    }
-
-	return objects[closestLightSource];
+	dReal luminousity = 0.;
+	for(std::vector<LIGHT_SOURCE>::iterator lsit=lightSources.begin(); lsit!=lightSources.end(); lsit++)
+		luminousity += lsit->Luminousity_At(pos[0], pos[1], pos[2], kindOfLight);
+	return luminousity;
 }
 
 #endif // _OBJECT_CPP

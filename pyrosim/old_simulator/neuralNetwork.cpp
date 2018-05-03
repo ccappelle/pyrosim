@@ -1,70 +1,72 @@
 #ifndef _NEURAL_NETWORK_CPP
 #define _NEURAL_NETWORK_CPP
 
-#include "iostream"
+#include <iostream>
+#include <cmath>
+#include <cstdlib>
 
 #include "neuralNetwork.h"
 
-#include "math.h"
+#include "constants.h"
 
-extern int MAX_NEURONS;
-extern int MAX_SYNAPSES;
-extern int SENSOR_NEURON;
-extern int BIAS_NEURON;
-extern int HIDDEN_NEURON;
-extern int MOTOR_NEURON;
-extern int FUNCTION_NEURON;
+extern const int SENSOR_NEURON;
+extern const int BIAS_NEURON;
+extern const int HIDDEN_NEURON;
+extern const int MOTOR_NEURON;
+extern const int FUNCTION_NEURON;
 
-NEURAL_NETWORK::NEURAL_NETWORK(void) {
-
-	Initialize_Neurons();
-
-	Initialize_Synapses();
+bool NEURAL_NETWORK::Is_A_Neuron_Type(std::string typeName) {
+	return stringToNeuronTypeMap.find(typeName) != stringToNeuronTypeMap.end();
 }
 
-NEURAL_NETWORK::~NEURAL_NETWORK(void) {
-
+bool NEURAL_NETWORK::Is_A_Synapse_Type(std::string typeName) {
+	return typeName.compare("Synapse") == 0;
 }
 
-void NEURAL_NETWORK::Add_Bias_Neuron(int ID) {
-        neurons[numNeurons] = new NEURON(ID,BIAS_NEURON, 1.0, 1.0);
-        numNeurons++;
-}
+void NEURAL_NETWORK::Read_Neuron_From_Python(std::string neuronTypeStr, ENVIRONMENT* env, Data* data) {
 
-void NEURAL_NETWORK::Add_Function_Neuron(int ID, double *timeValues){
-	neurons[numNeurons] = new NEURON(ID, timeValues);
+	neurons[numNeurons] = new NEURON();
+	neurons[numNeurons]->Read_From_Python(neuronTypeStr, data);
+
+	// Certain types of neurons get special treatment
+
+	if(neuronTypeStr.compare("MotorNeuron") == 0) {
+
+		int actuatorInputIndex, actuatorID;
+		std::cin >> actuatorID;
+		std::cin >> actuatorInputIndex;
+
+		ACTUATOR* act = env->Get_Actuator(actuatorID);
+		act->Connect_To_Motor_Neuron(neurons[numNeurons], actuatorInputIndex);
+	}
+
+	if(neuronTypeStr.compare("SensorNeuron") == 0) {
+
+		int sensorValueIndex, sensorID;
+		std::cin >> sensorID;
+		std::cin >> sensorValueIndex;
+
+		// We attempt to connect the sensor neuron to every possible object and actuator
+		// FIXME: replace once a global list of sensors is added to the environment
+		bool done = false;
+		for(int i=0; (!done) && i<env->Get_Number_Of_Objects(); i++) {
+			if(env->Get_Object(i)->Connect_Sensor_To_Sensor_Neuron(sensorID, sensorValueIndex, neurons[numNeurons]))
+				done = true;
+		}
+		for(int i=0; (!done) && i<env->Get_Number_Of_Actuators(); i++) {
+			if(env->Get_Actuator(i)->Connect_Sensor_To_Sensor_Neuron(sensorID, sensorValueIndex, neurons[numNeurons]))
+				done = true;
+		}
+	}
+
 	numNeurons++;
 }
 
-void NEURAL_NETWORK::Add_Hidden_Neuron(int ID, double tau, double alpha) {
-	neurons[numNeurons] = new NEURON(ID,HIDDEN_NEURON,tau, alpha);
-	numNeurons++;
-}
+void NEURAL_NETWORK::Read_Synapse_From_Python(std::string synapseTypeStr, ENVIRONMENT* environment, Data* data) {
 
-NEURON *NEURAL_NETWORK::Add_Motor_Neuron(int ID, double tau, double alpha, double start) {
-    
-    NEURON *newNeuron = new NEURON(ID,MOTOR_NEURON,tau, alpha);
-    newNeuron->Set(start);
-    neurons[numNeurons] = newNeuron;
-
-	numNeurons++;
-
-    return newNeuron;
-}
-
-NEURON *NEURAL_NETWORK::Add_Sensor_Neuron(int ID, int svIndex) {
-
-	NEURON *newNeuron = new NEURON(ID,SENSOR_NEURON,svIndex,1.0,1.0);
-	neurons[numNeurons] = newNeuron;
-	numNeurons++;
-
-	return newNeuron;
-}
-
-void NEURAL_NETWORK::Add_Synapse(void) {
     synapses[numSynapses] = new SYNAPSE();
-    synapses[numSynapses]-> Read_From_Python();
-    numSynapses ++; 
+    synapses[numSynapses]->Read_From_Python();
+    numSynapses++;
 }
 
 void NEURAL_NETWORK::Update(int timeStep) {
@@ -80,53 +82,28 @@ void NEURAL_NETWORK::Update(int timeStep) {
 
 // ------------------------- Private methods -----------------------------
 
-void NEURAL_NETWORK::Initialize_Neurons(void) {
-
-        neurons = new NEURON * [MAX_NEURONS];
-
-        for (int n = 0 ; n < MAX_NEURONS ; n++ )
-
-                neurons[n] = NULL;
-
-        numNeurons = 0;
-}
-
-void NEURAL_NETWORK::Initialize_Synapses(void) {
-
-        synapses = new SYNAPSE * [MAX_SYNAPSES];
-
-        for (int s = 0 ; s < MAX_SYNAPSES ; s++ )
-
-                synapses[s] = NULL;
-
-        numSynapses = 0;
-}
-
 void NEURAL_NETWORK::Push_Current_Values_To_Previous_Values(void) {
 
-        for (int n = 0 ; n < numNeurons ; n++ )
-
+	for (int n = 0 ; n < numNeurons ; n++ )
 		neurons[n]->Push_Current_Value_To_Previous_Value();
 }
 
 void NEURAL_NETWORK::Reset_Neuron_Values(int timeStep) {
 
 	for ( int n = 0 ; n < numNeurons ; n++ )
-
 		neurons[n]->Reset(timeStep);
 }
 
 void NEURAL_NETWORK::Threshold_Neurons(void) {
 
-        for ( int n = 0 ; n < numNeurons ; n++ )
-
-		neurons[n]->Threshold();	
+	for ( int n = 0 ; n < numNeurons ; n++ )
+		neurons[n]->Threshold();
 }
 
 void NEURAL_NETWORK::Update_Synapses(int timeStep){
-	for (int s=0; s<numSynapses; s++){
+
+	for (int s=0; s<numSynapses; s++)
 		synapses[s]->Update_Weight(timeStep);
-	}
 }
 
 void NEURAL_NETWORK::Update_Neurons(void) {
@@ -137,9 +114,14 @@ void NEURAL_NETWORK::Update_Neurons(void) {
 		int tni = synapses[s]->Get_Target_Neuron_Index();
 		double w = synapses[s]->Get_Weight();
 		double influence = w * neurons[sni]->Get_Previous_Value();
+
+//		int testNeuronID = 7;
+//		if(tni == testNeuronID)
+//			std::cerr << "Neuron " << sni << " influenced neuron " << tni << " by " << influence << "\n";
+
 		neurons[tni]->Set( neurons[tni]->Get_Value() + influence );
 	}
 
 }
 
-#endif
+#endif // _NEURAL_NETWORK_CPP

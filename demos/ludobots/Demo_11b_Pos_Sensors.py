@@ -36,5 +36,4 @@ y_data = sim.get_sensor_data(position, svi=1)
 z_data = sim.get_sensor_data(position, svi=2)
 
 for t in range(500):
-    print 'xyz position at time ', t,
-    print ' : ', x_data[t], y_data[t], z_data[t]
+    print('xyz position at time ', t, ' : ', x_data[t], y_data[t], z_data[t])

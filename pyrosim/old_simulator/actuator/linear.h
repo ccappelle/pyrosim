@@ -11,7 +11,9 @@ class LINEAR_ACTUATOR : public ROTARY_ACTUATOR {
 public:
 	void Actuate(void);
 
-	void Create_In_Simulator(dWorldID world, OBJECT ** allObjects, int numObjects);
+	void Create_In_Simulator(dWorldID world, OBJECT** allObjects, int numObjects, ACTUATOR** allActuators, int numActuators);
+
+	bool Create_Proprioceptive_Sensor(int myID, int evalPeriod);
 
 	void Draw() const;
 

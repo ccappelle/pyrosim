@@ -4,6 +4,7 @@
 #include <drawstuff/drawstuff.h>
 #include <iostream>
 #include <cmath>
+#include <cstdlib>
 
 #include "thruster.h"
 
@@ -17,13 +18,15 @@
 
 void THRUSTER::Actuate(void) {
 
-	if ( motorNeuron == NULL )
-
+	if ( motorNeurons[0] == NULL )
 		return;
 
-	double motorNeuronValue = motorNeuron->Get_Value();
+	double motorNeuronValue = motorNeurons[0]->Get_Value();
 
-	double zeroToOne = motorNeuronValue/2.0 + 0.5;
+	if ( motorNeuronValue < shutoffThreshold )
+		return;
+
+	double zeroToOne = (motorNeuronValue - shutoffThreshold)/(1. - shutoffThreshold);
 
 	double diff;
 
@@ -38,11 +41,14 @@ void THRUSTER::Actuate(void) {
 	yDir = R[4]*x + R[5]*y + R[6]*z;
 	zDir = R[8]*x + R[9]*y + R[10]*z;
 
+//	std::cerr << "Thrust: " << desiredTarget << " motor neuron val: " << motorNeuronValue << "\n";
+//	motorNeurons[0]->Print();
+
 	dBodyAddForce(first->Get_Body(), -xDir*desiredTarget, -yDir*desiredTarget, -zDir*desiredTarget);
 	lastDesired = desiredTarget;
 }
 
-void THRUSTER::Create_In_Simulator(dWorldID world, OBJECT ** allObjects, int numObjects) {
+void THRUSTER::Create_In_Simulator(dWorldID world, OBJECT ** allObjects, int numObjects, ACTUATOR** allActuators, int numActuators) {
 
 	if ( firstObject >= 0 )
 		first = allObjects[firstObject];
@@ -125,6 +131,7 @@ void THRUSTER::Read_From_Python(void) {
 	std::cin >> z;
 	std::cin >> lowStop;
 	std::cin >> highStop;
+	std::cin >> shutoffThreshold;
 }
 
 #endif // _ACTUATOR_THRUSTER_CPP

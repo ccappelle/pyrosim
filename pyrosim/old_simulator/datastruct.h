@@ -4,25 +4,26 @@
 const int MAX_GROUPS = 1000;
 struct Data
 {
-  char texturePathStr[100];
-  //simulator parameters
-  int runBlind;
-  float gravity;
-  float dt;
-  int evaluationTime;
-  //user option
-  int debug;
-  //camera parameters
-  float xyz[3];
-  float hpr[3];
-  int trackBody;
-  int followBody;
-  int collisionMatrix[MAX_GROUPS][MAX_GROUPS];
-  int numCollisionGroups;
-  int capture;
+	char texturePathStr[10000];
+	//simulator parameters
+	int runBlind;
+	float gravity;
+	bool disableFloor = false;
+	float dt;
+	int evaluationTime;
+	//user option
+	int debug;
+	//camera parameters
+	float xyz[3];
+	float hpr[3];
+	int trackBody;
+	int followBody;
+	int collisionMatrix[MAX_GROUPS][MAX_GROUPS];
+	int numCollisionGroups;
+	int capture;
 
-  int windowWidth = 750;
-  int windowHeight = 450;
+	int windowWidth = 750;
+	int windowHeight = 450;
 };
 
-#endif
+#endif // DATASTRUCT_H

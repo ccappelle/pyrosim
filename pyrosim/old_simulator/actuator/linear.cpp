@@ -6,6 +6,7 @@
 #include <cmath>
 
 #include "linear.h"
+#include "../sensor/proprioceptiveLinear.h"
 
 #ifdef dDOUBLE
 #define dsDrawLine dsDrawLineD
@@ -15,14 +16,12 @@
 #define dsDrawCapsule dsDrawCapsuleD
 #endif
 
-extern int SLIDER; // FIXME: remove once proprioceptive sensors are fixed
-
 void LINEAR_ACTUATOR::Actuate(void) {
 
-	if ( motorNeuron == NULL )
+	if ( motorNeurons[0] == NULL )
 		return;
 
-	double motorNeuronValue = motorNeuron->Get_Value();
+	double motorNeuronValue = motorNeurons[0]->Get_Value();
 
 	double zeroToOne = motorNeuronValue/2.0 + 0.5;
 
@@ -47,7 +46,7 @@ void LINEAR_ACTUATOR::Actuate(void) {
 	dJointSetSliderParam(joint, dParamFMax, strength);
 }
 
-void LINEAR_ACTUATOR::Create_In_Simulator(dWorldID world, OBJECT ** allObjects, int numObjects) {
+void LINEAR_ACTUATOR::Create_In_Simulator(dWorldID world, OBJECT ** allObjects, int numObjects, ACTUATOR** allActuators, int numActuators) {
 
 	if ( firstObject >= 0 )
 		first = allObjects[firstObject];
@@ -83,6 +82,13 @@ void LINEAR_ACTUATOR::Create_In_Simulator(dWorldID world, OBJECT ** allObjects, 
 		dJointSetSliderParam(joint,dParamLoStop,lowStop);
 		dJointSetSliderParam(joint,dParamHiStop,highStop);
 	}
+}
+
+bool LINEAR_ACTUATOR::Create_Proprioceptive_Sensor(int myID, int evalPeriod) {
+
+	PROPRIOCEPTIVE_LINEAR_SENSOR* ps = new PROPRIOCEPTIVE_LINEAR_SENSOR(myID, evalPeriod);
+	proprioceptiveSensor = static_cast<PROPRIOCEPTIVE_ROTARY_SENSOR*>(ps);
+	return false;
 }
 
 void LINEAR_ACTUATOR::Draw() const {
@@ -153,7 +159,7 @@ void LINEAR_ACTUATOR::Poll_Sensors(int t) {
 
 	if ( proprioceptiveSensor )
 
-		proprioceptiveSensor->Poll(joint, SLIDER, t); // FIXME: change this once the sensors are fixed
+		proprioceptiveSensor->Poll(joint, t);
 }
 
 #endif // _ACTUATOR_LINEAR_CPP

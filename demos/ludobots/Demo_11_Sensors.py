@@ -28,10 +28,9 @@ sensor2 = sim.send_touch_sensor(body_id=cyl2)
 sim.start()
 results = sim.wait_to_finish()
 
-print 'All sensor results'
-print results, '\n'
-print 'Selected sensor results'
-print 'Touch sensor 1:'
-print sim.get_sensor_data(sensor1, svi=0)
-print 'Touch sensor 2:'
-print sim.get_sensor_data(sensor2, svi=0)
+print('All sensor results\n', results, '\n')
+print('Selected sensor results')
+print('Touch sensor 1:')
+print(sim.get_sensor_data(sensor1, svi=0))
+print('Touch sensor 2:')
+print(sim.get_sensor_data(sensor2, svi=0))

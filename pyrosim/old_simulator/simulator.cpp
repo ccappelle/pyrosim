@@ -1,4 +1,4 @@
-#include "iostream"
+#include <iostream>
 
 //ode headers
 #include <ode/ode.h>
@@ -15,6 +15,7 @@
 #include "texturepath.h"
 #include "environment.h"
 #include "datastruct.h"
+#include "geomData.h"
 
 #ifdef _MSC_VER
 #pragma warning(disable:4244 4305)  // for VC++, no precision loss complaints
@@ -35,13 +36,12 @@ dsFunctions fn;
 
 int timer;
 
-ENVIRONMENT *environment;
+ENVIRONMENT* environment;
 int numberOfBodies = 0;
 bool initialized = false;
 static dGeomID ground;
 
-
-Data *data = new Data;//struct which keeps all user input values for various parameterss. see datastruct.h
+Data* data; // global struct which keeps all user input values for various parameters. see datastruct.h
 static float updated_xyz[3];
 int LAGSIZE = 20;
 static float average_z[20];
@@ -61,43 +61,88 @@ void Terminate(void);
 
 void Handle_Ray_Sensor(dGeomID o1, dGeomID o2) {
 
-    if ( dGeomGetClass(o1) == dRayClass ) {
+	dContact contact;
+	int n = dCollide(o1, o2, 1, &contact.geom, sizeof(dContact));
 
-        dContact contact;
+	if ( n>0 ) {
 
-        int n = dCollide(o1,o2,1,&contact.geom,sizeof(dContact));
+		OBJECT* obj = static_cast<GeomData*>(dGeomGetData(o1)) -> objectPtr;
+		OBJECT* obj2 = static_cast<GeomData*>(dGeomGetData(o2)) -> objectPtr;
 
-        if ( n>0 ) {
+		obj->Set_Ray_Sensor(contact.geom.depth, obj2, timer);
 
-            OBJECT *obj = (OBJECT *)dGeomGetData(o1);
-            OBJECT *obj2 = (OBJECT *)dGeomGetData(o2);
+		if ( data->runBlind == false )
+			obj->Draw_Ray_Sensor(contact.geom.pos[0],contact.geom.pos[1],contact.geom.pos[2],timer);
 
-            obj->Set_Ray_Sensor(contact.geom.depth,obj2,timer);
-
-            if ( data->runBlind == false )
-                obj->Draw_Ray_Sensor(contact.geom.pos[0],contact.geom.pos[1],contact.geom.pos[2],timer);
-
-        }
-    }
+	}
 }
 
-void Handle_Ray_Sensors(dGeomID o1, dGeomID o2) {
+void Handle_Proximity_Sensor(dGeomID o1, dGeomID o2) {
 
-    Handle_Ray_Sensor(o1,o2);
+//	std::cerr << "Proximity sensor is being handled!\n";
 
-    Handle_Ray_Sensor(o2,o1);
+	dContact contact;
+	int n = dCollide(o1, o2, 1, &contact.geom, sizeof(dContact));
+
+//	std::cerr << "Number of contacts found: " << n << "\n";
+
+	if ( n>0 ) {
+
+		OBJECT* obj1 = static_cast<GeomData*>(dGeomGetData(o1)) -> objectPtr;
+		OBJECT* obj2 = static_cast<GeomData*>(dGeomGetData(o2)) -> objectPtr;
+
+/*
+		std::cerr << "Contact depth: " << contact.geom.depth << "\n";
+		const dReal* sensorpos = dGeomGetPosition(o1);
+		std::cerr << "Sensor position: " << sensorpos[0] << " " << sensorpos[1] << " " << sensorpos[2] << "\n";
+		std::cerr << "Contact position: " << contact.geom.pos[0] << " " << contact.geom.pos[1] << " " << contact.geom.pos[2] << "\n";
+		std::cerr << "The other object has type ";
+		switch(static_cast<GeomData*>(dGeomGetData(o2)) -> geomType) {
+			case GROUND: std::cerr << "GROUND\n";
+				break;
+			case DEFAULT: std::cerr << "DEFAULT\n";
+				break;
+			case SENSOR_RAY: std::cerr << "SENSOR_RAY\n";
+				break;
+			case SENSOR_PROXIMITY: std::cerr << "SENSOR_PROXIMITY\n";
+				break;
+		}
+*/
+
+		obj1->Set_Proximity_Sensor(contact.geom.depth, contact.geom.pos, obj2, timer);
+	}
+
+//	std::cerr << "\n";
+}
+
+bool Handle_Collision_Sensors(dGeomID o1, dGeomID o2) {
+
+	GeomData* gd1 = static_cast<GeomData*>(dGeomGetData(o1));
+	GeomData* gd2 = static_cast<GeomData*>(dGeomGetData(o2));
+
+	if(gd1->geomType == SENSOR_RAY)
+		Handle_Ray_Sensor(o1,o2);
+	else if(gd2->geomType == SENSOR_RAY)
+		Handle_Ray_Sensor(o2,o1);
+	else if(gd1->geomType == SENSOR_PROXIMITY) // FIXME: in this arrangement the sensors can touch each other and rays
+		Handle_Proximity_Sensor(o1,o2);
+	else if(gd2->geomType == SENSOR_PROXIMITY)
+		Handle_Proximity_Sensor(o2,o1);
+	else
+		return false;
+
+	return true;
 }
 
 static void nearCallback (void *callbackData, dGeomID o1, dGeomID o2)
 {
 	int i, n;
 
-	Handle_Ray_Sensors(o1, o2);
 	// Cancel collisions between distance sensors and other objects.
-	if ( (dGeomGetClass(o1) == dRayClass) || (dGeomGetClass(o2) == dRayClass) ) return;
+	if( Handle_Collision_Sensors(o1, o2) ) return;
 
-	OBJECT *d1 = (OBJECT *)dGeomGetData(o1);
-	OBJECT *d2 = (OBJECT *)dGeomGetData(o2);
+	OBJECT *d1 = static_cast<GeomData*>(dGeomGetData(o1)) -> objectPtr;
+	OBJECT *d2 = static_cast<GeomData*>(dGeomGetData(o2)) -> objectPtr;
 
 	if ( d1 && d2 ){
 		if (dAreConnected (d1->Get_Body(),d2->Get_Body())) return; //no collision between joint connected bodies
@@ -142,7 +187,20 @@ static void nearCallback (void *callbackData, dGeomID o1, dGeomID o2)
 
 static void captureFrame(int num) {
 
-	char s[200];
+	// FIXME: It appears to be a difference in pixel formats between MacOS and Linux
+	// (and I vaguely remember that having something to do with compositing).
+	// Figure out a way to autodetect the format and choose the right one for reading.
+	// Useful reading on glGet:
+	// https://www.khronos.org/opengl/wiki/GLAPI/glGet#Framebuffers
+
+	//GLint pf;
+	//glGetIntegerv(GL_PACK_ALIGNMENT, &pf);
+	//std::cerr << pf << " " << GL_RGB << std::endl;
+
+	const int depth = 4;
+	GLenum pixelFormat = GL_RGBA;
+
+	char s[10000];
 
 	//printf("capturing frame %04d\n",num);
 	sprintf (s,"frame/%04d.ppm",num);
@@ -150,12 +208,12 @@ static void captureFrame(int num) {
 	FILE *f = fopen (s,"wb");
 	fprintf (f,"P6\n%d %d\n255\n",data->windowWidth,data->windowHeight);
 
-	void *buf = malloc( data->windowWidth * data->windowHeight * 3 );
-	glReadPixels( 0, 0, data->windowWidth, data->windowHeight, GL_RGB, GL_UNSIGNED_BYTE, buf );
+	void *buf = malloc( data->windowWidth * data->windowHeight * depth );
+	glReadPixels( 0, 0, data->windowWidth, data->windowHeight, pixelFormat, GL_UNSIGNED_BYTE, buf );
 
 	for (int y=(data->windowHeight - 1); y>=0; y--) {
 		for (int x=0; x<data->windowWidth; x++) {
-			unsigned char *pixel = ((unsigned char *)buf)+((y*data->windowWidth+ x)*3);
+			unsigned char *pixel = ((unsigned char *)buf)+((y*data->windowWidth+ x)*depth);
 			unsigned char b[3];
 			b[0] = *pixel;
 			b[1] = *(pixel+1);
@@ -165,7 +223,6 @@ static void captureFrame(int num) {
 	}
 	free(buf);
 	fclose(f);
-
 }
 
 
@@ -286,15 +343,12 @@ static void simLoop (int pause)
 
 void Initialize_ODE(void) {
 
-    dInitODE2(0);
-    world = dWorldCreate();
-    space = dHashSpaceCreate (0);
-    contactgroup = dJointGroupCreate (0);
-    ground = dCreatePlane (space,0,0,1,0);
+	dInitODE2(0);
+	world = dWorldCreate();
+	space = dHashSpaceCreate (0);
+	contactgroup = dJointGroupCreate (0);
 
-    dGeomSetData(ground,NULL);
-
-    timer = 0;
+	timer = 0;
 }
 
 void Initialize_Draw_Stuff(void){
@@ -332,25 +386,40 @@ void Run_Blind(void) {
         Simulate_For_One_Time_Step();
 }
 
-int main (int argc, char **argv)
-{
-    data->runBlind = false;
+int main (int argc, char **argv) {
 
-    if ( (argc > 1) && (strcmp(argv[1],"-blind")==0) )
-        data->runBlind = true;
+	data = new Data;
+	data->runBlind = false;
 
+	if ( (argc > 1) && (strcmp(argv[1],"-blind")==0) )
+		data->runBlind = true;
 
-    Initialize_ODE();
-    Initialize_Environment();
-    Read_From_Python();
-    dWorldSetGravity(world,0,0,data->gravity);
+	Initialize_ODE();
+	Initialize_Environment();
+	Read_From_Python();
 
-    if ( data->runBlind )
-        Run_Blind();
-    else{
-      Initialize_Draw_Stuff();
+	if ( !data->disableFloor ) {
+		ground = dCreatePlane (space,0,0,1,0);
 
-      dsSimulationLoop (argc,argv,data->windowWidth,data->windowHeight,&fn);
-  }
-  return 0;
+		GeomData* gd = new GeomData();
+		gd->geomType = GROUND;
+		gd->objectPtr = NULL;
+		dGeomSetData(ground, static_cast<void*>(gd));
+	}
+
+	dWorldSetGravity(world, 0, 0, data->gravity);
+
+	if ( data->runBlind )
+		Run_Blind();
+	else{
+
+		Initialize_Draw_Stuff();
+
+		dsSimulationLoop (argc,argv,data->windowWidth,data->windowHeight,&fn);
+	}
+
+	if ( !data->disableFloor )
+		delete static_cast<GeomData*>(dGeomGetData(ground));
+
+	return 0;
 }

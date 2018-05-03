@@ -3,7 +3,7 @@
 
 #include "actuator.h"
 #include "../object.h"
-#include "../proprioceptiveSensor.h"
+#include "../sensor/proprioceptiveRotary.h"
 
 class ROTARY_ACTUATOR : public ACTUATOR {
 
@@ -11,14 +11,9 @@ protected:
 	int	firstObject;
 	int	secondObject;
 
-	double x;
-	double y;
-	double z;
-	double normalX;
-	double normalY;
-	double normalZ;
-	double lowStop;
-	double highStop;
+	double x, y, z;
+	double normalX, normalY, normalZ;
+	double lowStop, highStop;
 	int	positionControl;
 
 	double speed;
@@ -26,13 +21,14 @@ protected:
 
 	dJointID joint;
 
-	PROPRIOCEPTIVE_SENSOR *proprioceptiveSensor;
+	PROPRIOCEPTIVE_ROTARY_SENSOR* proprioceptiveSensor;
 
-	OBJECT *first;
-	OBJECT *second;
+	OBJECT* first;
+	OBJECT* second;
 
 public:
 	ROTARY_ACTUATOR(void) :
+	  ACTUATOR(1),
 		firstObject(-1), secondObject(-1),
 		x(0), y(0), z(0),
 		normalX(0), normalY(0), normalZ(0),
@@ -44,13 +40,18 @@ public:
 		first(NULL),
 		second(NULL) {};
 
-	// Virtual functiontions are declared that way for making very similar derivatives like LINEAR_ACTUATOR
+	~ROTARY_ACTUATOR(void) {
+		if(proprioceptiveSensor)
+			delete proprioceptiveSensor;
+	};
+
+	// Functiontions are declared as virtual for making very similar derivatives like LINEAR_ACTUATOR
 
 	virtual void Actuate(void);
-	bool Connect_Sensor_To_Sensor_Neuron(int sensorID, NEURON *sensorNeuron);
+	bool Connect_Sensor_To_Sensor_Neuron(int sensorID, int sensorValueIndex, NEURON *sensorNeuron);
 
-	virtual void Create_In_Simulator(dWorldID world, OBJECT** allObjects, int numObjects);
-	bool Create_Proprioceptive_Sensor(int myID, int evalPeriod);
+	virtual void Create_In_Simulator(dWorldID world, OBJECT** allObjects, int numObjects, ACTUATOR** allActuators, int numActuators);
+	virtual bool Create_Proprioceptive_Sensor(int myID, int evalPeriod);
 
 	virtual void Draw(void) const;
 

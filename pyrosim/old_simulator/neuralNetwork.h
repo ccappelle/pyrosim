@@ -1,45 +1,45 @@
 #ifndef _NEURAL_NETWORK_H
 #define _NEURAL_NETWORK_H
 
-#include "neuron.h"
+// CTRNN
+// Updates:
+// v_i(t+dt) = tanh(\alpha*v_i(t) + \tau*\sum_{j,w_{ij}\neq 0} w_{ij}(t)*v_j(t))
 
+#include <string>
+
+#include "neuron.h"
 #include "synapse.h"
+#include "datastruct.h"
+#include "constants.h"
+
+#include "environment.h"
+class ENVIRONMENT; // AB: circular dependence in declaration is required to be able to connect neurons to various entities in environment
 
 class NEURAL_NETWORK {
 
 private:
-	NEURON **neurons;
+	int numNeurons;
+	int numSynapses;
 
-	int    numNeurons;
-
-        SYNAPSE **synapses;
-
-        int    numSynapses;
+	NEURON* neurons[MAX_NEURONS];
+	SYNAPSE* synapses[MAX_SYNAPSES];
 
 public:
-	NEURAL_NETWORK(void);
+	NEURAL_NETWORK(void) : numNeurons(0),
+	                       numSynapses(0),
+	                       neurons{NULL},
+	                       synapses{NULL} {};
+	~NEURAL_NETWORK(void) {};
 
-	~NEURAL_NETWORK(void);
+	bool Is_A_Neuron_Type(std::string typeName);
+	bool Is_A_Synapse_Type(std::string typeName);
 
-	void   Add_Bias_Neuron(int ID);
-
-	void Add_Function_Neuron(int ID, double *timeValues);
-
-	void   Add_Hidden_Neuron(int ID, double tau, double alpha);
-
-	NEURON *Add_Motor_Neuron(int ID, double tau, double alpha, double start);
-
-	NEURON *Add_Sensor_Neuron(int ID, int svIndex);
-
-	void   Add_Synapse(void);
+	void Read_Neuron_From_Python(std::string neuronTypeStr, ENVIRONMENT* environment, Data* data);
+	void Read_Synapse_From_Python(std::string synapseTypeStr, ENVIRONMENT* environment, Data* data);
 
 	void Update(int timeStep);
 
 private:
-	void Initialize_Neurons(void);
-
-	void Initialize_Synapses(void);
-
 	void Push_Current_Values_To_Previous_Values(void);
 
 	void Reset_Neuron_Values(int timeStep);
@@ -51,4 +51,4 @@ private:
 	void Update_Neurons(void);
 };
 
-#endif
+#endif // _NEURAL_NETWORK_H
