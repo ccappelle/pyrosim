@@ -10,8 +10,10 @@ rundemos.sh
 makedocs.sh
 pyrosim/test
 pyrosim/simulator/simulator
-pyrosim/simulator/ode-0.12/*
-pyrosim/simulator/tmp
+pyrosim/simulator/external/ode-0.12
+pyrosim/simulator/external/tmp
 pyrosim/frame
 ./frame
+pyrosim/simulator/build
+
 .DS_Store

@@ -1,0 +1,113 @@
+g++ -std=c++11 -DHAVE_CONFIG_H -I. -Iode-0.12/ode/src -Iode-0.12/include -DdTRIMESH_ENABLED -DdDOUBLE  -g -O2 -MT -MP -MMD -c -o environment.o environment.cpp
+g++ -std=c++11 -DHAVE_CONFIG_H -I. -Iode-0.12/ode/src -Iode-0.12/include -DdTRIMESH_ENABLED -DdDOUBLE  -g -O2 -MT -MP -MMD -c -o lightSensor.o lightSensor.cpp
+In file included from environment.cpp:4:
+In file included from ./environment.h:5:
+In file included from ode-0.12/include/ode/ode.h:40:
+ode-0.12/include/ode/misc.h:58:70: warning: ISO C++11 does not allow conversion from string literal to 'char *' [-Wwritable-strings]
+ODE_API void dPrintMatrix (const dReal *A, int n, int m, char *fmt = "%10.4f ",
+                                                                     ^
+In file included from lightSensor.cpp:5:
+In file included from ./lightSensor.h:4:
+In file included from ode-0.12/include/ode/ode.h:40:
+ode-0.12/include/ode/misc.h:58:70: warning: ISO C++11 does not allow conversion from string literal to 'char *' [-Wwritable-strings]
+ODE_API void dPrintMatrix (const dReal *A, int n, int m, char *fmt = "%10.4f ",
+                                                                     ^
+1 warning generated.
+g++ -std=c++11 -DHAVE_CONFIG_H -I. -Iode-0.12/ode/src -Iode-0.12/include -DdTRIMESH_ENABLED -DdDOUBLE  -g -O2 -MT -MP -MMD -c -o neuralNetwork.o neuralNetwork.cpp
+g++ -std=c++11 -DHAVE_CONFIG_H -I. -Iode-0.12/ode/src -Iode-0.12/include -DdTRIMESH_ENABLED -DdDOUBLE  -g -O2 -MT -MP -MMD -c -o neuron.o neuron.cpp
+1 warning generated.
+g++ -std=c++11 -DHAVE_CONFIG_H -I. -Iode-0.12/ode/src -Iode-0.12/include -DdTRIMESH_ENABLED -DdDOUBLE  -g -O2 -MT -MP -MMD -c -o object.o object.cpp
+g++ -std=c++11 -DHAVE_CONFIG_H -I. -Iode-0.12/ode/src -Iode-0.12/include -DdTRIMESH_ENABLED -DdDOUBLE  -g -O2 -MT -MP -MMD -c -o positionSensor.o positionSensor.cpp
+In file included from object.cpp:10:
+In file included from ./object.h:4:
+In file included from ode-0.12/include/ode/ode.h:40:
+ode-0.12/include/ode/misc.h:58:70: warning: ISO C++11 does not allow conversion from string literal to 'char *' [-Wwritable-strings]
+ODE_API void dPrintMatrix (const dReal *A, int n, int m, char *fmt = "%10.4f ",
+                                                                     ^
+In file included from positionSensor.cpp:5:
+In file included from ./positionSensor.h:4:
+In file included from ode-0.12/include/ode/ode.h:40:
+ode-0.12/include/ode/misc.h:58:70: warning: ISO C++11 does not allow conversion from string literal to 'char *' [-Wwritable-strings]
+ODE_API void dPrintMatrix (const dReal *A, int n, int m, char *fmt = "%10.4f ",
+                                                                     ^
+1 warning generated.
+g++ -std=c++11 -DHAVE_CONFIG_H -I. -Iode-0.12/ode/src -Iode-0.12/include -DdTRIMESH_ENABLED -DdDOUBLE  -g -O2 -MT -MP -MMD -c -o proprioceptiveSensor.o proprioceptiveSensor.cpp
+1 warning generated.
+g++ -std=c++11 -DHAVE_CONFIG_H -I. -Iode-0.12/ode/src -Iode-0.12/include -DdTRIMESH_ENABLED -DdDOUBLE  -g -O2 -MT -MP -MMD -c -o raySensor.o raySensor.cpp
+In file included from proprioceptiveSensor.cpp:6:
+In file included from ./proprioceptiveSensor.h:4:
+In file included from ode-0.12/include/ode/ode.h:40:
+ode-0.12/include/ode/misc.h:58:70: warning: ISO C++11 does not allow conversion from string literal to 'char *' [-Wwritable-strings]
+ODE_API void dPrintMatrix (const dReal *A, int n, int m, char *fmt = "%10.4f ",
+                                                                     ^
+1 warning generated.
+g++ -std=c++11 -DHAVE_CONFIG_H -I. -Iode-0.12/ode/src -Iode-0.12/include -DdTRIMESH_ENABLED -DdDOUBLE  -g -O2 -MT -MP -MMD -c -o simulator.o simulator.cpp
+In file included from raySensor.cpp:5:
+In file included from ./raySensor.h:4:
+In file included from ode-0.12/include/ode/ode.h:40:
+ode-0.12/include/ode/misc.h:58:70: warning: ISO C++11 does not allow conversion from string literal to 'char *' [-Wwritable-strings]
+ODE_API void dPrintMatrix (const dReal *A, int n, int m, char *fmt = "%10.4f ",
+                                                                     ^
+1 warning generated.
+g++ -std=c++11 -DHAVE_CONFIG_H -I. -Iode-0.12/ode/src -Iode-0.12/include -DdTRIMESH_ENABLED -DdDOUBLE  -g -O2 -MT -MP -MMD -c -o synapse.o synapse.cpp
+In file included from simulator.cpp:4:
+In file included from ode-0.12/include/ode/ode.h:40:
+ode-0.12/include/ode/misc.h:58:70: warning: ISO C++11 does not allow conversion from string literal to 'char *' [-Wwritable-strings]
+ODE_API void dPrintMatrix (const dReal *A, int n, int m, char *fmt = "%10.4f ",
+                                                                     ^
+1 warning generated.
+g++ -std=c++11 -DHAVE_CONFIG_H -I. -Iode-0.12/ode/src -Iode-0.12/include -DdTRIMESH_ENABLED -DdDOUBLE  -g -O2 -MT -MP -MMD -c -o touchSensor.o touchSensor.cpp
+g++ -std=c++11 -DHAVE_CONFIG_H -I. -Iode-0.12/ode/src -Iode-0.12/include -DdTRIMESH_ENABLED -DdDOUBLE  -g -O2 -MT -MP -MMD -c -o vestibularSensor.o vestibularSensor.cpp
+In file included from touchSensor.cpp:5:
+In file included from ./touchSensor.h:4:
+In file included from ode-0.12/include/ode/ode.h:40:
+ode-0.12/include/ode/misc.h:58:70: warning: ISO C++11 does not allow conversion from string literal to 'char *' [-Wwritable-strings]
+ODE_API void dPrintMatrix (const dReal *A, int n, int m, char *fmt = "%10.4f ",
+                                                                     ^
+1 warning generated.
+g++ -std=c++11 -DHAVE_CONFIG_H -I. -Iode-0.12/ode/src -Iode-0.12/include -DdTRIMESH_ENABLED -DdDOUBLE  -g -O2 -MT -MP -MMD -c -o actuator/adhesive.o actuator/adhesive.cpp
+In file included from vestibularSensor.cpp:5:
+In file included from ./vestibularSensor.h:4:
+In file included from ode-0.12/include/ode/ode.h:40:
+ode-0.12/include/ode/misc.h:58:70: warning: ISO C++11 does not allow conversion from string literal to 'char *' [-Wwritable-strings]
+ODE_API void dPrintMatrix (const dReal *A, int n, int m, char *fmt = "%10.4f ",
+                                                                     ^
+1 warning generated.
+g++ -std=c++11 -DHAVE_CONFIG_H -I. -Iode-0.12/ode/src -Iode-0.12/include -DdTRIMESH_ENABLED -DdDOUBLE  -g -O2 -MT -MP -MMD -c -o actuator/linear.o actuator/linear.cpp
+In file included from actuator/adhesive.cpp:7:
+In file included from actuator/adhesive.h:4:
+In file included from actuator/../object.h:4:
+In file included from ode-0.12/include/ode/ode.h:40:
+ode-0.12/include/ode/misc.h:58:70: warning: ISO C++11 does not allow conversion from string literal to 'char *' [-Wwritable-strings]
+ODE_API void dPrintMatrix (const dReal *A, int n, int m, char *fmt = "%10.4f ",
+                                                                     ^
+1 warning generated.
+g++ -std=c++11 -DHAVE_CONFIG_H -I. -Iode-0.12/ode/src -Iode-0.12/include -DdTRIMESH_ENABLED -DdDOUBLE  -g -O2 -MT -MP -MMD -c -o actuator/rotary.o actuator/rotary.cpp
+In file included from actuator/linear.cpp:8:
+In file included from actuator/linear.h:4:
+In file included from actuator/../object.h:4:
+In file included from ode-0.12/include/ode/ode.h:40:
+ode-0.12/include/ode/misc.h:58:70: warning: ISO C++11 does not allow conversion from string literal to 'char *' [-Wwritable-strings]
+ODE_API void dPrintMatrix (const dReal *A, int n, int m, char *fmt = "%10.4f ",
+                                                                     ^
+1 warning generated.
+g++ -std=c++11 -DHAVE_CONFIG_H -I. -Iode-0.12/ode/src -Iode-0.12/include -DdTRIMESH_ENABLED -DdDOUBLE  -g -O2 -MT -MP -MMD -c -o actuator/thruster.o actuator/thruster.cpp
+In file included from actuator/rotary.cpp:8:
+In file included from actuator/rotary.h:4:
+In file included from actuator/actuator.h:5:
+In file included from actuator/../object.h:4:
+In file included from ode-0.12/include/ode/ode.h:40:
+ode-0.12/include/ode/misc.h:58:70: warning: ISO C++11 does not allow conversion from string literal to 'char *' [-Wwritable-strings]
+ODE_API void dPrintMatrix (const dReal *A, int n, int m, char *fmt = "%10.4f ",
+                                                                     ^
+1 warning generated.
+In file included from actuator/thruster.cpp:8:
+In file included from actuator/thruster.h:4:
+In file included from actuator/../object.h:4:
+In file included from ode-0.12/include/ode/ode.h:40:
+ode-0.12/include/ode/misc.h:58:70: warning: ISO C++11 does not allow conversion from string literal to 'char *' [-Wwritable-strings]
+ODE_API void dPrintMatrix (const dReal *A, int n, int m, char *fmt = "%10.4f ",
+                                                                     ^
+1 warning generated.
+/bin/bash ode-0.12/libtool --tag=CXX --mode=link g++ -g -O2 -o simulator environment.o isSeenSensor.o lightSensor.o neuralNetwork.o neuron.o object.o positionSensor.o proprioceptiveSensor.o raySensor.o simulator.o synapse.o touchSensor.o vestibularSensor.o actuator/adhesive.o actuator/linear.o actuator/rotary.o actuator/thruster.o ode-0.12/drawstuff/src/libdrawstuff.la ode-0.12/ode/src/libode.la -framework OpenGL -framework GLUT -lm -lpthread ""
+libtool: link: g++ -g -O2 -o simulator environment.o isSeenSensor.o lightSensor.o neuralNetwork.o neuron.o object.o positionSensor.o proprioceptiveSensor.o raySensor.o simulator.o synapse.o touchSensor.o vestibularSensor.o actuator/adhesive.o actuator/linear.o actuator/rotary.o actuator/thruster.o "" -Wl,-bind_at_load  ode-0.12/drawstuff/src/.libs/libdrawstuff.a ode-0.12/ode/src/.libs/libode.a -framework OpenGL -framework GLUT -lm -lpthread

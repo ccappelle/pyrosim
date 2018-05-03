@@ -1,39 +1,10 @@
-to do:
+TO DO 'experimental':
 
-#completed comments and make api
 
-change ludobots pyrosim link to point to old version
+Blow up pyrosim
 
-# completed webpage
-#  - videos, highlight reel
-
-#completed logo
-
-#completed directory
-
-windows
-  - virtual machine
-  - linux partition
-  - figure out pipes
-
-#completed check ids
-
-#completed motor strength
-
-#completed 2017-05-31 ---- input function
-
-#completed different joint types
-
-#completed collision detection
-#  - collision pair
-  
-#completed demos 
-#  slow strong motor
-#  slow weak motor
-#  fast strong motor
-#  fast weak motor
-  
-#completed impulse forces
-
-#completed debug mode (draw joints etc.)
+Create new file structure
+Create new makefile
+Create new sim.cpp env.cpp
+Add evertything back
 

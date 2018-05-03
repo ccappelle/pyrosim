@@ -1,0 +1,63 @@
+Making install in include
+Making install in ode
+make[3]: Nothing to be done for `install-exec-am'.
+test -z "/usr/local/include/ode" || ../.././install-sh -c -d "/usr/local/include/ode"
+ /usr/bin/install -c -m 644 collision_trimesh.h mass.h odecpp.h common.h matrix.h odecpp_collision.h compatibility.h memory.h contact.h misc.h odemath.h odemath_legacy.h odeinit.h collision.h error.h objects.h rotation.h collision_space.h export-dif.h ode.h timer.h odeconfig.h '/usr/local/include/ode'
+Making install in drawstuff
+make[3]: Nothing to be done for `install-exec-am'.
+make[3]: Nothing to be done for `install-data-am'.
+make[3]: Nothing to be done for `install-exec-am'.
+make[3]: Nothing to be done for `install-data-am'.
+Making install in drawstuff
+Making install in src
+make[3]: Nothing to be done for `install-exec-am'.
+make[3]: Nothing to be done for `install-data-am'.
+Making install in dstest
+make[3]: Nothing to be done for `install-exec-am'.
+make[3]: Nothing to be done for `install-data-am'.
+make[3]: Nothing to be done for `install-exec-am'.
+make[3]: Nothing to be done for `install-data-am'.
+Making install in OPCODE
+Making install in Ice
+make[3]: Nothing to be done for `install-exec-am'.
+make[3]: Nothing to be done for `install-data-am'.
+make[3]: Nothing to be done for `install-exec-am'.
+make[3]: Nothing to be done for `install-data-am'.
+Making install in ode
+Making install in src
+Making install in joints
+make[4]: Nothing to be done for `install-exec-am'.
+make[4]: Nothing to be done for `install-data-am'.
+test -z "/usr/local/lib" || ../.././install-sh -c -d "/usr/local/lib"
+ /bin/sh ../../libtool   --mode=install /usr/bin/install -c   libode.la '/usr/local/lib'
+libtool: install: /usr/bin/install -c .libs/libode.lai /usr/local/lib/libode.la
+libtool: install: /usr/bin/install -c .libs/libode.a /usr/local/lib/libode.a
+libtool: install: chmod 644 /usr/local/lib/libode.a
+libtool: install: ranlib /usr/local/lib/libode.a
+/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/ranlib: file: /usr/local/lib/libode.a(nextafterf.o) has no symbols
+/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/ranlib: file: /usr/local/lib/libode.a(collision_trimesh_disabled.o) has no symbols
+/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/ranlib: file: /usr/local/lib/libode.a(collision_trimesh_trimesh.o) has no symbols
+/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/ranlib: file: /usr/local/lib/libode.a(OPC_Common.o) has no symbols
+/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/ranlib: file: /usr/local/lib/libode.a(OPC_Picking.o) has no symbols
+make[4]: Nothing to be done for `install-data-am'.
+Making install in demo
+make[3]: Nothing to be done for `install-exec-am'.
+make[3]: Nothing to be done for `install-data-am'.
+make[3]: Nothing to be done for `install-exec-am'.
+make[3]: Nothing to be done for `install-data-am'.
+Making install in tests
+Making install in UnitTest++
+Making install in src
+Making install in Posix
+make[5]: Nothing to be done for `install-exec-am'.
+make[5]: Nothing to be done for `install-data-am'.
+make[5]: Nothing to be done for `install-exec-am'.
+make[5]: Nothing to be done for `install-data-am'.
+make[4]: Nothing to be done for `install-exec-am'.
+make[4]: Nothing to be done for `install-data-am'.
+make[3]: Nothing to be done for `install-exec-am'.
+make[3]: Nothing to be done for `install-data-am'.
+test -z "/usr/local/bin" || ./install-sh -c -d "/usr/local/bin"
+ /usr/bin/install -c ode-config '/usr/local/bin'
+test -z "/usr/local/lib/pkgconfig" || ./install-sh -c -d "/usr/local/lib/pkgconfig"
+ /usr/bin/install -c -m 644 ode.pc '/usr/local/lib/pkgconfig'
