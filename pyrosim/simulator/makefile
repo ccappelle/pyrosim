@@ -48,12 +48,7 @@ $(OBJ_DIR)/%.cpp.o : $(SRC_DIR)/%.cpp
 
 .PHONY: clean
 clean:
-<<<<<<< HEAD
 	rm -rf $(BUILD_DIR)
 
 -include $(DEPS)
-=======
-	rm -f *.o */*.o
-	rm -f *.d */*.d
-	rm -f $(BIN)
->>>>>>> a3611ae36e4f4ac24e7a24643143ee3425ace669
+

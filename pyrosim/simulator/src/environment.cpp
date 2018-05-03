@@ -57,6 +57,7 @@ void Environment::readEntityFromPython(void){
 
     // read entity info from python
     entity->readFromPython();
+    // set entity id (probably unnecessary)
     entity->setID(this->entities.size());
 
     // add entity to entity list

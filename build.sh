@@ -18,9 +18,7 @@ make $MAKEOPTS > ../tmp/odemake 2>&1 &&
 cd ../.. &&
 echo "done" &&
 
-pwd
-
 echo  "Building simulator..." &&
-# make $MAKEOPTS
-make $MAKEOPTS > .external/tmp/pyrosimmake 2>&1 &&
+make $MAKEOPTS
+# make $MAKEOPTS > ./external/tmp/pyrosimmake 2>&1 &&
 echo "done"
