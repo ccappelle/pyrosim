@@ -14,6 +14,7 @@ typedef std::map<std::string, Entity * (*) ()> StringToEntity;
 StringToEntity stringToEntityMap{
     {"Box",        &createEntityInstance<BoxBody>      }, // simple body with one box
     {"Cylinder",   &createEntityInstance<CylinderBody> }, // simple body with one cylinder
+    {"Sphere",     &createEntityInstance<SphereBody>   }, // simple body with one shpere
     {"Composite",  &createEntityInstance<RigidBody>    }, // initially empty composite body
     {"HeightMap",  &createEntityInstance<HeightMap>    }, // Landscape
 };

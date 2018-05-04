@@ -53,6 +53,7 @@ public:
         // otherwise offset is necessary
         if (this->geoms.size() == 1){
             dMass m;
+            this->geoms[0]->setSpaceName(this->spaceName);
             this->geoms[0]->create(environment);
             this->geoms[0]->setBody(this->body);
             this->geoms[0]->resetGeom();
@@ -63,9 +64,11 @@ public:
             dMass globalMass;
             for (auto geom : this->geoms){
                 // dMass localMass;
+                geom->setSpaceName(this->spaceName);
                 geom->create(environment);
                 geom->setBody(this->body);
                 geom->resetGeomUsingOffset();
+
                 dMass localMass = geom->calculateMass();
                 dMassTranslate(&localMass, geom->position[0], geom->position[1], geom->position[2]);
                 dMassAdd(&globalMass, &localMass);
@@ -111,7 +114,7 @@ public:
             geom = new CylinderGeom();
         }
         else if (geomName == "Sphere"){
-
+            geom = new SphereGeom();
         }
         else{
             std::cerr << "Geom Name " << geomName << " not implemented" << std::endl;
@@ -146,6 +149,16 @@ public:
 
     void readFromPython(){
         this->readNextGeomFromPython("Cylinder");
+        this->readCollisionInfoFromPython();
+    }
+};
+
+class SphereBody: public RigidBody{
+public:
+    SphereBody(){this->drawName="Body";}
+
+    void readFromPython(){
+        this->readNextGeomFromPython("Sphere");
         this->readCollisionInfoFromPython();
     }
 };
