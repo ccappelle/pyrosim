@@ -72,6 +72,9 @@ int main(int argc, char **argv){
 
 static void command(int cmd){
 
+    if (cmd == 'x'){
+        endSimulation();
+    }
 }
 
 void createEnvironment(void){

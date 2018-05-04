@@ -88,7 +88,7 @@ class Simulator(object):
                  collision_group = None):
 
         body_id = self._num_entities
-        self._send_entitiy('Box',
+        self._send_entity('Box',
                            *position,
                            *orientation,
                            *sides,
@@ -111,7 +111,7 @@ class Simulator(object):
 
         capped = int(capped)
         body_id = self._num_entities
-        self._send_entitiy('Cylinder',
+        self._send_entity('Cylinder',
                            *position,
                            *orientation,
                            length,
@@ -126,15 +126,36 @@ class Simulator(object):
     def send_composite_body(self, space=None, collision_group=None):
 
         body_id = self._num_entities
-        self._send_entitiy('Composite',
+        self._send_entity('Composite',
                             space,
                             collision_group)
 
     def send_height_map(self, height_matrix,
                         position=(0, 0, 0),
-                        dimensions=10.0,
+                        size=10.0,
                         height_scale=1.0):
-        pass 
+        
+        M, N= np.shape(height_matrix)
+
+        try:
+            len(size)
+        except:
+            size = (size, size)
+
+        assert (len(size) == 2)
+
+        height_vec = height_matrix.ravel('C')
+
+        self._send_entity('HeightMap',
+                           *position,
+                           M, N,
+                           *height_vec,
+                           *size,
+                           height_scale,
+                           0.0, # offset
+                           1.0, # min aabb thickness
+                           0, # infinite wrap
+                           )
 
     def start(self):
         """Start the simulation"""
@@ -193,7 +214,7 @@ class Simulator(object):
 
         self._strings_to_send += string_to_send
 
-    def _send_entitiy(self, *args):
+    def _send_entity(self, *args):
         self._send('Entity', *args)
         self._num_entities += 1
 

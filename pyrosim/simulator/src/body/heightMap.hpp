@@ -27,7 +27,7 @@ public:
     HeightMap(){this->drawName="Body";};
 
     void readFromPython(void){
-        readValueFromPython<dReal>(this->position, 3);
+        readValueFromPython<dReal>(this->position, 3, "Position");
 
         // read in size
         readValueFromPython<int>(&this->M, "M");
@@ -45,6 +45,20 @@ public:
         readValueFromPython<dReal>(&this->thickness, "Thickness");
         
         readValueFromPython<int>(&this->wrap, "Wrap");
+
+        /// this->printMat();
+    }
+
+    void printMat(void){
+        std::cerr << "Height Matrix" << std::endl;
+        
+        for (int j=0; j < M; ++j){
+        for (int i=0; i < N; ++i){
+                // std::cerr << this->heightData[i * M + j] << " ";
+                std::cerr << this->getHeightValue(i, j) << " ";
+            }
+            std::cerr << std::endl;
+        }
     }
 
     void create(Environment *environment){
@@ -59,8 +73,8 @@ public:
                                         0,
                                         this->realDim[0],
                                         this->realDim[1],
-                                        this->M,
-                                        this->N,
+                                        this->N, this->M,
+                                        // this->M, this->N,
                                         this->scale,
                                         this->offset,
                                         this->thickness,
@@ -68,7 +82,8 @@ public:
 
         // necessary to set bounds
         // TEMPORARY HARD CODE FOR TESTING
-        dGeomHeightfieldDataSetBounds(this->heightMapID, (dReal) 0.0, (dReal) 4.0);
+        // In reality should find min/max
+        dGeomHeightfieldDataSetBounds(this->heightMapID, (dReal) -4.0, (dReal) 4.0);
 
         // create geom
         this->geom = dCreateHeightfield(space, this->heightMapID, 1);
@@ -86,7 +101,10 @@ public:
                          this->position[1],
                          this->position[2]);
     }
-
+    double getHeightValue(int i, int j){
+         return this->heightData[j * this->N + i];
+       // return this->heightData[i * this->N + j];
+    }
     void draw(void){
         // set color to green, arbitrary
         dsSetColorAlpha(0.2, 0.7, 0.2, 1.0);
@@ -113,22 +131,26 @@ public:
                 // NOTE: Default height map has Y coordinate (e.g. a[1])
                 // this triangle will be rotated same as the geom
 
-                // starting bottom left (SE)
+                // // starting bottom left (SE)
                 a[0] = currX;
                 a[2] = currY;
-                a[1] = this->heightData[i * this->M + j] * this->scale;
-                // point to bottom right (SW)
+                a[1] = this->getHeightValue(i, j) * this->scale;
+                // a[1] = this->heightData[j * this->N + i] * this->scale;
+                // // point to bottom right (SW)
                 b[0] = currX + xStep;
                 b[2] = currY;
-                b[1] = this->heightData[(i + 1) * this->M + j] * this->scale;
-                // point to top left (NE)
+                b[1] = this->getHeightValue(i + 1, j) * this->scale;
+                // b[1] = this->heightData[j * this->N + (i + 1)] * this->scale;
+                // // point to top left (NE)
                 c[0] = currX;
                 c[2] = currY + yStep;
-                c[1] = this->heightData[i * this->M + (j + 1)] * this->scale;
-                // point to top right
+                c[1] = this->getHeightValue(i, j + 1) * this->scale;
+                // c[1] = this->heightData[(j + 1) * this->N + i] * this->scale;
+                // // point to top right
                 d[0] = currX + xStep;
                 d[2] = currY + yStep;
-                d[1] = this->heightData[(i + 1) * this->M + (j + 1)] * this->scale;
+                d[1] = this->getHeightValue(i + 1, j + 1) * this->scale;
+                // d[1] = this->heightData[(j + 1) * this->N + (i + 1)] * this->scale;
 
                 // draw square, winding order determines face
                 // culling so draw both sides
