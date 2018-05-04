@@ -8,6 +8,7 @@ typedef std::map<std::string, Entity * (*) ()> StringToEntity;
 
 #include "body/rigidBody.hpp"
 #include "body/heightMap.hpp"
+#include "joint/joint.hpp"
 
 // C.C. we can possibly put this in separate file?
 // maybe when it becomes bigger we will know how to best handle it
@@ -17,6 +18,7 @@ StringToEntity stringToEntityMap{
     {"Sphere",     &createEntityInstance<SphereBody>   }, // simple body with one shpere
     {"Composite",  &createEntityInstance<RigidBody>    }, // initially empty composite body
     {"HeightMap",  &createEntityInstance<HeightMap>    }, // Landscape
+    {"Hinge",      &createEntityInstance<Hinge>        }, // Hinge joint
 };
 
 Environment::Environment(dWorldID world, dSpaceID space, int numEntities){
@@ -89,6 +91,11 @@ void Environment::draw(int drawJoints, int drawSpaces){
             entity->draw();
         }
     }
+}
+
+dBodyID Environment::getBody(int i){
+    RigidBody *bodyContainer = (RigidBody *) this->entities[i];
+    return bodyContainer->getBody();
 }
 
 void Environment::writeToPython(void){

@@ -41,6 +41,7 @@ public:
     // in the future will be a map of space names to allow for using subspaces
     dSpaceID getSpace(std::string name){return this->space;}; // currently returns topspace
 
+    dBodyID getBody(int i); 
     // write entities to python
     void writeToPython(void);
 };

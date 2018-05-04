@@ -124,6 +124,8 @@ public:
         this->geoms.push_back(geom);
     }
 
+    dBodyID getBody(void){return this->body;};
+
 protected:
     void readCollisionInfoFromPython(void){
         readStringFromPython(this->spaceName, "Space");

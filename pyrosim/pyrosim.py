@@ -15,11 +15,13 @@ import subprocess
 if __package__ is None or __package__ == '':
 #uses current directory visibility
   import _body
+  import _joint
 else:
 #uses current package visibility
   from . import _body
+  from . import _joint
 
-class Simulator(_body.Mixin):
+class Simulator(_body.Mixin, _joint.Mixin):
     """Python Interface for ODE robotics simulator
 
     Attributes
