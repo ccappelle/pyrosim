@@ -25,3 +25,23 @@ class Mixin(object):
                           *anchor,
                           *axis,
                           *joint_range)
+
+    def send_slider_joint(self,
+                          body1, body2,
+                          axis = (0, 0, 1),
+                          joint_range = 0.5):
+
+        if joint_range is None:
+            joint_range = (1, -1) # no stops
+
+        try:
+            len(joint_range)
+        except:
+            joint_range = (-joint_range, joint_range)
+
+        assert(len(joint_range)) == 2
+
+        self._send_entity("Slider",
+                          body1, body2,
+                          *axis,
+                          *joint_range)

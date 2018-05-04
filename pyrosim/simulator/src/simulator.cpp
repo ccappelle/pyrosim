@@ -41,6 +41,8 @@ dSpaceID topspace; // top space
 dJointGroupID contactgroup; // contact joints group
 
 int firstStep = true;
+int drawJoints = false;
+int drawSpaces = false;
 
 static void command(void);
 void createEnvironment(void);
@@ -72,8 +74,17 @@ int main(int argc, char **argv){
 
 static void command(int cmd){
 
+    // 'x' for exit
     if (cmd == 'x'){
         endSimulation();
+    }
+    // 'd' for toggle drawing of debug info (joints for now)
+    else if (cmd == 'd'){
+        drawJoints = !drawJoints;
+    }
+    // 's' for toggle drawing of spaces
+    else if (cmd == 's'){
+        drawSpaces = !drawSpaces;
     }
 }
 
@@ -109,7 +120,7 @@ static void drawLoop(int pause){
         simulationStep();
     }
 
-    environment->draw(true, true);
+    environment->draw(drawJoints, drawSpaces);
 }
 
 void endSimulation(void){
@@ -201,6 +212,8 @@ void nearCallback(void *callbackData, dGeomID o1, dGeomID o2){
             dSpaceCollide((dSpaceID) o2, callbackData, &nearCallback);
         }
     }
+    // TODO create exits for connected joints and
+    // user defined collision pattern
 
     // C.C. pointer to user defined geometry info
     // currently specifies entityID but could 

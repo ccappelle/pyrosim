@@ -7,6 +7,7 @@
 #include <iostream>
 #include <string>
 #include <vector>
+#include <map>
 
 // ode
 #include <ode/ode.h>
@@ -17,8 +18,9 @@
 class Environment{
 public:
     dWorldID world;
-    dSpaceID space;
+    dSpaceID topspace;
     std::vector<Entity*> entities;
+    std::map<std::string, dSpaceID> subspaces;
 
     Environment(dWorldID world, dSpaceID topspace, int numEntities = 50);
     ~Environment();
@@ -39,7 +41,8 @@ public:
     dWorldID getWorld(){return this->world;};
     // returns spaces
     // in the future will be a map of space names to allow for using subspaces
-    dSpaceID getSpace(std::string name){return this->space;}; // currently returns topspace
+    dSpaceID getSpace(std::string name);
+    void createSpace(std::string name);
 
     dBodyID getBody(int i); 
     // write entities to python
