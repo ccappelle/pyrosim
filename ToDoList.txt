@@ -7,4 +7,4 @@ Create new file structure
 Create new makefile
 Create new sim.cpp env.cpp
 Add evertything back
-
+Add Mixins

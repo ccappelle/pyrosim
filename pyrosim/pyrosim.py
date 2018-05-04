@@ -3,7 +3,23 @@ import numpy as np
 import os
 import subprocess
 
-class Simulator(object):
+# C.C NOTE: Mixin convention - 
+# mixin files should be named _name.py and
+# contain one Mixin class labeled Mixin.
+# see _body.py for more info
+
+
+# C.C. we can probably remove this after a certain point
+# this is necessary for being able to run
+# both as __main__ and as package
+if __package__ is None or __package__ == '':
+#uses current directory visibility
+  import _body
+else:
+#uses current package visibility
+  from . import _body
+
+class Simulator(_body.Mixin):
     """Python Interface for ODE robotics simulator
 
     Attributes
@@ -42,121 +58,6 @@ class Simulator(object):
 
         self._raw_cerr = ''
 
-    def add_box_to_composite(self,
-                             composite_id,
-                             position = (0.0, 0.0, 0.0),
-                             orientation = (0.0, 0.0, 1.0),
-                             sides = (0.25, 0.25, 0.25),
-                             density = 1.0,
-                             color = (1.0, 1.0, 1.0)):
-        self._send('Add', composite_id,
-                    'Box', 
-                    *position,
-                    *orientation,
-                    *sides,
-                    density,
-                    *color)
-
-    def add_cylinder_to_composite(self,
-                                  composite_id,
-                                  position = (0.0, 0.0, 0.0),
-                                  orientation = (0.0, 0.0, 1.0),
-                                  length=0.5,
-                                  radius=0.05,
-                                  capped=True,
-                                  density = 1.0,
-                                  color = (1.0, 1.0, 1.0)):
-        capped = int(capped)
-        self._send('Add',
-                   composite_id,
-                   'Cylinder',
-                   *position,
-                   *orientation,
-                   length,
-                   radius,
-                   capped,
-                   density,
-                   *color)
-
-    def send_box(self,
-                 position = (0.0, 0.0, 0.0),
-                 orientation = (0.0, 0.0, 1.0),
-                 sides = (0.25, 0.25, 0.25),
-                 density = 1.0,
-                 color = (1.0, 1.0, 1.0),
-                 space = None,
-                 collision_group = None):
-
-        body_id = self._num_entities
-        self._send_entity('Box',
-                           *position,
-                           *orientation,
-                           *sides,
-                           density,
-                           *color,
-                           space,
-                           collision_group)
-        return body_id
-
-    def send_cylinder(self,
-                      position = (0.0, 0.0, 0.0),
-                      orientation = (0.0, 0.0, 1.0),
-                      length = 0.5,
-                      radius = 0.05,
-                      capped = True,
-                      density = 1.0,
-                      color = (1.0, 1.0, 1.0),
-                      space = None,
-                      collision_group = None):
-
-        capped = int(capped)
-        body_id = self._num_entities
-        self._send_entity('Cylinder',
-                           *position,
-                           *orientation,
-                           length,
-                           radius,
-                           capped,
-                           density,
-                           *color,
-                           space,
-                           collision_group)
-        return body_id
-
-    def send_composite_body(self, space=None, collision_group=None):
-
-        body_id = self._num_entities
-        self._send_entity('Composite',
-                            space,
-                            collision_group)
-
-    def send_height_map(self, height_matrix,
-                        position=(0, 0, 0),
-                        size=10.0,
-                        height_scale=1.0):
-        
-        M, N= np.shape(height_matrix)
-
-        try:
-            len(size)
-        except:
-            size = (size, size)
-
-        assert (len(size) == 2)
-
-        height_vec = height_matrix.ravel('C')
-
-        self._send_entity('HeightMap',
-                           *position,
-                           M, N,
-                           *height_vec,
-                           *size,
-                           height_scale,
-                           0.0, # offset
-                           1.0, # min aabb thickness
-                           0, # infinite wrap
-                           )
-
     def start(self):
         """Start the simulation"""
 
@@ -177,7 +78,7 @@ class Simulator(object):
                 cwd=self._simulator_path, # helps with textures
                 )
         # write parameters
-        self._send_parameters()
+        self._send_simulator_parameters()
         self.pipe.stdin.write(self._strings_to_send)
         # finish by writing done
         self.pipe.stdin.write('Done\n')
@@ -214,6 +115,9 @@ class Simulator(object):
 
         self._strings_to_send += string_to_send
 
+    def _send_add_command(self, *args):
+        self._send('Add', *args)
+
     def _send_entity(self, *args):
         self._send('Entity', *args)
         self._num_entities += 1
@@ -221,7 +125,7 @@ class Simulator(object):
     def _send_parameter(self, *args):
         self._send('Parameter', *args)
 
-    def _send_parameters(self):
+    def _send_simulator_parameters(self):
 
         # send camera
 
