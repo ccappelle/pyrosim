@@ -3,7 +3,7 @@ import numpy as np
 import os
 import subprocess
 
-# C.C NOTE: Mixin convention - 
+# C.C NOTE: Mixin convention -
 # mixin files should be named _name.py and
 # contain one Mixin class labeled Mixin.
 # see _body.py for more info
@@ -13,13 +13,14 @@ import subprocess
 # this is necessary for being able to run
 # both as __main__ and as package
 if __package__ is None or __package__ == '':
-#uses current directory visibility
-  import _body
-  import _joint
+    # uses current directory visibility
+    import _body
+    import _joint
 else:
-#uses current package visibility
-  from . import _body
-  from . import _joint
+    # uses current package visibility
+    from . import _body
+    from . import _joint
+
 
 class Simulator(_body.Mixin, _joint.Mixin):
     """Python Interface for ODE robotics simulator
@@ -34,25 +35,26 @@ class Simulator(_body.Mixin, _joint.Mixin):
                  dt=0.01,
                  play_blind=False,
                  play_paused=False,
-                ):
+                 ):
 
         # location of this file
         self._this_file_path = os.path.dirname(os.path.abspath(__file__))
         # location of simulator executable
-        self._simulator_path = os.path.join(self._this_file_path, 'simulator/build')
+        self._simulator_path = os.path.join(
+            self._this_file_path, 'simulator/build')
 
         self._num_entities = 0
 
         # commands to be sent
-        self._strings_to_send=''
+        self._strings_to_send = ''
 
         # playback parameters
         self._play_blind = play_blind
         self._play_paused = play_paused
 
         # body parameters
-        self._current_space = None
-        self._current_collision_group = None
+        self._current_space = 'None'
+        self._current_collision_group = 'None'
 
         # sim parameters
         self._eval_steps = eval_steps
@@ -72,22 +74,32 @@ class Simulator(_body.Mixin, _joint.Mixin):
     def start(self):
         """Start the simulation"""
 
+        assert(self._play_blind is False or self._eval_steps > 0), (
+            'Cannot infinitely play blind. Change play_blind to False '
+            'or set eval_steps to a positive number'
+        )
+
+        assert(self._play_paused is False or self._play_blind is False), (
+            'Cannot play blind and paused. Change truth value of play_blind '
+            'or play_paused'
+        )
+
         commands = [self._simulator_path + '/simulator']
-        # if self._play_blind:
-        #     commands.append('-blind')
+        if self._play_blind:
+            commands.append('-blind')
         if self._play_paused:
             commands.append('-pause')
 
         # create pipe to simulator
         self.pipe = subprocess.Popen(
-                commands,
-                bufsize=0, # necessary to not halt
-                stdout=subprocess.PIPE, # connects stdout
-                stderr=subprocess.PIPE, # connects stderr
-                stdin=subprocess.PIPE, # connects stdin
-                universal_newlines=True, # necessary for 3.x
-                cwd=self._simulator_path, # helps with textures
-                )
+            commands,
+            bufsize=0,  # necessary to not halt
+            stdout=subprocess.PIPE,  # connects stdout
+            stderr=subprocess.PIPE,  # connects stderr
+            stdin=subprocess.PIPE,  # connects stdin
+            universal_newlines=True,  # necessary for 3.x
+            cwd=self._simulator_path,  # helps with textures
+        )
         # write parameters
         self._send_simulator_parameters()
         self.pipe.stdin.write(self._strings_to_send)
@@ -101,7 +113,7 @@ class Simulator(_body.Mixin, _joint.Mixin):
         self._raw_cout = data[0]
         self._raw_cerr = data[1]
 
-        #cut out annoying drawstuff commands
+        # cut out annoying drawstuff commands
         start_str = 'Simulation test environment v0.02'
         end_str = 'sideways and up.'
 
@@ -109,7 +121,8 @@ class Simulator(_body.Mixin, _joint.Mixin):
         end_index = self._raw_cerr.find(end_str)
 
         if not (start_index == -1 or end_index == -1):
-            self._raw_cerr = self._raw_cerr[:start_index] + self._raw_cerr[end_index + len(end_str):]
+            self._raw_cerr = self._raw_cerr[:start_index] + \
+                self._raw_cerr[end_index + len(end_str):]
 
     def get_error_out(self):
         """Returns raw output from cerr"""
@@ -121,8 +134,16 @@ class Simulator(_body.Mixin, _joint.Mixin):
         # each entry is delimited by \n
         string_to_send = command + '\n'
         for arg in args:
-            string_to_send +=  str(arg) + '\n'
 
+            try: # arg is a list or string
+                i = iter(arg)
+            except: # arg is a single value
+                string_to_send += str(arg) + '\n'
+            else:
+                if isinstance(arg, str):
+                    string_to_send += arg + '\n'
+                else:
+                    string_to_send += '\n'.join(str(entry) for entry in arg) + '\n'
         self._strings_to_send += string_to_send
 
     def _send_add_command(self, *args):
@@ -145,15 +166,17 @@ class Simulator(_body.Mixin, _joint.Mixin):
         self._send_parameter('EvalSteps', int(self._eval_steps))
         # send DT
         self._send_parameter('DT', self._dt)
-        
+
+
 if __name__ == '__main__':
-    
+
     sim = Simulator(play_blind=False, play_paused=True)
 
-    sim.send_cylinder(capped=False)
+    sim.send_cylinder(capped=False, space='hi')
 
     sim.start()
 
     sim.wait_to_finish()
 
+    print(sim._strings_to_send)
     print(sim._raw_cerr)

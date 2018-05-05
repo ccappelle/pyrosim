@@ -11,13 +11,14 @@ class Mixin(object):
                          sides = (0.25, 0.25, 0.25),
                          density = 1.0,
                          color = (1.0, 1.0, 1.0)):
+
         self._send_add_command(composite_id,
                                'Box', 
-                               *position,
-                               *orientation,
-                               *sides,
+                               position,
+                               orientation,
+                               sides,
                                density,
-                               *color)
+                               color)
 
     def add_cylinder_to_composite(self,
                                   composite_id,
@@ -31,8 +32,8 @@ class Mixin(object):
         capped = int(capped)
         self._send_add_command(composite_id,
                                'Cylinder',
-                               *position,
-                               *orientation,
+                               position,
+                               orientation,
                                length,
                                radius,
                                capped,
@@ -48,11 +49,11 @@ class Mixin(object):
                                 color = (1.0, 1.0, 1.0)):
         self._send_add_command(composite_id,
                                'Sphere',
-                               *position,
-                               *orientation,
+                               position,
+                               orientation,
                                radius,
                                density,
-                               *color)
+                               color)
 
     def send_box(self,
                  position = (0.0, 0.0, 0.0),
@@ -71,11 +72,11 @@ class Mixin(object):
 
         body_id = self._num_entities
         self._send_entity('Box',
-                           *position,
-                           *orientation,
-                           *sides,
+                           position,
+                           orientation,
+                           sides,
                            density,
-                           *color,
+                           color,
                            space,
                            collision_group)
         return body_id
@@ -99,16 +100,17 @@ class Mixin(object):
 
         capped = int(capped)
         body_id = self._num_entities
+
         self._send_entity('Cylinder',
-                           *position,
-                           *orientation,
-                           length,
-                           radius,
-                           capped,
-                           density,
-                           *color,
-                           space,
-                           collision_group)
+                          position,
+                          orientation,
+                          length,
+                          radius,
+                          capped,
+                          density,
+                          color,
+                          space,
+                          collision_group)
         return body_id
 
     def send_composite_body(self, space=None, collision_group=None):
@@ -130,7 +132,7 @@ class Mixin(object):
                         position=(0, 0, 0),
                         size=10.0,
                         height_scale=1.0):
-        
+        import numpy as np
         M, N= np.shape(height_matrix)
 
         try:
@@ -143,10 +145,10 @@ class Mixin(object):
         height_vec = height_matrix.ravel('C')
 
         self._send_entity('HeightMap',
-                           *position,
+                           position,
                            M, N,
-                           *height_vec,
-                           *size,
+                           height_vec,
+                           size,
                            height_scale,
                            0.0, # offset (unecessary with position)
                            1.0, # min aabb thickness
@@ -170,11 +172,11 @@ class Mixin(object):
 
         body_id = self._num_entities
         self._send_entity('Sphere',
-                           *position,
-                           *orientation,
+                           position,
+                           orientation,
                            radius,
                            density,
-                           *color,
+                           color,
                            space,
                            collision_group)
         return body_id

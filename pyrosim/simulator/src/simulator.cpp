@@ -1,6 +1,7 @@
 // std headers
 #include <iostream>
 #include <map>
+#include <cmath>
 #include <utility>
 #include <vector>
 
@@ -30,6 +31,8 @@
 #define dsDrawCapsule dsDrawCapsuleD
 #endif
 
+#define PI 3.14159265
+
 // global variables
 std::map<std::string, float> parameters; // maps of parameters useful to the simulator
 int evalStep; // current evaluation step
@@ -51,6 +54,7 @@ std::map<collisionPair, int> collisionMap;
 int firstStep = true;
 int drawJoints = false;
 int drawSpaces = false;
+int playBlind = false;
 
 std::string COLLIDE_ALWAYS = "Collide";
 
@@ -69,6 +73,14 @@ static void start(void);
 void simulationStep(void);
 
 int main(int argc, char **argv){
+
+    playBlind = false;
+    for (int i=0; i<argc; i++){
+        if (strcmp(argv[i], "-blind") == 0){
+            playBlind = true;
+        }
+    }
+
     // these functions cannot use input parameters
     initializeODE();
     initializeParameters();
@@ -78,9 +90,17 @@ int main(int argc, char **argv){
     // below here can use global input parameters
     createEnvironment();
     dWorldSetAutoDisableFlag(world, 1);
-    initializeDrawStuff();
+
     std::cerr << "Simulation Starting" << std::endl;
-    dsSimulationLoop(argc, argv, 900, 700, &fn);
+    if (playBlind){
+        while(1){
+            simulationStep();
+        }
+    }
+    else{
+        initializeDrawStuff();
+        dsSimulationLoop(argc, argv, 900, 700, &fn);
+    }
 }
 
 void readCollisionFromPython(void){
@@ -142,6 +162,74 @@ static void drawLoop(int pause){
     int nsteps = (int) ceilf(elapsed / parameters["DT"]);
     for(int i=0; i < nsteps && !pause; i++){
         simulationStep();
+    }
+
+    if (pause == true){
+        // draw pause square to signify paused
+        float xyz[3];
+        float hpr[3];
+
+        dsGetViewpoint(xyz, hpr);
+        dVector3 forward, right, up; // direction vector of camera
+
+        std::cerr << hpr[1] << std::endl;
+        forward[0] = cos(hpr[0] * PI / 180.0) * cos(hpr[1] * PI / 180.0); //* (1 - cos(hpr[1] * PI / 180.0));
+        forward[1] = sin(hpr[0] * PI / 180.0) * cos(hpr[1] * PI / 180.0); //* (1 - cos(hpr[1] * PI / 180.0));
+        forward[2] = sin(hpr[1] * PI / 180.0); 
+        dNormalize3(forward);
+
+        // right is orthogonal to forward with no z-component
+        right[0] = sin(hpr[0] * PI / 180.0);
+        right[1] = -cos(hpr[0] * PI / 180.0);
+        right[2] = 0; // dont use roll because its stupid
+        dNormalize3(right);
+
+        dCalcVectorCross3(up, right, forward);
+
+        dReal fdist = 0.2;
+        dReal rdist = 0.05;
+        dReal udist = -0.1;
+        dReal rOff = 0.1;
+        dReal uOff = 1.1;
+
+        dsSetColor(0.6, 0.1, 0.1);
+        for(int i=0; i<2; i++){
+
+
+            const dReal topPoint[3] = {
+                             xyz[0] + forward[0]*fdist + (1+rOff*i)*right[0]*rdist + up[0]*udist,
+                             xyz[1] + forward[1]*fdist + (1+rOff*i)*right[1]*rdist + up[1]*udist,
+                             xyz[2] + forward[2]*fdist + (1+rOff*i)*right[2]*rdist + up[2]*udist};
+            const dReal bottomPoint[3] = {
+                           xyz[0] + forward[0]*fdist + (1+rOff*i)*right[0]*rdist + up[0]*udist*uOff,
+                           xyz[1] + forward[1]*fdist + (1+rOff*i)*right[1]*rdist + up[1]*udist*uOff,
+                           xyz[2] + forward[2]*fdist + (1+rOff*i)*right[2]*rdist + up[2]*udist*uOff};
+            dsDrawLine(topPoint, bottomPoint);
+        }
+
+        // const dReal fpoint[3] = {xyz[0] + forward[0]*mod,
+        //                          xyz[1] + forward[1]*mod,
+        //                          xyz[2] + forward[2]*mod};
+        // const dReal upoint[3] = {xyz[0] + up[0]*0.01 + forward[0]*mod,
+        //                          xyz[1] + up[1]*0.01 + forward[1]*mod,
+        //                          xyz[2] + up[2]*0.01 + forward[2]*mod};
+        // const dReal rpoint[3] = {xyz[0] + right[0]*0.01 + forward[0]*mod,
+        //                          xyz[1] + right[1]*0.01 + forward[1]*mod,
+        //                          xyz[2] + right[2]*0.01 + forward[2]*mod};
+
+        // // dsDrawLine(point1, point2);
+        
+        // dMatrix3 R;
+        // dRSetIdentity(R);
+
+        // dsSetColor(1.0, 0.4, 0.4);
+        // dsDrawSphere(fpoint, R, 0.01);
+
+        // dsSetColor(0.0, 0.4, 0.4);
+        // dsDrawSphere(upoint, R, 0.01);
+
+        // dsSetColor(0.0, 0.4, 1.0);
+        // dsDrawSphere(rpoint, R, 0.01);
     }
 
     environment->draw(drawJoints, drawSpaces);
@@ -235,26 +323,36 @@ void nearCallback(void *callbackData, dGeomID o1, dGeomID o2){
         if (dGeomIsSpace(o2)){
             dSpaceCollide((dSpaceID) o2, callbackData, &nearCallback);
         }
+
+        return;
     }
     // TODO create exits for connected joints and
     // user defined collision pattern
 
     // C.C. currently geom data is just a string
     // we should create a data struct instead
-    std::string &group1 = *(static_cast<std::string*> (dGeomGetData(o1)));
-    std::string &group2 = *(static_cast<std::string*> (dGeomGetData(o2)));
 
-    if (group1 != COLLIDE_ALWAYS and group2 != COLLIDE_ALWAYS){
-        collisionPair pair = std::make_pair(group1, group2);
-        if (collisionMap.count(pair) == 0){ // no collision entry, exit early
-            return;
-        }
-        else{
-            if (collisionMap[pair] == false){ // collision entry specifies no collision should occur
+    if ( dGeomGetClass (o1) == dPlaneClass       or dGeomGetClass(o2) == dPlaneClass or
+         dGeomGetClass (o1) == dHeightfieldClass or dGeomGetClass(o2) == dHeightfieldClass){
+        // one or more geoms is a heightfield or plane so collision will occur
+    }
+    else{
+        std::string &group1 = *(static_cast<std::string*> (dGeomGetData(o1)));
+        std::string &group2 = *(static_cast<std::string*> (dGeomGetData(o2)));
+
+        if (group1 != COLLIDE_ALWAYS and group2 != COLLIDE_ALWAYS){
+            collisionPair pair = std::make_pair(group1, group2);
+            if (collisionMap.count(pair) == 0){ // no collision entry, exit early
                 return;
+            }
+            else{
+                if (collisionMap[pair] == false){ // collision entry specifies no collision should occur
+                    return;
+                }
             }
         }
     }
+
 
     // generate at most n contacts per collision
     const int N = parameters["nContacts"];

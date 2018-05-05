@@ -97,7 +97,7 @@ Entity* Environment::getEntity(int i){
 }
 
 dSpaceID Environment::getSpace(std::string name){
-    if (name == "None"){
+    if (name == "None" or name == "default"){
         return this->topspace;
     }
     
