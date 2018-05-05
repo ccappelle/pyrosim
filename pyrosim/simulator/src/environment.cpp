@@ -92,9 +92,8 @@ void Environment::draw(int drawJoints, int drawSpaces){
     }
 }
 
-dBodyID Environment::getBody(int i){
-    RigidBody *bodyContainer = (RigidBody *) this->entities[i];
-    return bodyContainer->getBody();
+Entity* Environment::getEntity(int i){
+    return this->entities[i];
 }
 
 dSpaceID Environment::getSpace(std::string name){

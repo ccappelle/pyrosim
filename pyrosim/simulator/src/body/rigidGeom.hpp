@@ -42,7 +42,6 @@ public:
 
     void setBody(dBodyID body){ dGeomSetBody(this->geom, body); }
     void setSpaceName(std::string name){this->spaceName = name;};
-
     void resetGeom(void){
         dGeomSetPosition(this->geom,
                          this->position[0],

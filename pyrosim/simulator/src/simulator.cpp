@@ -1,7 +1,9 @@
 // std headers
 #include <iostream>
-#include <vector>
 #include <map>
+#include <utility>
+#include <vector>
+
 
 // ode headers
 #include <ode/ode.h>
@@ -10,6 +12,7 @@
 // local headers
 #include "pythonReader.hpp"
 #include "environment.hpp"
+#include "body/rigidBody.hpp"
 
 // glut stupidity
 #ifdef __APPLE__
@@ -40,10 +43,16 @@ dWorldID world; // the entire world
 dSpaceID topspace; // top space
 dJointGroupID contactgroup; // contact joints group
 
+// collision map
+typedef std::pair<std::string, std::string> collisionPair;
+std::map<collisionPair, int> collisionMap;
+
+// various flags
 int firstStep = true;
 int drawJoints = false;
 int drawSpaces = false;
 
+void readCollisionFromPython(void);
 static void command(void);
 void createEnvironment(void);
 static void drawLoop(int pause);
@@ -72,6 +81,19 @@ int main(int argc, char **argv){
     dsSimulationLoop(argc, argv, 900, 700, &fn);
 }
 
+void readCollisionFromPython(void){
+    std::string group1, group2;
+
+    std::cerr << "Reading Collision Assignment" << std::endl;
+    readStringFromPython(group1, "Collision Group 1");
+    readStringFromPython(group2, "Collision Group 2");
+
+    collisionPair pair1 = std::make_pair(group1, group2);
+    collisionMap[pair1] = true;
+    collisionPair pair2 = std::make_pair(group2, group1);
+    collisionMap[pair2] = true;
+}
+
 static void command(int cmd){
 
     // 'x' for exit
@@ -97,7 +119,7 @@ void createEnvironment(void){
     // send ground plane
     dGeomID plane = dCreatePlane(topspace, 0, 0, 1, 0);
     int planeID = -1;
-    dGeomSetData(plane, &planeID);
+    dGeomSetData(plane, (void *) "None");
     // create bodies, joints, ANN, etc
     environment->createEntities();
 
@@ -216,10 +238,25 @@ void nearCallback(void *callbackData, dGeomID o1, dGeomID o2){
     // user defined collision pattern
 
     // C.C. pointer to user defined geometry info
-    // currently specifies entityID but could 
-    // be set to anything. Also currently unused
-    int *o1ID = (int*) dGeomGetData(o1);
-    int *o2ID = (int*) dGeomGetData(o2);
+    // currently specifies associated rigid body
+    // be set to anything
+    // TO DO: set to standard data struct or something
+    // right now all that is needed is the collision group name
+    // RigidBody *body1 = (RigidBody *) dGeomGetData(o1);
+    // RigidBody *body2 = (RigidBody *) dGeomGetData(o1);
+
+    std::string *group1 = (std::string *) dGeomGetData(o1);
+    std::string *group2 = (std::string *) dGeomGetData(o2);
+
+    collisionPair pair = std::make_pair(*group1, *group2);
+
+    if (collisionMap.count(pair) == 0){ // no entry assume collision
+
+    }
+    else{
+        return;
+    }
+    // std::cerr << " COllisino " << group1 << " " << group2 << std::endl;
 
     // generate at most n contacts per collision
     const int N = parameters["nContacts"];
@@ -265,6 +302,11 @@ void readFromPython(void){
         // add to entity
         else if(incomingString == "Add"){
             environment->addToEntityFromPython();
+        }
+        // special assignment flag
+        // may change layout in the future
+        else if(incomingString == "AssignCollision"){
+            readCollisionFromPython();
         }
         else{
             std::cerr << "INVALID READ IN " << incomingString << std::endl;

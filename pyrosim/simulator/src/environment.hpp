@@ -44,7 +44,7 @@ public:
     dSpaceID getSpace(std::string name);
     void createSpace(std::string name);
 
-    dBodyID getBody(int i); 
+    Entity* getEntity(int i); 
     // write entities to python
     void writeToPython(void);
 };

@@ -27,8 +27,6 @@ protected:
         readValueFromPython<int>(&this->body2ID, "Body 2");
     }
 
-
-
     void readStopsFromPython(void){
         readValueFromPython<dReal>(&this->lowStop, "Low Stop");
         readValueFromPython<dReal>(&this->highStop, "High Stop");
@@ -37,13 +35,16 @@ protected:
     void setBodies(Environment *environment){
         // set bodies
         if (this->body1ID >= 0){
-            this->body1 = environment->getBody(this->body1ID);
+            RigidBody *rigidBody = (RigidBody *) environment->getEntity(this->body1ID);
+            this->body1 = rigidBody->getBody();
         }
         else{
             this->body1 = (dBodyID) 0;
         }
+
         if (this->body2ID >= 0){
-            this->body2 = environment->getBody(this->body2ID);
+            RigidBody *rigidBody = (RigidBody *) environment->getEntity(this->body2ID);
+            this->body2 = rigidBody->getBody();
         }
         else{
             this->body2 = (dBodyID) 0;
@@ -88,9 +89,10 @@ public:
     }
 
     void draw(){
+
         // temporary draw function
-        dReal pos[3];
-        dReal rot[3];
+        dVector3 pos;
+        dVector3 rot;
 
         dJointGetHingeAnchor(this->joint, pos);
         dJointGetHingeAxis(this->joint, rot);
@@ -98,7 +100,13 @@ public:
         dMatrix3 R;
         dRFromZAxis(R, rot[0], rot[1], rot[2]);
 
-        dsSetColorAlpha(1, 0.2, 0.2, 0.5);
+
+        if(this->highStop == this->lowStop){
+            dsSetColorAlpha(0.1, 0.1, 0.1, 0.5);          
+        }
+        else{
+            dsSetColorAlpha(1, 0.2, 0.2, 0.5);
+        }
         dsDrawCylinder(pos, R, 0.3, 0.03);
     }
 
@@ -111,6 +119,8 @@ protected:
     dReal axis[3];
     
 public:
+    Slider(){this->drawName = "Joint";}
+
     void readJointParamsFromPython(void){
         readValueFromPython<dReal>(this->axis, 3,"Hinge Axis");
     }
@@ -132,11 +142,52 @@ public:
     }
 
     void draw(){
-        // draw through center of mass along axis
-        // if only connected to one object
+        dVector3 center = {0, 0, 0};
 
-        // draw from midpoint between two objects
-        // along axis
+        dVector3 direction;
+        dJointGetSliderAxis(this->joint, direction);
+
+        dReal offset = dJointGetSliderPosition(this->joint);
+
+        dsSetColorAlpha(0.3, 0.8, 0.3, 0.75);
+
+        int one = false;
+        if (this->body1ID >= 0){ // not the world
+            const dReal *bodyCenter = dBodyGetPosition(this->body1);
+            dAddVectors3(center, bodyCenter, center);
+            one = !one;
+        }
+        if (this->body2ID >= 0){
+            const dReal *bodyCenter = dBodyGetPosition(this->body2);
+            dAddVectors3(center, bodyCenter, center);
+            one = !one;
+        }
+
+        dReal point1[3];
+        dReal point2[3];
+
+        if (one){
+            // com of body if only one body
+            point1[0] = center[0] + direction[0] * (this->highStop - offset);
+            point1[1] = center[1] + direction[1] * (this->highStop - offset);
+            point1[2] = center[2] + direction[2] * (this->highStop - offset);
+
+            point2[0] = center[0] + direction[0] * (this->lowStop + offset);
+            point2[1] = center[1] + direction[1] * (this->lowStop + offset);
+            point2[2] = center[2] + direction[2] * (this->lowStop + offset);        
+        }
+        else{
+            // midpoint between two bodies if two bodies present
+            point1[0] = center[0] / 2.0 + direction[0] * this->highStop;
+            point1[1] = center[1] / 2.0 + direction[1] * this->highStop;
+            point1[2] = center[2] / 2.0 + direction[2] * this->highStop;
+
+            point2[0] = center[0] / 2.0 + direction[0] * this->lowStop;
+            point2[1] = center[1] / 2.0 + direction[1] * this->lowStop;
+            point2[2] = center[2] / 2.0 + direction[2] * this->lowStop;
+        }
+
+        dsDrawLine(point1, point2);
     }
 
 };
