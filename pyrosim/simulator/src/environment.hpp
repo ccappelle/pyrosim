@@ -45,6 +45,7 @@ public:
     void createSpace(std::string name);
 
     Entity* getEntity(int i); 
+    void takeStep(int timeStep, float dt);
     // write entities to python
     void writeToPython(void);
 };

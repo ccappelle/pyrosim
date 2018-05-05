@@ -172,7 +172,6 @@ static void drawLoop(int pause){
         dsGetViewpoint(xyz, hpr);
         dVector3 forward, right, up; // direction vector of camera
 
-        std::cerr << hpr[1] << std::endl;
         forward[0] = cos(hpr[0] * PI / 180.0) * cos(hpr[1] * PI / 180.0); //* (1 - cos(hpr[1] * PI / 180.0));
         forward[1] = sin(hpr[0] * PI / 180.0) * cos(hpr[1] * PI / 180.0); //* (1 - cos(hpr[1] * PI / 180.0));
         forward[2] = sin(hpr[1] * PI / 180.0); 
@@ -206,30 +205,6 @@ static void drawLoop(int pause){
                            xyz[2] + forward[2]*fdist + (1+rOff*i)*right[2]*rdist + up[2]*udist*uOff};
             dsDrawLine(topPoint, bottomPoint);
         }
-
-        // const dReal fpoint[3] = {xyz[0] + forward[0]*mod,
-        //                          xyz[1] + forward[1]*mod,
-        //                          xyz[2] + forward[2]*mod};
-        // const dReal upoint[3] = {xyz[0] + up[0]*0.01 + forward[0]*mod,
-        //                          xyz[1] + up[1]*0.01 + forward[1]*mod,
-        //                          xyz[2] + up[2]*0.01 + forward[2]*mod};
-        // const dReal rpoint[3] = {xyz[0] + right[0]*0.01 + forward[0]*mod,
-        //                          xyz[1] + right[1]*0.01 + forward[1]*mod,
-        //                          xyz[2] + right[2]*0.01 + forward[2]*mod};
-
-        // // dsDrawLine(point1, point2);
-        
-        // dMatrix3 R;
-        // dRSetIdentity(R);
-
-        // dsSetColor(1.0, 0.4, 0.4);
-        // dsDrawSphere(fpoint, R, 0.01);
-
-        // dsSetColor(0.0, 0.4, 0.4);
-        // dsDrawSphere(upoint, R, 0.01);
-
-        // dsSetColor(0.0, 0.4, 1.0);
-        // dsDrawSphere(rpoint, R, 0.01);
     }
 
     environment->draw(drawJoints, drawSpaces);
@@ -292,6 +267,9 @@ void initializeParameters(void){
 }
 
 void simulationStep(void){
+    // place action befor collision detection?
+    environment->takeStep(evalStep, parameters["DT"]);
+
     dSpaceCollide(topspace, 0, &nearCallback); // run collision
     dWorldStep(world, parameters["DT"]); // take time step
     dJointGroupEmpty(contactgroup);

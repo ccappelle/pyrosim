@@ -4,6 +4,16 @@
 
 class Mixin(object):
 
+    def add_impulse_to_body(self,
+                            body_id,
+                            force,
+                            time_step=0):
+
+        self._send_add_command(body_id,
+                               'Impulse',
+                               time_step,
+                               force
+                               )
     def add_box_to_composite(self,
                          composite_id,
                          position = (0.0, 0.0, 0.0),
@@ -13,6 +23,7 @@ class Mixin(object):
                          color = (1.0, 1.0, 1.0)):
 
         self._send_add_command(composite_id,
+                               'Geom',
                                'Box', 
                                position,
                                orientation,
@@ -31,6 +42,7 @@ class Mixin(object):
                                   color = (1.0, 1.0, 1.0)):
         capped = int(capped)
         self._send_add_command(composite_id,
+                               'Geom',
                                'Cylinder',
                                position,
                                orientation,
@@ -48,6 +60,7 @@ class Mixin(object):
                                 density = 1.0,
                                 color = (1.0, 1.0, 1.0)):
         self._send_add_command(composite_id,
+                               'Geom',
                                'Sphere',
                                position,
                                orientation,

@@ -140,6 +140,11 @@ void Environment::readEntityFromPython(void){
     std::cerr << "---------------------------" << std::endl << std::endl;
 }
 
+void Environment::takeStep(int timeStep, float dt){
+    for (auto entity : this->entities){
+        entity->takeStep(timeStep, dt);
+    }
+}
 void Environment::writeToPython(void){
     for (auto entity : this->entities){
         entity->writeToPython();

@@ -4,6 +4,8 @@
 #include <string>
 
 #include <ode/ode.h>
+#include <map>
+#include <vector>
 
 #include "entity.hpp"
 #include "rigidGeom.hpp"
@@ -15,6 +17,7 @@ public:
 
     std::string spaceName;
     std::string collisionGroupName;
+    std::map<int, std::vector<float>> impulses;
 
     RigidBody(){this->drawName="Body";};
 
@@ -99,17 +102,46 @@ public:
         }
     };
 
-    void readAdditionFromPython(void){
-        std::string geomName;
-        readStringFromPython(geomName, "Geom");
-        readNextGeomFromPython(geomName);
-    }
-
     virtual void readFromPython(void){
         readCollisionInfoFromPython();
     }
 
-    void readNextGeomFromPython(std::string geomName){
+    void readAdditionFromPython(void){
+        std::string addition;
+        readStringFromPython(addition, "Adding");
+        if (addition == "Geom")
+            readGeomFromPython();
+        else if (addition == "Impulse")
+            readImpulseFromPython();
+    }
+
+    void readImpulseFromPython(void){
+        // read in time
+        int time;
+        readValueFromPython<int>(&time, "Time");
+        // read direction
+        float force[3];
+        readValueFromPython<float>(force, 3, "Direction");
+        if (this->impulses.count(time) == 0){
+            this->impulses[time].push_back(force[0]);
+            this->impulses[time].push_back(force[1]);
+            this->impulses[time].push_back(force[2]);
+        }
+        else{
+            this->impulses[time][0] += force[0];
+            this->impulses[time][1] += force[1];
+            this->impulses[time][2] += force[2];
+        }
+    }
+
+    void readGeomFromPython(void){
+        std::string geomName;
+        readStringFromPython(geomName, "Geom");
+        readNamedGeomFromPython(geomName);
+    }
+
+
+    void readNamedGeomFromPython(std::string geomName){
         // C.C. could probably also put this in a map but
         // geoms are finite so I don't see the need
         RigidGeom *geom;
@@ -134,6 +166,15 @@ public:
 
     std::string getCollisionGroupName(void){return this->collisionGroupName;}
 
+    void takeStep(int timeStep, float dt){
+        // apply impulse
+        if (impulses.count(timeStep) > 0){
+            dBodyAddForce(this->body,
+                          impulses[timeStep][0] / dt,
+                          impulses[timeStep][1] / dt,
+                          impulses[timeStep][2] / dt);
+        }
+    }
 protected:
     void readCollisionInfoFromPython(void){
         readStringFromPython(this->spaceName, "Space");
@@ -147,7 +188,7 @@ public:
 
     void readFromPython(){
         // create box geom and read it in
-        this->readNextGeomFromPython("Box");
+        this->readNamedGeomFromPython("Box");
         // read space and collision info
         this->readCollisionInfoFromPython();
     }
@@ -158,7 +199,7 @@ public:
     CylinderBody(){this->drawName="Body";}
 
     void readFromPython(){
-        this->readNextGeomFromPython("Cylinder");
+        this->readNamedGeomFromPython("Cylinder");
         this->readCollisionInfoFromPython();
     }
 };
@@ -168,7 +209,7 @@ public:
     SphereBody(){this->drawName="Body";}
 
     void readFromPython(){
-        this->readNextGeomFromPython("Sphere");
+        this->readNamedGeomFromPython("Sphere");
         this->readCollisionInfoFromPython();
     }
 };

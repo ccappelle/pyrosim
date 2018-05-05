@@ -35,6 +35,9 @@ public:
     // draws entity (may be unused)
     virtual void draw(void){};
 
+    // take a simulation step (e.g. actuate motor for one step)
+    virtual void takeStep(int timeStep, float dt){};
+
     // writes output to cerr (may be unused)
     virtual void writeToPython(void){};
 
