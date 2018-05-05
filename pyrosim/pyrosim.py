@@ -51,14 +51,23 @@ class Simulator(_body.Mixin, _joint.Mixin):
         self._play_paused = play_paused
 
         # body parameters
-        self._current_space = 'default'
-        self._current_collision_group = 'default'
+        self._current_space = None
+        self._current_collision_group = None
 
         # sim parameters
         self._eval_steps = eval_steps
         self._dt = dt
 
         self._raw_cerr = ''
+
+    def assign_collision(self, group1, group2):
+        self._send('AssignCollision', group1, group2)
+
+    def set_current_collision_group(self, group_name):
+        self._current_collision_group = group_name
+
+    def set_current_space(self, space_name):
+        self._current_space = space_name
 
     def start(self):
         """Start the simulation"""
@@ -93,15 +102,14 @@ class Simulator(_body.Mixin, _joint.Mixin):
         self._raw_cerr = data[1]
 
         #cut out annoying drawstuff commands
-        start_str = 'Simulation Starting'
-        end_str = 'Simulation Completed'
+        start_str = 'Simulation test environment v0.02'
+        end_str = 'sideways and up.'
 
         start_index = self._raw_cerr.find(start_str)
         end_index = self._raw_cerr.find(end_str)
 
-
         if not (start_index == -1 or end_index == -1):
-            self._raw_cerr = self._raw_cerr[:start_index+len(start_str) + 1] + '...\n' + self._raw_cerr[end_index:]
+            self._raw_cerr = self._raw_cerr[:start_index] + self._raw_cerr[end_index + len(end_str):]
 
     def get_error_out(self):
         """Returns raw output from cerr"""

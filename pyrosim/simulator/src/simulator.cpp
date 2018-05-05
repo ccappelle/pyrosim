@@ -52,6 +52,8 @@ int firstStep = true;
 int drawJoints = false;
 int drawSpaces = false;
 
+std::string COLLIDE_ALWAYS = "Collide";
+
 void readCollisionFromPython(void);
 static void command(void);
 void createEnvironment(void);
@@ -77,7 +79,7 @@ int main(int argc, char **argv){
     createEnvironment();
     dWorldSetAutoDisableFlag(world, 1);
     initializeDrawStuff();
-    std::cerr << "Simulation Starting" << std::endl << std::endl;
+    std::cerr << "Simulation Starting" << std::endl;
     dsSimulationLoop(argc, argv, 900, 700, &fn);
 }
 
@@ -119,7 +121,7 @@ void createEnvironment(void){
     // send ground plane
     dGeomID plane = dCreatePlane(topspace, 0, 0, 1, 0);
     int planeID = -1;
-    dGeomSetData(plane, (void *) "None");
+    dGeomSetData(plane, static_cast<void*>(&COLLIDE_ALWAYS));
     // create bodies, joints, ANN, etc
     environment->createEntities();
 
@@ -237,26 +239,22 @@ void nearCallback(void *callbackData, dGeomID o1, dGeomID o2){
     // TODO create exits for connected joints and
     // user defined collision pattern
 
-    // C.C. pointer to user defined geometry info
-    // currently specifies associated rigid body
-    // be set to anything
-    // TO DO: set to standard data struct or something
-    // right now all that is needed is the collision group name
-    // RigidBody *body1 = (RigidBody *) dGeomGetData(o1);
-    // RigidBody *body2 = (RigidBody *) dGeomGetData(o1);
+    // C.C. currently geom data is just a string
+    // we should create a data struct instead
+    std::string &group1 = *(static_cast<std::string*> (dGeomGetData(o1)));
+    std::string &group2 = *(static_cast<std::string*> (dGeomGetData(o2)));
 
-    std::string *group1 = (std::string *) dGeomGetData(o1);
-    std::string *group2 = (std::string *) dGeomGetData(o2);
-
-    collisionPair pair = std::make_pair(*group1, *group2);
-
-    if (collisionMap.count(pair) == 0){ // no entry assume collision
-
+    if (group1 != COLLIDE_ALWAYS and group2 != COLLIDE_ALWAYS){
+        collisionPair pair = std::make_pair(group1, group2);
+        if (collisionMap.count(pair) == 0){ // no collision entry, exit early
+            return;
+        }
+        else{
+            if (collisionMap[pair] == false){ // collision entry specifies no collision should occur
+                return;
+            }
+        }
     }
-    else{
-        return;
-    }
-    // std::cerr << " COllisino " << group1 << " " << group2 << std::endl;
 
     // generate at most n contacts per collision
     const int N = parameters["nContacts"];

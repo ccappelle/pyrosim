@@ -63,6 +63,12 @@ class Mixin(object):
                  space = None,
                  collision_group = None):
 
+        if collision_group is None:
+            collision_group = self._current_collision_group
+
+        if space is None:
+            space = self._current_space
+
         body_id = self._num_entities
         self._send_entity('Box',
                            *position,
@@ -85,6 +91,12 @@ class Mixin(object):
                       space = None,
                       collision_group = None):
 
+        if collision_group is None:
+            collision_group = self._current_collision_group
+
+        if space is None:
+            space = self._current_space
+
         capped = int(capped)
         body_id = self._num_entities
         self._send_entity('Cylinder',
@@ -100,6 +112,12 @@ class Mixin(object):
         return body_id
 
     def send_composite_body(self, space=None, collision_group=None):
+
+        if collision_group is None:
+            collision_group = self._current_collision_group
+
+        if space is None:
+            space = self._current_space
 
         body_id = self._num_entities
         self._send_entity('Composite',
@@ -143,6 +161,12 @@ class Mixin(object):
                 color = (1.0, 1.0, 1.0),
                 space = None,
                 collision_group = None):
+
+        if collision_group is None:
+            collision_group = self._current_collision_group
+
+        if space is None:
+            space = self._current_space
 
         body_id = self._num_entities
         self._send_entity('Sphere',

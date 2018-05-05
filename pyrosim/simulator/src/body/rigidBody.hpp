@@ -57,7 +57,7 @@ public:
             this->geoms[0]->create(environment);
 
             // set paramaters after create
-            dGeomSetData(this->geoms[0]->getGeom(), &this->collisionGroupName);
+            dGeomSetData(this->geoms[0]->getGeom(), static_cast<void*>(&this->collisionGroupName));
             this->geoms[0]->setBody(this->body);
             this->geoms[0]->resetGeom();
             m = this->geoms[0]->calculateMass();
@@ -71,7 +71,7 @@ public:
                 geom->create(environment);
 
                 // set parameters after create
-                dGeomSetData(geom->getGeom(), &this->collisionGroupName);
+                dGeomSetData(geom->getGeom(), static_cast<void*>(&this->collisionGroupName));
                 geom->setBody(this->body);
                 geom->resetGeomUsingOffset();
 

@@ -39,8 +39,8 @@ class Mixin(object):
         except:
             joint_range = (-joint_range, joint_range)
 
-        assert(len(joint_range)) == 2
-
+        assert(len(joint_range)) == 2, "joint_range must have 2 entries"
+        assert(joint_range[1] >= joint_range[0]) , "Slider joint cannot have infinite range"
         self._send_entity("Slider",
                           body1, body2,
                           *axis,
