@@ -124,9 +124,9 @@ class Simulator(_body.Mixin, _joint.Mixin):
             self._raw_cerr = self._raw_cerr[:start_index] + \
                 self._raw_cerr[end_index + len(end_str):]
 
-    def get_error_out(self):
-        """Returns raw output from cerr"""
-        return self._raw_cerr
+    def get_debug_output(self):
+        """Returns the debug output from the simulation"""
+        return self._strings_to_send + '\n' + self._raw_cerr
 
     def _send(self, command, *args):
         assert isinstance(command, str), ('Command must be string')
@@ -178,5 +178,5 @@ if __name__ == '__main__':
 
     sim.wait_to_finish()
 
-    print(sim._strings_to_send)
-    print(sim._raw_cerr)
+    debug = sim.get_debug_output()
+    print(debug)

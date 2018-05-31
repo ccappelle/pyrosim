@@ -51,6 +51,11 @@ protected:
         }
 
     }
+
+    dJointID getJoint(void){
+        return this->joint;
+    }
+
 };
 
 

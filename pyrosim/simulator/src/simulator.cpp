@@ -245,6 +245,8 @@ void initializeParameters(void){
     parameters["DT"] = 0.01;
     parameters["EvalSteps"] = 200;
 
+    // parameters["ERP"];
+    
     // C.C. heavy here to split arrays into different
     // entries in map but maybe necessary
     // to reduce bloat in readFromPython

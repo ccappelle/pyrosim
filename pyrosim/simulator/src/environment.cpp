@@ -145,6 +145,7 @@ void Environment::takeStep(int timeStep, float dt){
         entity->takeStep(timeStep, dt);
     }
 }
+
 void Environment::writeToPython(void){
     for (auto entity : this->entities){
         entity->writeToPython();

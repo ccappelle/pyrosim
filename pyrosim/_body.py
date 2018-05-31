@@ -50,7 +50,7 @@ class Mixin(object):
                                radius,
                                capped,
                                density,
-                               *color)
+                               color)
 
     def add_sphere_to_composite(self,
                                 composite_id,
