@@ -12,7 +12,6 @@ import pyrosim
 # You then use the assign_collision method
 # to specify which groups can collide
 
-
 sim = pyrosim.Simulator(eval_steps=500)
 
 # ex of 1

@@ -162,11 +162,15 @@ public:
         this->geoms.push_back(geom);
     }
 
-    dBodyID getBody(void){return this->body;};
+    dBodyID getBody(void){
+        return this->body;
+    }
 
-    std::string getCollisionGroupName(void){return this->collisionGroupName;}
+    std::string getCollisionGroupName(void){
+        return this->collisionGroupName;
+    }
 
-    void takeStep(int timeStep, float dt){
+    void takeStep(int timeStep, dReal dt){
         // apply impulse
         if (impulses.count(timeStep) > 0){
             dBodyAddForce(this->body,
@@ -175,6 +179,7 @@ public:
                           impulses[timeStep][2] / dt);
         }
     }
+
 protected:
     void readCollisionInfoFromPython(void){
         readStringFromPython(this->spaceName, "Space");

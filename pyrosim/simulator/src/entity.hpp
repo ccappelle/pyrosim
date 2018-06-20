@@ -4,6 +4,7 @@
 #pragma once
 
 #include <drawstuff/drawstuff.h>
+#include <ode/ode.h>
 // drawing necessity
 #ifdef dDOUBLE
 #define dsDrawLine dsDrawLineD
@@ -34,9 +35,7 @@ public:
 
     // draws entity (may be unused)
     virtual void draw(void){};
-
-    // take a simulation step (e.g. actuate motor for one step)
-    virtual void takeStep(int timeStep, float dt){};
+    virtual void takeStep(int timeStep, dReal dt) {};
 
     // writes output to cerr (may be unused)
     virtual void writeToPython(void){};

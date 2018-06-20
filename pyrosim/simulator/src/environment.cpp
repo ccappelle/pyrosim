@@ -3,13 +3,18 @@
 
 #include <map>
 
+// mumbo jumbo to create a map from strings to entity initializer functions
 template<typename entityClass> Entity * createEntityInstance(){ return static_cast <Entity *> (new entityClass);}
 typedef std::map<std::string, Entity * (*) ()> StringToEntity;
+template<typename actuatorClass> Actuator * createActuatorInstance(){ return static_cast <Actuator *> (new actuatorClass);}
+typedef std::map<std::string, Actuator * (*) ()> StringToActuator;
 
 #include "body/rigidBody.hpp"
 #include "body/heightMap.hpp"
 #include "joint/joint.hpp"
+#include "actuator/jointMotor.hpp"
 
+// fill up map
 // C.C. we can possibly put this in separate file?
 // maybe when it becomes bigger we will know how to best handle it
 StringToEntity stringToEntityMap{
@@ -18,8 +23,12 @@ StringToEntity stringToEntityMap{
     {"Sphere",     &createEntityInstance<SphereBody>   }, // simple body with one shpere
     {"Composite",  &createEntityInstance<RigidBody>    }, // initially empty composite body
     {"HeightMap",  &createEntityInstance<HeightMap>    }, // Landscape
-    {"Hinge",      &createEntityInstance<Hinge>        }, // Hinge joint
-    {"Slider",     &createEntityInstance<Slider>       }, // slider joint
+    {"Hinge",      &createEntityInstance<HingeJoint>        }, // Hinge joint
+    {"Slider",     &createEntityInstance<SliderJoint>       }, // slider joint
+};
+
+StringToActuator stringToActuatorMap{
+    {"Rotary", &createActuatorInstance<Rotary> }, // Hinge rotary motor
 };
 
 Environment::Environment(dWorldID world, dSpaceID topspace, int numEntities){
@@ -37,12 +46,16 @@ void Environment::addToEntityFromPython(void){
     this->entities[entityID]->readAdditionFromPython();
 }
 
-void Environment::createEntities(void){
+void Environment::createInODE(void){
     std::cerr << "Creating Entities In Environment" << std::endl
               << "---------------------------" << std::endl;
     for (auto entity : this->entities){
         // create entity with env data
         entity->create(this);
+    }
+
+    for (auto actuator : this->actuators){
+        actuator->create(this);
     }
     std::cerr << "---------------------------" << std::endl << std::endl;
 }
@@ -96,6 +109,14 @@ Entity* Environment::getEntity(int i){
     return this->entities[i];
 }
 
+// Sensor* Environment::getSensor(int i){
+
+// }
+
+Actuator* Environment::getActuator(int i){
+    return this->actuators[i];
+}
+
 dSpaceID Environment::getSpace(std::string name){
     if (name == "None" or name == "default"){
         return this->topspace;
@@ -140,7 +161,54 @@ void Environment::readEntityFromPython(void){
     std::cerr << "---------------------------" << std::endl << std::endl;
 }
 
-void Environment::takeStep(int timeStep, float dt){
+void Environment::readActuatorFromPython(void){
+    // get name of actuator
+    std::string actuatorName;
+    readStringFromPython(actuatorName);
+    if (stringToActuatorMap.count(actuatorName) == 0){
+        // entity key doesnt exist, either change python send
+        // or add key to stringToEntityMap
+        std::cerr << "ERROR: Entity " << actuatorName << " does not exist"
+                  << std::endl
+                  << "Exiting" << std::endl;
+        exit(0);
+    }
+    // entity key name exists
+    std::cerr << "---------------------------" << std::endl
+              << "Creating Actuator " << actuatorName  
+              << " From Python: " << this->actuators.size()
+              << std::endl;
+
+    // create new instance of entity from map index
+    // associated with entityName
+    Actuator *actuator = stringToActuatorMap[actuatorName]();
+
+    // read entity info from python
+    actuator->readFromPython();
+    // set entity id (probably unnecessary)
+    actuator->setID(this->actuators.size());
+
+    // add entity to entity list
+    this->actuators.push_back(actuator);
+    std::cerr << "---------------------------" << std::endl << std::endl;
+}
+
+void Environment::takeStep(int timeStep, dReal dt){
+    // update sensors 
+    // for (auto sensor : this->sensors){
+    //     sensor->sense(this);
+    // }
+
+    // update network
+    // this->network->activate(this->sensors);
+
+    // actuate
+    for (auto actuator : this->actuators){
+        actuator->actuate(1.0);
+    }
+
+    // take steps with entities
+    // impulses etc.
     for (auto entity : this->entities){
         entity->takeStep(timeStep, dt);
     }

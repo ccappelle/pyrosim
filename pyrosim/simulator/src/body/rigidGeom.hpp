@@ -21,6 +21,7 @@ public:
     virtual void draw(void) =0;
     virtual void writeToPython(void) =0;
     virtual void readDimensionsFromPython(void) = 0; // unique to body
+    virtual void takeStep(int timeStep, dReal dt) {};
 
     dGeomID getGeom(){return this->geom;};
 

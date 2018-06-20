@@ -20,11 +20,15 @@ class Mixin(object):
 
         assert(len(joint_range)) == 2
 
+        joint_id = self._num_entities
+
         self._send_entity("Hinge",
                           body1, body2,
                           anchor,
                           axis,
                           joint_range)
+
+        return joint_id
 
     def send_slider_joint(self,
                           body1, body2,
@@ -41,7 +45,12 @@ class Mixin(object):
         else:
           assert(len(joint_range)) == 2, "joint_range must have 2 entries"
         assert(joint_range[1] >= joint_range[0]) , "Slider joint cannot have infinite range"
+
+        joint_id = self._num_entities
+
         self._send_entity("Slider",
                           body1, body2,
                           axis,
                           joint_range)
+
+        return joint_id

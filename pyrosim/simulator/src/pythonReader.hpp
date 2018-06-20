@@ -38,11 +38,4 @@ template<class T> inline void readValueFromPython(T *val, std::string name){
     readValueFromPython<T>(val, 1, name);
 }
 
-// C.C. : My attempt
-// template<> inline void readValueFromPython<std::string>(std::string &val){
-//     std::getline(std::cin, val);
-
-//     std::cerr << "Read In " << val << std::endl;
-// }
-
 #endif

@@ -16,13 +16,15 @@ if __package__ is None or __package__ == '':
     # uses current directory visibility
     import _body
     import _joint
+    import _actuator
 else:
     # uses current package visibility
     from . import _body
     from . import _joint
+    from . import _actuator
 
 
-class Simulator(_body.Mixin, _joint.Mixin):
+class Simulator(_body.Mixin, _joint.Mixin, _actuator.Mixin):
     """Python Interface for ODE robotics simulator
 
     Attributes
@@ -44,6 +46,7 @@ class Simulator(_body.Mixin, _joint.Mixin):
             self._this_file_path, 'simulator/build')
 
         self._num_entities = 0
+        self._num_actuators = 0
 
         # commands to be sent
         self._strings_to_send = ''
@@ -134,7 +137,6 @@ class Simulator(_body.Mixin, _joint.Mixin):
         # each entry is delimited by \n
         string_to_send = command + '\n'
         for arg in args:
-
             try: # arg is a list or string
                 i = iter(arg)
             except: # arg is a single value
@@ -153,11 +155,18 @@ class Simulator(_body.Mixin, _joint.Mixin):
         self._send('Entity', *args)
         self._num_entities += 1
 
+    def _send_actuator(self, *args):
+        self._send('Actuator', *args)
+        self._num_actuators += 1
+
+    def _send_sensor(self, *args):
+        self._send('Sensor', *args)
+        self._num_sensors += 1
+
     def _send_parameter(self, *args):
         self._send('Parameter', *args)
 
     def _send_simulator_parameters(self):
-
         # send camera
 
         # send gravity

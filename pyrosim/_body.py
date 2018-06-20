@@ -84,7 +84,7 @@ class Mixin(object):
             space = self._current_space
 
         body_id = self._num_entities
-        self._send_entity('Box',
+        self._send_entity( 'Box',
                            position,
                            orientation,
                            sides,

@@ -12,10 +12,9 @@ protected:
     dReal lowStop, highStop;
     dBodyID body1, body2; // ode bodies
     dJointID joint;
-
+public:
     virtual void create(Environment *environment) =0;
     virtual void readJointParamsFromPython() =0;
-
     void readFromPython(void){
         this->readBodiesFromPython();
         this->readJointParamsFromPython();
@@ -59,13 +58,13 @@ protected:
 };
 
 
-class Hinge : public Joint{
+class HingeJoint : public Joint{
 protected:
     dReal anchor[3];
     dReal axis[3];
     
 public:
-    Hinge(){this->drawName = "Joint";}
+    HingeJoint(){this->drawName = "Joint";}
 
     void readJointParamsFromPython(void){
         readValueFromPython<dReal>(this->anchor, 3,"Hinge Anchor");
@@ -118,13 +117,13 @@ public:
 };
 
 
-class Slider : public Joint{
+class SliderJoint : public Joint{
 protected:
     dReal anchor[3];
     dReal axis[3];
     
 public:
-    Slider(){this->drawName = "Joint";}
+    SliderJoint(){this->drawName = "Joint";}
 
     void readJointParamsFromPython(void){
         readValueFromPython<dReal>(this->axis, 3,"Hinge Axis");
