@@ -15,12 +15,13 @@
 #define dsDrawTriangle dsDrawTriangleD
 #endif
 
+enum EntityType {ENTITY=0, ACTUATOR, JOINT, NEURON, SYNAPSE, BODY, SENSOR};
+
 class Environment;
 
 class Entity{
 protected:
     int entityID;
-    std::string drawName; // currently unused name to specify drawing toggle. Currently just body and joint
 public:
     // addition function prototype 
     // allows extra python inputs to act on entity
@@ -43,6 +44,7 @@ public:
     // sets id (aka placement in entity list in env)
     virtual void setID(int myID){this->entityID = myID;};
     virtual int getID(){return this->entityID;};
-    virtual std::string getDrawName(){return this->drawName;};
+    virtual EntityType getEntityType(void){return ENTITY;};
 };
+
 #endif

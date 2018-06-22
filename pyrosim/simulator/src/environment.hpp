@@ -14,7 +14,6 @@
 
 // local
 #include "entity.hpp"
-#include "actuator/actuator.hpp"
 
 class Environment{
 public:
@@ -22,9 +21,9 @@ public:
     dSpaceID topspace;
     // useful to split this into seperate maps
     std::vector<Entity*> entities; // general entities (bodies, joints, etc)
-    // std::vector<Entity*> sensors; 
-    std::vector<Actuator*> actuators;
-    // std::vector<Entity*> network;
+
+    // ENTITY, ACTUATOR, JOINT, NEURON, SYNAPSE, BODY, SENSOR
+    std::vector< std::vector<int> > entityVectors;
 
     std::map<std::string, dSpaceID> subspaces;
 
@@ -34,7 +33,7 @@ public:
     // add to an existing entity using input from python
     void addToEntityFromPython(void);
 
-    void readActuatorFromPython(void);
+    // void readActuatorFromPython(void);
 
     // add new uninitialized entity to entities
     // and read in contents from python to that entity
@@ -53,11 +52,13 @@ public:
     void createSpace(std::string name);
 
     Entity* getEntity(int i);
-    Actuator* getActuator(int i);
+    // Actuator* getActuator(int i);
     
     void takeStep(int timeStep, dReal dt);
+    void takeStep(std::vector<int> entityIDs, int timeStep, dReal dt);
     // write entities to python
     void writeToPython(void);
+
 };
 
 #endif

@@ -382,9 +382,9 @@ void readFromPython(void){
         else if(incomingString == "Entity"){
             environment->readEntityFromPython();
         }
-        else if(incomingString == "Actuator"){
-            environment->readActuatorFromPython();
-        }
+        // else if(incomingString == "Actuator"){
+        //     environment->readActuatorFromPython();
+        // }
         // else if(incomingString == "Sensor"){
         //     enviornment->readSensorFromPython();
         // }

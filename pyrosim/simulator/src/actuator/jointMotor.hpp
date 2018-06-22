@@ -10,14 +10,15 @@
 #include "pythonReader.hpp"
 #include "joint/joint.hpp"
 
-class JointMotor : public Actuator{
+class JointActuator : public Actuator{
 protected:
     float maxForce, speed;
     int jointID;
     std::string control;
     dJointID joint;
+    HingeJoint *jointObject;
 public:
-    JointMotor(){};
+    JointActuator(){};
 
     virtual void create(Environment *environment) =0;
     virtual void actuate(void) =0;
@@ -35,10 +36,10 @@ public:
     }
 };
 
-class Rotary : public JointMotor{
+class RotaryActuator : public JointActuator{
 
     void create(Environment *environment){
-        HingeJoint *jointObject = (HingeJoint *) environment->getEntity(this->jointID);
+        this->jointObject = (HingeJoint *) environment->getEntity(this->jointID);
         this->joint = jointObject->getJoint();
 
         if (this->maxForce < 0){
@@ -67,10 +68,14 @@ class Rotary : public JointMotor{
     }
 
     void actuateByPosition(dReal position){
+        // position variable is assumed to be in [-1, 1]
+
+        // squash position to be in [0, 1]
+        dReal normalizedPosition = (position + 1.0) / 2.0;
 
         dReal highStop = dJointGetHingeParam(this->joint, dParamHiStop);
         dReal lowStop = dJointGetHingeParam(this->joint, dParamLoStop);
-        dReal desiredTarget = position * ( highStop - lowStop ) + lowStop;
+        dReal desiredTarget = normalizedPosition * ( highStop - lowStop ) + lowStop;
 
         dReal currentTarget;
         currentTarget = dJointGetHingeAngle(joint);

@@ -6,29 +6,29 @@
 // mumbo jumbo to create a map from strings to entity initializer functions
 template<typename entityClass> Entity * createEntityInstance(){ return static_cast <Entity *> (new entityClass);}
 typedef std::map<std::string, Entity * (*) ()> StringToEntity;
-template<typename actuatorClass> Actuator * createActuatorInstance(){ return static_cast <Actuator *> (new actuatorClass);}
-typedef std::map<std::string, Actuator * (*) ()> StringToActuator;
 
 #include "body/rigidBody.hpp"
 #include "body/heightMap.hpp"
 #include "joint/joint.hpp"
 #include "actuator/jointMotor.hpp"
+#include "network/ctrnn.hpp"
 
 // fill up map
 // C.C. we can possibly put this in separate file?
 // maybe when it becomes bigger we will know how to best handle it
 StringToEntity stringToEntityMap{
-    {"Box",        &createEntityInstance<BoxBody>      }, // simple body with one box
-    {"Cylinder",   &createEntityInstance<CylinderBody> }, // simple body with one cylinder
-    {"Sphere",     &createEntityInstance<SphereBody>   }, // simple body with one shpere
-    {"Composite",  &createEntityInstance<RigidBody>    }, // initially empty composite body
-    {"HeightMap",  &createEntityInstance<HeightMap>    }, // Landscape
-    {"Hinge",      &createEntityInstance<HingeJoint>        }, // Hinge joint
-    {"Slider",     &createEntityInstance<SliderJoint>       }, // slider joint
-};
-
-StringToActuator stringToActuatorMap{
-    {"Rotary", &createActuatorInstance<Rotary> }, // Hinge rotary motor
+    {"Box",             &createEntityInstance<BoxBody>        }, // simple body with one box
+    {"Cylinder",        &createEntityInstance<CylinderBody>   }, // simple body with one cylinder
+    {"Sphere",          &createEntityInstance<SphereBody>     }, // simple body with one shpere
+    {"Composite",       &createEntityInstance<RigidBody>      }, // initially empty composite body
+    {"HeightMap",       &createEntityInstance<HeightMap>      }, // Landscape
+    {"HingeJoint",      &createEntityInstance<HingeJoint>     }, // Hinge joint
+    {"SliderJoint",     &createEntityInstance<SliderJoint>    }, // slider joint
+    {"RotaryActuator",  &createEntityInstance<RotaryActuator> }, // Rotary actuator
+    {"Synapse",         &createEntityInstance<Synapse>        }, // Synapse
+    {"BiasNeuron",      &createEntityInstance<BiasNeuron>     }, // Bias neuron
+    {"MotorNeuron",     &createEntityInstance<MotorNeuron>    }, // Motor Neuron
+    {"UserNeuron",      &createEntityInstance<UserNeuron>     }, // User Neuron
 };
 
 Environment::Environment(dWorldID world, dSpaceID topspace, int numEntities){
@@ -36,6 +36,15 @@ Environment::Environment(dWorldID world, dSpaceID topspace, int numEntities){
     this->world = world;
     this->topspace = topspace;
     this->entities.reserve(numEntities);
+
+    // initialize empty vectors containing the indexes for 
+    // each entity type
+    // ENTITY, ACTUATOR, JOINT, NEURON, SYNAPSE, BODY, SENSOR
+    int numEnums = 7;
+    for (int i=0; i<numEnums; i++){
+        std::vector<int> vec;
+        this->entityVectors.push_back(vec);
+    }
 };
 
 void Environment::addToEntityFromPython(void){
@@ -54,9 +63,9 @@ void Environment::createInODE(void){
         entity->create(this);
     }
 
-    for (auto actuator : this->actuators){
-        actuator->create(this);
-    }
+    // for (auto actuator : this->actuators){
+    //     actuator->create(this);
+    // }
     std::cerr << "---------------------------" << std::endl << std::endl;
 }
 
@@ -73,9 +82,8 @@ void Environment::createSpace(std::string name){
 
 void Environment::draw(int drawJoints, int drawSpaces){
     for (auto entity : this->entities){
-        // C.C. probably a better way to do this
-        std::string drawGroup = entity->getDrawName();
-        if (drawGroup == "Joint"){
+        EntityType drawGroup = entity->getEntityType();
+        if (drawGroup == JOINT){
            if (drawJoints == true){
                 entity->draw();
            }
@@ -109,14 +117,6 @@ Entity* Environment::getEntity(int i){
     return this->entities[i];
 }
 
-// Sensor* Environment::getSensor(int i){
-
-// }
-
-Actuator* Environment::getActuator(int i){
-    return this->actuators[i];
-}
-
 dSpaceID Environment::getSpace(std::string name){
     if (name == "None" or name == "default"){
         return this->topspace;
@@ -144,7 +144,8 @@ void Environment::readEntityFromPython(void){
     // entity key name exists
     std::cerr << "---------------------------" << std::endl
               << "Creating Entity " << entityName  
-              << " From Python: " << this->entities.size()
+              << " From Python: " << std::endl
+              << "Entity ID: " << this->entities.size()
               << std::endl;
 
     // create new instance of entity from map index
@@ -153,69 +154,59 @@ void Environment::readEntityFromPython(void){
 
     // read entity info from python
     entity->readFromPython();
-    // set entity id (probably unnecessary)
+
+    // set entity id
     entity->setID(this->entities.size());
+    EntityType entityType = entity->getEntityType();
+    this->entityVectors[entityType].push_back(this->entities.size());
 
     // add entity to entity list
     this->entities.push_back(entity);
     std::cerr << "---------------------------" << std::endl << std::endl;
 }
 
-void Environment::readActuatorFromPython(void){
-    // get name of actuator
-    std::string actuatorName;
-    readStringFromPython(actuatorName);
-    if (stringToActuatorMap.count(actuatorName) == 0){
-        // entity key doesnt exist, either change python send
-        // or add key to stringToEntityMap
-        std::cerr << "ERROR: Entity " << actuatorName << " does not exist"
-                  << std::endl
-                  << "Exiting" << std::endl;
-        exit(0);
+void Environment::takeStep(std::vector<int> entityIDs, int timeStep, dReal dt){
+    // take a step with the specified entity ids
+    for (int entityID : entityIDs){
+        Entity *entity = this->getEntity(entityID);
+        entity->takeStep(timeStep, dt);
     }
-    // entity key name exists
-    std::cerr << "---------------------------" << std::endl
-              << "Creating Actuator " << actuatorName  
-              << " From Python: " << this->actuators.size()
-              << std::endl;
-
-    // create new instance of entity from map index
-    // associated with entityName
-    Actuator *actuator = stringToActuatorMap[actuatorName]();
-
-    // read entity info from python
-    actuator->readFromPython();
-    // set entity id (probably unnecessary)
-    actuator->setID(this->actuators.size());
-
-    // add entity to entity list
-    this->actuators.push_back(actuator);
-    std::cerr << "---------------------------" << std::endl << std::endl;
 }
 
 void Environment::takeStep(int timeStep, dReal dt){
-    // update sensors 
-    // for (auto sensor : this->sensors){
-    //     sensor->sense(this);
-    // }
+    // take step with relevant sensory motor entities
+    std::vector<int> sensorIDs = this->entityVectors[SENSOR];
+    std::vector<int> neuronIDs = this->entityVectors[NEURON];
+    std::vector<int> actuatorIDs = this->entityVectors[ACTUATOR];
+    std::vector<int> bodyIDs = this->entityVectors[ENTITY];
+    // order is important
+    // sense -> think -> act -> simulate
 
-    // update network
-    // this->network->activate(this->sensors);
+    // update sensors (sense)
+    takeStep(sensorIDs, timeStep, dt);
 
-    // actuate
-    for (auto actuator : this->actuators){
-        actuator->actuate(1.0);
-    }
+    // update network (think)
+    // note, neurons currently need to take step twice,
+    // once to reset and once to update
+    takeStep(neuronIDs, timeStep, dt);
+    takeStep(neuronIDs, timeStep, dt);
 
-    // take steps with entities
-    // impulses etc.
-    for (auto entity : this->entities){
-        entity->takeStep(timeStep, dt);
-    }
+    // update motors  (act)
+    takeStep(actuatorIDs, timeStep, dt);
+    // update other physics (simulate)
+    takeStep(bodyIDs, timeStep, dt);
 }
 
 void Environment::writeToPython(void){
     for (auto entity : this->entities){
         entity->writeToPython();
     }
+
+    // print indexes associated with each entity
+    // for(int i=0; i<7; i++){
+    //     std::vector<int> indexList = this->entityVectors[i];
+    //     for (int j : indexList){
+    //         std::cerr << i << " " << j << std::endl;
+    //     }
+    // }
 }

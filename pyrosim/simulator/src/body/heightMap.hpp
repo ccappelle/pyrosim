@@ -23,8 +23,9 @@ protected:
     int wrap;
     dReal position[3];
     std::string spaceName;
+    std::string componentName = "Body";
 public:
-    HeightMap(){this->drawName="Body";};
+    HeightMap(){};
 
     void readFromPython(void){
         readValueFromPython<dReal>(this->position, 3, "Position");

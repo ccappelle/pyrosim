@@ -12,6 +12,7 @@ protected:
     dReal lowStop, highStop;
     dBodyID body1, body2; // ode bodies
     dJointID joint;
+
 public:
     virtual void create(Environment *environment) =0;
     virtual void readJointParamsFromPython() =0;
@@ -55,6 +56,10 @@ public:
         return this->joint;
     }
 
+    virtual EntityType getEntityType(void){
+        return JOINT;
+    }
+
 };
 
 
@@ -64,7 +69,7 @@ protected:
     dReal axis[3];
     
 public:
-    HingeJoint(){this->drawName = "Joint";}
+    HingeJoint(){}
 
     void readJointParamsFromPython(void){
         readValueFromPython<dReal>(this->anchor, 3,"Hinge Anchor");
@@ -92,8 +97,7 @@ public:
         dJointSetHingeParam(this->joint, dParamHiStop, this->highStop);
     }
 
-    void draw(){
-
+    void draw(float r, float g, float b, float a){
         // temporary draw function
         dVector3 pos;
         dVector3 rot;
@@ -104,14 +108,17 @@ public:
         dMatrix3 R;
         dRFromZAxis(R, rot[0], rot[1], rot[2]);
 
+        dsSetColorAlpha(r, g, b, a);          
+        dsDrawCylinder(pos, R, 0.3, 0.03);
+    }
 
-        if(this->highStop == this->lowStop){
-            dsSetColorAlpha(0.1, 0.1, 0.1, 0.5);          
+    void draw(){
+        if (this->highStop == this->lowStop){
+            this->draw(0.1f, 0.1f, 0.1f, 0.5f);
         }
         else{
-            dsSetColorAlpha(1, 0.2, 0.2, 0.5);
+            this->draw(0.8f, 0.2f, 0.2f, 0.5f);
         }
-        dsDrawCylinder(pos, R, 0.3, 0.03);
     }
 
 };
@@ -123,7 +130,7 @@ protected:
     dReal axis[3];
     
 public:
-    SliderJoint(){this->drawName = "Joint";}
+    SliderJoint(){}
 
     void readJointParamsFromPython(void){
         readValueFromPython<dReal>(this->axis, 3,"Hinge Axis");

@@ -23,7 +23,9 @@ public:
         this->nextInput = 0.0;
     }
 
-    virtual void takeStep(int timeStep, dReal dt) {}
+    virtual void takeStep(int timeStep, dReal dt) { this->actuate(); }
+
+    virtual EntityType getEntityType(void){ return ACTUATOR; }
 };
 
 #endif

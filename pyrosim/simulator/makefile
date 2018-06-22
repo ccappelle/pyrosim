@@ -26,15 +26,21 @@ DSFRAMEWORK=$(ODEDIR)/drawstuff/src/libdrawstuff.la $(ODEDIR)/ode/src/libode.la 
 
 # get source names with stripped directory
 SRCS := $(notdir $(shell find $(SRC_DIR) -name *.cpp))
+
 # OTHERSRCS := $(wildcard src/*/*.cpp) 
 #$(SRC_DIR)/*.cpp */*/*.cpp)
-$(info $(SRCS))
-$(info $(SRC_DIR))
+
 
 # get obj names from src names
 OBJS := $(SRCS:%=$(OBJ_DIR)/%.o)
 # get dependencies from obj
 DEPS := $(OBJS:.o=.d)
+
+
+$(info $(SRCS))
+$(info $(SRC_DIR))
+$(info $(OBJS))
+$(info $(DEPS))
 
 INCL_FLAGS := -I$(INC_DIR) -I$(ODEDIR)/include -I$(ODEDIR)/ode/src
 

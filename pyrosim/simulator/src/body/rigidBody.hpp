@@ -18,8 +18,8 @@ public:
     std::string spaceName;
     std::string collisionGroupName;
     std::map<int, std::vector<float>> impulses;
-
-    RigidBody(){this->drawName="Body";};
+    std::string componentName = "Body";
+    RigidBody(){};
 
     virtual void draw(void){
         // draw center of mass as black sphere
@@ -189,7 +189,7 @@ protected:
 
 class BoxBody: public RigidBody{
 public:
-    BoxBody(){this->drawName="Body";};
+    BoxBody(){};
 
     void readFromPython(){
         // create box geom and read it in
@@ -201,7 +201,7 @@ public:
 
 class CylinderBody: public RigidBody{
 public:
-    CylinderBody(){this->drawName="Body";}
+    CylinderBody(){}
 
     void readFromPython(){
         this->readNamedGeomFromPython("Cylinder");
@@ -211,7 +211,7 @@ public:
 
 class SphereBody: public RigidBody{
 public:
-    SphereBody(){this->drawName="Body";}
+    SphereBody(){}
 
     void readFromPython(){
         this->readNamedGeomFromPython("Sphere");
