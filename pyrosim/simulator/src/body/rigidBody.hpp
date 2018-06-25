@@ -38,6 +38,10 @@ public:
         }
     }
 
+    const dReal* getPosition(void){
+        return dBodyGetPosition(this->body);
+    }
+
     void writeToPython(void){
         std::cerr << "Rigid Body:" << std::endl
                   << "  Space     : " << this->spaceName << std::endl
@@ -60,7 +64,8 @@ public:
             this->geoms[0]->create(environment);
 
             // set paramaters after create
-            dGeomSetData(this->geoms[0]->getGeom(), static_cast<void*>(&this->collisionGroupName));
+            // dGeomSetData(this->geoms[0]->getGeom(), static_cast<void*>(&this->collisionGroupName));
+            dGeomSetData(this->geoms[0]->getGeom(), static_cast<void*>(&this->entityID));
             this->geoms[0]->setBody(this->body);
             this->geoms[0]->resetGeom();
             m = this->geoms[0]->calculateMass();
@@ -74,7 +79,8 @@ public:
                 geom->create(environment);
 
                 // set parameters after create
-                dGeomSetData(geom->getGeom(), static_cast<void*>(&this->collisionGroupName));
+                // dGeomSetData(geom->getGeom(), static_cast<void*>(&this->collisionGroupName));
+                dGeomSetData(this->geoms[0]->getGeom(), static_cast<void*>(&this->entityID));
                 geom->setBody(this->body);
                 geom->resetGeomUsingOffset();
 
@@ -170,6 +176,9 @@ public:
         return this->collisionGroupName;
     }
 
+    // dReal* getColor(void){
+    //     return this->color
+    // }
     void takeStep(int timeStep, dReal dt){
         // apply impulse
         if (impulses.count(timeStep) > 0){
@@ -180,6 +189,9 @@ public:
         }
     }
 
+    virtual EntityType getEntityType(void){
+        return BODY;
+    }
 protected:
     void readCollisionInfoFromPython(void){
         readStringFromPython(this->spaceName, "Space");

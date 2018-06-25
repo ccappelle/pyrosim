@@ -14,6 +14,7 @@
 #include "pythonReader.hpp"
 #include "environment.hpp"
 #include "body/rigidBody.hpp"
+#include "body/ray.hpp"
 
 // glut stupidity
 #ifdef __APPLE__
@@ -56,13 +57,15 @@ int drawJoints = false;
 int drawSpaces = false;
 int playBlind = false;
 
-std::string COLLIDE_ALWAYS = "Collide";
+std::string COLLIDE_ALWAYS_STR = "Collide";
+int COLLIDE_ALWAYS = -1;
 
 void readCollisionFromPython(void);
 static void command(void);
 void createEnvironment(void);
 static void drawLoop(int pause);
 void endSimulation();
+void handleRayCollision();
 static void nearCallback(void *callbackData, dGeomID o1, dGeomID o2);
 void readFromPython(void);
 void initializeDrawStuff(void);
@@ -107,6 +110,7 @@ int main(int argc, char **argv){
 }
 
 void readCollisionFromPython(void){
+    // creates entry into map to specify collision
     std::string group1, group2;
 
     std::cerr << "Reading Collision Assignment" << std::endl;
@@ -197,8 +201,6 @@ static void drawLoop(int pause){
 
         dsSetColor(0.6, 0.1, 0.1);
         for(int i=0; i<2; i++){
-
-
             const dReal topPoint[3] = {
                              xyz[0] + forward[0]*fdist + (1+rOff*i)*right[0]*rdist + up[0]*udist,
                              xyz[1] + forward[1]*fdist + (1+rOff*i)*right[1]*rdist + up[1]*udist,
@@ -217,6 +219,8 @@ static void drawLoop(int pause){
 void endSimulation(void){
     // std::cerr << "Successful Exit" << std::endl;
     std::cerr << "Simulation Completed" << std::endl << std::endl;
+    // write out total time steps to cout for sensory collection
+    std::cout << evalStep;
     environment->writeToPython();
     std::cerr << "Success" << std::endl;
     exit(0);
@@ -275,7 +279,6 @@ void initializeParameters(void){
 void simulationStep(void){
     // place action before collision detection?
     environment->takeStep(evalStep, parameters["DT"]);
-
     dSpaceCollide(topspace, 0, &nearCallback); // run collision
     dWorldStep(world, parameters["DT"]); // take time step
     dJointGroupEmpty(contactgroup);
@@ -295,6 +298,36 @@ static void start(void)
   dAllocateODEDataForThread(dAllocateMaskAll);
 }
 
+void handleRayCollision(dGeomID ray, dGeomID o2){
+    dContact contact;
+    int n = dCollide(ray, o2, 1, &contact.geom, sizeof(dContact));
+    std::cerr << "N contacts: " << n << std::endl;
+    if (n > 0){
+        std::cerr << "Handling Ray Collision" << std::endl;
+        int &rayID = *(static_cast<int*>(dGeomGetData(ray)));
+
+        Ray *rayObj = (Ray*) environment->getEntity(rayID);
+        dReal color[3];
+
+        if (dGeomGetClass(o2) == dHeightfieldClass or dGeomGetClass(o2) == dPlaneClass){
+            color[0] = 0.0;
+            color[1] = 0.0;
+            color[2] = 0.0;
+        }
+        else{
+            int &bodyID = *(static_cast<int*>(dGeomGetData(o2)));
+            RigidBody *body = (RigidBody *) environment->getEntity(bodyID);
+
+            color[0] = 1.0;
+            color[1] = 0.0;
+            color[2] = 0.0;
+        }
+
+        rayObj->collisionUpdate(contact.geom.depth,
+                                color[0], color[1], color[2]);
+    }
+}
+
 void nearCallback(void *callbackData, dGeomID o1, dGeomID o2){
     if ( dGeomIsSpace(o1) || dGeomIsSpace(o2) ){
         // collide space with other objects
@@ -310,21 +343,38 @@ void nearCallback(void *callbackData, dGeomID o1, dGeomID o2){
 
         return;
     }
-    // TODO create exits for connected joints and
-    // user defined collision pattern
 
-    // C.C. currently geom data is just a string
-    // we should create a data struct instead
 
-    if ( dGeomGetClass (o1) == dPlaneClass       or dGeomGetClass(o2) == dPlaneClass or
+    if (dGeomGetClass(o1) == dRayClass){
+        handleRayCollision(o1, o2);
+        return;
+    }
+    else if (dGeomGetClass(o2) == dRayClass){
+        handleRayCollision(o2, o1);
+        return;
+    }
+
+    else if ( dGeomGetClass (o1) == dPlaneClass       or dGeomGetClass(o2) == dPlaneClass or
          dGeomGetClass (o1) == dHeightfieldClass or dGeomGetClass(o2) == dHeightfieldClass){
         // one or more geoms is a heightfield or plane so collision will occur
     }
     else{
-        std::string &group1 = *(static_cast<std::string*> (dGeomGetData(o1)));
-        std::string &group2 = *(static_cast<std::string*> (dGeomGetData(o2)));
 
-        if (group1 != COLLIDE_ALWAYS and group2 != COLLIDE_ALWAYS){
+        // std::string &group1 = *(static_cast<std::string*> (dGeomGetData(o1)));
+        // std::string &group2 = *(static_cast<std::string*> (dGeomGetData(o2)));
+        int &entityID1 = *(static_cast<int*> (dGeomGetData(o1)));
+        int &entityID2 = *(static_cast<int*> (dGeomGetData(o2)));
+
+        RigidBody *body1 = (RigidBody *) environment->getEntity(entityID1);
+        RigidBody *body2 = (RigidBody *) environment->getEntity(entityID2);
+
+        if (dAreConnected(body1->getBody(), body2->getBody())){ // exit early if connected
+            return;
+        }
+
+        std::string group1 = body1->getCollisionGroupName();
+        std::string group2 = body2->getCollisionGroupName();
+        if (group1 != COLLIDE_ALWAYS_STR and group2 != COLLIDE_ALWAYS_STR){
             collisionPair pair = std::make_pair(group1, group2);
             if (collisionMap.count(pair) == 0){ // no collision entry, exit early
                 return;

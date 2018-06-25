@@ -9,26 +9,32 @@ typedef std::map<std::string, Entity * (*) ()> StringToEntity;
 
 #include "body/rigidBody.hpp"
 #include "body/heightMap.hpp"
+#include "body/ray.hpp"
 #include "joint/joint.hpp"
 #include "actuator/jointMotor.hpp"
 #include "network/ctrnn.hpp"
-
+#include "sensor/positionSensor.hpp"
+#include "sensor/raySensor.hpp"
 // fill up map
 // C.C. we can possibly put this in separate file?
 // maybe when it becomes bigger we will know how to best handle it
 StringToEntity stringToEntityMap{
-    {"Box",             &createEntityInstance<BoxBody>        }, // simple body with one box
-    {"Cylinder",        &createEntityInstance<CylinderBody>   }, // simple body with one cylinder
-    {"Sphere",          &createEntityInstance<SphereBody>     }, // simple body with one shpere
-    {"Composite",       &createEntityInstance<RigidBody>      }, // initially empty composite body
-    {"HeightMap",       &createEntityInstance<HeightMap>      }, // Landscape
-    {"HingeJoint",      &createEntityInstance<HingeJoint>     }, // Hinge joint
-    {"SliderJoint",     &createEntityInstance<SliderJoint>    }, // slider joint
-    {"RotaryActuator",  &createEntityInstance<RotaryActuator> }, // Rotary actuator
-    {"Synapse",         &createEntityInstance<Synapse>        }, // Synapse
-    {"BiasNeuron",      &createEntityInstance<BiasNeuron>     }, // Bias neuron
-    {"MotorNeuron",     &createEntityInstance<MotorNeuron>    }, // Motor Neuron
-    {"UserNeuron",      &createEntityInstance<UserNeuron>     }, // User Neuron
+    {"Box",               &createEntityInstance<BoxBody>           }, // simple body with one box
+    {"Cylinder",          &createEntityInstance<CylinderBody>      }, // simple body with one cylinder
+    {"Sphere",            &createEntityInstance<SphereBody>        }, // simple body with one shpere
+    {"Composite",         &createEntityInstance<RigidBody>         }, // initially empty composite body
+    {"Ray",               &createEntityInstance<Ray>               }, // ray geom object
+    {"HeightMap",         &createEntityInstance<HeightMap>         }, // Landscape
+    {"HingeJoint",        &createEntityInstance<HingeJoint>        }, // Hinge joint
+    {"SliderJoint",       &createEntityInstance<SliderJoint>       }, // slider joint
+    {"RotaryActuator",    &createEntityInstance<RotaryActuator>    }, // Rotary actuator
+    {"Synapse",           &createEntityInstance<Synapse>           }, // Synapse
+    {"BiasNeuron",        &createEntityInstance<BiasNeuron>        }, // Bias neuron
+    {"MotorNeuron",       &createEntityInstance<MotorNeuron>       }, // Motor Neuron
+    {"UserNeuron",        &createEntityInstance<UserNeuron>        }, // User Neuron
+    {"SensorNeuron",      &createEntityInstance<SensorNeuron>      }, // Sensor Neuron
+    {"PositionSensor",    &createEntityInstance<PositionSensor>    }, // Position Sensor
+    {"RaySensor",         &createEntityInstance<RaySensor>         }, // Ray sensor
 };
 
 Environment::Environment(dWorldID world, dSpaceID topspace, int numEntities){
@@ -178,7 +184,7 @@ void Environment::takeStep(int timeStep, dReal dt){
     std::vector<int> sensorIDs = this->entityVectors[SENSOR];
     std::vector<int> neuronIDs = this->entityVectors[NEURON];
     std::vector<int> actuatorIDs = this->entityVectors[ACTUATOR];
-    std::vector<int> bodyIDs = this->entityVectors[ENTITY];
+    std::vector<int> bodyIDs = this->entityVectors[BODY];
     // order is important
     // sense -> think -> act -> simulate
 
@@ -190,7 +196,6 @@ void Environment::takeStep(int timeStep, dReal dt){
     // once to reset and once to update
     takeStep(neuronIDs, timeStep, dt);
     takeStep(neuronIDs, timeStep, dt);
-
     // update motors  (act)
     takeStep(actuatorIDs, timeStep, dt);
     // update other physics (simulate)
@@ -201,12 +206,4 @@ void Environment::writeToPython(void){
     for (auto entity : this->entities){
         entity->writeToPython();
     }
-
-    // print indexes associated with each entity
-    // for(int i=0; i<7; i++){
-    //     std::vector<int> indexList = this->entityVectors[i];
-    //     for (int j : indexList){
-    //         std::cerr << i << " " << j << std::endl;
-    //     }
-    // }
 }

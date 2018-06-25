@@ -7,7 +7,9 @@
 #include <vector>
 
 #include "entity.hpp"
+#include "pythonReader.hpp"
 #include "actuator/actuator.hpp"
+#include "sensor/sensor.hpp"
 
 class Synapse;
 
@@ -23,31 +25,24 @@ public:
     virtual void readFromPython(void) =0;
     virtual void create(Environment *environment) =0;
 
-    virtual EntityType getEntityType(void){return NEURON;};
-
-    void addSynapse(Synapse *synapse){
+    virtual void addSynapse(Synapse *synapse){
         // adds synapse to vector of synapses
         this->outSynapses.push_back(synapse);
     }
 
     virtual void takeStep(int timeStep, dReal dt){
-        // two step approach to ensure all nodes are updated
-        // correctly. First step sends out value of neuron
-        // along outgoing synapses (fire) to be cached in 
-        // target neurons.
-        // Second step thresholds cached value to set new 
-        // value of neuron
         if (this->lastUpdated != timeStep){
             this->fireStep();
             this->lastUpdated = timeStep;
         }
         else{
-            this->thresholdStep();
+            this->updateStep();
         }
     }
 
+    virtual EntityType getEntityType(void){return NEURON;};
     virtual void fireStep() =0;
-    virtual void thresholdStep() =0;
+    virtual void updateStep() =0;
 };
 
 
@@ -79,40 +74,63 @@ public:
     float getWeight(void){ return this->weight;}
 };
 
-
-class BiasNeuron : public Neuron
+// INPUT NEURONS ---- Bias, Sensor, User --------------------------
+class InputNeuron : public Neuron
 {
 public:
-    BiasNeuron(){};
-
     virtual void create(Environment* environment) {};
-    virtual void readFromPython(void){
-        readValueFromPython(&this->value, "Bias Value");
-    }
-    virtual void fireStep(){
-        this->fire();
-    }
     virtual void fire(){
         for (Synapse* synapse : this->outSynapses){
             Neuron* targetNeuron = synapse->getTargetNeuron();
             targetNeuron->addSynapticInput(this->value, synapse->getWeight()); 
         }
     }
-    virtual void thresholdStep(){cachedValue = 0.0f;};
+    virtual void fireStep(){ this->fire(); }
+    virtual void readFromPython(void) =0;
+    virtual void updateStep()=0;
 };
 
-class UserNeuron : public Neuron
+
+class BiasNeuron : public InputNeuron
+{
+public:
+    BiasNeuron(){};
+    virtual void readFromPython(void){
+        readValueFromPython(&this->value, "Bias Value");
+    }
+    virtual void updateStep(){cachedValue = 0.0f; };
+};
+
+class SensorNeuron : public InputNeuron
+{
+protected:
+    Sensor *sensor;
+    int sensorID;
+public:
+    SensorNeuron(){};
+    virtual void updateStep(){
+        cachedValue = 0.0f;
+        this->value = this->sensor->getSensorValue();
+    }
+
+    virtual void create(Environment *environment){
+        sensor = (Sensor *) environment->getEntity(this->sensorID);
+    }
+
+    virtual void readFromPython(){
+        // read in motor's entity ID
+        readValueFromPython<int>(&sensorID, "Sensor ID");
+    }
+};
+
+
+class UserNeuron : public InputNeuron
 {
 protected:
     std::vector<float> inputValues;
     int indexValue;
 public:
     UserNeuron(){};
-
-    virtual void create(Environment * environment){
-        indexValue = 0;
-    };
-
     virtual void readFromPython(void){
         // read in num inputs
         int n;
@@ -125,18 +143,10 @@ public:
         for (int i=0; i<n; i++){
             this->inputValues.push_back(inValues[i]);
         }
+        this->indexValue = 0;
     }
-
-    virtual void fireStep(){
-        this->fire();
-    }
-    virtual void fire(){
-        for (Synapse* synapse : this->outSynapses){
-            Neuron* targetNeuron = synapse->getTargetNeuron();
-            targetNeuron->addSynapticInput(this->value, synapse->getWeight()); 
-        }
-    }
-    virtual void thresholdStep(){
+    virtual void updateStep(){
+        this->cachedValue = 0.0f;
         // set value from inputValues
         this->value = this->inputValues[this->indexValue];
         // set next index value
@@ -145,6 +155,7 @@ public:
 };
 
 
+// Tagetable Neurons -------- Hidden, Motor ----------------------
 class TargetableNeuron : public Neuron
 {
 protected:
@@ -159,7 +170,7 @@ public:
         this->cachedValue += neuronValue * weight;
     }
 
-    void updateNeuron(){
+    void updateNeuronFromCache(){
         // ctrnn update. then reset cache
         this->value = this->alpha * this->value + this->tau * this->cachedValue;
         this->cachedValue = 0.0f;
@@ -188,9 +199,20 @@ public:
         this->fire();
     }
 
-    virtual void thresholdStep(){
-        this->updateNeuron();
+    virtual void updateStep(){
+        this->updateNeuronFromCache();
         this->threshold();
+    }
+};
+
+
+class HiddenNeuron : public TargetableNeuron
+{
+public:
+    HiddenNeuron(){};
+    virtual void create(Environment *environment){};
+    virtual void readFromPython(){
+        this->readParamsFromPython();
     }
 };
 
@@ -200,12 +222,11 @@ class MotorNeuron : public TargetableNeuron
 protected:
     Actuator *motor;
     int motorID;
-
 public:
     MotorNeuron(){};
 
-    virtual void thresholdStep(){
-        this->updateNeuron();
+    virtual void updateStep(){
+        this->updateNeuronFromCache();
         this->threshold();
         motor->setNextInput(this->value);
     }
