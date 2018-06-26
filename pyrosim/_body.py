@@ -57,8 +57,8 @@ class Mixin(object):
                                 position = (0.0, 0.0, 0.0),
                                 orientation = (0.0, 0.0, 1.0),
                                 radius=0.25,
-                                density = 1.0,
-                                color = (1.0, 1.0, 1.0)):
+                                density=1.0,
+                                color=(1.0, 1.0, 1.0)):
         self._send_add_command(composite_id,
                                'Geom',
                                'Sphere',
@@ -67,6 +67,16 @@ class Mixin(object):
                                radius,
                                density,
                                color)
+
+    def send_ray(self,
+                 body_id,
+                 position,
+                 orientation,
+                 max_length=10.0):
+
+        ray_id = self._send_entity('Ray', body_id, position, orientation, max_length)
+
+        return ray_id
 
     def send_box(self,
                  position = (0.0, 0.0, 0.0),
@@ -83,15 +93,14 @@ class Mixin(object):
         if space is None:
             space = self._current_space
 
-        body_id = self._num_entities
-        self._send_entity( 'Box',
-                           position,
-                           orientation,
-                           sides,
-                           density,
-                           color,
-                           space,
-                           collision_group)
+        body_id = self._send_entity('Box',
+                                    position,
+                                    orientation,
+                                    sides,
+                                    density,
+                                    color,
+                                    space,
+                                    collision_group)
         return body_id
 
     def send_cylinder(self,
@@ -112,9 +121,8 @@ class Mixin(object):
             space = self._current_space
 
         capped = int(capped)
-        body_id = self._num_entities
 
-        self._send_entity('Cylinder',
+        body_id = self._send_entity('Cylinder',
                           position,
                           orientation,
                           length,
@@ -183,8 +191,7 @@ class Mixin(object):
         if space is None:
             space = self._current_space
 
-        body_id = self._num_entities
-        self._send_entity('Sphere',
+        body_id = self._send_entity('Sphere',
                            position,
                            orientation,
                            radius,

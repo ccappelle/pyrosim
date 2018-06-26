@@ -6,9 +6,9 @@ class Mixin(object):
                              speed=1.0,
                              control='positional'):
 
-        actuator_id = self._num_actuators
+        actuator_id = self._num_entities
 
-        self._send_actuator('Rotary',
+        self._send_entity('RotaryActuator',
                             joint_id,
                             max_force,
                             speed,

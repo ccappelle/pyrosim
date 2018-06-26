@@ -15,3 +15,4 @@ sim.send_hinge_joint(-1, cyl,
 
 sim.start()
 sim.wait_to_finish()
+print(sim._raw_cerr)

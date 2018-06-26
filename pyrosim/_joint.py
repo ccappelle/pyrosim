@@ -22,7 +22,7 @@ class Mixin(object):
 
         joint_id = self._num_entities
 
-        self._send_entity("Hinge",
+        self._send_entity("HingeJoint",
                           body1, body2,
                           anchor,
                           axis,
@@ -48,7 +48,7 @@ class Mixin(object):
 
         joint_id = self._num_entities
 
-        self._send_entity("Slider",
+        self._send_entity("SliderJoint",
                           body1, body2,
                           axis,
                           joint_range)

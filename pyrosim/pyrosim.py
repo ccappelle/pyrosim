@@ -17,14 +17,20 @@ if __package__ is None or __package__ == '':
     import _body
     import _joint
     import _actuator
+    import _network
+    import _sensor
 else:
     # uses current package visibility
     from . import _body
     from . import _joint
     from . import _actuator
+    from . import _network
+    from . import _sensor
 
 
-class Simulator(_body.Mixin, _joint.Mixin, _actuator.Mixin):
+class Simulator(_body.Mixin, _joint.Mixin,
+                _actuator.Mixin, _network.Mixin,
+                _sensor.Mixin):
     """Python Interface for ODE robotics simulator
 
     Attributes
@@ -64,6 +70,7 @@ class Simulator(_body.Mixin, _joint.Mixin, _actuator.Mixin):
         self._dt = dt
 
         self._raw_cerr = ''
+        self._sensor_data = {}
 
     def assign_collision(self, group1, group2):
         self._send('AssignCollision', group1, group2)
@@ -127,9 +134,24 @@ class Simulator(_body.Mixin, _joint.Mixin, _actuator.Mixin):
             self._raw_cerr = self._raw_cerr[:start_index] + \
                 self._raw_cerr[end_index + len(end_str):]
 
+        self._read_sensor_data()
+
     def get_debug_output(self):
         """Returns the debug output from the simulation"""
         return self._strings_to_send + '\n' + self._raw_cerr
+
+    def _read_sensor_data(self):
+        sensor_vector = self._raw_cout.split(' ')
+
+        if len(sensor_vector) > 1: # at least one sensor present
+            time_steps = int(sensor_vector.pop(0))
+
+            while(len(sensor_vector) > 0):
+                entity_index = int(sensor_vector.pop(0))
+                self._sensor_data[entity_index] = [0] * time_steps
+
+                for t in range(time_steps):
+                    self._sensor_data[entity_index][t] = float(sensor_vector.pop(0))
 
     def _send(self, command, *args):
         assert isinstance(command, str), ('Command must be string')
@@ -152,16 +174,11 @@ class Simulator(_body.Mixin, _joint.Mixin, _actuator.Mixin):
         self._send('Add', *args)
 
     def _send_entity(self, *args):
+        entity_id = self._num_entities
         self._send('Entity', *args)
+
         self._num_entities += 1
-
-    def _send_actuator(self, *args):
-        self._send('Actuator', *args)
-        self._num_actuators += 1
-
-    def _send_sensor(self, *args):
-        self._send('Sensor', *args)
-        self._num_sensors += 1
+        return entity_id
 
     def _send_parameter(self, *args):
         self._send('Parameter', *args)

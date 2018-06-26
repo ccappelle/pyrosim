@@ -73,7 +73,6 @@ void Handle_Ray_Sensor(dGeomID o1, dGeomID o2) {
 
 		if ( data->runBlind == false )
 			obj->Draw_Ray_Sensor(contact.geom.pos[0],contact.geom.pos[1],contact.geom.pos[2],timer);
-
 	}
 }
 
