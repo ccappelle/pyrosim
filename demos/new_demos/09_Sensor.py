@@ -50,6 +50,3 @@ sim.send_synapse(sensor_neuron, motor_neuron, 10.0)
 sim.send_synapse(sensor_neuron2, motor_neuron, -1.0)
 sim.start()
 sim.wait_to_finish()
-
-# print(sim._sensor_data)
-

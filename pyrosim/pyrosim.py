@@ -54,6 +54,8 @@ class Simulator(_body.Mixin, _joint.Mixin,
         self._num_entities = 0
         self._num_actuators = 0
 
+        self._entities = []
+
         # commands to be sent
         self._strings_to_send = ''
 
@@ -173,10 +175,17 @@ class Simulator(_body.Mixin, _joint.Mixin,
     def _send_add_command(self, *args):
         self._send('Add', *args)
 
-    def _send_entity(self, *args):
+    def _send_entity(self, entity_type, *args):
+        valid_entity_types = ['Entity', 'Body',
+                              'Actuator', 'Joint',
+                              'Sensor', 'Neuron',
+                              'Synapse']
+        assert entity_type in valid_entity_types, ('Entity type inputed: ' + str(entity_type) +
+                                                   ' must be one of ' + str(valid_entity_types))
+
+        self._entities.append(entity_type)
         entity_id = self._num_entities
         self._send('Entity', *args)
-
         self._num_entities += 1
         return entity_id
 
@@ -193,6 +202,25 @@ class Simulator(_body.Mixin, _joint.Mixin,
         # send DT
         self._send_parameter('DT', self._dt)
 
+    def _assert_body(self, id_tag, tag_name=''):
+        assert self._entities[id_tag] == 'Body', ('Input id tag ' + str(tag_name) + ': ' +
+                                                  str(id_tag) +' does not correspond to body')
+
+    def _assert_actuator(self, id_tag, tag_name=''):
+        assert self._entities[id_tag] == 'Actuator', ('Input id tag ' + str(tag_name) + ': ' +
+                                                      str(id_tag) +' does not correspond to actuator')
+
+    def _assert_joint(self, id_tag, tag_name=''):
+        assert self._entities[id_tag] == 'Joint', ('Input id tag ' + str(tag_name) + ': ' +
+                                                   str(id_tag) +' does not correspond to joint')
+
+    def _assert_sensor(self, id_tag, tag_name=''):
+        assert self._entities[id_tag] == 'Sensor', ('Input id tag ' + str(tag_name) + ': ' +
+                                                    str(id_tag) +' does not correspond to sensor')
+
+    def _assert_neuron(self, id_tag, tag_name=''):
+        assert self._entities[id_tag] == 'Neuron', ('Input id tag ' + str(tag_name) + ': ' +
+                                                    str(id_tag) +' does not correspond to neuron')
 
 if __name__ == '__main__':
 
