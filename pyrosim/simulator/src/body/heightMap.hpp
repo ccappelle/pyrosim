@@ -7,6 +7,7 @@
 
 #include "entity.hpp"
 #include "pythonReader.hpp"
+#include "geomData.hpp"
 
 // hard code here for both simulator efficiency
 // and convenience
@@ -101,6 +102,14 @@ public:
                          this->position[0],
                          this->position[1],
                          this->position[2]);
+
+        // set user geom data
+        GeomData* geomData = new GeomData();
+        geomData->entityID = -1;
+        geomData->color[0] = 0.0;
+        geomData->color[1] = 0.0;
+        geomData->color[2] = 0.0;
+        dGeomSetData(this->geom, static_cast<void*>(geomData));
     }
     double getHeightValue(int i, int j){
          return this->heightData[j * this->N + i];

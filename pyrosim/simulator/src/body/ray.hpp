@@ -5,6 +5,7 @@
 
 #include "body/rigidBody.hpp"
 #include "pythonReader.hpp"
+#include "geomData.hpp"
 
 class Ray : public Entity
 {   
@@ -34,7 +35,15 @@ public:
         this->body = (RigidBody *) environment->getEntity(this->bodyID);
         this->ray = dCreateRay(environment->getSpace("default"), this->maxLength);
 
-        dGeomSetData(this->ray, static_cast<void*>(&this->entityID));
+
+        // dGeomSetData(this->ray, static_cast<void*>(&this->entityID));
+        GeomData* geomData = new GeomData();
+        geomData->entityID = this->entityID;
+        geomData->color[0] = 0.0;
+        geomData->color[1] = 0.0;
+        geomData->color[2] = 0.0;
+        dGeomSetData(this->ray, static_cast<void*>(geomData));
+
         dGeomSetBody(this->ray, this->body->getBody());
         dMatrix3 R;
         dRFromZAxis(R,

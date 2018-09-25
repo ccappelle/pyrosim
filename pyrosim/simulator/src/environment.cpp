@@ -1,8 +1,6 @@
 #include "environment.hpp"
 #include "pythonReader.hpp"
 
-#include <map>
-
 // mumbo jumbo to create a map from strings to entity initializer functions
 template<typename entityClass> Entity * createEntityInstance(){ return static_cast <Entity *> (new entityClass);}
 typedef std::map<std::string, Entity * (*) ()> StringToEntity;
@@ -12,29 +10,36 @@ typedef std::map<std::string, Entity * (*) ()> StringToEntity;
 #include "body/ray.hpp"
 #include "joint/joint.hpp"
 #include "actuator/jointMotor.hpp"
+#include "actuator/thruster.hpp"
 #include "network/ctrnn.hpp"
 #include "sensor/positionSensor.hpp"
 #include "sensor/raySensor.hpp"
+#include "sensor/touchSensor.hpp"
 // fill up map
 // C.C. we can possibly put this in separate file?
 // maybe when it becomes bigger we will know how to best handle it
 StringToEntity stringToEntityMap{
-    {"Box",               &createEntityInstance<BoxBody>           }, // simple body with one box
-    {"Cylinder",          &createEntityInstance<CylinderBody>      }, // simple body with one cylinder
-    {"Sphere",            &createEntityInstance<SphereBody>        }, // simple body with one shpere
-    {"Composite",         &createEntityInstance<RigidBody>         }, // initially empty composite body
-    {"Ray",               &createEntityInstance<Ray>               }, // ray geom object
-    {"HeightMap",         &createEntityInstance<HeightMap>         }, // Landscape
-    {"HingeJoint",        &createEntityInstance<HingeJoint>        }, // Hinge joint
-    {"SliderJoint",       &createEntityInstance<SliderJoint>       }, // slider joint
-    {"RotaryActuator",    &createEntityInstance<RotaryActuator>    }, // Rotary actuator
-    {"Synapse",           &createEntityInstance<Synapse>           }, // Synapse
-    {"BiasNeuron",        &createEntityInstance<BiasNeuron>        }, // Bias neuron
-    {"MotorNeuron",       &createEntityInstance<MotorNeuron>       }, // Motor Neuron
-    {"UserNeuron",        &createEntityInstance<UserNeuron>        }, // User Neuron
-    {"SensorNeuron",      &createEntityInstance<SensorNeuron>      }, // Sensor Neuron
-    {"PositionSensor",    &createEntityInstance<PositionSensor>    }, // Position Sensor
-    {"RaySensor",         &createEntityInstance<RaySensor>         }, // Ray sensor
+    {"Box",               &createEntityInstance<BoxBody>            }, // simple body with one box
+    {"Cylinder",          &createEntityInstance<CylinderBody>       }, // simple body with one cylinder
+    {"Sphere",            &createEntityInstance<SphereBody>         }, // simple body with one shpere
+    {"Composite",         &createEntityInstance<RigidBody>          }, // initially empty composite body
+    {"Ray",               &createEntityInstance<Ray>                }, // ray geom object
+    {"HeightMap",         &createEntityInstance<HeightMap>          }, // Landscape
+    {"HingeJoint",        &createEntityInstance<HingeJoint>         }, // Hinge joint
+    {"SliderJoint",       &createEntityInstance<SliderJoint>        }, // slider joint
+    {"BallAndSocketJoint",&createEntityInstance<BallAndSocketJoint> }, // Ball and socket Joint
+    {"UniversalJoint",    &createEntityInstance<UniversalJoint>     }, // Universal joint
+    {"RotaryActuator",    &createEntityInstance<RotaryActuator>     }, // Rotary actuator - attaches to hinge joint
+    {"LinearActuator",    &createEntityInstance<LinearActuator>     }, // Linear actuator - attaches to slider joint
+    {"ThrusterActuator",  &createEntityInstance<ThrusterActuator>   }, // thruster - like a rocket
+    {"Synapse",           &createEntityInstance<Synapse>            }, // Synapse
+    {"BiasNeuron",        &createEntityInstance<BiasNeuron>         }, // Bias neuron
+    {"MotorNeuron",       &createEntityInstance<MotorNeuron>        }, // Motor Neuron
+    {"UserNeuron",        &createEntityInstance<UserNeuron>         }, // User Neuron
+    {"SensorNeuron",      &createEntityInstance<SensorNeuron>       }, // Sensor Neuron
+    {"PositionSensor",    &createEntityInstance<PositionSensor>     }, // Position Sensor
+    {"RaySensor",         &createEntityInstance<RaySensor>          }, // Ray sensor
+    {"TouchSensor",       &createEntityInstance<TouchSensor>        }, // Touch sensor
 };
 
 Environment::Environment(dWorldID world, dSpaceID topspace, int numEntities){
@@ -53,6 +58,14 @@ Environment::Environment(dWorldID world, dSpaceID topspace, int numEntities){
     }
 };
 
+void Environment::addCollisionPair(int firstID, int secondID){
+    std::pair<int, int> collisionPair (firstID, secondID);
+    this->collisions.push_back(collisionPair);
+}
+
+void Environment::emptyCollisionPairs(void){
+    this->collisions.clear();
+}
 void Environment::addToEntityFromPython(void){
     // read in ID to add to
     int entityID;

@@ -9,6 +9,7 @@
 
 #include "entity.hpp"
 #include "rigidGeom.hpp"
+#include "geomData.hpp"
 
 class RigidBody : public Entity {
 public:
@@ -65,7 +66,10 @@ public:
 
             // set paramaters after create
             // dGeomSetData(this->geoms[0]->getGeom(), static_cast<void*>(&this->collisionGroupName));
-            dGeomSetData(this->geoms[0]->getGeom(), static_cast<void*>(&this->entityID));
+            // dGeomSetData(this->geoms[0]->getGeom(), static_cast<void*>(&this->entityID));
+            // create geom data structure
+            this->geoms[0]->setData(this->entityID);
+
             this->geoms[0]->setBody(this->body);
             this->geoms[0]->resetGeom();
             m = this->geoms[0]->calculateMass();
@@ -80,7 +84,9 @@ public:
 
                 // set parameters after create
                 // dGeomSetData(geom->getGeom(), static_cast<void*>(&this->collisionGroupName));
-                dGeomSetData(this->geoms[0]->getGeom(), static_cast<void*>(&this->entityID));
+                // dGeomSetData(this->geoms[0]->getGeom(), static_cast<void*>(&this->entityID));
+                geom->setData(this->entityID);
+
                 geom->setBody(this->body);
                 geom->resetGeomUsingOffset();
 

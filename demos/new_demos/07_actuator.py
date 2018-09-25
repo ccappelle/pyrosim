@@ -2,37 +2,26 @@ import sys
 sys.path.insert(0, '../../')
 import pyrosim
 
-sim = pyrosim.Simulator(play_paused=True, eval_steps=-1)
+# toggle joint drawing by pressing 'd'
+sim = pyrosim.Simulator(eval_steps=-1, play_paused=True)
 
-length = 0.5
-radius = length / 5.0
+cyl = sim.send_cylinder(position=(0.25, 0, 1),
+                        orientation=(1, 0, 0),
+                        length=0.5)
+sphere = sim.send_sphere(position=(0.5, 0, 1),
+                         radius=0.1)
 
-# create cylinders in right angle arm
-cyl1 = sim.send_cylinder(position=(0, 0, length / 2.0 + radius),
-                         length=length,
-                         radius=radius)
-cyl2 = sim.send_cylinder(position=(length / 2.0, 0, length + radius),
-                         orientation=(1, 0, 0),
-                         length=length,
-                         radius=radius)
+hinge = sim.send_hinge_joint(-1, cyl,
+                     anchor=(0, 0, 1),
+                     axis=(0, 1, 0),
+                     joint_range=None)
 
-# joint cylinders
-joint = sim.send_hinge_joint(cyl1, cyl2,
-                             anchor=(0, 0, length + radius),
-                             axis=(0, 1, 0),
-                             # joint_range=(-3.14159 / 2.0, +3.14159 / 2.0)
-                             )
+slider = sim.send_slider_joint(cyl, sphere,
+                      axis=(1, 0, 0),
+                      joint_range=0.3)
 
-# create motor
-motor = sim.send_rotary_actuator(joint,
-                                 max_force=100.0, # max amount of force able to be used
-                                 speed=1.0,       # speed multiplier of motor
-                                 control='velocity'  # how the motor moves based on input
-                                 )
+sim.send_rotary_actuator(hinge)
+sim.send_linear_actuator(slider)
 
-# arm should not move because motor is constantly being
-# told to stay at position 0
 sim.start()
 sim.wait_to_finish()
-
-print(sim._raw_cerr)

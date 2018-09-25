@@ -8,6 +8,7 @@
 #include <string>
 #include <vector>
 #include <map>
+#include <utility>
 
 // ode
 #include <ode/ode.h>
@@ -26,6 +27,7 @@ public:
     std::vector< std::vector<int> > entityVectors;
 
     std::map<std::string, dSpaceID> subspaces;
+    std::vector< std::pair <int, int> > collisions;
 
     Environment(dWorldID world, dSpaceID topspace, int numEntities = 50);
     ~Environment();
@@ -33,8 +35,9 @@ public:
     // add to an existing entity using input from python
     void addToEntityFromPython(void);
 
-    // void readActuatorFromPython(void);
-
+    void addCollisionPair(int firstID, int secondID);
+    void emptyCollisionPairs(void);
+    
     // add new uninitialized entity to entities
     // and read in contents from python to that entity
     void readEntityFromPython(void);

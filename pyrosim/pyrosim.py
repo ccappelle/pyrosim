@@ -2,6 +2,7 @@ from __future__ import division, print_function
 import numpy as np
 import os
 import subprocess
+import copy
 
 # C.C NOTE: Mixin convention -
 # mixin files should be named _name.py and
@@ -75,13 +76,50 @@ class Simulator(_body.Mixin, _joint.Mixin,
         self._sensor_data = {}
 
     def assign_collision(self, group1, group2):
+        """Assign a collision between group1 and group2"""
         self._send('AssignCollision', group1, group2)
 
     def set_current_collision_group(self, group_name):
+        """Set the current group name for future bodies to use as default"""
         self._current_collision_group = group_name
 
     def set_current_space(self, space_name):
+        """Set the current space name for future bodies to use as default"""
+
         self._current_space = space_name
+
+    def set_gravity(self, x=0, y=0, z=-9.8):
+        """Set the gravity for simulation"""
+        self._send_parameter('GravityX', x)
+        self._send_parameter('GravityY', y)
+        self._send_parameter('GravityZ', z)
+
+    def set_camera(self, xyz, hpr):
+        """Sets how the camera starts in simulation
+
+        Parameters
+        ----------
+        xyz : triple float
+            Indicates the statring position of the camera
+        hpr : triple float
+            Heading, Pitch, and Roll of the camera.
+        """
+
+        assert len(xyz) == 3
+        assert len(hpr) == 3
+        x, y, z = xyz
+        h, p, r = hpr
+
+        # C.C. parameters oare singular values so 
+        # must write out vectors. May change in the future
+
+        self._send_parameter('CameraX', x)
+        self._send_parameter('CameraY', y)
+        self._send_parameter('CameraZ', z)
+
+        self._send_parameter('CameraH', h)
+        self._send_parameter('CameraP', p)
+        self._send_parameter('CameraR', r)
 
     def start(self):
         """Start the simulation"""
@@ -117,10 +155,20 @@ class Simulator(_body.Mixin, _joint.Mixin,
         self.pipe.stdin.write(self._strings_to_send)
         # finish by writing done
         self.pipe.stdin.write('Done\n')
+        # self.pipe.stdin.close()
 
     def wait_to_finish(self):
-        """Communicate with pipe once sim is complete"""
+        """Communicate with pipe once sim is complete
 
+        .. note:: for **python 3.x** it is necessary to use this command after `sim.start()`
+            in order for the simulation to run properly.
+        """
+
+        # for line in iter(self.pipe.stdout.readline, b''):
+        #     # print(line)
+        #     pass
+        # self.pipe.terminate()
+        # code = self.pipe.poll()
         data = self.pipe.communicate()
         self._raw_cout = data[0]
         self._raw_cerr = data[1]
@@ -138,24 +186,42 @@ class Simulator(_body.Mixin, _joint.Mixin,
 
         self._read_sensor_data()
 
+    def get_sensor_data(self, sensor_id):
+        self._assert_sensor(sensor_id, 'sensor_id')
+        return copy.copy(self._sensor_data[sensor_id][:])
+        
     def get_debug_output(self):
         """Returns the debug output from the simulation"""
         return self._strings_to_send + '\n' + self._raw_cerr
 
     def _read_sensor_data(self):
+        # sensor data comes back as a long string of single values delimited by a space 
+        # character. This function reads the value and splits the data accordingly
+        # into the proper sensor data entry
+
         sensor_vector = self._raw_cout.split(' ')
 
-        if len(sensor_vector) > 1: # at least one sensor present
+        if len(sensor_vector) > 1: # at least one sensor present so contitue
             time_steps = int(sensor_vector.pop(0))
 
             while(len(sensor_vector) > 0):
+                # first pop off id tag of the sensor
                 entity_index = int(sensor_vector.pop(0))
+
+                # create list entry in data dict to populate with sensor values
+                # for each time step
                 self._sensor_data[entity_index] = [0] * time_steps
 
                 for t in range(time_steps):
                     self._sensor_data[entity_index][t] = float(sensor_vector.pop(0))
 
     def _send(self, command, *args):
+        """Append to string containing commands for C++ program to read in.
+        
+        `command` string should have a corresponding catch on the c++ side in environment.cpp
+        Remaining args should be read in by `readFromPython()` method in corresponding objects
+        C++ code.
+        """
         assert isinstance(command, str), ('Command must be string')
 
         # each entry is delimited by \n
@@ -193,10 +259,6 @@ class Simulator(_body.Mixin, _joint.Mixin,
         self._send('Parameter', *args)
 
     def _send_simulator_parameters(self):
-        # send camera
-
-        # send gravity
-
         # send eval steps
         self._send_parameter('EvalSteps', int(self._eval_steps))
         # send DT

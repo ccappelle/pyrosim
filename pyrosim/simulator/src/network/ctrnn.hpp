@@ -78,7 +78,7 @@ public:
 class InputNeuron : public Neuron
 {
 public:
-    virtual void create(Environment* environment) {};
+    virtual void create(Environment* environment) {this->lastUpdated=-1;};
     virtual void fire(){
         for (Synapse* synapse : this->outSynapses){
             Neuron* targetNeuron = synapse->getTargetNeuron();
@@ -115,6 +115,7 @@ public:
 
     virtual void create(Environment *environment){
         sensor = (Sensor *) environment->getEntity(this->sensorID);
+        this->lastUpdated = -1;
     }
 
     virtual void readFromPython(){
@@ -210,7 +211,11 @@ class HiddenNeuron : public TargetableNeuron
 {
 public:
     HiddenNeuron(){};
-    virtual void create(Environment *environment){};
+    virtual void create(Environment *environment){
+        this->value = 0.0;
+        this->cachedValue = 0.0;
+        this->lastUpdated = -1;
+    }
     virtual void readFromPython(){
         this->readParamsFromPython();
     }
@@ -233,6 +238,9 @@ public:
 
     virtual void create(Environment *environment){
         motor = (Actuator *) environment->getEntity(this->motorID);
+        this->value = 0.0;
+        this->cachedValue = 0.0;
+        this->lastUpdated = -1;
     }
 
     virtual void readFromPython(){

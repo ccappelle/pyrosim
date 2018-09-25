@@ -15,6 +15,7 @@
 #include "environment.hpp"
 #include "body/rigidBody.hpp"
 #include "body/ray.hpp"
+#include "geomData.hpp"
 
 // glut stupidity
 #ifdef __APPLE__
@@ -98,6 +99,8 @@ int main(int argc, char **argv){
     dWorldSetAutoDisableFlag(world, 1);
 
     std::cerr << "Simulation Starting" << std::endl;
+
+    simulationStep();
     if (playBlind){
         while(1){
             simulationStep();
@@ -105,6 +108,7 @@ int main(int argc, char **argv){
     }
     else{
         initializeDrawStuff();
+        // can't set camera here :(
         dsSimulationLoop(argc, argv, 900, 700, &fn);
     }
 }
@@ -146,8 +150,15 @@ void createEnvironment(void){
                      parameters["GravityZ"]);
     // send ground plane
     dGeomID plane = dCreatePlane(topspace, 0, 0, 1, 0);
-    int planeID = -1;
-    dGeomSetData(plane, static_cast<void*>(&COLLIDE_ALWAYS));
+    // dGeomSetData(plane, static_cast<void*>(&COLLIDE_ALWAYS));
+    GeomData* planeData = new GeomData();
+    planeData->entityID = -1;
+    planeData->color[0] = 0.0;
+    planeData->color[1] = 0.0;
+    planeData->color[2] = 0.0;
+    dGeomSetData(plane, static_cast<void*>(planeData));
+    // GeomData planeData = (GeomData) {-1, 0.0, 0.0, 0.0};
+    // dGeomSetData(plane, static_cast<void*>(&planeData));
     // create bodies, joints, ANN, etc
     environment->createInODE();
 
@@ -156,9 +167,9 @@ void createEnvironment(void){
 
 static void drawLoop(int pause){
     if (firstStep){
-        float xyz[] = {0.0, -3.0, 2.0};
-        float hpr[] = {90.0, -25.0, 0.0};
-        dsSetViewpoint(xyz, hpr);
+        // float xyz[] = {parameters["CameraX"], parameters["CameraY"], parameters["CameraZ"]};
+        // float hpr[] = {parameters["CameraH"], parameters["CameraP"], parameters["CameraR"]};
+        // dsSetViewpoint(xyz, hpr);
         firstStep=false;
     }
 
@@ -262,11 +273,11 @@ void initializeParameters(void){
     // different parameter maps. aka 
     // v3Parameters, iParameters, fParameters, etc.
     parameters["CameraX"] = 0.0;
-    parameters["CameraY"] = 0.0;
-    parameters["CameraZ"] = 0.0;
+    parameters["CameraY"] = -5.0;
+    parameters["CameraZ"] = 2.0;
 
     parameters["CameraH"] = 90.0f;
-    parameters["CameraP"] = 0.0f;
+    parameters["CameraP"] = -10.0f;
     parameters["CameraR"] = 0.0f;
 
     parameters["GravityX"] = 0.0f;
@@ -279,9 +290,12 @@ void initializeParameters(void){
 void simulationStep(void){
     // place action before collision detection?
     environment->takeStep(evalStep, parameters["DT"]);
+    environment->emptyCollisionPairs();
     dSpaceCollide(topspace, 0, &nearCallback); // run collision
     dWorldStep(world, parameters["DT"]); // take time step
     dJointGroupEmpty(contactgroup);
+    // empty collision pairs
+    
 
     evalTime += parameters["DT"];
     evalStep ++;
@@ -296,6 +310,10 @@ void simulationStep(void){
 static void start(void)
 {
   dAllocateODEDataForThread(dAllocateMaskAll);
+  // set camera here?
+    float xyz[] = {parameters["CameraX"], parameters["CameraY"], parameters["CameraZ"]};
+    float hpr[] = {parameters["CameraH"], parameters["CameraP"], parameters["CameraR"]};
+    dsSetViewpoint(xyz, hpr);
 }
 
 void handleRayCollision(dGeomID ray, dGeomID o2){
@@ -304,31 +322,21 @@ void handleRayCollision(dGeomID ray, dGeomID o2){
     std::cerr << "N contacts: " << n << std::endl;
     if (n > 0){
         std::cerr << "Handling Ray Collision" << std::endl;
-        int &rayID = *(static_cast<int*>(dGeomGetData(ray)));
+        GeomData* rayData = static_cast<GeomData*>(dGeomGetData(ray));
 
-        Ray *rayObj = (Ray*) environment->getEntity(rayID);
+        Ray *rayObj = (Ray*) environment->getEntity(rayData->entityID);
         dReal color[3];
 
-        if (dGeomGetClass(o2) == dHeightfieldClass or dGeomGetClass(o2) == dPlaneClass){
-            color[0] = 0.0;
-            color[1] = 0.0;
-            color[2] = 0.0;
-        }
-        else{
-            int &bodyID = *(static_cast<int*>(dGeomGetData(o2)));
-            RigidBody *body = (RigidBody *) environment->getEntity(bodyID);
-
-            color[0] = 1.0;
-            color[1] = 0.0;
-            color[2] = 0.0;
-        }
-
+        GeomData* bodyData = static_cast<GeomData*>(dGeomGetData(o2));
         rayObj->collisionUpdate(contact.geom.depth,
-                                color[0], color[1], color[2]);
+                                bodyData->color[0],
+                                bodyData->color[1],
+                                bodyData->color[2]);
     }
 }
 
 void nearCallback(void *callbackData, dGeomID o1, dGeomID o2){
+    // runs collision response between 'near' pair of geom o1 and o2
     if ( dGeomIsSpace(o1) || dGeomIsSpace(o2) ){
         // collide space with other objects
         dSpaceCollide2(o1, o2, callbackData, &nearCallback);
@@ -343,30 +351,25 @@ void nearCallback(void *callbackData, dGeomID o1, dGeomID o2){
 
         return;
     }
-
-
     if (dGeomGetClass(o1) == dRayClass){
-        handleRayCollision(o1, o2);
-        return;
+         handleRayCollision(o1, o2);
+         return;
     }
     else if (dGeomGetClass(o2) == dRayClass){
-        handleRayCollision(o2, o1);
-        return;
+         handleRayCollision(o2, o1);
+         return;
     }
 
-    else if ( dGeomGetClass (o1) == dPlaneClass       or dGeomGetClass(o2) == dPlaneClass or
-         dGeomGetClass (o1) == dHeightfieldClass or dGeomGetClass(o2) == dHeightfieldClass){
-        // one or more geoms is a heightfield or plane so collision will occur
+    GeomData* g1 = static_cast<GeomData*> (dGeomGetData(o1));
+    GeomData* g2 = static_cast<GeomData*> (dGeomGetData(o2));
+
+    if (g1->entityID == -1 or g2->entityID == -1){
+        // an entity ID of -1 indicates always collide
+        // contitne
     }
     else{
-
-        // std::string &group1 = *(static_cast<std::string*> (dGeomGetData(o1)));
-        // std::string &group2 = *(static_cast<std::string*> (dGeomGetData(o2)));
-        int &entityID1 = *(static_cast<int*> (dGeomGetData(o1)));
-        int &entityID2 = *(static_cast<int*> (dGeomGetData(o2)));
-
-        RigidBody *body1 = (RigidBody *) environment->getEntity(entityID1);
-        RigidBody *body2 = (RigidBody *) environment->getEntity(entityID2);
+        RigidBody *body1 = (RigidBody *) environment->getEntity(g1->entityID);
+        RigidBody *body2 = (RigidBody *) environment->getEntity(g2->entityID);
 
         if (dAreConnected(body1->getBody(), body2->getBody())){ // exit early if connected
             return;
@@ -387,7 +390,6 @@ void nearCallback(void *callbackData, dGeomID o1, dGeomID o2){
         }
     }
 
-
     // generate at most n contacts per collision
     const int N = parameters["nContacts"];
     dContact contact[N];
@@ -402,6 +404,8 @@ void nearCallback(void *callbackData, dGeomID o1, dGeomID o2){
 
             dJointID c = dJointCreateContact(world, contactgroup, &contact[i]);
             dJointAttach(c, dGeomGetBody(contact[i].geom.g1), dGeomGetBody(contact[i].geom.g2));
+            // create collision pair and append to environment.collisions
+            environment->addCollisionPair(g1->entityID, g2->entityID);
         }
     }
 }

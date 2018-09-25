@@ -1,0 +1,47 @@
+
+Questions:
+Given a system which can evolve its morphology and control, what are the pressures necessary in order for evolution to find modular solutions?
+Further, how do the solutions found reflect the structure of the environment they are placed in? 
+
+Hypothesis:
+Robots which can change their morphology are more capable of becoming modular than ones that cannot -- possibly obvious / known.
+Specific pressure is necessary to generate modular solutions. Either modularly varying goals or cost functions.
+
+
+Treebot Setup:
+==============
+
+Depth 3 treebot. 7 total branches. 4 leaves.
+1 motor placed in each branch = 7 motors.
+1 sensor placed in each leaf = 4 sensors.
+~3 hidden neurons in each branch = 3*7=21 hidden neurons.
+32 total neurons.
+
+Robot is planar in the XY-plane meaning its motors can move branches left and right.
+
+Environment consists of two types of cylinders. One the robot should point at, one the robot should not point at. This is a version of classification which requires the robot to understand where the objects are in the environment and how its own body movement impacts how it is viewing its environment.
+
+
+Treatments:
+===========
+
+    Evolutionary Control:
+    ---------------------
+    Evolution can control weights only.
+    Evolution can control weights and existence of weights.
+    (evolution can control weights and joint range)
+    Evolution can control weight, existence, and joint range
+
+    Cost:
+    -----
+    No cost
+    Connection Cost (existence only)
+    Joint Cost (joint range only)
+
+    Training Regiment:
+    ------------------
+    Edges of environment space (n*f specific environments)
+    Random subset of env. space (n*f random environments)
+
+
+

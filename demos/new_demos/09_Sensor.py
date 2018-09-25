@@ -20,6 +20,7 @@ cyl2 = sim.send_cylinder(position=(length / 2.0, 0, length + radius),
 
 box = sim.send_box(position=(5 *length, 0, length),
                    sides=(2 * length, 2 * length, 2* length),
+                   color=(1, 0, 1)
                    )
 # # joint cylinders
 joint = sim.send_hinge_joint(cyl1, cyl2,
@@ -50,3 +51,7 @@ sim.send_synapse(sensor_neuron, motor_neuron, 10.0)
 sim.send_synapse(sensor_neuron2, motor_neuron, -1.0)
 sim.start()
 sim.wait_to_finish()
+
+ray_sensor_out = sim.get_sensor_data(ray_sensor)
+
+print(ray_sensor_out)

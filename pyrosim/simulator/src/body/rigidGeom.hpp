@@ -4,6 +4,7 @@
 #pragma once
 
 #include "entity.hpp"
+#include "geomData.hpp"
 
 class RigidGeom : public Entity{
 public:
@@ -25,7 +26,6 @@ public:
 
     dGeomID getGeom(){return this->geom;};
 
-    
     void readColorFromPython(void){ readValueFromPython<dReal>(this->color, 3, "Color");}
     void readDensityFromPython(void){readValueFromPython<dReal>(&this->density, "Density");}
     void readOrientationFromPython(void){readValueFromPython<dReal>(this->orientation, 3, "Orientation");}
@@ -43,6 +43,16 @@ public:
 
     void setBody(dBodyID body){ dGeomSetBody(this->geom, body); }
     void setSpaceName(std::string name){this->spaceName = name;};
+
+    void setData(int entityID){
+        GeomData* geomData = new GeomData();
+        geomData->entityID = entityID;
+        geomData->color[0] = this->color[0];
+        geomData->color[1] = this->color[1];
+        geomData->color[2] = this->color[2];
+        dGeomSetData(this->geom, static_cast<void*>(geomData));
+    }
+
     void resetGeom(void){
         dGeomSetPosition(this->geom,
                          this->position[0],

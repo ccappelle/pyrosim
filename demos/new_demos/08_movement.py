@@ -3,42 +3,43 @@ sys.path.insert(0, '../../')
 import pyrosim
 import numpy as np
 
+DT = 0.01
+# toggle joint drawing by pressing 'd'
+sim = pyrosim.Simulator(eval_steps=-1, play_paused=True, dt=DT)
 
-sim = pyrosim.Simulator(play_paused=True, eval_steps=-1)
 
-length = 0.5
-radius = length / 5.0
+cyl = sim.send_cylinder(position=(0.25, 0, 1),
+                        orientation=(1, 0, 0),
+                        length=0.5)
+sphere = sim.send_sphere(position=(0.5, 0, 1),
+                         radius=0.1)
 
-# create cylinders in right angle arm
-cyl1 = sim.send_cylinder(position=(0, 0, length / 2.0 + radius),
-                         length=length,
-                         radius=radius)
-cyl2 = sim.send_cylinder(position=(length / 2.0, 0, length + radius),
-                         orientation=(1, 0, 0),
-                         length=length,
-                         radius=radius)
 
-# joint cylinders
-joint = sim.send_hinge_joint(cyl1, cyl2,
-                             anchor=(0, 0, length + radius),
-                             axis=(0, 1, 0),
-                             # joint_range=(-3.14159 / 2.0, +3.14159 / 2.0)
-                             )
+hinge = sim.send_hinge_joint(-1, cyl,
+                     anchor=(0, 0, 1),
+                     axis=(0, 1, 0),
+                     joint_range=np.pi/4.0)
 
-# create motor
-motor = sim.send_rotary_actuator(joint,
-                                 max_force=100.0, # max amount of force able to be used
-                                 speed=3.0,       # speed multiplier of motor
-                                 control='positional'  # how the motor moves based on input
-                                 )
+slider = sim.send_slider_joint(cyl, sphere,
+                      axis=(1, 0, 0),
+                      joint_range=0.3)
 
-t = np.linspace(0, 2 * np.pi, num=50)
-inputs = 10.0 * np.sin(t)
+rotary_motor = sim.send_rotary_actuator(hinge,
+                                        control='positional',
+                                        max_force=10)
+linear_motor = sim.send_linear_actuator(slider)
 
-input_neuron = sim.send_user_neuron(inputs)
-motor_neuron = sim.send_motor_neuron(motor, alpha=1.0, tau=0.1)
+# create sine wave as input
+t_values = np.arange(0, np.pi * 2, DT)
+input_values = 10 * np.sin(t_values)
+input_neuron = sim.send_user_neuron(input_values)
 
-sim.send_synapse(input_neuron, motor_neuron, 10.0)
+# motor neurons correspondnig to actuators
+rotary_neuron = sim.send_motor_neuron(rotary_motor)
+linear_neuron = sim.send_motor_neuron(linear_motor)
+
+sim.send_synapse(input_neuron, rotary_neuron, 1.0)
+sim.send_synapse(input_neuron, linear_neuron, 1.0)
 
 sim.start()
 sim.wait_to_finish()
