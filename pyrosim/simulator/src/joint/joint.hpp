@@ -62,6 +62,9 @@ public:
         return JOINT;
     }
 
+    virtual dReal getProprioception(void){
+        return 0;
+    }
 };
 
 
@@ -129,6 +132,9 @@ public:
         }
     }
 
+    virtual dReal getProprioception(void){
+        return dJointGetHingeAngle(this->joint);
+    }
 };
 
 
@@ -213,6 +219,10 @@ public:
         dsDrawLine(point1, point2);
     }
 
+    
+    virtual dReal getProprioception(void){
+        return dJointGetSliderPosition(this->joint);
+    }
 };
 
 class BallAndSocketJoint : public Joint{

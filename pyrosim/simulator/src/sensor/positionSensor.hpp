@@ -29,7 +29,6 @@ public:
 
             exit(0);
         }
-        
     }
 
     void sense(){

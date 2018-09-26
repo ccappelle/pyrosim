@@ -115,7 +115,34 @@ class Mixin(object):
 
     # ------------- QUATERNION SENSOR --------------------------------
     def send_quaternion_sensor(self, body_id, which_sense='a'):
-
+        # not implemented yet
         self._assert_body(body_id)
-        return self._send_sensor('QuaternionSensor', which_sense)
+        return self._send_sensor('QuaternionSensor', body_id, which_sense)
+
+
+    def send_proprioceptive_sensor(self, joint_id):
+        """Attach a proprioceptive sensor to the joint
+    
+        Proprioceptive sensors return the value of
+        the joint at each time step. For example, a hinge
+        joint will return the angle and a slider joint
+        will return the position offset.
+
+        .. note:: Currently not implemented for universal or ball
+        joints. Attached proprioceptive sensors will only return 0.
+
+        Parameters
+        ----------
+        joint_id    : int
+            The id tag of the joint to attach the sensor to
+
+        Returns
+        -------
+        int
+            The id tag of the sensor
+        """
+
+        self._assert_joint(joint_id)
+
+        return self._send_sensor('ProprioceptiveSensor', joint_id)
 
