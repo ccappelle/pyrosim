@@ -265,6 +265,8 @@ class Simulator(_body.Mixin, _joint.Mixin,
         self._send_parameter('DT', self._dt)
 
     def _assert_body(self, id_tag, tag_name=''):
+        if (id_tag == -1):
+            return
         assert self._entities[id_tag] == 'Body', ('Input id tag ' + str(tag_name) + ': ' +
                                                   str(id_tag) +' does not correspond to body')
 

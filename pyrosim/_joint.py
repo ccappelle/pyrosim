@@ -42,10 +42,9 @@ class Mixin(object):
         int
             Id tag of the joint
         """
-        if not(body1 == -1):
-            self._assert_body(body1, 'body1')
-        if not(body2 == -1):
-            self._assert_body(body2, 'body2')
+
+        self._assert_body(body1, 'body1')
+        self._assert_body(body2, 'body2')
         
         assert not(body1 == -1 and body2 == -1), ('Both bodies cannot be the world')
         if joint_range is None:
@@ -95,6 +94,7 @@ class Mixin(object):
         int
             Id tag of the joint
         """
+
         self._assert_body(body1, 'body1')
         self._assert_body(body2, 'body2')
         if joint_range is None:
