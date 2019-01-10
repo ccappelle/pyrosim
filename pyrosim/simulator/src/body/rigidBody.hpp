@@ -14,6 +14,7 @@
 class RigidBody : public Entity {
 public:
     dBodyID body; // literal body object
+    int isSeen;
     std::vector<RigidGeom*> geoms; // our class of geoms
 
     std::string spaceName;
@@ -24,23 +25,35 @@ public:
 
     virtual void draw(void){
         // draw center of mass as black sphere
-        const dReal *pos = dBodyGetPosition(this->body);
-        dMatrix3 R;
-        dRSetIdentity(R);
+        // const dReal *pos = dBodyGetPosition(this->body);
+        // dMatrix3 R;
+        // dRSetIdentity(R);
 
-        // dont draw if only one geom attached
-        if (this->geoms.size() != 1){
-            dsSetColorAlpha(0.0, 0.0, 0.0, 0.75);
-            dsDrawSphere(pos, R, 0.1);
-        }
+        // // dont draw if only one geom attached
+        // if (this->geoms.size() != 1){
+        //     dsSetColorAlpha(0.0, 0.0, 0.0, 0.15);
+        //     dsDrawSphere(pos, R, 0.1);
+        // }
 
         for (auto geom : this->geoms){
             geom->draw();
         }
     }
 
+    int getIsSeen( void ){
+        return isSeen;
+    }
+
+    void setIsSeen( int s ){
+        this->isSeen = s;
+    }
+
     const dReal* getPosition(void){
         return dBodyGetPosition(this->body);
+    }
+
+    const dReal* getQuaternion(void){
+        return dBodyGetQuaternion(this->body);
     }
 
     void writeToPython(void){

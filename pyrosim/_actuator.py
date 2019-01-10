@@ -76,11 +76,14 @@ class Mixin(object):
                                     speed,
                                     control)
 
-    def send_truster(self,
+    def send_thruster(self,
                      body_id,
                      force_range=(0.0, 10.0),
                      direction=(0.0, 0.0, 1.0)):
         """Sends a thruster to a body.
+
+        Thrusters act as forces pushing on the center of mass in the specified
+        `direction`.
         
         Parameters
         ----------

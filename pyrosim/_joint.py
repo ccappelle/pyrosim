@@ -149,7 +149,7 @@ class Mixin(object):
 
         """Send a ball and socket joint to the simulator
 
-        Ball and sockets maintain the distance between the bodies and the joint
+        Universal joints allow rotation about two axes.
 
         Parameters
         ----------
@@ -159,8 +159,12 @@ class Mixin(object):
         body2       : int 
             The id tag of the second body. Specify -1 in order to set body2
             to the 'world'
-        anchor      : triple of floats (optional)
-            The absolute starting position of the joint.
+        anchor      : triple of floats
+            The absolute starting world position of the joint.
+        axis1       : triple of floats (optional)
+            The first axis of rotation. (Default is (0, 0, 1))
+        axis2       : triple of floats (optional)
+            The second axis of rotation. (Default is (1, 0, 0))
         """
 
         self._assert_body(body1, 'body1')

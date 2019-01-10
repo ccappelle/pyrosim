@@ -288,14 +288,22 @@ void initializeParameters(void){
 }
 
 void simulationStep(void){
-    // place action before collision detection?
+    // // place action before collision detection?
     environment->takeStep(evalStep, parameters["DT"]);
     environment->emptyCollisionPairs();
     dSpaceCollide(topspace, 0, &nearCallback); // run collision
     dWorldStep(world, parameters["DT"]); // take time step
     dJointGroupEmpty(contactgroup);
-    // empty collision pairs
+    // // empty collision pairs
     
+    // place action before collision detection?
+    // dSpaceCollide(topspace, 0, &nearCallback); // run collision
+    // environment->takeStep(evalStep, parameters["DT"]);
+
+    // dWorldStep(world, parameters["DT"]); // take time step
+    // environment->emptyCollisionPairs();
+    // dJointGroupEmpty(contactgroup);
+    // empty collision pairs
 
     evalTime += parameters["DT"];
     evalStep ++;
@@ -317,8 +325,11 @@ static void start(void)
 }
 
 void handleRayCollision(dGeomID ray, dGeomID o2){
+    // handles ray collisions
+
     dContact contact;
     int n = dCollide(ray, o2, 1, &contact.geom, sizeof(dContact));
+
     std::cerr << "N contacts: " << n << std::endl;
     if (n > 0){
         std::cerr << "Handling Ray Collision" << std::endl;
@@ -328,6 +339,13 @@ void handleRayCollision(dGeomID ray, dGeomID o2){
         dReal color[3];
 
         GeomData* bodyData = static_cast<GeomData*>(dGeomGetData(o2));
+
+        // if ray 'sees' a body, set the sensor to true
+        if ( bodyData->entityID > 0 ){
+            RigidBody *body = (RigidBody *) environment->getEntity( bodyData->entityID );
+            body->setIsSeen( true );
+        }
+
         rayObj->collisionUpdate(contact.geom.depth,
                                 bodyData->color[0],
                                 bodyData->color[1],

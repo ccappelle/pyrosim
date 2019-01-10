@@ -12,16 +12,21 @@ class ThrusterActuator : public Actuator
 protected:
     float low_force, high_force;
     float direction[3];
-    dBodyID body;
-    int bodyID;
+    dBodyID body; // the ode given id
+    int bodyID;   // the pyrosim entity id
     dReal dt;
     dReal lastForce[3];
+    dReal lastMagnitude;
+    dMatrix3 RInit;
+
 public:
     ThrusterActuator(){};
 
     void create(Environment *environment){
         RigidBody *bodyObj = (RigidBody *) environment->getEntity(this->bodyID);
         this->body = bodyObj->getBody();
+        this->lastMagnitude = 0.0;
+        dBodyCopyRotation( this->body, this->RInit );
     }
 
     void readFromPython(void){
@@ -32,42 +37,63 @@ public:
     }
 
     void actuate(dReal input, dReal dt){
-        this->actuateByMagnitude(input, dt);
-        // dReal normalizedInput = (input + 1.0) / 2.0;
-        // dReal forceMagnitude = normalizedInput * (high_force - low_force) + low_force;
+        const dReal *R = dBodyGetRotation(this->body);
 
-        // std::cerr << forceMagnitude << " " << high_force << " "
-        // const dReal dir[3] = {direction[0] * forceMagnitude * timeStep,
-        //                       direction[1] * forceMagnitude * timeStep,
-        //                       direction[2] * forceMagnitude * timeStep};
+        // invert by taking transform of initial rotation to ensure direction
+        // is in global coordinates then modified by rotation due to simulation
+        const dReal xDirTemp = RInit[0] * direction[0] + RInit[4] * direction[1] + RInit[8]*direction[2];
+        const dReal yDirTemp = RInit[1] * direction[0] + RInit[5] * direction[1] + RInit[9]*direction[2];
+        const dReal zDirTemp = RInit[2] * direction[0] + RInit[6] * direction[1] + RInit[10]*direction[2];
 
-        // dBodyAddForce(this->body, dir[0], dir[1], dir[2]);
+        const dReal xDir = R[0] * xDirTemp + R[1] * yDirTemp + R[2] * zDirTemp;
+        const dReal yDir = R[4] * xDirTemp + R[5] * yDirTemp + R[6] * zDirTemp;
+        const dReal zDir = R[8] * xDirTemp + R[9] * yDirTemp + R[10] * zDirTemp;
+
+        dReal normalizedInput = (input + 1.0) / 2.0;
+        dReal forceMagnitude = normalizedInput * (high_force - low_force) + low_force;
+        this->lastMagnitude = forceMagnitude;
+
+        // std::cerr << forceMagnitude << " " << high_force << " " << std::endl;
+        const dReal dir[3] = {xDir * forceMagnitude * dt,
+                              yDir * forceMagnitude * dt,
+                              zDir * forceMagnitude * dt};
+        // save the direction of the force for drawing purposes
+        this->lastForce[0] = normalizedInput * xDir;
+        this->lastForce[1] = normalizedInput * yDir;
+        this->lastForce[2] = normalizedInput * zDir;
+
+        dBodyAddForce(this->body, dir[0], dir[1], dir[2]);
     }
 
     void actuateByMagnitude(dReal input, dReal dt){
         // actuate so that 0 corresponds to the low range of force
         dReal normalizedInput = abs(input);
         dReal forceMagnitude = normalizedInput * (high_force - low_force) + low_force;
+
         const dReal dir[3] = {direction[0] * forceMagnitude * dt,
                               direction[1] * forceMagnitude * dt,
                               direction[2] * forceMagnitude * dt};
-        this->lastForce[0] = dir[0] / dt;
-        this->lastForce[1] = dir[1] / dt;
-        this->lastForce[2] = dir[2] / dt;
+        this->lastForce[0] = normalizedInput + 0.5 / 2.0 * direction[0] * dt;
+        this->lastForce[1] = normalizedInput + 0.5 / 2.0 * direction[1] * dt;
+        this->lastForce[2] = normalizedInput + 0.5 / 2.0 * direction[2] * dt;
+
 
         dBodyAddForce(this->body, dir[0], dir[1], dir[2]);
     }
 
     void draw(void){
-        std::cerr << "Drawing thruster" << std::endl;
-        std::cerr << this->lastForce[0] << " " << this->lastForce[1] << " " << this->lastForce[2] << std::endl;
-        float length = 100.0;
+        // std::cerr << "Drawing thruster" << std::endl;
+        // std::cerr << this->lastForce[0] << " " << this->lastForce[1] << " " << this->lastForce[2] << std::endl;
+        // float length = 1.0;
         const dReal *pos1 = dBodyGetPosition(this->body);
-        const dReal pos2[3] = {pos1[0] + log(this->lastForce[0]* length),
-                               pos1[1] + log(this->lastForce[1]* length),
-                               pos1[2] + log(this->lastForce[2]* length)};
 
-        dsSetColor(1, 0, 0);
+        const dReal pos2[3] = {pos1[0] - this->lastForce[0],
+                               pos1[1] - this->lastForce[1],
+                               pos1[2] - this->lastForce[2]};
+
+        dsSetColor(1, 0.75, 0.2);
+        // std::cerr << pos1[0] << " " << pos1[1] << " " << pos1[2] << std::endl;
+        // std::cerr << pos2[0] << " " << pos2[1] << " " << pos2[2] << std::endl;
         dsDrawLine(pos1, pos2);
     }
 };

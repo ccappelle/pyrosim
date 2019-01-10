@@ -26,13 +26,27 @@ All bodies have parameters which specify their position, orientation, color, and
 See :ref:`code` for explicit parameter listing.
 Below is an example sending multiple bodies with some of these parameters altered.
 
+.. literalinclude:: ../../../demos/docs/all_bodies_parameter_options.py
+
+.. figure:: ../images/all_bodies_parameter_options.png
+    :width: 75%
+    :align: center
+
+    Nine bodies with different parameter options.
+
 
 Composite Bodies
 ----------------
 Composite bodies are bodies which use multiple rigid body prototypes in their construction.
 Composite bodies are useful to efficiently create arbitrary shapes.
-You can send composite bodies similar to singular bodies, however you would use 'add' commands instead off 'send' commands to attach prototypes to the composite body.
+You can send composite bodies similar to singular bodies, however you would use **add** commands instead of **send** commands to attach prototypes to the composite body.
 Below is an example of creating a hollow box attaching cylinders to a composite body.
 The black sphere in the center is an graphical illustration of the center of mass of the composite body.
 
 .. literalinclude:: ../../../demos/docs/composite_body.py
+
+.. figure:: ../images/composite_body.png
+    :width: 75%
+    :align: center
+
+    Composite single body made up of added cylinders.

@@ -1,11 +1,11 @@
-# demos/docs/all_bodies_altered.py
+# demos/docs/all_bodies_parameter_options.py
 import pyrosim
 
 sim = pyrosim.Simulator(play_paused=True, eval_steps=-1)
 
 for i in range(3):
     y = i - 1
-    color = [i / 2, i / 2, i / 2]
+    color = [i / 2, i / 2, i / 2] # set the color to be greyscale
     size = 1 + i
 
     sim.send_box(position=[-1, y, 1],

@@ -15,8 +15,8 @@ protected:
     int whichDimension;
 public:
     virtual void readFromPython(void){
-        readValueFromPython<int>(&this->bodyID);
-        readValueFromPython<int>(&this->whichDimension);
+        readValueFromPython<int>(&this->bodyID, "Body ID");
+        readValueFromPython<int>(&this->whichDimension, "Wich Dimension (0:x, 1:y, 2:z)");
     }
 
     virtual void create(Environment *environment){

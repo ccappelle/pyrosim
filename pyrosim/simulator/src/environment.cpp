@@ -12,10 +12,12 @@ typedef std::map<std::string, Entity * (*) ()> StringToEntity;
 #include "actuator/jointMotor.hpp"
 #include "actuator/thruster.hpp"
 #include "network/ctrnn.hpp"
+#include "sensor/isSeenSensor.hpp"
 #include "sensor/positionSensor.hpp"
 #include "sensor/raySensor.hpp"
 #include "sensor/touchSensor.hpp"
 #include "sensor/proprioceptiveSensor.hpp"
+#include "sensor/vestibularSensor.hpp"
 
 // fill up map
 // C.C. we can possibly put this in separate file?
@@ -39,10 +41,12 @@ StringToEntity stringToEntityMap{
     {"MotorNeuron",          &createEntityInstance<MotorNeuron>          }, // Motor Neuron
     {"UserNeuron",           &createEntityInstance<UserNeuron>           }, // User Neuron
     {"SensorNeuron",         &createEntityInstance<SensorNeuron>         }, // Sensor Neuron
+    {"IsSeenSensor",         &createEntityInstance<IsSeenSensor>         }, // Is seen sensor
     {"PositionSensor",       &createEntityInstance<PositionSensor>       }, // Position Sensor
     {"RaySensor",            &createEntityInstance<RaySensor>            }, // Ray sensor
     {"TouchSensor",          &createEntityInstance<TouchSensor>          }, // Touch sensor
     {"ProprioceptiveSensor", &createEntityInstance<ProprioceptiveSensor> }, // Proprioceptive sensor
+    {"quaternionSensor",     &createEntityInstance<QuaternionSensor>     }, // vestibular sensor returning quaternion
 };
 
 Environment::Environment(dWorldID world, dSpaceID topspace, int numEntities){

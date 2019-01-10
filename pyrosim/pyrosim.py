@@ -158,7 +158,7 @@ class Simulator(_body.Mixin, _joint.Mixin,
         # self.pipe.stdin.close()
 
     def wait_to_finish(self):
-        """Communicate with pipe once sim is complete
+        """Communicate with pipe once simulation is complete
 
         .. note:: for **python 3.x** it is necessary to use this command after `sim.start()`
             in order for the simulation to run properly.
@@ -187,9 +187,24 @@ class Simulator(_body.Mixin, _joint.Mixin,
         self._read_sensor_data()
 
     def get_sensor_data(self, sensor_id):
+        """Returns the sensor data of the specified sensor at each
+        time step"""
+        
         self._assert_sensor(sensor_id, 'sensor_id')
         return copy.copy(self._sensor_data[sensor_id][:])
-        
+    
+    def get_all_sensor_data( self ):
+        """Outputs all sensor data created by the simulation
+
+        Returns
+        -------
+        dict
+            The sensor dictionary. The keys are is the id of the
+            sensor and the value a list containing the sensory 
+            information at each time step.
+        """
+        return copy.copy( self._sensor_data )
+
     def get_debug_output(self):
         """Returns the debug output from the simulation"""
         return self._strings_to_send + '\n' + self._raw_cerr

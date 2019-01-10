@@ -12,10 +12,12 @@ class RaySensor : public Sensor
 protected:
     Ray *ray;
     int rayID;
+    float range;
     int whichSense;
+
 public:
     virtual void readFromPython(void){
-        readValueFromPython<int>(&this->rayID, "Ray ID");
+        readValueFromPython<int>(&this->rayID, "Ray ID" );
         readValueFromPython<int>(&this->whichSense, "Which Sense");
     }
 
