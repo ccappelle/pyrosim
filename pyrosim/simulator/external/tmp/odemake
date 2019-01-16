@@ -1,0 +1,1392 @@
+Making all in include
+Making all in ode
+make[2]: Nothing to be done for `all'.
+Making all in drawstuff
+make[2]: Nothing to be done for `all'.
+make[2]: Nothing to be done for `all-am'.
+Making all in drawstuff
+Making all in src
+/bin/sh ../../libtool --tag=CXX   --mode=compile g++ -DHAVE_CONFIG_H -I. -I../../ode/src  -I../../include -DDEFAULT_PATH_TO_TEXTURES='"../../drawstuff/textures/"'  -DdDOUBLE  -g -O2 -MT drawstuff.lo -MD -MP -MF .deps/drawstuff.Tpo -c -o drawstuff.lo drawstuff.cpp
+/bin/sh ../../libtool --tag=CXX   --mode=compile g++ -DHAVE_CONFIG_H -I. -I../../ode/src  -I../../include -DDEFAULT_PATH_TO_TEXTURES='"../../drawstuff/textures/"'  -DdDOUBLE  -g -O2 -MT osx.lo -MD -MP -MF .deps/osx.Tpo -c -o osx.lo osx.cpp
+libtool: compile:  g++ -DHAVE_CONFIG_H -I. -I../../ode/src -I../../include -DDEFAULT_PATH_TO_TEXTURES=\"../../drawstuff/textures/\" -DdDOUBLE -g -O2 -MT osx.lo -MD -MP -MF .deps/osx.Tpo -c osx.cpp -o osx.o
+libtool: compile:  g++ -DHAVE_CONFIG_H -I. -I../../ode/src -I../../include -DDEFAULT_PATH_TO_TEXTURES=\"../../drawstuff/textures/\" -DdDOUBLE -g -O2 -MT drawstuff.lo -MD -MP -MF .deps/drawstuff.Tpo -c drawstuff.cpp -o drawstuff.o
+In file included from drawstuff.cpp:44:
+In file included from ../../include/ode/ode.h:40:
+../../include/ode/misc.h:58:70: warning: conversion from string literal to 'char *' is deprecated [-Wc++11-compat-deprecated-writable-strings]
+ODE_API void dPrintMatrix (const dReal *A, int n, int m, char *fmt = "%10.4f ",
+                                                                     ^
+osx.cpp:146:12: warning: 'glutGetModifiers' is deprecated: first deprecated in macOS 10.9 [-Wdeprecated-declarations]
+    return glutGetModifiers() & ~GLUT_ACTIVE_SHIFT;
+           ^
+/System/Library/Frameworks/GLUT.framework/Headers/glut.h:552:21: note: 'glutGetModifiers' has been explicitly marked deprecated here
+extern int APIENTRY glutGetModifiers(void) OPENGL_DEPRECATED(10_0, 10_9);
+                    ^
+osx.cpp:258:5: warning: 'glutInit' is deprecated: first deprecated in macOS 10.9 [-Wdeprecated-declarations]
+    glutInit(&argc, argv);
+    ^
+/System/Library/Frameworks/GLUT.framework/Headers/glut.h:431:22: note: 'glutInit' has been explicitly marked deprecated here
+extern void APIENTRY glutInit(int *argcp, char **argv) OPENGL_DEPRECATED(10_0, 10_9);
+                     ^
+osx.cpp:259:5: warning: 'glutInitDisplayMode' is deprecated: first deprecated in macOS 10.9 [-Wdeprecated-declarations]
+    glutInitDisplayMode(GLUT_RGBA | GLUT_DOUBLE | GLUT_DEPTH);
+    ^
+/System/Library/Frameworks/GLUT.framework/Headers/glut.h:432:22: note: 'glutInitDisplayMode' has been explicitly marked deprecated here
+extern void APIENTRY glutInitDisplayMode(unsigned int mode) OPENGL_DEPRECATED(10_0, 10_9);
+                     ^
+osx.cpp:260:2: warning: 'glutInitWindowSize' is deprecated: first deprecated in macOS 10.9 [-Wdeprecated-declarations]
+        glutInitWindowSize(width, height);
+        ^
+/System/Library/Frameworks/GLUT.framework/Headers/glut.h:437:22: note: 'glutInitWindowSize' has been explicitly marked deprecated here
+extern void APIENTRY glutInitWindowSize(int width, int height) OPENGL_DEPRECATED(10_0, 10_9);
+                     ^
+osx.cpp:262:23: warning: 'glutCreateWindow' is deprecated: first deprecated in macOS 10.9 [-Wdeprecated-declarations]
+    windowReference = glutCreateWindow("ODE - Drawstuff");
+                      ^
+/System/Library/Frameworks/GLUT.framework/Headers/glut.h:441:21: note: 'glutCreateWindow' has been explicitly marked deprecated here
+extern int APIENTRY glutCreateWindow(const char *title) OPENGL_DEPRECATED(10_0, 10_9);
+                    ^
+osx.cpp:271:5: warning: 'glutSwapBuffers' is deprecated: first deprecated in macOS 10.9 [-Wdeprecated-declarations]
+    glutSwapBuffers();
+    ^
+/System/Library/Frameworks/GLUT.framework/Headers/glut.h:448:22: note: 'glutSwapBuffers' has been explicitly marked deprecated here
+extern void APIENTRY glutSwapBuffers(void) OPENGL_DEPRECATED(10_0, 10_9);
+                     ^
+osx.cpp:284:5: warning: 'glutTimerFunc' is deprecated: first deprecated in macOS 10.9 [-Wdeprecated-declarations]
+    glutTimerFunc(1000/60, osxTimerEventHandler, 0);
+    ^
+/System/Library/Frameworks/GLUT.framework/Headers/glut.h:514:22: note: 'glutTimerFunc' has been explicitly marked deprecated here
+extern void APIENTRY glutTimerFunc(unsigned int millis, void (*func)(int value), int value) OPENGL_DEPRECATED(10_0, 10_9);
+                     ^
+osx.cpp:289:5: warning: 'glutPostRedisplay' is deprecated: first deprecated in macOS 10.9 [-Wdeprecated-declarations]
+    glutPostRedisplay();
+    ^
+/System/Library/Frameworks/GLUT.framework/Headers/glut.h:444:22: note: 'glutPostRedisplay' has been explicitly marked deprecated here
+extern void APIENTRY glutPostRedisplay(void) OPENGL_DEPRECATED(10_0, 10_9);
+                     ^
+osx.cpp:295:5: warning: 'glutKeyboardFunc' is deprecated: first deprecated in macOS 10.9 [-Wdeprecated-declarations]
+    glutKeyboardFunc(osxKeyEventHandler);
+    ^
+/System/Library/Frameworks/GLUT.framework/Headers/glut.h:507:22: note: 'glutKeyboardFunc' has been explicitly marked deprecated here
+extern void APIENTRY glutKeyboardFunc(void (*func)(unsigned char key, int x, int y)) OPENGL_DEPRECATED(10_0, 10_9);
+                     ^
+osx.cpp:296:5: warning: 'glutMouseFunc' is deprecated: first deprecated in macOS 10.9 [-Wdeprecated-declarations]
+    glutMouseFunc(osxMouseEventHandler);
+    ^
+/System/Library/Frameworks/GLUT.framework/Headers/glut.h:508:22: note: 'glutMouseFunc' has been explicitly marked deprecated here
+extern void APIENTRY glutMouseFunc(void (*func)(int button, int state, int x, int y)) OPENGL_DEPRECATED(10_0, 10_9);
+                     ^
+osx.cpp:297:5: warning: 'glutMotionFunc' is deprecated: first deprecated in macOS 10.9 [-Wdeprecated-declarations]
+    glutMotionFunc(osxMotionEventHandler);
+    ^
+/System/Library/Frameworks/GLUT.framework/Headers/glut.h:509:22: note: 'glutMotionFunc' has been explicitly marked deprecated here
+extern void APIENTRY glutMotionFunc(void (*func)(int x, int y)) OPENGL_DEPRECATED(10_0, 10_9);
+                     ^
+osx.cpp:298:5: warning: 'glutDisplayFunc' is deprecated: first deprecated in macOS 10.9 [-Wdeprecated-declarations]
+    glutDisplayFunc(osxRedisplayEventHandler);
+    ^
+/System/Library/Frameworks/GLUT.framework/Headers/glut.h:505:22: note: 'glutDisplayFunc' has been explicitly marked deprecated here
+extern void APIENTRY glutDisplayFunc(void (*func)(void)) OPENGL_DEPRECATED(10_0, 10_9);
+                     ^
+osx.cpp:299:5: warning: 'glutReshapeFunc' is deprecated: first deprecated in macOS 10.9 [-Wdeprecated-declarations]
+    glutReshapeFunc(osxWindowReshapeEventHandler);
+    ^
+/System/Library/Frameworks/GLUT.framework/Headers/glut.h:506:22: note: 'glutReshapeFunc' has been explicitly marked deprecated here
+extern void APIENTRY glutReshapeFunc(void (*func)(int width, int height)) OPENGL_DEPRECATED(10_0, 10_9);
+                     ^
+osx.cpp:342:5: warning: 'glutMainLoop' is deprecated: first deprecated in macOS 10.9 [-Wdeprecated-declarations]
+    glutMainLoop();
+    ^
+/System/Library/Frameworks/GLUT.framework/Headers/glut.h:438:22: note: 'glutMainLoop' has been explicitly marked deprecated here
+extern void APIENTRY glutMainLoop(void) OPENGL_DEPRECATED(10_0, 10_9);
+                     ^
+drawstuff.cpp:261:3: warning: 'gluBuild2DMipmaps' is deprecated: first deprecated in macOS 10.9 - "Use glGenerateMipmap" [-Wdeprecated-declarations]
+  gluBuild2DMipmaps (GL_TEXTURE_2D, 3, image->width(), image->height(),
+  ^
+/System/Library/Frameworks/OpenGL.framework/Headers/glu.h:247:14: note: 'gluBuild2DMipmaps' has been explicitly marked deprecated here
+extern GLint gluBuild2DMipmaps (GLenum target, GLint internalFormat, GLsizei width, GLsizei height, GLenum format, GLenum type, const void *data) OPENGL_DEPRECATED_MSG(10_0, 10_9, "Use glGenerateMipmap");
+             ^
+14 warnings generated.
+mv -f .deps/osx.Tpo .deps/osx.Plo
+2 warnings generated.
+mv -f .deps/drawstuff.Tpo .deps/drawstuff.Plo
+/bin/sh ../../libtool --tag=CXX   --mode=link g++  -g -O2   -o libdrawstuff.la  drawstuff.lo   osx.lo  -lm  -lpthread
+libtool: link: ar cru .libs/libdrawstuff.a  drawstuff.o osx.o
+libtool: link: ranlib .libs/libdrawstuff.a
+libtool: link: ( cd ".libs" && rm -f "libdrawstuff.la" && ln -s "../libdrawstuff.la" "libdrawstuff.la" )
+Making all in dstest
+g++ -DHAVE_CONFIG_H -I. -I../../ode/src  -I../../drawstuff/src -I../../include -DdDOUBLE  -g -O2 -MT dstest.o -MD -MP -MF .deps/dstest.Tpo -c -o dstest.o dstest.cpp
+mv -f .deps/dstest.Tpo .deps/dstest.Po
+/bin/sh ../../libtool --tag=CXX   --mode=link g++  -g -O2   -o dstest dstest.o ../../drawstuff/src/libdrawstuff.la -framework OpenGL -framework GLUT  -lm  -lpthread
+libtool: link: g++ -g -O2 -o dstest dstest.o -Wl,-bind_at_load  ../../drawstuff/src/.libs/libdrawstuff.a -framework OpenGL -framework GLUT -lm -lpthread
+make[2]: Nothing to be done for `all-am'.
+Making all in OPCODE
+Making all in Ice
+/bin/sh ../../libtool --tag=CXX   --mode=compile g++ -DHAVE_CONFIG_H -I. -I../../ode/src  -I ../../OPCODE -I ../../include -DdDOUBLE  -g -O2 -MT IceAABB.lo -MD -MP -MF .deps/IceAABB.Tpo -c -o IceAABB.lo IceAABB.cpp
+/bin/sh ../../libtool --tag=CXX   --mode=compile g++ -DHAVE_CONFIG_H -I. -I../../ode/src  -I ../../OPCODE -I ../../include -DdDOUBLE  -g -O2 -MT IceContainer.lo -MD -MP -MF .deps/IceContainer.Tpo -c -o IceContainer.lo IceContainer.cpp
+libtool: compile:  g++ -DHAVE_CONFIG_H -I. -I../../ode/src -I ../../OPCODE -I ../../include -DdDOUBLE -g -O2 -MT IceContainer.lo -MD -MP -MF .deps/IceContainer.Tpo -c IceContainer.cpp -o IceContainer.o
+libtool: compile:  g++ -DHAVE_CONFIG_H -I. -I../../ode/src -I ../../OPCODE -I ../../include -DdDOUBLE -g -O2 -MT IceAABB.lo -MD -MP -MF .deps/IceAABB.Tpo -c IceAABB.cpp -o IceAABB.o
+In file included from IceAABB.cpp:21:
+In file included from ../../OPCODE/Stdafx.h:19:
+In file included from ../../OPCODE/Opcode.h:82:
+In file included from ../../OPCODE/OPC_IceHook.h:43:
+In file included from IceContainer.cpp:25:
+In file included from ../../OPCODE/Stdafx.h:../../OPCODE/Ice/IceUtils.h:19:
+In file included from ../../OPCODE/Opcode.h:82:
+In file included from ../../OPCODE/OPC_IceHook.h:43:
+226:51:../../OPCODE/Ice/IceUtils.h:226:51:  warning: warning: expression result unused; assign into a variable to force a volatile load [-Wunused-volatile-lvalue]
+expression result unused; assign into a variable to force a volatile load [-Wunused-volatile-lvalue]
+        inline_ void _prefetch(void const* ptr)         { (void)*(char const volatile *)ptr;    }
+        inline_ void _prefetch(void const* ptr)         { (void)*(char const volatile *)ptr;    }
+                                                                ^~~~~~~~~~~~~~~~~~~~~~~~~~~
+                                                                ^~~~~~~~~~~~~~~~~~~~~~~~~~~
+1 warning generated.
+mv -f .deps/IceContainer.Tpo .deps/IceContainer.Plo
+/bin/sh ../../libtool --tag=CXX   --mode=compile g++ -DHAVE_CONFIG_H -I. -I../../ode/src  -I ../../OPCODE -I ../../include -DdDOUBLE  -g -O2 -MT IceHPoint.lo -MD -MP -MF .deps/IceHPoint.Tpo -c -o IceHPoint.lo IceHPoint.cpp
+1 warning generated.
+mv -f .deps/IceAABB.Tpo .deps/IceAABB.Plo
+/bin/sh ../../libtool --tag=CXX   --mode=compile g++ -DHAVE_CONFIG_H -I. -I../../ode/src  -I ../../OPCODE -I ../../include -DdDOUBLE  -g -O2 -MT IceIndexedTriangle.lo -MD -MP -MF .deps/IceIndexedTriangle.Tpo -c -o IceIndexedTriangle.lo IceIndexedTriangle.cpp
+libtool: compile:  g++ -DHAVE_CONFIG_H -I. -I../../ode/src -I ../../OPCODE -I ../../include -DdDOUBLE -g -O2 -MT IceHPoint.lo -MD -MP -MF .deps/IceHPoint.Tpo -c IceHPoint.cpp -o IceHPoint.o
+libtool: compile:  g++ -DHAVE_CONFIG_H -I. -I../../ode/src -I ../../OPCODE -I ../../include -DdDOUBLE -g -O2 -MT IceIndexedTriangle.lo -MD -MP -MF .deps/IceIndexedTriangle.Tpo -c IceIndexedTriangle.cpp -o IceIndexedTriangle.o
+In file included from IceHPoint.cpp:29:
+In file included from ../../OPCODE/Stdafx.h:19:
+In file included from ../../OPCODE/Opcode.h:82:
+In file included from ../../OPCODE/OPC_IceHook.h:43:
+../../OPCODE/Ice/IceUtils.h:226:51: warning: expression result unused; assign into a variable to force a volatile load [-Wunused-volatile-lvalue]
+        inline_ void _prefetch(void const* ptr)         { (void)*(char const volatile *)ptr;    }
+                                                                ^~~~~~~~~~~~~~~~~~~~~~~~~~~
+In file included from IceIndexedTriangle.cpp:12:
+In file included from ../../OPCODE/Stdafx.h:19:
+In file included from ../../OPCODE/Opcode.h:82:
+In file included from ../../OPCODE/OPC_IceHook.h:43:
+../../OPCODE/Ice/IceUtils.h:226:51: warning: expression result unused; assign into a variable to force a volatile load [-Wunused-volatile-lvalue]
+        inline_ void _prefetch(void const* ptr)         { (void)*(char const volatile *)ptr;    }
+                                                                ^~~~~~~~~~~~~~~~~~~~~~~~~~~
+1 warning generated.
+mv -f .deps/IceHPoint.Tpo .deps/IceHPoint.Plo
+/bin/sh ../../libtool --tag=CXX   --mode=compile g++ -DHAVE_CONFIG_H -I. -I../../ode/src  -I ../../OPCODE -I ../../include -DdDOUBLE  -g -O2 -MT IceMatrix3x3.lo -MD -MP -MF .deps/IceMatrix3x3.Tpo -c -o IceMatrix3x3.lo IceMatrix3x3.cpp
+libtool: compile:  g++ -DHAVE_CONFIG_H -I. -I../../ode/src -I ../../OPCODE -I ../../include -DdDOUBLE -g -O2 -MT IceMatrix3x3.lo -MD -MP -MF .deps/IceMatrix3x3.Tpo -c IceMatrix3x3.cpp -o IceMatrix3x3.o
+1 warning generated.
+mv -f .deps/IceIndexedTriangle.Tpo .deps/IceIndexedTriangle.Plo
+/bin/sh ../../libtool --tag=CXX   --mode=compile g++ -DHAVE_CONFIG_H -I. -I../../ode/src  -I ../../OPCODE -I ../../include -DdDOUBLE  -g -O2 -MT IceMatrix4x4.lo -MD -MP -MF .deps/IceMatrix4x4.Tpo -c -o IceMatrix4x4.lo IceMatrix4x4.cpp
+In file included from IceMatrix3x3.cpp:36:
+In file included from ../../OPCODE/Stdafx.h:19:
+In file included from ../../OPCODE/Opcode.h:82:
+In file included from ../../OPCODE/OPC_IceHook.h:43:
+../../OPCODE/Ice/IceUtils.h:226:51: warning: expression result unused; assign into a variable to force a volatile load [-Wunused-volatile-lvalue]
+        inline_ void _prefetch(void const* ptr)         { (void)*(char const volatile *)ptr;    }
+                                                                ^~~~~~~~~~~~~~~~~~~~~~~~~~~
+libtool: compile:  g++ -DHAVE_CONFIG_H -I. -I../../ode/src -I ../../OPCODE -I ../../include -DdDOUBLE -g -O2 -MT IceMatrix4x4.lo -MD -MP -MF .deps/IceMatrix4x4.Tpo -c IceMatrix4x4.cpp -o IceMatrix4x4.o
+1 warning generated.
+mv -f .deps/IceMatrix3x3.Tpo .deps/IceMatrix3x3.Plo
+/bin/sh ../../libtool --tag=CXX   --mode=compile g++ -DHAVE_CONFIG_H -I. -I../../ode/src  -I ../../OPCODE -I ../../include -DdDOUBLE  -g -O2 -MT IceOBB.lo -MD -MP -MF .deps/IceOBB.Tpo -c -o IceOBB.lo IceOBB.cpp
+In file included from IceMatrix4x4.cpp:39:
+In file included from ../../OPCODE/Stdafx.h:19:
+In file included from ../../OPCODE/Opcode.h:82:
+In file included from ../../OPCODE/OPC_IceHook.h:43:
+../../OPCODE/Ice/IceUtils.h:226:51: warning: expression result unused; assign into a variable to force a volatile load [-Wunused-volatile-lvalue]
+        inline_ void _prefetch(void const* ptr)         { (void)*(char const volatile *)ptr;    }
+                                                                ^~~~~~~~~~~~~~~~~~~~~~~~~~~
+libtool: compile:  g++ -DHAVE_CONFIG_H -I. -I../../ode/src -I ../../OPCODE -I ../../include -DdDOUBLE -g -O2 -MT IceOBB.lo -MD -MP -MF .deps/IceOBB.Tpo -c IceOBB.cpp -o IceOBB.o
+1 warning generated.
+In file included from IceOBB.cpp:21:
+In file included from ../../OPCODE/Stdafx.h:19:
+In file included from ../../OPCODE/Opcode.h:82:
+In file included from ../../OPCODE/OPC_IceHook.h:43:
+../../OPCODE/Ice/IceUtils.h:226:51: warning: expression result unused; assign into a variable to force a volatile load [-Wunused-volatile-lvalue]
+        inline_ void _prefetch(void const* ptr)         { (void)*(char const volatile *)ptr;    }
+                                                                ^~~~~~~~~~~~~~~~~~~~~~~~~~~
+mv -f .deps/IceMatrix4x4.Tpo .deps/IceMatrix4x4.Plo
+/bin/sh ../../libtool --tag=CXX   --mode=compile g++ -DHAVE_CONFIG_H -I. -I../../ode/src  -I ../../OPCODE -I ../../include -DdDOUBLE  -g -O2 -MT IcePlane.lo -MD -MP -MF .deps/IcePlane.Tpo -c -o IcePlane.lo IcePlane.cpp
+libtool: compile:  g++ -DHAVE_CONFIG_H -I. -I../../ode/src -I ../../OPCODE -I ../../include -DdDOUBLE -g -O2 -MT IcePlane.lo -MD -MP -MF .deps/IcePlane.Tpo -c IcePlane.cpp -o IcePlane.o
+In file included from IcePlane.cpp:21:
+In file included from ../../OPCODE/Stdafx.h:19:
+In file included from ../../OPCODE/Opcode.h:82:
+In file included from ../../OPCODE/OPC_IceHook.h:43:
+../../OPCODE/Ice/IceUtils.h:226:51: warning: expression result unused; assign into a variable to force a volatile load [-Wunused-volatile-lvalue]
+        inline_ void _prefetch(void const* ptr)         { (void)*(char const volatile *)ptr;    }
+                                                                ^~~~~~~~~~~~~~~~~~~~~~~~~~~
+1 warning generated.
+mv -f .deps/IceOBB.Tpo .deps/IceOBB.Plo
+/bin/sh ../../libtool --tag=CXX   --mode=compile g++ -DHAVE_CONFIG_H -I. -I../../ode/src  -I ../../OPCODE -I ../../include -DdDOUBLE  -g -O2 -MT IcePoint.lo -MD -MP -MF .deps/IcePoint.Tpo -c -o IcePoint.lo IcePoint.cpp
+1 warning generated.
+libtool: compile:  g++ -DHAVE_CONFIG_H -I. -I../../ode/src -I ../../OPCODE -I ../../include -DdDOUBLE -g -O2 -MT IcePoint.lo -MD -MP -MF .deps/IcePoint.Tpo -c IcePoint.cpp -o IcePoint.o
+mv -f .deps/IcePlane.Tpo .deps/IcePlane.Plo
+/bin/sh ../../libtool --tag=CXX   --mode=compile g++ -DHAVE_CONFIG_H -I. -I../../ode/src  -I ../../OPCODE -I ../../include -DdDOUBLE  -g -O2 -MT IceRandom.lo -MD -MP -MF .deps/IceRandom.Tpo -c -o IceRandom.lo IceRandom.cpp
+libtool: compile:  g++ -DHAVE_CONFIG_H -I. -I../../ode/src -I ../../OPCODE -I ../../include -DdDOUBLE -g -O2 -MT IceRandom.lo -MD -MP -MF .deps/IceRandom.Tpo -c IceRandom.cpp -o IceRandom.o
+In file included from IcePoint.cpp:49:
+In file included from ../../OPCODE/Stdafx.h:19:
+In file included from ../../OPCODE/Opcode.h:82:
+In file included from ../../OPCODE/OPC_IceHook.h:43:
+../../OPCODE/Ice/IceUtils.h:226:51: warning: expression result unused; assign into a variable to force a volatile load [-Wunused-volatile-lvalue]
+        inline_ void _prefetch(void const* ptr)         { (void)*(char const volatile *)ptr;    }
+                                                                ^~~~~~~~~~~~~~~~~~~~~~~~~~~
+In file included from IceRandom.cpp:12:
+In file included from ../../OPCODE/Stdafx.h:19:
+In file included from ../../OPCODE/Opcode.h:82:
+In file included from ../../OPCODE/OPC_IceHook.h:43:
+../../OPCODE/Ice/IceUtils.h:226:51: warning: expression result unused; assign into a variable to force a volatile load [-Wunused-volatile-lvalue]
+        inline_ void _prefetch(void const* ptr)         { (void)*(char const volatile *)ptr;    }
+                                                                ^~~~~~~~~~~~~~~~~~~~~~~~~~~
+1 warning generated.
+mv -f .deps/IcePoint.Tpo .deps/IcePoint.Plo
+/bin/sh ../../libtool --tag=CXX   --mode=compile g++ -DHAVE_CONFIG_H -I. -I../../ode/src  -I ../../OPCODE -I ../../include -DdDOUBLE  -g -O2 -MT IceRay.lo -MD -MP -MF .deps/IceRay.Tpo -c -o IceRay.lo IceRay.cpp
+1 warning generated.
+mv -f .deps/IceRandom.Tpo .deps/IceRandom.Plo
+/bin/sh ../../libtool --tag=CXX   --mode=compile g++ -DHAVE_CONFIG_H -I. -I../../ode/src  -I ../../OPCODE -I ../../include -DdDOUBLE  -g -O2 -MT IceRevisitedRadix.lo -MD -MP -MF .deps/IceRevisitedRadix.Tpo -c -o IceRevisitedRadix.lo IceRevisitedRadix.cpp
+libtool: compile:  g++ -DHAVE_CONFIG_H -I. -I../../ode/src -I ../../OPCODE -I ../../include -DdDOUBLE -g -O2 -MT IceRay.lo -MD -MP -MF .deps/IceRay.Tpo -c IceRay.cpp -o IceRay.o
+libtool: compile:  g++ -DHAVE_CONFIG_H -I. -I../../ode/src -I ../../OPCODE -I ../../include -DdDOUBLE -g -O2 -MT IceRevisitedRadix.lo -MD -MP -MF .deps/IceRevisitedRadix.Tpo -c IceRevisitedRadix.cpp -o IceRevisitedRadix.o
+In file included from IceRay.cpp:62:
+In file included from ../../OPCODE/Stdafx.h:19:
+In file included from ../../OPCODE/Opcode.h:82:
+In file included from ../../OPCODE/OPC_IceHook.h:43:
+../../OPCODE/Ice/IceUtils.h:226:51: warning: expression result unused; assign into a variable to force a volatile load [-Wunused-volatile-lvalue]
+        inline_ void _prefetch(void const* ptr)         { (void)*(char const volatile *)ptr;    }
+                                                                ^~~~~~~~~~~~~~~~~~~~~~~~~~~
+In file included from IceRevisitedRadix.cpp:52:
+In file included from ../../OPCODE/Stdafx.h:19:
+In file included from ../../OPCODE/Opcode.h:82:
+In file included from ../../OPCODE/OPC_IceHook.h:43:
+../../OPCODE/Ice/IceUtils.h:226:51: warning: expression result unused; assign into a variable to force a volatile load [-Wunused-volatile-lvalue]
+        inline_ void _prefetch(void const* ptr)         { (void)*(char const volatile *)ptr;    }
+                                                                ^~~~~~~~~~~~~~~~~~~~~~~~~~~
+1 warning generated.
+mv -f .deps/IceRay.Tpo .deps/IceRay.Plo
+/bin/sh ../../libtool --tag=CXX   --mode=compile g++ -DHAVE_CONFIG_H -I. -I../../ode/src  -I ../../OPCODE -I ../../include -DdDOUBLE  -g -O2 -MT IceSegment.lo -MD -MP -MF .deps/IceSegment.Tpo -c -o IceSegment.lo IceSegment.cpp
+libtool: compile:  g++ -DHAVE_CONFIG_H -I. -I../../ode/src -I ../../OPCODE -I ../../include -DdDOUBLE -g -O2 -MT IceSegment.lo -MD -MP -MF .deps/IceSegment.Tpo -c IceSegment.cpp -o IceSegment.o
+In file included from IceSegment.cpp:25:
+In file included from ../../OPCODE/Stdafx.h:19:
+In file included from ../../OPCODE/Opcode.h:82:
+In file included from ../../OPCODE/OPC_IceHook.h:43:
+../../OPCODE/Ice/IceUtils.h:226:51: warning: expression result unused; assign into a variable to force a volatile load [-Wunused-volatile-lvalue]
+        inline_ void _prefetch(void const* ptr)         { (void)*(char const volatile *)ptr;    }
+                                                                ^~~~~~~~~~~~~~~~~~~~~~~~~~~
+1 warning generated.
+mv -f .deps/IceRevisitedRadix.Tpo .deps/IceRevisitedRadix.Plo
+/bin/sh ../../libtool --tag=CXX   --mode=compile g++ -DHAVE_CONFIG_H -I. -I../../ode/src  -I ../../OPCODE -I ../../include -DdDOUBLE  -g -O2 -MT IceTriangle.lo -MD -MP -MF .deps/IceTriangle.Tpo -c -o IceTriangle.lo IceTriangle.cpp
+1 warning generated.
+libtool: compile:  g++ -DHAVE_CONFIG_H -I. -I../../ode/src -I ../../OPCODE -I ../../include -DdDOUBLE -g -O2 -MT IceTriangle.lo -MD -MP -MF .deps/IceTriangle.Tpo -c IceTriangle.cpp -o IceTriangle.o
+mv -f .deps/IceSegment.Tpo .deps/IceSegment.Plo
+/bin/sh ../../libtool --tag=CXX   --mode=compile g++ -DHAVE_CONFIG_H -I. -I../../ode/src  -I ../../OPCODE -I ../../include -DdDOUBLE  -g -O2 -MT IceUtils.lo -MD -MP -MF .deps/IceUtils.Tpo -c -o IceUtils.lo IceUtils.cpp
+libtool: compile:  g++ -DHAVE_CONFIG_H -I. -I../../ode/src -I ../../OPCODE -I ../../include -DdDOUBLE -g -O2 -MT IceUtils.lo -MD -MP -MF .deps/IceUtils.Tpo -c IceUtils.cpp -o IceUtils.o
+In file included from IceTriangle.cpp:12:
+In file included from ../../OPCODE/Stdafx.h:19:
+In file included from ../../OPCODE/Opcode.h:82:
+In file included from ../../OPCODE/OPC_IceHook.h:43:
+../../OPCODE/Ice/IceUtils.h:226:51: warning: expression result unused; assign into a variable to force a volatile load [-Wunused-volatile-lvalue]
+        inline_ void _prefetch(void const* ptr)         { (void)*(char const volatile *)ptr;    }
+                                                                ^~~~~~~~~~~~~~~~~~~~~~~~~~~
+In file included from IceUtils.cpp:12:
+In file included from ../../OPCODE/Stdafx.h:19:
+In file included from ../../OPCODE/Opcode.h:82:
+In file included from ../../OPCODE/OPC_IceHook.h:43:
+../../OPCODE/Ice/IceUtils.h:226:51: warning: expression result unused; assign into a variable to force a volatile load [-Wunused-volatile-lvalue]
+        inline_ void _prefetch(void const* ptr)         { (void)*(char const volatile *)ptr;    }
+                                                                ^~~~~~~~~~~~~~~~~~~~~~~~~~~
+1 warning generated.
+1 warning generated.
+mv -f .deps/IceUtils.Tpo .deps/IceUtils.Plo
+mv -f .deps/IceTriangle.Tpo .deps/IceTriangle.Plo
+/bin/sh ../../libtool --tag=CXX   --mode=link g++  -g -O2   -o libIce.la  IceAABB.lo IceContainer.lo IceHPoint.lo IceIndexedTriangle.lo IceMatrix3x3.lo IceMatrix4x4.lo IceOBB.lo IcePlane.lo IcePoint.lo IceRandom.lo IceRay.lo IceRevisitedRadix.lo IceSegment.lo IceTriangle.lo IceUtils.lo  -lm  -lpthread
+libtool: link: ar cru .libs/libIce.a  IceAABB.o IceContainer.o IceHPoint.o IceIndexedTriangle.o IceMatrix3x3.o IceMatrix4x4.o IceOBB.o IcePlane.o IcePoint.o IceRandom.o IceRay.o IceRevisitedRadix.o IceSegment.o IceTriangle.o IceUtils.o
+libtool: link: ranlib .libs/libIce.a
+libtool: link: ( cd ".libs" && rm -f "libIce.la" && ln -s "../libIce.la" "libIce.la" )
+/bin/sh ../libtool --tag=CXX   --mode=compile g++ -DHAVE_CONFIG_H -I. -I../ode/src  -fno-strict-aliasing -I../include -DdDOUBLE  -g -O2 -MT OPC_AABBCollider.lo -MD -MP -MF .deps/OPC_AABBCollider.Tpo -c -o OPC_AABBCollider.lo OPC_AABBCollider.cpp
+/bin/sh ../libtool --tag=CXX   --mode=compile g++ -DHAVE_CONFIG_H -I. -I../ode/src  -fno-strict-aliasing -I../include -DdDOUBLE  -g -O2 -MT OPC_AABBTree.lo -MD -MP -MF .deps/OPC_AABBTree.Tpo -c -o OPC_AABBTree.lo OPC_AABBTree.cpp
+libtool: compile:  g++ -DHAVE_CONFIG_H -I. -I../ode/src -fno-strict-aliasing -I../include -DdDOUBLE -g -O2 -MT OPC_AABBCollider.lo -MD -MP -MF .deps/OPC_AABBCollider.Tpo -c OPC_AABBCollider.cpp -o OPC_AABBCollider.o
+libtool: compile:  g++ -DHAVE_CONFIG_H -I. -I../ode/src -fno-strict-aliasing -I../include -DdDOUBLE -g -O2 -MT OPC_AABBTree.lo -MD -MP -MF .deps/OPC_AABBTree.Tpo -c OPC_AABBTree.cpp -o OPC_AABBTree.o
+In file included from OPC_AABBTree.cpp:47:
+In file included from ./Stdafx.h:19In file included from OPC_AABBCollider.cpp:31:
+In file included from ./Stdafx.h:19:
+In file included from ./Opcode.h:82:
+In file included from ./OPC_IceHook.h:43:
+:
+In file included from ./Opcode.h:82:
+In file included from ./OPC_IceHook.h:43:
+./Ice/IceUtils.h:226:./Ice/IceUtils.h:226:51: 51: warning: warning: expression result unused; assign into a variable to force a volatile load [-Wunused-volatile-lvalue]
+expression result unused; assign into a variable to force a volatile load [-Wunused-volatile-lvalue]
+        inline_ void _prefetch(void const* ptr)         { (void)*(char const volatile *)ptr;    }
+                                                                ^~~~~~~~~~~~~~~~~~~~~~~~~~~
+        inline_ void _prefetch(void const* ptr)         { (void)*(char const volatile *)ptr;    }
+                                                                ^~~~~~~~~~~~~~~~~~~~~~~~~~~
+1 warning generated.
+mv -f .deps/OPC_AABBTree.Tpo .deps/OPC_AABBTree.Plo
+/bin/sh ../libtool --tag=CXX   --mode=compile g++ -DHAVE_CONFIG_H -I. -I../ode/src  -fno-strict-aliasing -I../include -DdDOUBLE  -g -O2 -MT OPC_BaseModel.lo -MD -MP -MF .deps/OPC_BaseModel.Tpo -c -o OPC_BaseModel.lo OPC_BaseModel.cpp
+libtool: compile:  g++ -DHAVE_CONFIG_H -I. -I../ode/src -fno-strict-aliasing -I../include -DdDOUBLE -g -O2 -MT OPC_BaseModel.lo -MD -MP -MF .deps/OPC_BaseModel.Tpo -c OPC_BaseModel.cpp -o OPC_BaseModel.o
+In file included from OPC_BaseModel.cpp:31:
+In file included from ./Stdafx.h:19:
+In file included from ./Opcode.h:82:
+In file included from ./OPC_IceHook.h:43:
+./Ice/IceUtils.h:226:51: warning: expression result unused; assign into a variable to force a volatile load [-Wunused-volatile-lvalue]
+        inline_ void _prefetch(void const* ptr)         { (void)*(char const volatile *)ptr;    }
+                                                                ^~~~~~~~~~~~~~~~~~~~~~~~~~~
+1 warning generated.
+mv -f .deps/OPC_BaseModel.Tpo .deps/OPC_BaseModel.Plo
+/bin/sh ../libtool --tag=CXX   --mode=compile g++ -DHAVE_CONFIG_H -I. -I../ode/src  -fno-strict-aliasing -I../include -DdDOUBLE  -g -O2 -MT OPC_Collider.lo -MD -MP -MF .deps/OPC_Collider.Tpo -c -o OPC_Collider.lo OPC_Collider.cpp
+libtool: compile:  g++ -DHAVE_CONFIG_H -I. -I../ode/src -fno-strict-aliasing -I../include -DdDOUBLE -g -O2 -MT OPC_Collider.lo -MD -MP -MF .deps/OPC_Collider.Tpo -c OPC_Collider.cpp -o OPC_Collider.o
+1 warning generated.
+mv -f .deps/OPC_AABBCollider.Tpo .deps/OPC_AABBCollider.Plo
+/bin/sh ../libtool --tag=CXX   --mode=compile g++ -DHAVE_CONFIG_H -I. -I../ode/src  -fno-strict-aliasing -I../include -DdDOUBLE  -g -O2 -MT OPC_Common.lo -MD -MP -MF .deps/OPC_Common.Tpo -c -o OPC_Common.lo OPC_Common.cpp
+libtool: compile:  g++ -DHAVE_CONFIG_H -I. -I../ode/src -fno-strict-aliasing -I../include -DdDOUBLE -g -O2 -MT OPC_Common.lo -MD -MP -MF .deps/OPC_Common.Tpo -c OPC_Common.cpp -o OPC_Common.o
+In file included from OPC_Collider.cpp:31:
+In file included from ./Stdafx.h:19:
+In file included from ./Opcode.h:82:
+In file included from ./OPC_IceHook.h:43:
+./Ice/IceUtils.h:226:51: warning: expression result unused; assign into a variable to force a volatile load [-Wunused-volatile-lvalue]
+        inline_ void _prefetch(void const* ptr)         { (void)*(char const volatile *)ptr;    }
+                                                                ^~~~~~~~~~~~~~~~~~~~~~~~~~~
+In file included from OPC_Common.cpp:46:
+In file included from ./Stdafx.h:19:
+In file included from ./Opcode.h:82:
+In file included from ./OPC_IceHook.h:43:
+./Ice/IceUtils.h:226:51: warning: expression result unused; assign into a variable to force a volatile load [-Wunused-volatile-lvalue]
+        inline_ void _prefetch(void const* ptr)         { (void)*(char const volatile *)ptr;    }
+                                                                ^~~~~~~~~~~~~~~~~~~~~~~~~~~
+1 warning generated.
+mv -f .deps/OPC_Collider.Tpo .deps/OPC_Collider.Plo
+/bin/sh ../libtool --tag=CXX   --mode=compile g++ -DHAVE_CONFIG_H -I. -I../ode/src  -fno-strict-aliasing -I../include -DdDOUBLE  -g -O2 -MT OPC_HybridModel.lo -MD -MP -MF .deps/OPC_HybridModel.Tpo -c -o OPC_HybridModel.lo OPC_HybridModel.cpp
+1 warning generated.
+mv -f .deps/OPC_Common.Tpo .deps/OPC_Common.Plo
+/bin/sh ../libtool --tag=CXX   --mode=compile g++ -DHAVE_CONFIG_H -I. -I../ode/src  -fno-strict-aliasing -I../include -DdDOUBLE  -g -O2 -MT OPC_LSSCollider.lo -MD -MP -MF .deps/OPC_LSSCollider.Tpo -c -o OPC_LSSCollider.lo OPC_LSSCollider.cpp
+libtool: compile:  g++ -DHAVE_CONFIG_H -I. -I../ode/src -fno-strict-aliasing -I../include -DdDOUBLE -g -O2 -MT OPC_HybridModel.lo -MD -MP -MF .deps/OPC_HybridModel.Tpo -c OPC_HybridModel.cpp -o OPC_HybridModel.o
+libtool: compile:  g++ -DHAVE_CONFIG_H -I. -I../ode/src -fno-strict-aliasing -I../include -DdDOUBLE -g -O2 -MT OPC_LSSCollider.lo -MD -MP -MF .deps/OPC_LSSCollider.Tpo -c OPC_LSSCollider.cpp -o OPC_LSSCollider.o
+In file included from OPC_HybridModel.cpp:85:
+In file included from ./Stdafx.h:19:
+In file included from ./Opcode.h:82:
+In file included from ./OPC_IceHook.h:43:
+./Ice/IceUtils.h:226:51: warning: expression result unused; assign into a variable to force a volatile load [-Wunused-volatile-lvalue]
+        inline_ void _prefetch(void const* ptr)         { (void)*(char const volatile *)ptr;    }
+                                                                ^~~~~~~~~~~~~~~~~~~~~~~~~~~
+In file included from OPC_LSSCollider.cpp:31:
+In file included from ./Stdafx.h:19:
+In file included from ./Opcode.h:82:
+In file included from ./OPC_IceHook.h:43:
+./Ice/IceUtils.h:226:51: warning: expression result unused; assign into a variable to force a volatile load [-Wunused-volatile-lvalue]
+        inline_ void _prefetch(void const* ptr)         { (void)*(char const volatile *)ptr;    }
+                                                                ^~~~~~~~~~~~~~~~~~~~~~~~~~~
+1 warning generated.
+mv -f .deps/OPC_HybridModel.Tpo .deps/OPC_HybridModel.Plo
+/bin/sh ../libtool --tag=CXX   --mode=compile g++ -DHAVE_CONFIG_H -I. -I../ode/src  -fno-strict-aliasing -I../include -DdDOUBLE  -g -O2 -MT OPC_MeshInterface.lo -MD -MP -MF .deps/OPC_MeshInterface.Tpo -c -o OPC_MeshInterface.lo OPC_MeshInterface.cpp
+libtool: compile:  g++ -DHAVE_CONFIG_H -I. -I../ode/src -fno-strict-aliasing -I../include -DdDOUBLE -g -O2 -MT OPC_MeshInterface.lo -MD -MP -MF .deps/OPC_MeshInterface.Tpo -c OPC_MeshInterface.cpp -o OPC_MeshInterface.o
+In file included from OPC_MeshInterface.cpp:119:
+In file included from ./Stdafx.h:19:
+In file included from ./Opcode.h:82:
+In file included from ./OPC_IceHook.h:43:
+./Ice/IceUtils.h:226:51: warning: expression result unused; assign into a variable to force a volatile load [-Wunused-volatile-lvalue]
+        inline_ void _prefetch(void const* ptr)         { (void)*(char const volatile *)ptr;    }
+                                                                ^~~~~~~~~~~~~~~~~~~~~~~~~~~
+1 warning generated.
+mv -f .deps/OPC_MeshInterface.Tpo .deps/OPC_MeshInterface.Plo
+/bin/sh ../libtool --tag=CXX   --mode=compile g++ -DHAVE_CONFIG_H -I. -I../ode/src  -fno-strict-aliasing -I../include -DdDOUBLE  -g -O2 -MT OPC_Model.lo -MD -MP -MF .deps/OPC_Model.Tpo -c -o OPC_Model.lo OPC_Model.cpp
+libtool: compile:  g++ -DHAVE_CONFIG_H -I. -I../ode/src -fno-strict-aliasing -I../include -DdDOUBLE -g -O2 -MT OPC_Model.lo -MD -MP -MF .deps/OPC_Model.Tpo -c OPC_Model.cpp -o OPC_Model.o
+In file included from OPC_Model.cpp:93:
+In file included from ./Stdafx.h:19:
+In file included from ./Opcode.h:82:
+In file included from ./OPC_IceHook.h:43:
+./Ice/IceUtils.h:226:51: warning: expression result unused; assign into a variable to force a volatile load [-Wunused-volatile-lvalue]
+        inline_ void _prefetch(void const* ptr)         { (void)*(char const volatile *)ptr;    }
+                                                                ^~~~~~~~~~~~~~~~~~~~~~~~~~~
+1 warning generated.
+mv -f .deps/OPC_Model.Tpo .deps/OPC_Model.Plo
+/bin/sh ../libtool --tag=CXX   --mode=compile g++ -DHAVE_CONFIG_H -I. -I../ode/src  -fno-strict-aliasing -I../include -DdDOUBLE  -g -O2 -MT OPC_OBBCollider.lo -MD -MP -MF .deps/OPC_OBBCollider.Tpo -c -o OPC_OBBCollider.lo OPC_OBBCollider.cpp
+libtool: compile:  g++ -DHAVE_CONFIG_H -I. -I../ode/src -fno-strict-aliasing -I../include -DdDOUBLE -g -O2 -MT OPC_OBBCollider.lo -MD -MP -MF .deps/OPC_OBBCollider.Tpo -c OPC_OBBCollider.cpp -o OPC_OBBCollider.o
+In file included from OPC_OBBCollider.cpp:31:
+In file included from ./Stdafx.h:19:
+In file included from ./Opcode.h:82:
+In file included from ./OPC_IceHook.h:43:
+./Ice/IceUtils.h:226:51: warning: expression result unused; assign into a variable to force a volatile load [-Wunused-volatile-lvalue]
+        inline_ void _prefetch(void const* ptr)         { (void)*(char const volatile *)ptr;    }
+                                                                ^~~~~~~~~~~~~~~~~~~~~~~~~~~
+1 warning generated.
+mv -f .deps/OPC_LSSCollider.Tpo .deps/OPC_LSSCollider.Plo
+/bin/sh ../libtool --tag=CXX   --mode=compile g++ -DHAVE_CONFIG_H -I. -I../ode/src  -fno-strict-aliasing -I../include -DdDOUBLE  -g -O2 -MT Opcode.lo -MD -MP -MF .deps/Opcode.Tpo -c -o Opcode.lo Opcode.cpp
+libtool: compile:  g++ -DHAVE_CONFIG_H -I. -I../ode/src -fno-strict-aliasing -I../include -DdDOUBLE -g -O2 -MT Opcode.lo -MD -MP -MF .deps/Opcode.Tpo -c Opcode.cpp -o Opcode.o
+1 warning generated.
+mv -f .deps/OPC_OBBCollider.Tpo .deps/OPC_OBBCollider.Plo
+/bin/sh ../libtool --tag=CXX   --mode=compile g++ -DHAVE_CONFIG_H -I. -I../ode/src  -fno-strict-aliasing -I../include -DdDOUBLE  -g -O2 -MT OPC_OptimizedTree.lo -MD -MP -MF .deps/OPC_OptimizedTree.Tpo -c -o OPC_OptimizedTree.lo OPC_OptimizedTree.cpp
+In file included from Opcode.cpp:36:
+In file included from ./Stdafx.h:19:
+In file included from ./Opcode.h:82:
+In file included from ./OPC_IceHook.h:43:
+./Ice/IceUtils.h:226:51: warning: expression result unused; assign into a variable to force a volatile load [-Wunused-volatile-lvalue]
+        inline_ void _prefetch(void const* ptr)         { (void)*(char const volatile *)ptr;    }
+                                                                ^~~~~~~~~~~~~~~~~~~~~~~~~~~
+libtool: compile:  g++ -DHAVE_CONFIG_H -I. -I../ode/src -fno-strict-aliasing -I../include -DdDOUBLE -g -O2 -MT OPC_OptimizedTree.lo -MD -MP -MF .deps/OPC_OptimizedTree.Tpo -c OPC_OptimizedTree.cpp -o OPC_OptimizedTree.o
+1 warning generated.
+mv -f .deps/Opcode.Tpo .deps/Opcode.Plo
+/bin/sh ../libtool --tag=CXX   --mode=compile g++ -DHAVE_CONFIG_H -I. -I../ode/src  -fno-strict-aliasing -I../include -DdDOUBLE  -g -O2 -MT OPC_Picking.lo -MD -MP -MF .deps/OPC_Picking.Tpo -c -o OPC_Picking.lo OPC_Picking.cpp
+In file included from OPC_OptimizedTree.cpp:69:
+In file included from ./Stdafx.h:19:
+In file included from ./Opcode.h:82:
+In file included from ./OPC_IceHook.h:43:
+./Ice/IceUtils.h:226:51: warning: expression result unused; assign into a variable to force a volatile load [-Wunused-volatile-lvalue]
+        inline_ void _prefetch(void const* ptr)         { (void)*(char const volatile *)ptr;    }
+                                                                ^~~~~~~~~~~~~~~~~~~~~~~~~~~
+libtool: compile:  g++ -DHAVE_CONFIG_H -I. -I../ode/src -fno-strict-aliasing -I../include -DdDOUBLE -g -O2 -MT OPC_Picking.lo -MD -MP -MF .deps/OPC_Picking.Tpo -c OPC_Picking.cpp -o OPC_Picking.o
+In file included from OPC_Picking.cpp:20:
+In file included from ./Stdafx.h:19:
+In file included from ./Opcode.h:82:
+In file included from ./OPC_IceHook.h:43:
+./Ice/IceUtils.h:226:51: warning: expression result unused; assign into a variable to force a volatile load [-Wunused-volatile-lvalue]
+        inline_ void _prefetch(void const* ptr)         { (void)*(char const volatile *)ptr;    }
+                                                                ^~~~~~~~~~~~~~~~~~~~~~~~~~~
+1 warning generated.
+mv -f .deps/OPC_Picking.Tpo .deps/OPC_Picking.Plo
+/bin/sh ../libtool --tag=CXX   --mode=compile g++ -DHAVE_CONFIG_H -I. -I../ode/src  -fno-strict-aliasing -I../include -DdDOUBLE  -g -O2 -MT OPC_PlanesCollider.lo -MD -MP -MF .deps/OPC_PlanesCollider.Tpo -c -o OPC_PlanesCollider.lo OPC_PlanesCollider.cpp
+libtool: compile:  g++ -DHAVE_CONFIG_H -I. -I../ode/src -fno-strict-aliasing -I../include -DdDOUBLE -g -O2 -MT OPC_PlanesCollider.lo -MD -MP -MF .deps/OPC_PlanesCollider.Tpo -c OPC_PlanesCollider.cpp -o OPC_PlanesCollider.o
+1 warning generated.
+mv -f .deps/OPC_OptimizedTree.Tpo .deps/OPC_OptimizedTree.Plo
+/bin/sh ../libtool --tag=CXX   --mode=compile g++ -DHAVE_CONFIG_H -I. -I../ode/src  -fno-strict-aliasing -I../include -DdDOUBLE  -g -O2 -MT OPC_RayCollider.lo -MD -MP -MF .deps/OPC_RayCollider.Tpo -c -o OPC_RayCollider.lo OPC_RayCollider.cpp
+In file included from OPC_PlanesCollider.cpp:31:
+In file included from ./Stdafx.h:19:
+In file included from ./Opcode.h:82:
+In file included from ./OPC_IceHook.h:43:
+./Ice/IceUtils.h:226:51: warning: expression result unused; assign into a variable to force a volatile load [-Wunused-volatile-lvalue]
+        inline_ void _prefetch(void const* ptr)         { (void)*(char const volatile *)ptr;    }
+                                                                ^~~~~~~~~~~~~~~~~~~~~~~~~~~
+libtool: compile:  g++ -DHAVE_CONFIG_H -I. -I../ode/src -fno-strict-aliasing -I../include -DdDOUBLE -g -O2 -MT OPC_RayCollider.lo -MD -MP -MF .deps/OPC_RayCollider.Tpo -c OPC_RayCollider.cpp -o OPC_RayCollider.o
+In file included from OPC_RayCollider.cpp:115:
+In file included from ./Stdafx.h:19:
+In file included from ./Opcode.h:82:
+In file included from ./OPC_IceHook.h:43:
+./Ice/IceUtils.h:226:51: warning: expression result unused; assign into a variable to force a volatile load [-Wunused-volatile-lvalue]
+        inline_ void _prefetch(void const* ptr)         { (void)*(char const volatile *)ptr;    }
+                                                                ^~~~~~~~~~~~~~~~~~~~~~~~~~~
+1 warning generated.
+mv -f .deps/OPC_PlanesCollider.Tpo .deps/OPC_PlanesCollider.Plo
+/bin/sh ../libtool --tag=CXX   --mode=compile g++ -DHAVE_CONFIG_H -I. -I../ode/src  -fno-strict-aliasing -I../include -DdDOUBLE  -g -O2 -MT OPC_SphereCollider.lo -MD -MP -MF .deps/OPC_SphereCollider.Tpo -c -o OPC_SphereCollider.lo OPC_SphereCollider.cpp
+libtool: compile:  g++ -DHAVE_CONFIG_H -I. -I../ode/src -fno-strict-aliasing -I../include -DdDOUBLE -g -O2 -MT OPC_SphereCollider.lo -MD -MP -MF .deps/OPC_SphereCollider.Tpo -c OPC_SphereCollider.cpp -o OPC_SphereCollider.o
+In file included from OPC_SphereCollider.cpp:35:
+In file included from ./Stdafx.h:19:
+In file included from ./Opcode.h:82:
+In file included from ./OPC_IceHook.h:43:
+./Ice/IceUtils.h:226:51: warning: expression result unused; assign into a variable to force a volatile load [-Wunused-volatile-lvalue]
+        inline_ void _prefetch(void const* ptr)         { (void)*(char const volatile *)ptr;    }
+                                                                ^~~~~~~~~~~~~~~~~~~~~~~~~~~
+1 warning generated.
+mv -f .deps/OPC_RayCollider.Tpo .deps/OPC_RayCollider.Plo
+/bin/sh ../libtool --tag=CXX   --mode=compile g++ -DHAVE_CONFIG_H -I. -I../ode/src  -fno-strict-aliasing -I../include -DdDOUBLE  -g -O2 -MT OPC_TreeBuilders.lo -MD -MP -MF .deps/OPC_TreeBuilders.Tpo -c -o OPC_TreeBuilders.lo OPC_TreeBuilders.cpp
+libtool: compile:  g++ -DHAVE_CONFIG_H -I. -I../ode/src -fno-strict-aliasing -I../include -DdDOUBLE -g -O2 -MT OPC_TreeBuilders.lo -MD -MP -MF .deps/OPC_TreeBuilders.Tpo -c OPC_TreeBuilders.cpp -o OPC_TreeBuilders.o
+In file included from OPC_TreeBuilders.cpp:53:
+In file included from ./Stdafx.h:19:
+In file included from ./Opcode.h:82:
+In file included from ./OPC_IceHook.h:43:
+./Ice/IceUtils.h:226:51: warning: expression result unused; assign into a variable to force a volatile load [-Wunused-volatile-lvalue]
+        inline_ void _prefetch(void const* ptr)         { (void)*(char const volatile *)ptr;    }
+                                                                ^~~~~~~~~~~~~~~~~~~~~~~~~~~
+1 warning generated.
+mv -f .deps/OPC_SphereCollider.Tpo .deps/OPC_SphereCollider.Plo
+/bin/sh ../libtool --tag=CXX   --mode=compile g++ -DHAVE_CONFIG_H -I. -I../ode/src  -fno-strict-aliasing -I../include -DdDOUBLE  -g -O2 -MT OPC_TreeCollider.lo -MD -MP -MF .deps/OPC_TreeCollider.Tpo -c -o OPC_TreeCollider.lo OPC_TreeCollider.cpp
+libtool: compile:  g++ -DHAVE_CONFIG_H -I. -I../ode/src -fno-strict-aliasing -I../include -DdDOUBLE -g -O2 -MT OPC_TreeCollider.lo -MD -MP -MF .deps/OPC_TreeCollider.Tpo -c OPC_TreeCollider.cpp -o OPC_TreeCollider.o
+1 warning generated.
+mv -f .deps/OPC_TreeBuilders.Tpo .deps/OPC_TreeBuilders.Plo
+/bin/sh ../libtool --tag=CXX   --mode=compile g++ -DHAVE_CONFIG_H -I. -I../ode/src  -fno-strict-aliasing -I../include -DdDOUBLE  -g -O2 -MT OPC_VolumeCollider.lo -MD -MP -MF .deps/OPC_VolumeCollider.Tpo -c -o OPC_VolumeCollider.lo OPC_VolumeCollider.cpp
+libtool: compile:  g++ -DHAVE_CONFIG_H -I. -I../ode/src -fno-strict-aliasing -I../include -DdDOUBLE -g -O2 -MT OPC_VolumeCollider.lo -MD -MP -MF .deps/OPC_VolumeCollider.Tpo -c OPC_VolumeCollider.cpp -o OPC_VolumeCollider.o
+In file included from OPC_TreeCollider.cpp:32:
+In file included from ./Stdafx.h:19:
+In file included from ./Opcode.h:82:
+In file included from ./OPC_IceHook.h:43:
+./Ice/IceUtils.h:226:51: warning: expression result unused; assign into a variable to force a volatile load [-Wunused-volatile-lvalue]
+        inline_ void _prefetch(void const* ptr)         { (void)*(char const volatile *)ptr;    }
+                                                                ^~~~~~~~~~~~~~~~~~~~~~~~~~~
+In file included from OPC_VolumeCollider.cpp:31:
+In file included from ./Stdafx.h:19:
+In file included from ./Opcode.h:82:
+In file included from ./OPC_IceHook.h:43:
+./Ice/IceUtils.h:226:51: warning: expression result unused; assign into a variable to force a volatile load [-Wunused-volatile-lvalue]
+        inline_ void _prefetch(void const* ptr)         { (void)*(char const volatile *)ptr;    }
+                                                                ^~~~~~~~~~~~~~~~~~~~~~~~~~~
+1 warning generated.
+mv -f .deps/OPC_VolumeCollider.Tpo .deps/OPC_VolumeCollider.Plo
+1 warning generated.
+mv -f .deps/OPC_TreeCollider.Tpo .deps/OPC_TreeCollider.Plo
+/bin/sh ../libtool --tag=CXX   --mode=link g++  -g -O2   -o libOPCODE.la  OPC_AABBCollider.lo OPC_AABBTree.lo OPC_BaseModel.lo OPC_Collider.lo OPC_Common.lo OPC_HybridModel.lo OPC_LSSCollider.lo OPC_MeshInterface.lo OPC_Model.lo OPC_OBBCollider.lo Opcode.lo OPC_OptimizedTree.lo OPC_Picking.lo OPC_PlanesCollider.lo OPC_RayCollider.lo OPC_SphereCollider.lo OPC_TreeBuilders.lo OPC_TreeCollider.lo OPC_VolumeCollider.lo  -lm  -lpthread
+libtool: link: ar cru .libs/libOPCODE.a  OPC_AABBCollider.o OPC_AABBTree.o OPC_BaseModel.o OPC_Collider.o OPC_Common.o OPC_HybridModel.o OPC_LSSCollider.o OPC_MeshInterface.o OPC_Model.o OPC_OBBCollider.o Opcode.o OPC_OptimizedTree.o OPC_Picking.o OPC_PlanesCollider.o OPC_RayCollider.o OPC_SphereCollider.o OPC_TreeBuilders.o OPC_TreeCollider.o OPC_VolumeCollider.o
+/Library/Developer/CommandLineTools/usr/bin/ranlib: file: .libs/libOPCODE.a(OPC_Common.o) has no symbols
+/Library/Developer/CommandLineTools/usr/bin/ranlib: file: .libs/libOPCODE.a(OPC_Picking.o) has no symbols
+libtool: link: ranlib .libs/libOPCODE.a
+/Library/Developer/CommandLineTools/usr/bin/ranlib: file: .libs/libOPCODE.a(OPC_Common.o) has no symbols
+/Library/Developer/CommandLineTools/usr/bin/ranlib: file: .libs/libOPCODE.a(OPC_Picking.o) has no symbols
+libtool: link: ( cd ".libs" && rm -f "libOPCODE.la" && ln -s "../libOPCODE.la" "libOPCODE.la" )
+Making all in ode
+Making all in src
+/Library/Developer/CommandLineTools/usr/bin/make  all-recursive
+Making all in joints
+/bin/sh ../../../libtool --tag=CXX   --mode=compile g++ -DHAVE_CONFIG_H -I. -I../../../ode/src  -I../../../include -DdDOUBLE  -g -O2 -MT joint.lo -MD -MP -MF .deps/joint.Tpo -c -o joint.lo joint.cpp
+/bin/sh ../../../libtool --tag=CXX   --mode=compile g++ -DHAVE_CONFIG_H -I. -I../../../ode/src  -I../../../include -DdDOUBLE  -g -O2 -MT ball.lo -MD -MP -MF .deps/ball.Tpo -c -o ball.lo ball.cpp
+libtool: compile:  g++ -DHAVE_CONFIG_H -I. -I../../../ode/src -I../../../include -DdDOUBLE -g -O2 -MT ball.lo -MD -MP -MF .deps/ball.Tpo -c ball.cpp -o ball.o
+libtool: compile:  g++ -DHAVE_CONFIG_H -I. -I../../../ode/src -I../../../include -DdDOUBLE -g -O2 -MT joint.lo -MD -MP -MF .deps/joint.Tpo -c joint.cpp -o joint.o
+In file included from joint.cpp:32:
+In file included from ../../../include/ode/ode.h:40:
+../../../include/ode/misc.h:58:70: warning: conversion from string literal to 'char *' is deprecated [-Wc++11-compat-deprecated-writable-strings]
+ODE_API void dPrintMatrix (const dReal *A, int n, int m, char *fmt = "%10.4f ",
+                                                                     ^
+In file included from ball.cpp:26:
+./joint_internal.h:24:9: warning: '_ODE_JOINT_NTERNAL_H_' is used as a header guard here, followed by #define of a different macro [-Wheader-guard]
+#ifndef _ODE_JOINT_NTERNAL_H_
+        ^~~~~~~~~~~~~~~~~~~~~
+./joint_internal.h:25:9: note: '_ODE_JOINT_INTERNAL_H_' is defined here; did you mean '_ODE_JOINT_NTERNAL_H_'?
+#define _ODE_JOINT_INTERNAL_H_
+        ^~~~~~~~~~~~~~~~~~~~~~
+        _ODE_JOINT_NTERNAL_H_
+In file included from joint.cpp:38:
+./joint_internal.h:24:9: warning: '_ODE_JOINT_NTERNAL_H_' is used as a header guard here, followed by #define of a different macro [-Wheader-guard]
+#ifndef _ODE_JOINT_NTERNAL_H_
+        ^~~~~~~~~~~~~~~~~~~~~
+./joint_internal.h:25:9: note: '_ODE_JOINT_INTERNAL_H_' is defined here; did you mean '_ODE_JOINT_NTERNAL_H_'?
+#define _ODE_JOINT_INTERNAL_H_
+        ^~~~~~~~~~~~~~~~~~~~~~
+        _ODE_JOINT_NTERNAL_H_
+1 warning generated.
+mv -f .deps/ball.Tpo .deps/ball.Plo
+/bin/sh ../../../libtool --tag=CXX   --mode=compile g++ -DHAVE_CONFIG_H -I. -I../../../ode/src  -I../../../include -DdDOUBLE  -g -O2 -MT hinge.lo -MD -MP -MF .deps/hinge.Tpo -c -o hinge.lo hinge.cpp
+libtool: compile:  g++ -DHAVE_CONFIG_H -I. -I../../../ode/src -I../../../include -DdDOUBLE -g -O2 -MT hinge.lo -MD -MP -MF .deps/hinge.Tpo -c hinge.cpp -o hinge.o
+2 warnings generated.
+mv -f .deps/joint.Tpo .deps/joint.Plo
+/bin/sh ../../../libtool --tag=CXX   --mode=compile g++ -DHAVE_CONFIG_H -I. -I../../../ode/src  -I../../../include -DdDOUBLE  -g -O2 -MT slider.lo -MD -MP -MF .deps/slider.Tpo -c -o slider.lo slider.cpp
+In file included from hinge.cpp:26:
+./joint_internal.h:24:9: warning: '_ODE_JOINT_NTERNAL_H_' is used as a header guard here, followed by #define of a different macro [-Wheader-guard]
+#ifndef _ODE_JOINT_NTERNAL_H_
+        ^~~~~~~~~~~~~~~~~~~~~
+./joint_internal.h:25:9: note: '_ODE_JOINT_INTERNAL_H_' is defined here; did you mean '_ODE_JOINT_NTERNAL_H_'?
+#define _ODE_JOINT_INTERNAL_H_
+        ^~~~~~~~~~~~~~~~~~~~~~
+        _ODE_JOINT_NTERNAL_H_
+libtool: compile:  g++ -DHAVE_CONFIG_H -I. -I../../../ode/src -I../../../include -DdDOUBLE -g -O2 -MT slider.lo -MD -MP -MF .deps/slider.Tpo -c slider.cpp -o slider.o
+1 warning generated.
+In file included from slider.cpp:26:
+./joint_internal.h:24:9: warning: '_ODE_JOINT_NTERNAL_H_' is used as a header guard here, followed by #define of a different macro [-Wheader-guard]
+#ifndef _ODE_JOINT_NTERNAL_H_
+        ^~~~~~~~~~~~~~~~~~~~~
+./joint_internal.h:25:9: note: '_ODE_JOINT_INTERNAL_H_' is defined here; did you mean '_ODE_JOINT_NTERNAL_H_'?
+#define _ODE_JOINT_INTERNAL_H_
+        ^~~~~~~~~~~~~~~~~~~~~~
+        _ODE_JOINT_NTERNAL_H_
+mv -f .deps/hinge.Tpo .deps/hinge.Plo
+/bin/sh ../../../libtool --tag=CXX   --mode=compile g++ -DHAVE_CONFIG_H -I. -I../../../ode/src  -I../../../include -DdDOUBLE  -g -O2 -MT contact.lo -MD -MP -MF .deps/contact.Tpo -c -o contact.lo contact.cpp
+libtool: compile:  g++ -DHAVE_CONFIG_H -I. -I../../../ode/src -I../../../include -DdDOUBLE -g -O2 -MT contact.lo -MD -MP -MF .deps/contact.Tpo -c contact.cpp -o contact.o
+1 warning generated.
+mv -f .deps/slider.Tpo .deps/slider.Plo
+/bin/sh ../../../libtool --tag=CXX   --mode=compile g++ -DHAVE_CONFIG_H -I. -I../../../ode/src  -I../../../include -DdDOUBLE  -g -O2 -MT universal.lo -MD -MP -MF .deps/universal.Tpo -c -o universal.lo universal.cpp
+In file included from contact.cpp:26:
+./joint_internal.h:24:9: warning: '_ODE_JOINT_NTERNAL_H_' is used as a header guard here, followed by #define of a different macro [-Wheader-guard]
+#ifndef _ODE_JOINT_NTERNAL_H_
+        ^~~~~~~~~~~~~~~~~~~~~
+./joint_internal.h:25:9: note: '_ODE_JOINT_INTERNAL_H_' is defined here; did you mean '_ODE_JOINT_NTERNAL_H_'?
+#define _ODE_JOINT_INTERNAL_H_
+        ^~~~~~~~~~~~~~~~~~~~~~
+        _ODE_JOINT_NTERNAL_H_
+libtool: compile:  g++ -DHAVE_CONFIG_H -I. -I../../../ode/src -I../../../include -DdDOUBLE -g -O2 -MT universal.lo -MD -MP -MF .deps/universal.Tpo -c universal.cpp -o universal.o
+1 warning generated.
+mv -f .deps/contact.Tpo .deps/contact.Plo
+/bin/sh ../../../libtool --tag=CXX   --mode=compile g++ -DHAVE_CONFIG_H -I. -I../../../ode/src  -I../../../include -DdDOUBLE  -g -O2 -MT hinge2.lo -MD -MP -MF .deps/hinge2.Tpo -c -o hinge2.lo hinge2.cpp
+In file included from universal.cpp:26:
+./joint_internal.h:24:9: warning: '_ODE_JOINT_NTERNAL_H_' is used as a header guard here, followed by #define of a different macro [-Wheader-guard]
+#ifndef _ODE_JOINT_NTERNAL_H_
+        ^~~~~~~~~~~~~~~~~~~~~
+./joint_internal.h:25:9: note: '_ODE_JOINT_INTERNAL_H_' is defined here; did you mean '_ODE_JOINT_NTERNAL_H_'?
+#define _ODE_JOINT_INTERNAL_H_
+        ^~~~~~~~~~~~~~~~~~~~~~
+        _ODE_JOINT_NTERNAL_H_
+libtool: compile:  g++ -DHAVE_CONFIG_H -I. -I../../../ode/src -I../../../include -DdDOUBLE -g -O2 -MT hinge2.lo -MD -MP -MF .deps/hinge2.Tpo -c hinge2.cpp -o hinge2.o
+In file included from hinge2.cpp:26:
+./joint_internal.h:24:9: warning: '_ODE_JOINT_NTERNAL_H_' is used as a header guard here, followed by #define of a different macro [-Wheader-guard]
+#ifndef _ODE_JOINT_NTERNAL_H_
+        ^~~~~~~~~~~~~~~~~~~~~
+./joint_internal.h:25:9: note: '_ODE_JOINT_INTERNAL_H_' is defined here; did you mean '_ODE_JOINT_NTERNAL_H_'?
+#define _ODE_JOINT_INTERNAL_H_
+        ^~~~~~~~~~~~~~~~~~~~~~
+        _ODE_JOINT_NTERNAL_H_
+1 warning generated.
+mv -f .deps/universal.Tpo .deps/universal.Plo
+/bin/sh ../../../libtool --tag=CXX   --mode=compile g++ -DHAVE_CONFIG_H -I. -I../../../ode/src  -I../../../include -DdDOUBLE  -g -O2 -MT fixed.lo -MD -MP -MF .deps/fixed.Tpo -c -o fixed.lo fixed.cpp
+libtool: compile:  g++ -DHAVE_CONFIG_H -I. -I../../../ode/src -I../../../include -DdDOUBLE -g -O2 -MT fixed.lo -MD -MP -MF .deps/fixed.Tpo -c fixed.cpp -o fixed.o
+1 warning generated.
+mv -f .deps/hinge2.Tpo .deps/hinge2.Plo
+/bin/sh ../../../libtool --tag=CXX   --mode=compile g++ -DHAVE_CONFIG_H -I. -I../../../ode/src  -I../../../include -DdDOUBLE  -g -O2 -MT null.lo -MD -MP -MF .deps/null.Tpo -c -o null.lo null.cpp
+In file included from fixed.cpp:26:
+./joint_internal.h:24:9: warning: '_ODE_JOINT_NTERNAL_H_' is used as a header guard here, followed by #define of a different macro [-Wheader-guard]
+#ifndef _ODE_JOINT_NTERNAL_H_
+        ^~~~~~~~~~~~~~~~~~~~~
+./joint_internal.h:25:9: note: '_ODE_JOINT_INTERNAL_H_' is defined here; did you mean '_ODE_JOINT_NTERNAL_H_'?
+#define _ODE_JOINT_INTERNAL_H_
+        ^~~~~~~~~~~~~~~~~~~~~~
+        _ODE_JOINT_NTERNAL_H_
+libtool: compile:  g++ -DHAVE_CONFIG_H -I. -I../../../ode/src -I../../../include -DdDOUBLE -g -O2 -MT null.lo -MD -MP -MF .deps/null.Tpo -c null.cpp -o null.o
+1 warning generated.
+mv -f .deps/fixed.Tpo .deps/fixed.Plo
+/bin/sh ../../../libtool --tag=CXX   --mode=compile g++ -DHAVE_CONFIG_H -I. -I../../../ode/src  -I../../../include -DdDOUBLE  -g -O2 -MT amotor.lo -MD -MP -MF .deps/amotor.Tpo -c -o amotor.lo amotor.cpp
+In file included from null.cpp:26:
+./joint_internal.h:24:9: warning: '_ODE_JOINT_NTERNAL_H_' is used as a header guard here, followed by #define of a different macro [-Wheader-guard]
+#ifndef _ODE_JOINT_NTERNAL_H_
+        ^~~~~~~~~~~~~~~~~~~~~
+./joint_internal.h:25:9: note: '_ODE_JOINT_INTERNAL_H_' is defined here; did you mean '_ODE_JOINT_NTERNAL_H_'?
+#define _ODE_JOINT_INTERNAL_H_
+        ^~~~~~~~~~~~~~~~~~~~~~
+        _ODE_JOINT_NTERNAL_H_
+libtool: compile:  g++ -DHAVE_CONFIG_H -I. -I../../../ode/src -I../../../include -DdDOUBLE -g -O2 -MT amotor.lo -MD -MP -MF .deps/amotor.Tpo -c amotor.cpp -o amotor.o
+1 warning generated.
+mv -f .deps/null.Tpo .deps/null.Plo
+/bin/sh ../../../libtool --tag=CXX   --mode=compile g++ -DHAVE_CONFIG_H -I. -I../../../ode/src  -I../../../include -DdDOUBLE  -g -O2 -MT lmotor.lo -MD -MP -MF .deps/lmotor.Tpo -c -o lmotor.lo lmotor.cpp
+libtool: compile:  g++ -DHAVE_CONFIG_H -I. -I../../../ode/src -I../../../include -DdDOUBLE -g -O2 -MT lmotor.lo -MD -MP -MF .deps/lmotor.Tpo -c lmotor.cpp -o lmotor.o
+In file included from amotor.cpp:26:
+./joint_internal.h:24:9: warning: '_ODE_JOINT_NTERNAL_H_' is used as a header guard here, followed by #define of a different macro [-Wheader-guard]
+#ifndef _ODE_JOINT_NTERNAL_H_
+        ^~~~~~~~~~~~~~~~~~~~~
+./joint_internal.h:25:9: note: '_ODE_JOINT_INTERNAL_H_' is defined here; did you mean '_ODE_JOINT_NTERNAL_H_'?
+#define _ODE_JOINT_INTERNAL_H_
+        ^~~~~~~~~~~~~~~~~~~~~~
+        _ODE_JOINT_NTERNAL_H_
+In file included from lmotor.cpp:26:
+./joint_internal.h:24:9: warning: '_ODE_JOINT_NTERNAL_H_' is used as a header guard here, followed by #define of a different macro [-Wheader-guard]
+#ifndef _ODE_JOINT_NTERNAL_H_
+        ^~~~~~~~~~~~~~~~~~~~~
+./joint_internal.h:25:9: note: '_ODE_JOINT_INTERNAL_H_' is defined here; did you mean '_ODE_JOINT_NTERNAL_H_'?
+#define _ODE_JOINT_INTERNAL_H_
+        ^~~~~~~~~~~~~~~~~~~~~~
+        _ODE_JOINT_NTERNAL_H_
+1 warning generated.
+1 warning generated.
+mv -f .deps/amotor.Tpo .deps/amotor.Plo
+/bin/sh ../../../libtool --tag=CXX   --mode=compile g++ -DHAVE_CONFIG_H -I. -I../../../ode/src  -I../../../include -DdDOUBLE  -g -O2 -MT plane2d.lo -MD -MP -MF .deps/plane2d.Tpo -c -o plane2d.lo plane2d.cpp
+mv -f .deps/lmotor.Tpo .deps/lmotor.Plo
+/bin/sh ../../../libtool --tag=CXX   --mode=compile g++ -DHAVE_CONFIG_H -I. -I../../../ode/src  -I../../../include -DdDOUBLE  -g -O2 -MT pu.lo -MD -MP -MF .deps/pu.Tpo -c -o pu.lo pu.cpp
+libtool: compile:  g++ -DHAVE_CONFIG_H -I. -I../../../ode/src -I../../../include -DdDOUBLE -g -O2 -MT plane2d.lo -MD -MP -MF .deps/plane2d.Tpo -c plane2d.cpp -o plane2d.o
+libtool: compile:  g++ -DHAVE_CONFIG_H -I. -I../../../ode/src -I../../../include -DdDOUBLE -g -O2 -MT pu.lo -MD -MP -MF .deps/pu.Tpo -c pu.cpp -o pu.o
+In file included from plane2d.cpp:26:
+./joint_internal.h:24:9: warning: '_ODE_JOINT_NTERNAL_H_' is used as a header guard here, followed by #define of a different macro [-Wheader-guard]
+#ifndef _ODE_JOINT_NTERNAL_H_
+        ^~~~~~~~~~~~~~~~~~~~~
+./joint_internal.h:25:9: note: '_ODE_JOINT_INTERNAL_H_' is defined here; did you mean '_ODE_JOINT_NTERNAL_H_'?
+#define _ODE_JOINT_INTERNAL_H_
+        ^~~~~~~~~~~~~~~~~~~~~~
+        _ODE_JOINT_NTERNAL_H_
+In file included from pu.cpp:26:
+./joint_internal.h:24:9: warning: '_ODE_JOINT_NTERNAL_H_' is used as a header guard here, followed by #define of a different macro [-Wheader-guard]
+#ifndef _ODE_JOINT_NTERNAL_H_
+        ^~~~~~~~~~~~~~~~~~~~~
+./joint_internal.h:25:9: note: '_ODE_JOINT_INTERNAL_H_' is defined here; did you mean '_ODE_JOINT_NTERNAL_H_'?
+#define _ODE_JOINT_INTERNAL_H_
+        ^~~~~~~~~~~~~~~~~~~~~~
+        _ODE_JOINT_NTERNAL_H_
+1 warning generated.
+mv -f .deps/plane2d.Tpo .deps/plane2d.Plo
+/bin/sh ../../../libtool --tag=CXX   --mode=compile g++ -DHAVE_CONFIG_H -I. -I../../../ode/src  -I../../../include -DdDOUBLE  -g -O2 -MT pr.lo -MD -MP -MF .deps/pr.Tpo -c -o pr.lo pr.cpp
+libtool: compile:  g++ -DHAVE_CONFIG_H -I. -I../../../ode/src -I../../../include -DdDOUBLE -g -O2 -MT pr.lo -MD -MP -MF .deps/pr.Tpo -c pr.cpp -o pr.o
+1 warning generated.
+mv -f .deps/pu.Tpo .deps/pu.Plo
+/bin/sh ../../../libtool --tag=CXX   --mode=compile g++ -DHAVE_CONFIG_H -I. -I../../../ode/src  -I../../../include -DdDOUBLE  -g -O2 -MT piston.lo -MD -MP -MF .deps/piston.Tpo -c -o piston.lo piston.cpp
+In file included from pr.cpp:26:
+./joint_internal.h:24:9: warning: '_ODE_JOINT_NTERNAL_H_' is used as a header guard here, followed by #define of a different macro [-Wheader-guard]
+#ifndef _ODE_JOINT_NTERNAL_H_
+        ^~~~~~~~~~~~~~~~~~~~~
+./joint_internal.h:25:9: note: '_ODE_JOINT_INTERNAL_H_' is defined here; did you mean '_ODE_JOINT_NTERNAL_H_'?
+#define _ODE_JOINT_INTERNAL_H_
+        ^~~~~~~~~~~~~~~~~~~~~~
+        _ODE_JOINT_NTERNAL_H_
+libtool: compile:  g++ -DHAVE_CONFIG_H -I. -I../../../ode/src -I../../../include -DdDOUBLE -g -O2 -MT piston.lo -MD -MP -MF .deps/piston.Tpo -c piston.cpp -o piston.o
+In file included from piston.cpp:26:
+./joint_internal.h:24:9: warning: '_ODE_JOINT_NTERNAL_H_' is used as a header guard here, followed by #define of a different macro [-Wheader-guard]
+#ifndef _ODE_JOINT_NTERNAL_H_
+        ^~~~~~~~~~~~~~~~~~~~~
+./joint_internal.h:25:9: note: '_ODE_JOINT_INTERNAL_H_' is defined here; did you mean '_ODE_JOINT_NTERNAL_H_'?
+#define _ODE_JOINT_INTERNAL_H_
+        ^~~~~~~~~~~~~~~~~~~~~~
+        _ODE_JOINT_NTERNAL_H_
+1 warning generated.
+mv -f .deps/pr.Tpo .deps/pr.Plo
+1 warning generated.
+mv -f .deps/piston.Tpo .deps/piston.Plo
+/bin/sh ../../../libtool --tag=CXX   --mode=link g++  -g -O2   -o libjoints.la  joint.lo ball.lo hinge.lo slider.lo contact.lo universal.lo hinge2.lo fixed.lo null.lo amotor.lo lmotor.lo plane2d.lo pu.lo pr.lo piston.lo  -lm  -lpthread
+libtool: link: ar cru .libs/libjoints.a  joint.o ball.o hinge.o slider.o contact.o universal.o hinge2.o fixed.o null.o amotor.o lmotor.o plane2d.o pu.o pr.o piston.o
+libtool: link: ranlib .libs/libjoints.a
+libtool: link: ( cd ".libs" && rm -f "libjoints.la" && ln -s "../libjoints.la" "libjoints.la" )
+/bin/sh ../../libtool --tag=CC   --mode=compile g++ -DHAVE_CONFIG_H -I.  -I../../include -D__ODE__   -I../../OPCODE -I../../OPCODE/Ice -DdTRIMESH_ENABLED -DdTRIMESH_OPCODE          -DdDOUBLE  -g -O2 -MT nextafterf.lo -MD -MP -MF .deps/nextafterf.Tpo -c -o nextafterf.lo nextafterf.c
+/bin/sh ../../libtool --tag=CXX   --mode=compile g++ -DHAVE_CONFIG_H -I.  -I../../include -D__ODE__   -I../../OPCODE -I../../OPCODE/Ice -DdTRIMESH_ENABLED -DdTRIMESH_OPCODE          -DdDOUBLE  -g -O2 -MT array.lo -MD -MP -MF .deps/array.Tpo -c -o array.lo array.cpp
+libtool: compile:  g++ -DHAVE_CONFIG_H -I. -I../../include -D__ODE__ -I../../OPCODE -I../../OPCODE/Ice -DdTRIMESH_ENABLED -DdTRIMESH_OPCODE -DdDOUBLE -g -O2 -MT nextafterf.lo -MD -MP -MF .deps/nextafterf.Tpo -c nextafterf.c -o nextafterf.o
+libtool: compile:  g++ -DHAVE_CONFIG_H -I. -I../../include -D__ODE__ -I../../OPCODE -I../../OPCODE/Ice -DdTRIMESH_ENABLED -DdTRIMESH_OPCODE -DdDOUBLE -g -O2 -MT array.lo -MD -MP -MF .deps/array.Tpo -c array.cpp -o array.o
+clang: warning: treating 'c' input as 'c++' when in C++ mode, this behavior is deprecated [-Wdeprecated]
+mv -f .deps/nextafterf.Tpo .deps/nextafterf.Plo
+/bin/sh ../../libtool --tag=CXX   --mode=compile g++ -DHAVE_CONFIG_H -I.  -I../../include -D__ODE__   -I../../OPCODE -I../../OPCODE/Ice -DdTRIMESH_ENABLED -DdTRIMESH_OPCODE          -DdDOUBLE  -g -O2 -MT box.lo -MD -MP -MF .deps/box.Tpo -c -o box.lo box.cpp
+mv -f .deps/array.Tpo .deps/array.Plo
+/bin/sh ../../libtool --tag=CXX   --mode=compile g++ -DHAVE_CONFIG_H -I.  -I../../include -D__ODE__   -I../../OPCODE -I../../OPCODE/Ice -DdTRIMESH_ENABLED -DdTRIMESH_OPCODE          -DdDOUBLE  -g -O2 -MT capsule.lo -MD -MP -MF .deps/capsule.Tpo -c -o capsule.lo capsule.cpp
+libtool: compile:  g++ -DHAVE_CONFIG_H -I. -I../../include -D__ODE__ -I../../OPCODE -I../../OPCODE/Ice -DdTRIMESH_ENABLED -DdTRIMESH_OPCODE -DdDOUBLE -g -O2 -MT box.lo -MD -MP -MF .deps/box.Tpo -c box.cpp -o box.o
+libtool: compile:  g++ -DHAVE_CONFIG_H -I. -I../../include -D__ODE__ -I../../OPCODE -I../../OPCODE/Ice -DdTRIMESH_ENABLED -DdTRIMESH_OPCODE -DdDOUBLE -g -O2 -MT capsule.lo -MD -MP -MF .deps/capsule.Tpo -c capsule.cpp -o capsule.o
+mv -f .deps/capsule.Tpo .deps/capsule.Plo
+/bin/sh ../../libtool --tag=CXX   --mode=compile g++ -DHAVE_CONFIG_H -I.  -I../../include -D__ODE__   -I../../OPCODE -I../../OPCODE/Ice -DdTRIMESH_ENABLED -DdTRIMESH_OPCODE          -DdDOUBLE  -g -O2 -MT collision_cylinder_box.lo -MD -MP -MF .deps/collision_cylinder_box.Tpo -c -o collision_cylinder_box.lo collision_cylinder_box.cpp
+libtool: compile:  g++ -DHAVE_CONFIG_H -I. -I../../include -D__ODE__ -I../../OPCODE -I../../OPCODE/Ice -DdTRIMESH_ENABLED -DdTRIMESH_OPCODE -DdDOUBLE -g -O2 -MT collision_cylinder_box.lo -MD -MP -MF .deps/collision_cylinder_box.Tpo -c collision_cylinder_box.cpp -o collision_cylinder_box.o
+mv -f .deps/box.Tpo .deps/box.Plo
+/bin/sh ../../libtool --tag=CXX   --mode=compile g++ -DHAVE_CONFIG_H -I.  -I../../include -D__ODE__   -I../../OPCODE -I../../OPCODE/Ice -DdTRIMESH_ENABLED -DdTRIMESH_OPCODE          -DdDOUBLE  -g -O2 -MT collision_cylinder_plane.lo -MD -MP -MF .deps/collision_cylinder_plane.Tpo -c -o collision_cylinder_plane.lo collision_cylinder_plane.cpp
+libtool: compile:  g++ -DHAVE_CONFIG_H -I. -I../../include -D__ODE__ -I../../OPCODE -I../../OPCODE/Ice -DdTRIMESH_ENABLED -DdTRIMESH_OPCODE -DdDOUBLE -g -O2 -MT collision_cylinder_plane.lo -MD -MP -MF .deps/collision_cylinder_plane.Tpo -c collision_cylinder_plane.cpp -o collision_cylinder_plane.o
+mv -f .deps/collision_cylinder_box.Tpo .deps/collision_cylinder_box.Plo
+/bin/sh ../../libtool --tag=CXX   --mode=compile g++ -DHAVE_CONFIG_H -I.  -I../../include -D__ODE__   -I../../OPCODE -I../../OPCODE/Ice -DdTRIMESH_ENABLED -DdTRIMESH_OPCODE          -DdDOUBLE  -g -O2 -MT collision_cylinder_sphere.lo -MD -MP -MF .deps/collision_cylinder_sphere.Tpo -c -o collision_cylinder_sphere.lo collision_cylinder_sphere.cpp
+mv -f .deps/collision_cylinder_plane.Tpo .deps/collision_cylinder_plane.Plo
+/bin/sh ../../libtool --tag=CXX   --mode=compile g++ -DHAVE_CONFIG_H -I.  -I../../include -D__ODE__   -I../../OPCODE -I../../OPCODE/Ice -DdTRIMESH_ENABLED -DdTRIMESH_OPCODE          -DdDOUBLE  -g -O2 -MT collision_kernel.lo -MD -MP -MF .deps/collision_kernel.Tpo -c -o collision_kernel.lo collision_kernel.cpp
+libtool: compile:  g++ -DHAVE_CONFIG_H -I. -I../../include -D__ODE__ -I../../OPCODE -I../../OPCODE/Ice -DdTRIMESH_ENABLED -DdTRIMESH_OPCODE -DdDOUBLE -g -O2 -MT collision_cylinder_sphere.lo -MD -MP -MF .deps/collision_cylinder_sphere.Tpo -c collision_cylinder_sphere.cpp -o collision_cylinder_sphere.o
+libtool: compile:  g++ -DHAVE_CONFIG_H -I. -I../../include -D__ODE__ -I../../OPCODE -I../../OPCODE/Ice -DdTRIMESH_ENABLED -DdTRIMESH_OPCODE -DdDOUBLE -g -O2 -MT collision_kernel.lo -MD -MP -MF .deps/collision_kernel.Tpo -c collision_kernel.cpp -o collision_kernel.o
+In file included from collision_kernel.cpp:40:
+In file included from ./collision_trimesh_internal.h:41:
+In file included from ../../OPCODE/Opcode.h:82:
+In file included from ../../OPCODE/OPC_IceHook.h:43:
+../../OPCODE/Ice/IceUtils.h:226:51: warning: expression result unused; assign into a variable to force a volatile load [-Wunused-volatile-lvalue]
+        inline_ void _prefetch(void const* ptr)         { (void)*(char const volatile *)ptr;    }
+                                                                ^~~~~~~~~~~~~~~~~~~~~~~~~~~
+mv -f .deps/collision_cylinder_sphere.Tpo .deps/collision_cylinder_sphere.Plo
+/bin/sh ../../libtool --tag=CXX   --mode=compile g++ -DHAVE_CONFIG_H -I.  -I../../include -D__ODE__   -I../../OPCODE -I../../OPCODE/Ice -DdTRIMESH_ENABLED -DdTRIMESH_OPCODE          -DdDOUBLE  -g -O2 -MT collision_quadtreespace.lo -MD -MP -MF .deps/collision_quadtreespace.Tpo -c -o collision_quadtreespace.lo collision_quadtreespace.cpp
+libtool: compile:  g++ -DHAVE_CONFIG_H -I. -I../../include -D__ODE__ -I../../OPCODE -I../../OPCODE/Ice -DdTRIMESH_ENABLED -DdTRIMESH_OPCODE -DdDOUBLE -g -O2 -MT collision_quadtreespace.lo -MD -MP -MF .deps/collision_quadtreespace.Tpo -c collision_quadtreespace.cpp -o collision_quadtreespace.o
+mv -f .deps/collision_quadtreespace.Tpo .deps/collision_quadtreespace.Plo
+/bin/sh ../../libtool --tag=CXX   --mode=compile g++ -DHAVE_CONFIG_H -I.  -I../../include -D__ODE__   -I../../OPCODE -I../../OPCODE/Ice -DdTRIMESH_ENABLED -DdTRIMESH_OPCODE          -DdDOUBLE  -g -O2 -MT collision_sapspace.lo -MD -MP -MF .deps/collision_sapspace.Tpo -c -o collision_sapspace.lo collision_sapspace.cpp
+1 warning generated.
+libtool: compile:  g++ -DHAVE_CONFIG_H -I. -I../../include -D__ODE__ -I../../OPCODE -I../../OPCODE/Ice -DdTRIMESH_ENABLED -DdTRIMESH_OPCODE -DdDOUBLE -g -O2 -MT collision_sapspace.lo -MD -MP -MF .deps/collision_sapspace.Tpo -c collision_sapspace.cpp -o collision_sapspace.o
+mv -f .deps/collision_kernel.Tpo .deps/collision_kernel.Plo
+/bin/sh ../../libtool --tag=CXX   --mode=compile g++ -DHAVE_CONFIG_H -I.  -I../../include -D__ODE__   -I../../OPCODE -I../../OPCODE/Ice -DdTRIMESH_ENABLED -DdTRIMESH_OPCODE          -DdDOUBLE  -g -O2 -MT collision_space.lo -MD -MP -MF .deps/collision_space.Tpo -c -o collision_space.lo collision_space.cpp
+libtool: compile:  g++ -DHAVE_CONFIG_H -I. -I../../include -D__ODE__ -I../../OPCODE -I../../OPCODE/Ice -DdTRIMESH_ENABLED -DdTRIMESH_OPCODE -DdDOUBLE -g -O2 -MT collision_space.lo -MD -MP -MF .deps/collision_space.Tpo -c collision_space.cpp -o collision_space.o
+collision_space.cpp:422:12: warning: 'this' pointer cannot be null in well-defined C++ code; pointer may be assumed to always convert to true [-Wundefined-bool-conversion]
+  dAASSERT(this && callback);
+           ^~~~ ~~
+../../include/ode/common.h:99:30: note: expanded from macro 'dAASSERT'
+#define dAASSERT(a) dUASSERT(a,"Bad argument(s)")
+                             ^
+../../include/ode/common.h:70:37: note: expanded from macro 'dUASSERT'
+#    define dUASSERT(a,msg) { if (!(a)) { dDebug (d_ERR_UASSERT, \
+                                    ^
+mv -f .deps/collision_sapspace.Tpo .deps/collision_sapspace.Plo
+/bin/sh ../../libtool --tag=CXX   --mode=compile g++ -DHAVE_CONFIG_H -I.  -I../../include -D__ODE__   -I../../OPCODE -I../../OPCODE/Ice -DdTRIMESH_ENABLED -DdTRIMESH_OPCODE          -DdDOUBLE  -g -O2 -MT collision_transform.lo -MD -MP -MF .deps/collision_transform.Tpo -c -o collision_transform.lo collision_transform.cpp
+1 warning generated.
+mv -f .deps/collision_space.Tpo .deps/collision_space.Plo
+/bin/sh ../../libtool --tag=CXX   --mode=compile g++ -DHAVE_CONFIG_H -I.  -I../../include -D__ODE__   -I../../OPCODE -I../../OPCODE/Ice -DdTRIMESH_ENABLED -DdTRIMESH_OPCODE          -DdDOUBLE  -g -O2 -MT collision_trimesh_disabled.lo -MD -MP -MF .deps/collision_trimesh_disabled.Tpo -c -o collision_trimesh_disabled.lo collision_trimesh_disabled.cpp
+libtool: compile:  g++ -DHAVE_CONFIG_H -I. -I../../include -D__ODE__ -I../../OPCODE -I../../OPCODE/Ice -DdTRIMESH_ENABLED -DdTRIMESH_OPCODE -DdDOUBLE -g -O2 -MT collision_transform.lo -MD -MP -MF .deps/collision_transform.Tpo -c collision_transform.cpp -o collision_transform.o
+libtool: compile:  g++ -DHAVE_CONFIG_H -I. -I../../include -D__ODE__ -I../../OPCODE -I../../OPCODE/Ice -DdTRIMESH_ENABLED -DdTRIMESH_OPCODE -DdDOUBLE -g -O2 -MT collision_trimesh_disabled.lo -MD -MP -MF .deps/collision_trimesh_disabled.Tpo -c collision_trimesh_disabled.cpp -o collision_trimesh_disabled.o
+mv -f .deps/collision_trimesh_disabled.Tpo .deps/collision_trimesh_disabled.Plo
+/bin/sh ../../libtool --tag=CXX   --mode=compile g++ -DHAVE_CONFIG_H -I.  -I../../include -D__ODE__   -I../../OPCODE -I../../OPCODE/Ice -DdTRIMESH_ENABLED -DdTRIMESH_OPCODE          -DdDOUBLE  -g -O2 -MT collision_util.lo -MD -MP -MF .deps/collision_util.Tpo -c -o collision_util.lo collision_util.cpp
+mv -f .deps/collision_transform.Tpo .deps/collision_transform.Plo
+/bin/sh ../../libtool --tag=CXX   --mode=compile g++ -DHAVE_CONFIG_H -I.  -I../../include -D__ODE__   -I../../OPCODE -I../../OPCODE/Ice -DdTRIMESH_ENABLED -DdTRIMESH_OPCODE          -DdDOUBLE  -g -O2 -MT convex.lo -MD -MP -MF .deps/convex.Tpo -c -o convex.lo convex.cpp
+libtool: compile:  g++ -DHAVE_CONFIG_H -I. -I../../include -D__ODE__ -I../../OPCODE -I../../OPCODE/Ice -DdTRIMESH_ENABLED -DdTRIMESH_OPCODE -DdDOUBLE -g -O2 -MT collision_util.lo -MD -MP -MF .deps/collision_util.Tpo -c collision_util.cpp -o collision_util.o
+libtool: compile:  g++ -DHAVE_CONFIG_H -I. -I../../include -D__ODE__ -I../../OPCODE -I../../OPCODE/Ice -DdTRIMESH_ENABLED -DdTRIMESH_OPCODE -DdDOUBLE -g -O2 -MT convex.lo -MD -MP -MF .deps/convex.Tpo -c convex.cpp -o convex.o
+mv -f .deps/collision_util.Tpo .deps/collision_util.Plo
+/bin/sh ../../libtool --tag=CXX   --mode=compile g++ -DHAVE_CONFIG_H -I.  -I../../include -D__ODE__   -I../../OPCODE -I../../OPCODE/Ice -DdTRIMESH_ENABLED -DdTRIMESH_OPCODE          -DdDOUBLE  -g -O2 -MT cylinder.lo -MD -MP -MF .deps/cylinder.Tpo -c -o cylinder.lo cylinder.cpp
+libtool: compile:  g++ -DHAVE_CONFIG_H -I. -I../../include -D__ODE__ -I../../OPCODE -I../../OPCODE/Ice -DdTRIMESH_ENABLED -DdTRIMESH_OPCODE -DdDOUBLE -g -O2 -MT cylinder.lo -MD -MP -MF .deps/cylinder.Tpo -c cylinder.cpp -o cylinder.o
+mv -f .deps/cylinder.Tpo .deps/cylinder.Plo
+/bin/sh ../../libtool --tag=CXX   --mode=compile g++ -DHAVE_CONFIG_H -I.  -I../../include -D__ODE__   -I../../OPCODE -I../../OPCODE/Ice -DdTRIMESH_ENABLED -DdTRIMESH_OPCODE          -DdDOUBLE  -g -O2 -MT error.lo -MD -MP -MF .deps/error.Tpo -c -o error.lo error.cpp
+libtool: compile:  g++ -DHAVE_CONFIG_H -I. -I../../include -D__ODE__ -I../../OPCODE -I../../OPCODE/Ice -DdTRIMESH_ENABLED -DdTRIMESH_OPCODE -DdDOUBLE -g -O2 -MT error.lo -MD -MP -MF .deps/error.Tpo -c error.cpp -o error.o
+mv -f .deps/convex.Tpo .deps/convex.Plo
+/bin/sh ../../libtool --tag=CXX   --mode=compile g++ -DHAVE_CONFIG_H -I.  -I../../include -D__ODE__   -I../../OPCODE -I../../OPCODE/Ice -DdTRIMESH_ENABLED -DdTRIMESH_OPCODE          -DdDOUBLE  -g -O2 -MT export-dif.lo -MD -MP -MF .deps/export-dif.Tpo -c -o export-dif.lo export-dif.cpp
+libtool: compile:  g++ -DHAVE_CONFIG_H -I. -I../../include -D__ODE__ -I../../OPCODE -I../../OPCODE/Ice -DdTRIMESH_ENABLED -DdTRIMESH_OPCODE -DdDOUBLE -g -O2 -MT export-dif.lo -MD -MP -MF .deps/export-dif.Tpo -c export-dif.cpp -o export-dif.o
+mv -f .deps/error.Tpo .deps/error.Plo
+/bin/sh ../../libtool --tag=CXX   --mode=compile g++ -DHAVE_CONFIG_H -I.  -I../../include -D__ODE__   -I../../OPCODE -I../../OPCODE/Ice -DdTRIMESH_ENABLED -DdTRIMESH_OPCODE          -DdDOUBLE  -g -O2 -MT heightfield.lo -MD -MP -MF .deps/heightfield.Tpo -c -o heightfield.lo heightfield.cpp
+libtool: compile:  g++ -DHAVE_CONFIG_H -I. -I../../include -D__ODE__ -I../../OPCODE -I../../OPCODE/Ice -DdTRIMESH_ENABLED -DdTRIMESH_OPCODE -DdDOUBLE -g -O2 -MT heightfield.lo -MD -MP -MF .deps/heightfield.Tpo -c heightfield.cpp -o heightfield.o
+In file included from export-dif.cpp:36:
+In file included from ../../include/ode/ode.h:40:
+../../include/ode/misc.h:58:70: warning: conversion from string literal to 'char *' is deprecated [-Wc++11-compat-deprecated-writable-strings]
+ODE_API void dPrintMatrix (const dReal *A, int n, int m, char *fmt = "%10.4f ",
+                                                                     ^
+1 warning generated.
+mv -f .deps/export-dif.Tpo .deps/export-dif.Plo
+/bin/sh ../../libtool --tag=CXX   --mode=compile g++ -DHAVE_CONFIG_H -I.  -I../../include -D__ODE__   -I../../OPCODE -I../../OPCODE/Ice -DdTRIMESH_ENABLED -DdTRIMESH_OPCODE          -DdDOUBLE  -g -O2 -MT lcp.lo -MD -MP -MF .deps/lcp.Tpo -c -o lcp.lo lcp.cpp
+libtool: compile:  g++ -DHAVE_CONFIG_H -I. -I../../include -D__ODE__ -I../../OPCODE -I../../OPCODE/Ice -DdTRIMESH_ENABLED -DdTRIMESH_OPCODE -DdDOUBLE -g -O2 -MT lcp.lo -MD -MP -MF .deps/lcp.Tpo -c lcp.cpp -o lcp.o
+In file included from lcp.cpp:113:
+../../include/ode/misc.h:58:70: warning: conversion from string literal to 'char *' is deprecated [-Wc++11-compat-deprecated-writable-strings]
+ODE_API void dPrintMatrix (const dReal *A, int n, int m, char *fmt = "%10.4f ",
+                                                                     ^
+In file included from lcp.cpp:117:
+./mat.h:66:27: warning: conversion from string literal to 'char *' is deprecated [-Wc++11-compat-deprecated-writable-strings]
+  void print (char *fmt = "%10.4f ", FILE *f=stdout);
+                          ^
+mv -f .deps/heightfield.Tpo .deps/heightfield.Plo
+/bin/sh ../../libtool --tag=CXX   --mode=compile g++ -DHAVE_CONFIG_H -I.  -I../../include -D__ODE__   -I../../OPCODE -I../../OPCODE/Ice -DdTRIMESH_ENABLED -DdTRIMESH_OPCODE          -DdDOUBLE  -g -O2 -MT mass.lo -MD -MP -MF .deps/mass.Tpo -c -o mass.lo mass.cpp
+libtool: compile:  g++ -DHAVE_CONFIG_H -I. -I../../include -D__ODE__ -I../../OPCODE -I../../OPCODE/Ice -DdTRIMESH_ENABLED -DdTRIMESH_OPCODE -DdDOUBLE -g -O2 -MT mass.lo -MD -MP -MF .deps/mass.Tpo -c mass.cpp -o mass.o
+In file included from mass.cpp:33:
+In file included from ./collision_trimesh_internal.h:41:
+In file included from ../../OPCODE/Opcode.h:82:
+In file included from ../../OPCODE/OPC_IceHook.h:43:
+../../OPCODE/Ice/IceUtils.h:226:51: warning: expression result unused; assign into a variable to force a volatile load [-Wunused-volatile-lvalue]
+        inline_ void _prefetch(void const* ptr)         { (void)*(char const volatile *)ptr;    }
+                                                                ^~~~~~~~~~~~~~~~~~~~~~~~~~~
+2 warnings generated.
+1 warning generated.
+mv -f .deps/lcp.Tpo .deps/lcp.Plo
+/bin/sh ../../libtool --tag=CXX   --mode=compile g++ -DHAVE_CONFIG_H -I.  -I../../include -D__ODE__   -I../../OPCODE -I../../OPCODE/Ice -DdTRIMESH_ENABLED -DdTRIMESH_OPCODE          -DdDOUBLE  -g -O2 -MT mat.lo -MD -MP -MF .deps/mat.Tpo -c -o mat.lo mat.cpp
+mv -f .deps/mass.Tpo .deps/mass.Plo
+/bin/sh ../../libtool --tag=CXX   --mode=compile g++ -DHAVE_CONFIG_H -I.  -I../../include -D__ODE__   -I../../OPCODE -I../../OPCODE/Ice -DdTRIMESH_ENABLED -DdTRIMESH_OPCODE          -DdDOUBLE  -g -O2 -MT matrix.lo -MD -MP -MF .deps/matrix.Tpo -c -o matrix.lo matrix.cpp
+libtool: compile:  g++ -DHAVE_CONFIG_H -I. -I../../include -D__ODE__ -I../../OPCODE -I../../OPCODE/Ice -DdTRIMESH_ENABLED -DdTRIMESH_OPCODE -DdDOUBLE -g -O2 -MT mat.lo -MD -MP -MF .deps/mat.Tpo -c mat.cpp -o mat.o
+libtool: compile:  g++ -DHAVE_CONFIG_H -I. -I../../include -D__ODE__ -I../../OPCODE -I../../OPCODE/Ice -DdTRIMESH_ENABLED -DdTRIMESH_OPCODE -DdDOUBLE -g -O2 -MT matrix.lo -MD -MP -MF .deps/matrix.Tpo -c matrix.cpp -o matrix.o
+In file included from mat.cpp:24:
+../../include/ode/misc.h:58:70: warning: conversion from string literal to 'char *' is deprecated [-Wc++11-compat-deprecated-writable-strings]
+ODE_API void dPrintMatrix (const dReal *A, int n, int m, char *fmt = "%10.4f ",
+                                                                     ^
+In file included from mat.cpp:29:
+./mat.h:66:27: warning: conversion from string literal to 'char *' is deprecated [-Wc++11-compat-deprecated-writable-strings]
+  void print (char *fmt = "%10.4f ", FILE *f=stdout);
+                          ^
+2 warnings generated.
+mv -f .deps/mat.Tpo .deps/mat.Plo
+/bin/sh ../../libtool --tag=CXX   --mode=compile g++ -DHAVE_CONFIG_H -I.  -I../../include -D__ODE__   -I../../OPCODE -I../../OPCODE/Ice -DdTRIMESH_ENABLED -DdTRIMESH_OPCODE          -DdDOUBLE  -g -O2 -MT memory.lo -MD -MP -MF .deps/memory.Tpo -c -o memory.lo memory.cpp
+libtool: compile:  g++ -DHAVE_CONFIG_H -I. -I../../include -D__ODE__ -I../../OPCODE -I../../OPCODE/Ice -DdTRIMESH_ENABLED -DdTRIMESH_OPCODE -DdDOUBLE -g -O2 -MT memory.lo -MD -MP -MF .deps/memory.Tpo -c memory.cpp -o memory.o
+mv -f .deps/matrix.Tpo .deps/matrix.Plo
+/bin/sh ../../libtool --tag=CXX   --mode=compile g++ -DHAVE_CONFIG_H -I.  -I../../include -D__ODE__   -I../../OPCODE -I../../OPCODE/Ice -DdTRIMESH_ENABLED -DdTRIMESH_OPCODE          -DdDOUBLE  -g -O2 -MT misc.lo -MD -MP -MF .deps/misc.Tpo -c -o misc.lo misc.cpp
+mv -f .deps/memory.Tpo .deps/memory.Plo
+/bin/sh ../../libtool --tag=CXX   --mode=compile g++ -DHAVE_CONFIG_H -I.  -I../../include -D__ODE__   -I../../OPCODE -I../../OPCODE/Ice -DdTRIMESH_ENABLED -DdTRIMESH_OPCODE          -DdDOUBLE  -g -O2 -MT obstack.lo -MD -MP -MF .deps/obstack.Tpo -c -o obstack.lo obstack.cpp
+libtool: compile:  g++ -DHAVE_CONFIG_H -I. -I../../include -D__ODE__ -I../../OPCODE -I../../OPCODE/Ice -DdTRIMESH_ENABLED -DdTRIMESH_OPCODE -DdDOUBLE -g -O2 -MT misc.lo -MD -MP -MF .deps/misc.Tpo -c misc.cpp -o misc.o
+libtool: compile:  g++ -DHAVE_CONFIG_H -I. -I../../include -D__ODE__ -I../../OPCODE -I../../OPCODE/Ice -DdTRIMESH_ENABLED -DdTRIMESH_OPCODE -DdDOUBLE -g -O2 -MT obstack.lo -MD -MP -MF .deps/obstack.Tpo -c obstack.cpp -o obstack.o
+In file included from misc.cpp:24:
+../../include/ode/misc.h:58:70: warning: conversion from string literal to 'char *' is deprecated [-Wc++11-compat-deprecated-writable-strings]
+ODE_API void dPrintMatrix (const dReal *A, int n, int m, char *fmt = "%10.4f ",
+                                                                     ^
+mv -f .deps/obstack.Tpo .deps/obstack.Plo
+/bin/sh ../../libtool --tag=CXX   --mode=compile g++ -DHAVE_CONFIG_H -I.  -I../../include -D__ODE__   -I../../OPCODE -I../../OPCODE/Ice -DdTRIMESH_ENABLED -DdTRIMESH_OPCODE          -DdDOUBLE  -g -O2 -MT ode.lo -MD -MP -MF .deps/ode.Tpo -c -o ode.lo ode.cpp
+1 warning generated.
+mv -f .deps/misc.Tpo .deps/misc.Plo
+/bin/sh ../../libtool --tag=CXX   --mode=compile g++ -DHAVE_CONFIG_H -I.  -I../../include -D__ODE__   -I../../OPCODE -I../../OPCODE/Ice -DdTRIMESH_ENABLED -DdTRIMESH_OPCODE          -DdDOUBLE  -g -O2 -MT odeinit.lo -MD -MP -MF .deps/odeinit.Tpo -c -o odeinit.lo odeinit.cpp
+libtool: compile:  g++ -DHAVE_CONFIG_H -I. -I../../include -D__ODE__ -I../../OPCODE -I../../OPCODE/Ice -DdTRIMESH_ENABLED -DdTRIMESH_OPCODE -DdDOUBLE -g -O2 -MT ode.lo -MD -MP -MF .deps/ode.Tpo -c ode.cpp -o ode.o
+libtool: compile:  g++ -DHAVE_CONFIG_H -I. -I../../include -D__ODE__ -I../../OPCODE -I../../OPCODE/Ice -DdTRIMESH_ENABLED -DdTRIMESH_OPCODE -DdDOUBLE -g -O2 -MT odeinit.lo -MD -MP -MF .deps/odeinit.Tpo -c odeinit.cpp -o odeinit.o
+In file included from ode.cpp:30:
+In file included from ../../include/ode/ode.h:40:
+../../include/ode/misc.h:58:70: warning: conversion from string literal to 'char *' is deprecated [-Wc++11-compat-deprecated-writable-strings]
+ODE_API void dPrintMatrix (const dReal *A, int n, int m, char *fmt = "%10.4f ",
+                                                                     ^
+In file included from odeinit.cpp:36:
+In file included from ./collision_trimesh_internal.h:41:
+In file included from ../../OPCODE/Opcode.h:82:
+In file included from ../../OPCODE/OPC_IceHook.h:43:
+../../OPCODE/Ice/IceUtils.h:226:51: warning: expression result unused; assign into a variable to force a volatile load [-Wunused-volatile-lvalue]
+        inline_ void _prefetch(void const* ptr)         { (void)*(char const volatile *)ptr;    }
+                                                                ^~~~~~~~~~~~~~~~~~~~~~~~~~~
+1 warning generated.
+mv -f .deps/odeinit.Tpo .deps/odeinit.Plo
+/bin/sh ../../libtool --tag=CXX   --mode=compile g++ -DHAVE_CONFIG_H -I.  -I../../include -D__ODE__   -I../../OPCODE -I../../OPCODE/Ice -DdTRIMESH_ENABLED -DdTRIMESH_OPCODE          -DdDOUBLE  -g -O2 -MT odemath.lo -MD -MP -MF .deps/odemath.Tpo -c -o odemath.lo odemath.cpp
+libtool: compile:  g++ -DHAVE_CONFIG_H -I. -I../../include -D__ODE__ -I../../OPCODE -I../../OPCODE/Ice -DdTRIMESH_ENABLED -DdTRIMESH_OPCODE -DdDOUBLE -g -O2 -MT odemath.lo -MD -MP -MF .deps/odemath.Tpo -c odemath.cpp -o odemath.o
+mv -f .deps/odemath.Tpo .deps/odemath.Plo
+/bin/sh ../../libtool --tag=CXX   --mode=compile g++ -DHAVE_CONFIG_H -I.  -I../../include -D__ODE__   -I../../OPCODE -I../../OPCODE/Ice -DdTRIMESH_ENABLED -DdTRIMESH_OPCODE          -DdDOUBLE  -g -O2 -MT plane.lo -MD -MP -MF .deps/plane.Tpo -c -o plane.lo plane.cpp
+libtool: compile:  g++ -DHAVE_CONFIG_H -I. -I../../include -D__ODE__ -I../../OPCODE -I../../OPCODE/Ice -DdTRIMESH_ENABLED -DdTRIMESH_OPCODE -DdDOUBLE -g -O2 -MT plane.lo -MD -MP -MF .deps/plane.Tpo -c plane.cpp -o plane.o
+mv -f .deps/plane.Tpo .deps/plane.Plo
+/bin/sh ../../libtool --tag=CXX   --mode=compile g++ -DHAVE_CONFIG_H -I.  -I../../include -D__ODE__   -I../../OPCODE -I../../OPCODE/Ice -DdTRIMESH_ENABLED -DdTRIMESH_OPCODE          -DdDOUBLE  -g -O2 -MT quickstep.lo -MD -MP -MF .deps/quickstep.Tpo -c -o quickstep.lo quickstep.cpp
+1 warning generated.
+mv -f .deps/ode.Tpo .deps/ode.Plo
+/bin/sh ../../libtool --tag=CXX   --mode=compile g++ -DHAVE_CONFIG_H -I.  -I../../include -D__ODE__   -I../../OPCODE -I../../OPCODE/Ice -DdTRIMESH_ENABLED -DdTRIMESH_OPCODE          -DdDOUBLE  -g -O2 -MT ray.lo -MD -MP -MF .deps/ray.Tpo -c -o ray.lo ray.cpp
+libtool: compile:  g++ -DHAVE_CONFIG_H -I. -I../../include -D__ODE__ -I../../OPCODE -I../../OPCODE/Ice -DdTRIMESH_ENABLED -DdTRIMESH_OPCODE -DdDOUBLE -g -O2 -MT quickstep.lo -MD -MP -MF .deps/quickstep.Tpo -c quickstep.cpp -o quickstep.o
+libtool: compile:  g++ -DHAVE_CONFIG_H -I. -I../../include -D__ODE__ -I../../OPCODE -I../../OPCODE/Ice -DdTRIMESH_ENABLED -DdTRIMESH_OPCODE -DdDOUBLE -g -O2 -MT ray.lo -MD -MP -MF .deps/ray.Tpo -c ray.cpp -o ray.o
+In file included from quickstep.cpp:29:
+../../include/ode/misc.h:58:70: warning: conversion from string literal to 'char *' is deprecated [-Wc++11-compat-deprecated-writable-strings]
+ODE_API void dPrintMatrix (const dReal *A, int n, int m, char *fmt = "%10.4f ",
+                                                                     ^
+mv -f .deps/ray.Tpo .deps/ray.Plo
+/bin/sh ../../libtool --tag=CXX   --mode=compile g++ -DHAVE_CONFIG_H -I.  -I../../include -D__ODE__   -I../../OPCODE -I../../OPCODE/Ice -DdTRIMESH_ENABLED -DdTRIMESH_OPCODE          -DdDOUBLE  -g -O2 -MT rotation.lo -MD -MP -MF .deps/rotation.Tpo -c -o rotation.lo rotation.cpp
+libtool: compile:  g++ -DHAVE_CONFIG_H -I. -I../../include -D__ODE__ -I../../OPCODE -I../../OPCODE/Ice -DdTRIMESH_ENABLED -DdTRIMESH_OPCODE -DdDOUBLE -g -O2 -MT rotation.lo -MD -MP -MF .deps/rotation.Tpo -c rotation.cpp -o rotation.o
+1 warning generated.
+mv -f .deps/quickstep.Tpo .deps/quickstep.Plo
+/bin/sh ../../libtool --tag=CXX   --mode=compile g++ -DHAVE_CONFIG_H -I.  -I../../include -D__ODE__   -I../../OPCODE -I../../OPCODE/Ice -DdTRIMESH_ENABLED -DdTRIMESH_OPCODE          -DdDOUBLE  -g -O2 -MT sphere.lo -MD -MP -MF .deps/sphere.Tpo -c -o sphere.lo sphere.cpp
+libtool: compile:  g++ -DHAVE_CONFIG_H -I. -I../../include -D__ODE__ -I../../OPCODE -I../../OPCODE/Ice -DdTRIMESH_ENABLED -DdTRIMESH_OPCODE -DdDOUBLE -g -O2 -MT sphere.lo -MD -MP -MF .deps/sphere.Tpo -c sphere.cpp -o sphere.o
+mv -f .deps/rotation.Tpo .deps/rotation.Plo
+/bin/sh ../../libtool --tag=CXX   --mode=compile g++ -DHAVE_CONFIG_H -I.  -I../../include -D__ODE__   -I../../OPCODE -I../../OPCODE/Ice -DdTRIMESH_ENABLED -DdTRIMESH_OPCODE          -DdDOUBLE  -g -O2 -MT step.lo -MD -MP -MF .deps/step.Tpo -c -o step.lo step.cpp
+libtool: compile:  g++ -DHAVE_CONFIG_H -I. -I../../include -D__ODE__ -I../../OPCODE -I../../OPCODE/Ice -DdTRIMESH_ENABLED -DdTRIMESH_OPCODE -DdDOUBLE -g -O2 -MT step.lo -MD -MP -MF .deps/step.Tpo -c step.cpp -o step.o
+mv -f .deps/sphere.Tpo .deps/sphere.Plo
+/bin/sh ../../libtool --tag=CXX   --mode=compile g++ -DHAVE_CONFIG_H -I.  -I../../include -D__ODE__   -I../../OPCODE -I../../OPCODE/Ice -DdTRIMESH_ENABLED -DdTRIMESH_OPCODE          -DdDOUBLE  -g -O2 -MT timer.lo -MD -MP -MF .deps/timer.Tpo -c -o timer.lo timer.cpp
+libtool: compile:  g++ -DHAVE_CONFIG_H -I. -I../../include -D__ODE__ -I../../OPCODE -I../../OPCODE/Ice -DdTRIMESH_ENABLED -DdTRIMESH_OPCODE -DdDOUBLE -g -O2 -MT timer.lo -MD -MP -MF .deps/timer.Tpo -c timer.cpp -o timer.o
+mv -f .deps/timer.Tpo .deps/timer.Plo
+/bin/sh ../../libtool --tag=CXX   --mode=compile g++ -DHAVE_CONFIG_H -I.  -I../../include -D__ODE__   -I../../OPCODE -I../../OPCODE/Ice -DdTRIMESH_ENABLED -DdTRIMESH_OPCODE          -DdDOUBLE  -g -O2 -MT util.lo -MD -MP -MF .deps/util.Tpo -c -o util.lo util.cpp
+libtool: compile:  g++ -DHAVE_CONFIG_H -I. -I../../include -D__ODE__ -I../../OPCODE -I../../OPCODE/Ice -DdTRIMESH_ENABLED -DdTRIMESH_OPCODE -DdDOUBLE -g -O2 -MT util.lo -MD -MP -MF .deps/util.Tpo -c util.cpp -o util.o
+In file included from util.cpp:23:
+In file included from ../../include/ode/ode.h:40:
+../../include/ode/misc.h:58:70: warning: conversion from string literal to 'char *' is deprecated [-Wc++11-compat-deprecated-writable-strings]
+ODE_API void dPrintMatrix (const dReal *A, int n, int m, char *fmt = "%10.4f ",
+                                                                     ^
+mv -f .deps/step.Tpo .deps/step.Plo
+/bin/sh ../../libtool --tag=CXX   --mode=compile g++ -DHAVE_CONFIG_H -I.  -I../../include -D__ODE__   -I../../OPCODE -I../../OPCODE/Ice -DdTRIMESH_ENABLED -DdTRIMESH_OPCODE          -DdDOUBLE  -g -O2 -MT collision_trimesh_trimesh.lo -MD -MP -MF .deps/collision_trimesh_trimesh.Tpo -c -o collision_trimesh_trimesh.lo collision_trimesh_trimesh.cpp
+libtool: compile:  g++ -DHAVE_CONFIG_H -I. -I../../include -D__ODE__ -I../../OPCODE -I../../OPCODE/Ice -DdTRIMESH_ENABLED -DdTRIMESH_OPCODE -DdDOUBLE -g -O2 -MT collision_trimesh_trimesh.lo -MD -MP -MF .deps/collision_trimesh_trimesh.Tpo -c collision_trimesh_trimesh.cpp -o collision_trimesh_trimesh.o
+1 warning generated.
+mv -f .deps/util.Tpo .deps/util.Plo
+/bin/sh ../../libtool --tag=CXX   --mode=compile g++ -DHAVE_CONFIG_H -I.  -I../../include -D__ODE__   -I../../OPCODE -I../../OPCODE/Ice -DdTRIMESH_ENABLED -DdTRIMESH_OPCODE          -DdDOUBLE  -g -O2 -MT collision_trimesh_trimesh_new.lo -MD -MP -MF .deps/collision_trimesh_trimesh_new.Tpo -c -o collision_trimesh_trimesh_new.lo collision_trimesh_trimesh_new.cpp
+mv -f .deps/collision_trimesh_trimesh.Tpo .deps/collision_trimesh_trimesh.Plo
+/bin/sh ../../libtool --tag=CXX   --mode=compile g++ -DHAVE_CONFIG_H -I.  -I../../include -D__ODE__   -I../../OPCODE -I../../OPCODE/Ice -DdTRIMESH_ENABLED -DdTRIMESH_OPCODE          -DdDOUBLE  -g -O2 -MT collision_trimesh_sphere.lo -MD -MP -MF .deps/collision_trimesh_sphere.Tpo -c -o collision_trimesh_sphere.lo collision_trimesh_sphere.cpp
+libtool: compile:  g++ -DHAVE_CONFIG_H -I. -I../../include -D__ODE__ -I../../OPCODE -I../../OPCODE/Ice -DdTRIMESH_ENABLED -DdTRIMESH_OPCODE -DdDOUBLE -g -O2 -MT collision_trimesh_trimesh_new.lo -MD -MP -MF .deps/collision_trimesh_trimesh_new.Tpo -c collision_trimesh_trimesh_new.cpp -o collision_trimesh_trimesh_new.o
+libtool: compile:  g++ -DHAVE_CONFIG_H -I. -I../../include -D__ODE__ -I../../OPCODE -I../../OPCODE/Ice -DdTRIMESH_ENABLED -DdTRIMESH_OPCODE -DdDOUBLE -g -O2 -MT collision_trimesh_sphere.lo -MD -MP -MF .deps/collision_trimesh_sphere.Tpo -c collision_trimesh_sphere.cpp -o collision_trimesh_sphere.o
+In file included from collision_trimesh_trimesh_new.cpp:42:
+In file included from ./collision_trimesh_internal.h:41:
+In file included from ../../OPCODE/Opcode.h:82:
+In file included from ../../OPCODE/OPC_IceHook.h:43:
+../../OPCODE/Ice/IceUtils.h:226:51: warning: expression result unused; assign into a variable to force a volatile load [-Wunused-volatile-lvalue]
+        inline_ void _prefetch(void const* ptr)         { (void)*(char const volatile *)ptr;    }
+                                                                ^~~~~~~~~~~~~~~~~~~~~~~~~~~
+In file included from collision_trimesh_sphere.cpp:37:
+In file included from ./collision_trimesh_internal.h:41:
+In file included from ../../OPCODE/Opcode.h:82:
+In file included from ../../OPCODE/OPC_IceHook.h:43:
+../../OPCODE/Ice/IceUtils.h:226:51: warning: expression result unused; assign into a variable to force a volatile load [-Wunused-volatile-lvalue]
+        inline_ void _prefetch(void const* ptr)         { (void)*(char const volatile *)ptr;    }
+                                                                ^~~~~~~~~~~~~~~~~~~~~~~~~~~
+1 warning generated.
+mv -f .deps/collision_trimesh_sphere.Tpo .deps/collision_trimesh_sphere.Plo
+/bin/sh ../../libtool --tag=CXX   --mode=compile g++ -DHAVE_CONFIG_H -I.  -I../../include -D__ODE__   -I../../OPCODE -I../../OPCODE/Ice -DdTRIMESH_ENABLED -DdTRIMESH_OPCODE          -DdDOUBLE  -g -O2 -MT collision_trimesh_ray.lo -MD -MP -MF .deps/collision_trimesh_ray.Tpo -c -o collision_trimesh_ray.lo collision_trimesh_ray.cpp
+libtool: compile:  g++ -DHAVE_CONFIG_H -I. -I../../include -D__ODE__ -I../../OPCODE -I../../OPCODE/Ice -DdTRIMESH_ENABLED -DdTRIMESH_OPCODE -DdDOUBLE -g -O2 -MT collision_trimesh_ray.lo -MD -MP -MF .deps/collision_trimesh_ray.Tpo -c collision_trimesh_ray.cpp -o collision_trimesh_ray.o
+1 warning generated.
+mv -f .deps/collision_trimesh_trimesh_new.Tpo .deps/collision_trimesh_trimesh_new.Plo
+/bin/sh ../../libtool --tag=CXX   --mode=compile g++ -DHAVE_CONFIG_H -I.  -I../../include -D__ODE__   -I../../OPCODE -I../../OPCODE/Ice -DdTRIMESH_ENABLED -DdTRIMESH_OPCODE          -DdDOUBLE  -g -O2 -MT collision_trimesh_opcode.lo -MD -MP -MF .deps/collision_trimesh_opcode.Tpo -c -o collision_trimesh_opcode.lo collision_trimesh_opcode.cpp
+libtool: compile:  g++ -DHAVE_CONFIG_H -I. -I../../include -D__ODE__ -I../../OPCODE -I../../OPCODE/Ice -DdTRIMESH_ENABLED -DdTRIMESH_OPCODE -DdDOUBLE -g -O2 -MT collision_trimesh_opcode.lo -MD -MP -MF .deps/collision_trimesh_opcode.Tpo -c collision_trimesh_opcode.cpp -o collision_trimesh_opcode.o
+In file included from collision_trimesh_ray.cpp:34:
+In file included from ./collision_trimesh_internal.h:41:
+In file included from ../../OPCODE/Opcode.h:82:
+In file included from ../../OPCODE/OPC_IceHook.h:43:
+../../OPCODE/Ice/IceUtils.h:226:51: warning: expression result unused; assign into a variable to force a volatile load [-Wunused-volatile-lvalue]
+        inline_ void _prefetch(void const* ptr)         { (void)*(char const volatile *)ptr;    }
+                                                                ^~~~~~~~~~~~~~~~~~~~~~~~~~~
+In file included from collision_trimesh_opcode.cpp:31:
+In file included from ./collision_trimesh_internal.h:41:
+In file included from ../../OPCODE/Opcode.h:82:
+In file included from ../../OPCODE/OPC_IceHook.h:43:
+../../OPCODE/Ice/IceUtils.h:226:51: warning: expression result unused; assign into a variable to force a volatile load [-Wunused-volatile-lvalue]
+        inline_ void _prefetch(void const* ptr)         { (void)*(char const volatile *)ptr;    }
+                                                                ^~~~~~~~~~~~~~~~~~~~~~~~~~~
+1 warning generated.
+mv -f .deps/collision_trimesh_ray.Tpo .deps/collision_trimesh_ray.Plo
+/bin/sh ../../libtool --tag=CXX   --mode=compile g++ -DHAVE_CONFIG_H -I.  -I../../include -D__ODE__   -I../../OPCODE -I../../OPCODE/Ice -DdTRIMESH_ENABLED -DdTRIMESH_OPCODE          -DdDOUBLE  -g -O2 -MT collision_trimesh_box.lo -MD -MP -MF .deps/collision_trimesh_box.Tpo -c -o collision_trimesh_box.lo collision_trimesh_box.cpp
+libtool: compile:  g++ -DHAVE_CONFIG_H -I. -I../../include -D__ODE__ -I../../OPCODE -I../../OPCODE/Ice -DdTRIMESH_ENABLED -DdTRIMESH_OPCODE -DdDOUBLE -g -O2 -MT collision_trimesh_box.lo -MD -MP -MF .deps/collision_trimesh_box.Tpo -c collision_trimesh_box.cpp -o collision_trimesh_box.o
+In file included from collision_trimesh_box.cpp:38:
+In file included from ./collision_trimesh_internal.h:41:
+In file included from ../../OPCODE/Opcode.h:82:
+In file included from ../../OPCODE/OPC_IceHook.h:43:
+../../OPCODE/Ice/IceUtils.h:226:51: warning: expression result unused; assign into a variable to force a volatile load [-Wunused-volatile-lvalue]
+        inline_ void _prefetch(void const* ptr)         { (void)*(char const volatile *)ptr;    }
+                                                                ^~~~~~~~~~~~~~~~~~~~~~~~~~~
+1 warning generated.
+mv -f .deps/collision_trimesh_opcode.Tpo .deps/collision_trimesh_opcode.Plo
+/bin/sh ../../libtool --tag=CXX   --mode=compile g++ -DHAVE_CONFIG_H -I.  -I../../include -D__ODE__   -I../../OPCODE -I../../OPCODE/Ice -DdTRIMESH_ENABLED -DdTRIMESH_OPCODE          -DdDOUBLE  -g -O2 -MT collision_trimesh_ccylinder.lo -MD -MP -MF .deps/collision_trimesh_ccylinder.Tpo -c -o collision_trimesh_ccylinder.lo collision_trimesh_ccylinder.cpp
+libtool: compile:  g++ -DHAVE_CONFIG_H -I. -I../../include -D__ODE__ -I../../OPCODE -I../../OPCODE/Ice -DdTRIMESH_ENABLED -DdTRIMESH_OPCODE -DdDOUBLE -g -O2 -MT collision_trimesh_ccylinder.lo -MD -MP -MF .deps/collision_trimesh_ccylinder.Tpo -c collision_trimesh_ccylinder.cpp -o collision_trimesh_ccylinder.o
+In file included from collision_trimesh_ccylinder.cpp:59:
+In file included from ./collision_trimesh_internal.h:41:
+In file included from ../../OPCODE/Opcode.h:82:
+In file included from ../../OPCODE/OPC_IceHook.h:43:
+../../OPCODE/Ice/IceUtils.h:226:51: warning: expression result unused; assign into a variable to force a volatile load [-Wunused-volatile-lvalue]
+        inline_ void _prefetch(void const* ptr)         { (void)*(char const volatile *)ptr;    }
+                                                                ^~~~~~~~~~~~~~~~~~~~~~~~~~~
+1 warning generated.
+mv -f .deps/collision_trimesh_box.Tpo .deps/collision_trimesh_box.Plo
+/bin/sh ../../libtool --tag=CXX   --mode=compile g++ -DHAVE_CONFIG_H -I.  -I../../include -D__ODE__   -I../../OPCODE -I../../OPCODE/Ice -DdTRIMESH_ENABLED -DdTRIMESH_OPCODE          -DdDOUBLE  -g -O2 -MT collision_trimesh_distance.lo -MD -MP -MF .deps/collision_trimesh_distance.Tpo -c -o collision_trimesh_distance.lo collision_trimesh_distance.cpp
+libtool: compile:  g++ -DHAVE_CONFIG_H -I. -I../../include -D__ODE__ -I../../OPCODE -I../../OPCODE/Ice -DdTRIMESH_ENABLED -DdTRIMESH_OPCODE -DdDOUBLE -g -O2 -MT collision_trimesh_distance.lo -MD -MP -MF .deps/collision_trimesh_distance.Tpo -c collision_trimesh_distance.cpp -o collision_trimesh_distance.o
+In file included from collision_trimesh_distance.cpp:9:
+In file included from ./collision_trimesh_internal.h:41:
+In file included from ../../OPCODE/Opcode.h:82:
+In file included from ../../OPCODE/OPC_IceHook.h:43:
+../../OPCODE/Ice/IceUtils.h:226:51: warning: expression result unused; assign into a variable to force a volatile load [-Wunused-volatile-lvalue]
+        inline_ void _prefetch(void const* ptr)         { (void)*(char const volatile *)ptr;    }
+                                                                ^~~~~~~~~~~~~~~~~~~~~~~~~~~
+1 warning generated.
+mv -f .deps/collision_trimesh_ccylinder.Tpo .deps/collision_trimesh_ccylinder.Plo
+/bin/sh ../../libtool --tag=CXX   --mode=compile g++ -DHAVE_CONFIG_H -I.  -I../../include -D__ODE__   -I../../OPCODE -I../../OPCODE/Ice -DdTRIMESH_ENABLED -DdTRIMESH_OPCODE          -DdDOUBLE  -g -O2 -MT collision_cylinder_trimesh.lo -MD -MP -MF .deps/collision_cylinder_trimesh.Tpo -c -o collision_cylinder_trimesh.lo collision_cylinder_trimesh.cpp
+libtool: compile:  g++ -DHAVE_CONFIG_H -I. -I../../include -D__ODE__ -I../../OPCODE -I../../OPCODE/Ice -DdTRIMESH_ENABLED -DdTRIMESH_OPCODE -DdDOUBLE -g -O2 -MT collision_cylinder_trimesh.lo -MD -MP -MF .deps/collision_cylinder_trimesh.Tpo -c collision_cylinder_trimesh.cpp -o collision_cylinder_trimesh.o
+1 warning generated.
+In file included from collision_cylinder_trimesh.cpp:35:
+In file included from ./collision_trimesh_internal.h:41:
+In file included from ../../OPCODE/Opcode.h:82:
+In file included from ../../OPCODE/OPC_IceHook.h:43:
+../../OPCODE/Ice/IceUtils.h:226:51: warning: expression result unused; assign into a variable to force a volatile load [-Wunused-volatile-lvalue]
+        inline_ void _prefetch(void const* ptr)         { (void)*(char const volatile *)ptr;    }
+                                                                ^~~~~~~~~~~~~~~~~~~~~~~~~~~
+mv -f .deps/collision_trimesh_distance.Tpo .deps/collision_trimesh_distance.Plo
+/bin/sh ../../libtool --tag=CXX   --mode=compile g++ -DHAVE_CONFIG_H -I.  -I../../include -D__ODE__   -I../../OPCODE -I../../OPCODE/Ice -DdTRIMESH_ENABLED -DdTRIMESH_OPCODE          -DdDOUBLE  -g -O2 -MT collision_trimesh_plane.lo -MD -MP -MF .deps/collision_trimesh_plane.Tpo -c -o collision_trimesh_plane.lo collision_trimesh_plane.cpp
+libtool: compile:  g++ -DHAVE_CONFIG_H -I. -I../../include -D__ODE__ -I../../OPCODE -I../../OPCODE/Ice -DdTRIMESH_ENABLED -DdTRIMESH_OPCODE -DdDOUBLE -g -O2 -MT collision_trimesh_plane.lo -MD -MP -MF .deps/collision_trimesh_plane.Tpo -c collision_trimesh_plane.cpp -o collision_trimesh_plane.o
+In file included from collision_trimesh_plane.cpp:35:
+In file included from ./collision_trimesh_internal.h:41:
+In file included from ../../OPCODE/Opcode.h:82:
+In file included from ../../OPCODE/OPC_IceHook.h:43:
+../../OPCODE/Ice/IceUtils.h:226:51: warning: expression result unused; assign into a variable to force a volatile load [-Wunused-volatile-lvalue]
+        inline_ void _prefetch(void const* ptr)         { (void)*(char const volatile *)ptr;    }
+                                                                ^~~~~~~~~~~~~~~~~~~~~~~~~~~
+1 warning generated.
+mv -f .deps/collision_trimesh_plane.Tpo .deps/collision_trimesh_plane.Plo
+/bin/sh ../../libtool --tag=CC   --mode=compile g++ -DHAVE_CONFIG_H -I.  -I../../include -D__ODE__   -I../../OPCODE -I../../OPCODE/Ice -DdTRIMESH_ENABLED -DdTRIMESH_OPCODE          -DdDOUBLE  -g -O2 -MT fastldlt.lo -MD -MP -MF .deps/fastldlt.Tpo -c -o fastldlt.lo fastldlt.c
+libtool: compile:  g++ -DHAVE_CONFIG_H -I. -I../../include -D__ODE__ -I../../OPCODE -I../../OPCODE/Ice -DdTRIMESH_ENABLED -DdTRIMESH_OPCODE -DdDOUBLE -g -O2 -MT fastldlt.lo -MD -MP -MF .deps/fastldlt.Tpo -c fastldlt.c -o fastldlt.o
+1 warning generated.
+mv -f .deps/collision_cylinder_trimesh.Tpo .deps/collision_cylinder_trimesh.Plo
+/bin/sh ../../libtool --tag=CC   --mode=compile g++ -DHAVE_CONFIG_H -I.  -I../../include -D__ODE__   -I../../OPCODE -I../../OPCODE/Ice -DdTRIMESH_ENABLED -DdTRIMESH_OPCODE          -DdDOUBLE  -g -O2 -MT fastltsolve.lo -MD -MP -MF .deps/fastltsolve.Tpo -c -o fastltsolve.lo fastltsolve.c
+clang: warning: treating 'c' input as 'c++' when in C++ mode, this behavior is deprecated [-Wdeprecated]
+libtool: compile:  g++ -DHAVE_CONFIG_H -I. -I../../include -D__ODE__ -I../../OPCODE -I../../OPCODE/Ice -DdTRIMESH_ENABLED -DdTRIMESH_OPCODE -DdDOUBLE -g -O2 -MT fastltsolve.lo -MD -MP -MF .deps/fastltsolve.Tpo -c fastltsolve.c -o fastltsolve.o
+clang: warning: treating 'c' input as 'c++' when in C++ mode, this behavior is deprecated [-Wdeprecated]
+fastldlt.c:379:14: warning: indirection of non-volatile null pointer will be deleted, not trap [-Wnull-dereference]
+    default: *((char*)0)=0;  /* this should never happen! */
+             ^~~~~~~~~~~
+fastldlt.c:379:14: note: consider using __builtin_trap() or qualifying pointer with 'volatile'
+1 warning generated.
+mv -f .deps/fastltsolve.Tpo .deps/fastltsolve.Plo
+/bin/sh ../../libtool --tag=CC   --mode=compile g++ -DHAVE_CONFIG_H -I.  -I../../include -D__ODE__   -I../../OPCODE -I../../OPCODE/Ice -DdTRIMESH_ENABLED -DdTRIMESH_OPCODE          -DdDOUBLE  -g -O2 -MT fastdot.lo -MD -MP -MF .deps/fastdot.Tpo -c -o fastdot.lo fastdot.c
+mv -f .deps/fastldlt.Tpo .deps/fastldlt.Plo
+/bin/sh ../../libtool --tag=CC   --mode=compile g++ -DHAVE_CONFIG_H -I.  -I../../include -D__ODE__   -I../../OPCODE -I../../OPCODE/Ice -DdTRIMESH_ENABLED -DdTRIMESH_OPCODE          -DdDOUBLE  -g -O2 -MT fastlsolve.lo -MD -MP -MF .deps/fastlsolve.Tpo -c -o fastlsolve.lo fastlsolve.c
+libtool: compile:  g++ -DHAVE_CONFIG_H -I. -I../../include -D__ODE__ -I../../OPCODE -I../../OPCODE/Ice -DdTRIMESH_ENABLED -DdTRIMESH_OPCODE -DdDOUBLE -g -O2 -MT fastdot.lo -MD -MP -MF .deps/fastdot.Tpo -c fastdot.c -o fastdot.o
+libtool: compile:  g++ -DHAVE_CONFIG_H -I. -I../../include -D__ODE__ -I../../OPCODE -I../../OPCODE/Ice -DdTRIMESH_ENABLED -DdTRIMESH_OPCODE -DdDOUBLE -g -O2 -MT fastlsolve.lo -MD -MP -MF .deps/fastlsolve.Tpo -c fastlsolve.c -o fastlsolve.o
+clang: warning: treating 'c' input as 'c++' when in C++ mode, this behavior is deprecated [-Wdeprecated]
+clang: warning: treating 'c' input as 'c++' when in C++ mode, this behavior is deprecated [-Wdeprecated]
+mv -f .deps/fastdot.Tpo .deps/fastdot.Plo
+mv -f .deps/fastlsolve.Tpo .deps/fastlsolve.Plo
+/bin/sh ../../libtool --tag=CC   --mode=link g++  -g -O2   -o libfast.la  fastldlt.lo fastltsolve.lo fastdot.lo fastlsolve.lo  -lm  -lpthread
+libtool: link: ar cru .libs/libfast.a  fastldlt.o fastltsolve.o fastdot.o fastlsolve.o
+libtool: link: ranlib .libs/libfast.a
+libtool: link: ( cd ".libs" && rm -f "libfast.la" && ln -s "../libfast.la" "libfast.la" )
+/bin/sh ../../libtool --tag=CXX   --mode=link g++  -g -O2 -version-info 3:0:0  -o libode.la -rpath /usr/local/lib nextafterf.lo array.lo box.lo capsule.lo collision_cylinder_box.lo collision_cylinder_plane.lo collision_cylinder_sphere.lo collision_kernel.lo collision_quadtreespace.lo collision_sapspace.lo collision_space.lo collision_transform.lo collision_trimesh_disabled.lo collision_util.lo convex.lo cylinder.lo error.lo export-dif.lo heightfield.lo lcp.lo mass.lo mat.lo matrix.lo memory.lo misc.lo obstack.lo ode.lo odeinit.lo odemath.lo plane.lo quickstep.lo ray.lo rotation.lo sphere.lo step.lo timer.lo util.lo   collision_trimesh_trimesh.lo collision_trimesh_trimesh_new.lo collision_trimesh_sphere.lo collision_trimesh_ray.lo collision_trimesh_opcode.lo collision_trimesh_box.lo collision_trimesh_ccylinder.lo collision_trimesh_distance.lo collision_cylinder_trimesh.lo collision_trimesh_plane.lo  libfast.la joints/libjoints.la   ../../OPCODE/libOPCODE.la ../../OPCODE/Ice/libIce.la  -lm  -lpthread
+libtool: link: (cd .libs/libode.lax/libfast.a && ar x "/Users/collin/Documents/Code/pyrosim/pyrosim/simulator/external/ode-0.12/ode/src/./.libs/libfast.a")
+libtool: link: (cd .libs/libode.lax/libjoints.a && ar x "/Users/collin/Documents/Code/pyrosim/pyrosim/simulator/external/ode-0.12/ode/src/joints/.libs/libjoints.a")
+libtool: link: (cd .libs/libode.lax/libOPCODE.a && ar x "/Users/collin/Documents/Code/pyrosim/pyrosim/simulator/external/ode-0.12/ode/src/../../OPCODE/.libs/libOPCODE.a")
+libtool: link: (cd .libs/libode.lax/libIce.a && ar x "/Users/collin/Documents/Code/pyrosim/pyrosim/simulator/external/ode-0.12/ode/src/../../OPCODE/Ice/.libs/libIce.a")
+libtool: link: ar cru .libs/libode.a  nextafterf.o array.o box.o capsule.o collision_cylinder_box.o collision_cylinder_plane.o collision_cylinder_sphere.o collision_kernel.o collision_quadtreespace.o collision_sapspace.o collision_space.o collision_transform.o collision_trimesh_disabled.o collision_util.o convex.o cylinder.o error.o export-dif.o heightfield.o lcp.o mass.o mat.o matrix.o memory.o misc.o obstack.o ode.o odeinit.o odemath.o plane.o quickstep.o ray.o rotation.o sphere.o step.o timer.o util.o collision_trimesh_trimesh.o collision_trimesh_trimesh_new.o collision_trimesh_sphere.o collision_trimesh_ray.o collision_trimesh_opcode.o collision_trimesh_box.o collision_trimesh_ccylinder.o collision_trimesh_distance.o collision_cylinder_trimesh.o collision_trimesh_plane.o  .libs/libode.lax/libfast.a/fastdot.o .libs/libode.lax/libfast.a/fastldlt.o .libs/libode.lax/libfast.a/fastlsolve.o .libs/libode.lax/libfast.a/fastltsolve.o  .libs/libode.lax/libjoints.a/amotor.o .libs/libode.lax/libjoints.a/ball.o .libs/libode.lax/libjoints.a/contact.o .libs/libode.lax/libjoints.a/fixed.o .libs/libode.lax/libjoints.a/hinge.o .libs/libode.lax/libjoints.a/hinge2.o .libs/libode.lax/libjoints.a/joint.o .libs/libode.lax/libjoints.a/lmotor.o .libs/libode.lax/libjoints.a/null.o .libs/libode.lax/libjoints.a/piston.o .libs/libode.lax/libjoints.a/plane2d.o .libs/libode.lax/libjoints.a/pr.o .libs/libode.lax/libjoints.a/pu.o .libs/libode.lax/libjoints.a/slider.o .libs/libode.lax/libjoints.a/universal.o  .libs/libode.lax/libOPCODE.a/OPC_AABBCollider.o .libs/libode.lax/libOPCODE.a/OPC_AABBTree.o .libs/libode.lax/libOPCODE.a/OPC_BaseModel.o .libs/libode.lax/libOPCODE.a/OPC_Collider.o .libs/libode.lax/libOPCODE.a/OPC_Common.o .libs/libode.lax/libOPCODE.a/OPC_HybridModel.o .libs/libode.lax/libOPCODE.a/OPC_LSSCollider.o .libs/libode.lax/libOPCODE.a/OPC_MeshInterface.o .libs/libode.lax/libOPCODE.a/OPC_Model.o .libs/libode.lax/libOPCODE.a/OPC_OBBCollider.o .libs/libode.lax/libOPCODE.a/OPC_OptimizedTree.o .libs/libode.lax/libOPCODE.a/OPC_Picking.o .libs/libode.lax/libOPCODE.a/OPC_PlanesCollider.o .libs/libode.lax/libOPCODE.a/OPC_RayCollider.o .libs/libode.lax/libOPCODE.a/OPC_SphereCollider.o .libs/libode.lax/libOPCODE.a/OPC_TreeBuilders.o .libs/libode.lax/libOPCODE.a/OPC_TreeCollider.o .libs/libode.lax/libOPCODE.a/OPC_VolumeCollider.o .libs/libode.lax/libOPCODE.a/Opcode.o  .libs/libode.lax/libIce.a/IceAABB.o .libs/libode.lax/libIce.a/IceContainer.o .libs/libode.lax/libIce.a/IceHPoint.o .libs/libode.lax/libIce.a/IceIndexedTriangle.o .libs/libode.lax/libIce.a/IceMatrix3x3.o .libs/libode.lax/libIce.a/IceMatrix4x4.o .libs/libode.lax/libIce.a/IceOBB.o .libs/libode.lax/libIce.a/IcePlane.o .libs/libode.lax/libIce.a/IcePoint.o .libs/libode.lax/libIce.a/IceRandom.o .libs/libode.lax/libIce.a/IceRay.o .libs/libode.lax/libIce.a/IceRevisitedRadix.o .libs/libode.lax/libIce.a/IceSegment.o .libs/libode.lax/libIce.a/IceTriangle.o .libs/libode.lax/libIce.a/IceUtils.o 
+/Library/Developer/CommandLineTools/usr/bin/ranlib: file: .libs/libode.a(nextafterf.o) has no symbols
+/Library/Developer/CommandLineTools/usr/bin/ranlib: file: .libs/libode.a(collision_trimesh_disabled.o) has no symbols
+/Library/Developer/CommandLineTools/usr/bin/ranlib: file: .libs/libode.a(collision_trimesh_trimesh.o) has no symbols
+/Library/Developer/CommandLineTools/usr/bin/ranlib: file: .libs/libode.a(OPC_Common.o) has no symbols
+/Library/Developer/CommandLineTools/usr/bin/ranlib: file: .libs/libode.a(OPC_Picking.o) has no symbols
+libtool: link: ranlib .libs/libode.a
+/Library/Developer/CommandLineTools/usr/bin/ranlib: file: .libs/libode.a(nextafterf.o) has no symbols
+/Library/Developer/CommandLineTools/usr/bin/ranlib: file: .libs/libode.a(collision_trimesh_disabled.o) has no symbols
+/Library/Developer/CommandLineTools/usr/bin/ranlib: file: .libs/libode.a(collision_trimesh_trimesh.o) has no symbols
+/Library/Developer/CommandLineTools/usr/bin/ranlib: file: .libs/libode.a(OPC_Common.o) has no symbols
+/Library/Developer/CommandLineTools/usr/bin/ranlib: file: .libs/libode.a(OPC_Picking.o) has no symbols
+libtool: link: rm -fr .libs/libode.lax
+libtool: link: ( cd ".libs" && rm -f "libode.la" && ln -s "../libode.la" "libode.la" )
+Making all in demo
+g++ -DHAVE_CONFIG_H -I. -I../../ode/src  -I/Users/collin/Documents/Code/pyrosim/pyrosim/simulator/external/ode-0.12/include -DDRAWSTUFF_TEXTURE_PATH="\"/Users/collin/Documents/Code/pyrosim/pyrosim/simulator/external/ode-0.12/drawstuff/textures\"" -DdTRIMESH_ENABLED -DdDOUBLE  -g -O2 -MT demo_boxstack.o -MD -MP -MF .deps/demo_boxstack.Tpo -c -o demo_boxstack.o demo_boxstack.cpp
+g++ -DHAVE_CONFIG_H -I. -I../../ode/src  -I/Users/collin/Documents/Code/pyrosim/pyrosim/simulator/external/ode-0.12/include -DDRAWSTUFF_TEXTURE_PATH="\"/Users/collin/Documents/Code/pyrosim/pyrosim/simulator/external/ode-0.12/drawstuff/textures\"" -DdTRIMESH_ENABLED -DdDOUBLE  -g -O2 -MT demo_buggy.o -MD -MP -MF .deps/demo_buggy.Tpo -c -o demo_buggy.o demo_buggy.cpp
+In file included from demo_boxstack.cpp:23:
+In file included from /Users/collin/Documents/Code/pyrosim/pyrosim/simulator/external/ode-0.12/include/ode/ode.h:40:
+/Users/collin/Documents/Code/pyrosim/pyrosim/simulator/external/ode-0.12/include/ode/misc.h:58:70: warning: conversion from string literal to 'char *' is deprecated [-Wc++11-compat-deprecated-writable-strings]
+ODE_API void dPrintMatrix (const dReal *A, int n, int m, char *fmt = "%10.4f ",
+                                                                     ^
+In file included from demo_buggy.cpp:31:
+In file included from /Users/collin/Documents/Code/pyrosim/pyrosim/simulator/external/ode-0.12/include/ode/ode.h:40:
+/Users/collin/Documents/Code/pyrosim/pyrosim/simulator/external/ode-0.12/include/ode/misc.h:58:70: warning: conversion from string literal to 'char *' is deprecated [-Wc++11-compat-deprecated-writable-strings]
+ODE_API void dPrintMatrix (const dReal *A, int n, int m, char *fmt = "%10.4f ",
+                                                                     ^
+1 warning generated.
+mv -f .deps/demo_buggy.Tpo .deps/demo_buggy.Po
+g++ -DHAVE_CONFIG_H -I. -I../../ode/src  -I/Users/collin/Documents/Code/pyrosim/pyrosim/simulator/external/ode-0.12/include -DDRAWSTUFF_TEXTURE_PATH="\"/Users/collin/Documents/Code/pyrosim/pyrosim/simulator/external/ode-0.12/drawstuff/textures\"" -DdTRIMESH_ENABLED -DdDOUBLE  -g -O2 -MT demo_cards.o -MD -MP -MF .deps/demo_cards.Tpo -c -o demo_cards.o demo_cards.cpp
+1 warning generated.
+mv -f .deps/demo_boxstack.Tpo .deps/demo_boxstack.Po
+g++ -DHAVE_CONFIG_H -I. -I../../ode/src  -I/Users/collin/Documents/Code/pyrosim/pyrosim/simulator/external/ode-0.12/include -DDRAWSTUFF_TEXTURE_PATH="\"/Users/collin/Documents/Code/pyrosim/pyrosim/simulator/external/ode-0.12/drawstuff/textures\"" -DdTRIMESH_ENABLED -DdDOUBLE  -g -O2 -MT demo_chain1.o -MD -MP -MF .deps/demo_chain1.Tpo -c -o demo_chain1.o demo_chain1.c
+clang: warning: treating 'c' input as 'c++' when in C++ mode, this behavior is deprecated [-Wdeprecated]
+In file included from demo_chain1.c:26:
+In file included from /Users/collin/Documents/Code/pyrosim/pyrosim/simulator/external/ode-0.12/include/ode/ode.h:40:
+/Users/collin/Documents/Code/pyrosim/pyrosim/simulator/external/ode-0.12/include/ode/misc.h:58:70: warning: conversion from string literal to 'char *' is deprecated [-Wc++11-compat-deprecated-writable-strings]
+ODE_API void dPrintMatrix (const dReal *A, int n, int m, char *fmt = "%10.4f ",
+                                                                     ^
+1 warning generated.
+mv -f .deps/demo_chain1.Tpo .deps/demo_chain1.Po
+g++ -DHAVE_CONFIG_H -I. -I../../ode/src  -I/Users/collin/Documents/Code/pyrosim/pyrosim/simulator/external/ode-0.12/include -DDRAWSTUFF_TEXTURE_PATH="\"/Users/collin/Documents/Code/pyrosim/pyrosim/simulator/external/ode-0.12/drawstuff/textures\"" -DdTRIMESH_ENABLED -DdDOUBLE  -g -O2 -MT demo_chain2.o -MD -MP -MF .deps/demo_chain2.Tpo -c -o demo_chain2.o demo_chain2.cpp
+In file included from demo_cards.cpp:2:
+In file included from /Users/collin/Documents/Code/pyrosim/pyrosim/simulator/external/ode-0.12/include/ode/ode.h:40:
+/Users/collin/Documents/Code/pyrosim/pyrosim/simulator/external/ode-0.12/include/ode/misc.h:58:70: warning: conversion from string literal to 'char *' is deprecated [-Wc++11-compat-deprecated-writable-strings]
+ODE_API void dPrintMatrix (const dReal *A, int n, int m, char *fmt = "%10.4f ",
+                                                                     ^
+In file included from demo_chain2.cpp:25:
+In file included from /Users/collin/Documents/Code/pyrosim/pyrosim/simulator/external/ode-0.12/include/ode/ode.h:40:
+/Users/collin/Documents/Code/pyrosim/pyrosim/simulator/external/ode-0.12/include/ode/misc.h:58:70: warning: conversion from string literal to 'char *' is deprecated [-Wc++11-compat-deprecated-writable-strings]
+ODE_API void dPrintMatrix (const dReal *A, int n, int m, char *fmt = "%10.4f ",
+                                                                     ^
+1 warning generated.
+mv -f .deps/demo_cards.Tpo .deps/demo_cards.Po
+g++ -DHAVE_CONFIG_H -I. -I../../ode/src  -I/Users/collin/Documents/Code/pyrosim/pyrosim/simulator/external/ode-0.12/include -DDRAWSTUFF_TEXTURE_PATH="\"/Users/collin/Documents/Code/pyrosim/pyrosim/simulator/external/ode-0.12/drawstuff/textures\"" -DdTRIMESH_ENABLED -DdDOUBLE  -g -O2 -MT demo_collision.o -MD -MP -MF .deps/demo_collision.Tpo -c -o demo_collision.o demo_collision.cpp
+1 warning generated.
+mv -f .deps/demo_chain2.Tpo .deps/demo_chain2.Po
+In file included from demo_collision.cpp:34:
+In file included from /Users/collin/Documents/Code/pyrosim/pyrosim/simulator/external/ode-0.12/include/ode/ode.h:40:
+/Users/collin/Documents/Code/pyrosim/pyrosim/simulator/external/ode-0.12/include/ode/misc.h:58:70: warning: conversion from string literal to 'char *' is deprecated [-Wc++11-compat-deprecated-writable-strings]
+ODE_API void dPrintMatrix (const dReal *A, int n, int m, char *fmt = "%10.4f ",
+                                                                     ^
+g++ -DHAVE_CONFIG_H -I. -I../../ode/src  -I/Users/collin/Documents/Code/pyrosim/pyrosim/simulator/external/ode-0.12/include -DDRAWSTUFF_TEXTURE_PATH="\"/Users/collin/Documents/Code/pyrosim/pyrosim/simulator/external/ode-0.12/drawstuff/textures\"" -DdTRIMESH_ENABLED -DdDOUBLE  -g -O2 -MT demo_convex_cd.o -MD -MP -MF .deps/demo_convex_cd.Tpo -c -o demo_convex_cd.o demo_convex_cd.cpp
+In file included from demo_convex_cd.cpp:25:
+In file included from /Users/collin/Documents/Code/pyrosim/pyrosim/simulator/external/ode-0.12/include/ode/ode.h:40:
+/Users/collin/Documents/Code/pyrosim/pyrosim/simulator/external/ode-0.12/include/ode/misc.h:58:70: warning: conversion from string literal to 'char *' is deprecated [-Wc++11-compat-deprecated-writable-strings]
+ODE_API void dPrintMatrix (const dReal *A, int n, int m, char *fmt = "%10.4f ",
+                                                                     ^
+1 warning generated.
+mv -f .deps/demo_convex_cd.Tpo .deps/demo_convex_cd.Po
+g++ -DHAVE_CONFIG_H -I. -I../../ode/src  -I/Users/collin/Documents/Code/pyrosim/pyrosim/simulator/external/ode-0.12/include -DDRAWSTUFF_TEXTURE_PATH="\"/Users/collin/Documents/Code/pyrosim/pyrosim/simulator/external/ode-0.12/drawstuff/textures\"" -DdTRIMESH_ENABLED -DdDOUBLE  -g -O2 -MT demo_crash.o -MD -MP -MF .deps/demo_crash.Tpo -c -o demo_crash.o demo_crash.cpp
+In file included from demo_crash.cpp:27:
+In file included from /Users/collin/Documents/Code/pyrosim/pyrosim/simulator/external/ode-0.12/include/ode/ode.h:40:
+/Users/collin/Documents/Code/pyrosim/pyrosim/simulator/external/ode-0.12/include/ode/misc.h:58:70: warning: conversion from string literal to 'char *' is deprecated [-Wc++11-compat-deprecated-writable-strings]
+ODE_API void dPrintMatrix (const dReal *A, int n, int m, char *fmt = "%10.4f ",
+                                                                     ^
+1 warning generated.
+mv -f .deps/demo_crash.Tpo .deps/demo_crash.Po
+g++ -DHAVE_CONFIG_H -I. -I../../ode/src  -I/Users/collin/Documents/Code/pyrosim/pyrosim/simulator/external/ode-0.12/include -DDRAWSTUFF_TEXTURE_PATH="\"/Users/collin/Documents/Code/pyrosim/pyrosim/simulator/external/ode-0.12/drawstuff/textures\"" -DdTRIMESH_ENABLED -DdDOUBLE  -g -O2 -MT demo_cylvssphere.o -MD -MP -MF .deps/demo_cylvssphere.Tpo -c -o demo_cylvssphere.o demo_cylvssphere.cpp
+In file included from demo_cylvssphere.cpp:30:
+In file included from /Users/collin/Documents/Code/pyrosim/pyrosim/simulator/external/ode-0.12/include/ode/ode.h:40:
+/Users/collin/Documents/Code/pyrosim/pyrosim/simulator/external/ode-0.12/include/ode/misc.h:58:70: warning: conversion from string literal to 'char *' is deprecated [-Wc++11-compat-deprecated-writable-strings]
+ODE_API void dPrintMatrix (const dReal *A, int n, int m, char *fmt = "%10.4f ",
+                                                                     ^
+1 warning generated.
+mv -f .deps/demo_collision.Tpo .deps/demo_collision.Po
+g++ -DHAVE_CONFIG_H -I. -I../../ode/src  -I/Users/collin/Documents/Code/pyrosim/pyrosim/simulator/external/ode-0.12/include -DDRAWSTUFF_TEXTURE_PATH="\"/Users/collin/Documents/Code/pyrosim/pyrosim/simulator/external/ode-0.12/drawstuff/textures\"" -DdTRIMESH_ENABLED -DdDOUBLE  -g -O2 -MT demo_feedback.o -MD -MP -MF .deps/demo_feedback.Tpo -c -o demo_feedback.o demo_feedback.cpp
+1 warning generated.
+mv -f .deps/demo_cylvssphere.Tpo .deps/demo_cylvssphere.Po
+g++ -DHAVE_CONFIG_H -I. -I../../ode/src  -I/Users/collin/Documents/Code/pyrosim/pyrosim/simulator/external/ode-0.12/include -DDRAWSTUFF_TEXTURE_PATH="\"/Users/collin/Documents/Code/pyrosim/pyrosim/simulator/external/ode-0.12/drawstuff/textures\"" -DdTRIMESH_ENABLED -DdDOUBLE  -g -O2 -MT demo_friction.o -MD -MP -MF .deps/demo_friction.Tpo -c -o demo_friction.o demo_friction.cpp
+In file included from demo_feedback.cpp:30:
+In file included from /Users/collin/Documents/Code/pyrosim/pyrosim/simulator/external/ode-0.12/include/ode/ode.h:40:
+/Users/collin/Documents/Code/pyrosim/pyrosim/simulator/external/ode-0.12/include/ode/misc.h:58:70: warning: conversion from string literal to 'char *' is deprecated [-Wc++11-compat-deprecated-writable-strings]
+ODE_API void dPrintMatrix (const dReal *A, int n, int m, char *fmt = "%10.4f ",
+                                                                     ^
+In file included from demo_friction.cpp:47:
+In file included from /Users/collin/Documents/Code/pyrosim/pyrosim/simulator/external/ode-0.12/include/ode/ode.h:40:
+/Users/collin/Documents/Code/pyrosim/pyrosim/simulator/external/ode-0.12/include/ode/misc.h:58:70: warning: conversion from string literal to 'char *' is deprecated [-Wc++11-compat-deprecated-writable-strings]
+ODE_API void dPrintMatrix (const dReal *A, int n, int m, char *fmt = "%10.4f ",
+                                                                     ^
+1 warning generated.
+mv -f .deps/demo_friction.Tpo .deps/demo_friction.Po
+g++ -DHAVE_CONFIG_H -I. -I../../ode/src  -I/Users/collin/Documents/Code/pyrosim/pyrosim/simulator/external/ode-0.12/include -DDRAWSTUFF_TEXTURE_PATH="\"/Users/collin/Documents/Code/pyrosim/pyrosim/simulator/external/ode-0.12/drawstuff/textures\"" -DdTRIMESH_ENABLED -DdDOUBLE  -g -O2 -MT demo_gyroscopic.o -MD -MP -MF .deps/demo_gyroscopic.Tpo -c -o demo_gyroscopic.o demo_gyroscopic.cpp
+1 warning generated.
+mv -f .deps/demo_feedback.Tpo .deps/demo_feedback.Po
+g++ -DHAVE_CONFIG_H -I. -I../../ode/src  -I/Users/collin/Documents/Code/pyrosim/pyrosim/simulator/external/ode-0.12/include -DDRAWSTUFF_TEXTURE_PATH="\"/Users/collin/Documents/Code/pyrosim/pyrosim/simulator/external/ode-0.12/drawstuff/textures\"" -DdTRIMESH_ENABLED -DdDOUBLE  -g -O2 -MT demo_heightfield.o -MD -MP -MF .deps/demo_heightfield.Tpo -c -o demo_heightfield.o demo_heightfield.cpp
+In file included from demo_gyroscopic.cpp:1:
+In file included from /Users/collin/Documents/Code/pyrosim/pyrosim/simulator/external/ode-0.12/include/ode/ode.h:40:
+/Users/collin/Documents/Code/pyrosim/pyrosim/simulator/external/ode-0.12/include/ode/misc.h:58:70: warning: conversion from string literal to 'char *' is deprecated [-Wc++11-compat-deprecated-writable-strings]
+ODE_API void dPrintMatrix (const dReal *A, int n, int m, char *fmt = "%10.4f ",
+                                                                     ^
+In file included from demo_heightfield.cpp:23:
+In file included from /Users/collin/Documents/Code/pyrosim/pyrosim/simulator/external/ode-0.12/include/ode/ode.h:40:
+/Users/collin/Documents/Code/pyrosim/pyrosim/simulator/external/ode-0.12/include/ode/misc.h:58:70: warning: conversion from string literal to 'char *' is deprecated [-Wc++11-compat-deprecated-writable-strings]
+ODE_API void dPrintMatrix (const dReal *A, int n, int m, char *fmt = "%10.4f ",
+                                                                     ^
+1 warning generated.
+mv -f .deps/demo_gyroscopic.Tpo .deps/demo_gyroscopic.Po
+g++ -DHAVE_CONFIG_H -I. -I../../ode/src  -I/Users/collin/Documents/Code/pyrosim/pyrosim/simulator/external/ode-0.12/include -DDRAWSTUFF_TEXTURE_PATH="\"/Users/collin/Documents/Code/pyrosim/pyrosim/simulator/external/ode-0.12/drawstuff/textures\"" -DdTRIMESH_ENABLED -DdDOUBLE  -g -O2 -MT demo_hinge.o -MD -MP -MF .deps/demo_hinge.Tpo -c -o demo_hinge.o demo_hinge.cpp
+1 warning generated.
+mv -f .deps/demo_heightfield.Tpo .deps/demo_heightfield.Po
+g++ -DHAVE_CONFIG_H -I. -I../../ode/src  -I/Users/collin/Documents/Code/pyrosim/pyrosim/simulator/external/ode-0.12/include -DDRAWSTUFF_TEXTURE_PATH="\"/Users/collin/Documents/Code/pyrosim/pyrosim/simulator/external/ode-0.12/drawstuff/textures\"" -DdTRIMESH_ENABLED -DdDOUBLE  -g -O2 -MT demo_I.o -MD -MP -MF .deps/demo_I.Tpo -c -o demo_I.o demo_I.cpp
+In file included from demo_hinge.cpp:23:
+In file included from /Users/collin/Documents/Code/pyrosim/pyrosim/simulator/external/ode-0.12/include/ode/ode.h:40:
+/Users/collin/Documents/Code/pyrosim/pyrosim/simulator/external/ode-0.12/include/ode/misc.h:58:70: warning: conversion from string literal to 'char *' is deprecated [-Wc++11-compat-deprecated-writable-strings]
+ODE_API void dPrintMatrix (const dReal *A, int n, int m, char *fmt = "%10.4f ",
+                                                                     ^
+1 warning generated.
+In file included from demo_I.cpp:40:
+In file included from /Users/collin/Documents/Code/pyrosim/pyrosim/simulator/external/ode-0.12/include/ode/ode.h:40:
+/Users/collin/Documents/Code/pyrosim/pyrosim/simulator/external/ode-0.12/include/ode/misc.h:58:70: warning: conversion from string literal to 'char *' is deprecated [-Wc++11-compat-deprecated-writable-strings]
+ODE_API void dPrintMatrix (const dReal *A, int n, int m, char *fmt = "%10.4f ",
+                                                                     ^
+mv -f .deps/demo_hinge.Tpo .deps/demo_hinge.Po
+g++ -DHAVE_CONFIG_H -I. -I../../ode/src  -I/Users/collin/Documents/Code/pyrosim/pyrosim/simulator/external/ode-0.12/include -DDRAWSTUFF_TEXTURE_PATH="\"/Users/collin/Documents/Code/pyrosim/pyrosim/simulator/external/ode-0.12/drawstuff/textures\"" -DdTRIMESH_ENABLED -DdDOUBLE  -g -O2 -MT demo_jointPR.o -MD -MP -MF .deps/demo_jointPR.Tpo -c -o demo_jointPR.o demo_jointPR.cpp
+1 warning generated.
+mv -f .deps/demo_I.Tpo .deps/demo_I.Po
+g++ -DHAVE_CONFIG_H -I. -I../../ode/src  -I/Users/collin/Documents/Code/pyrosim/pyrosim/simulator/external/ode-0.12/include -DDRAWSTUFF_TEXTURE_PATH="\"/Users/collin/Documents/Code/pyrosim/pyrosim/simulator/external/ode-0.12/drawstuff/textures\"" -DdTRIMESH_ENABLED -DdDOUBLE  -g -O2 -MT demo_joints.o -MD -MP -MF .deps/demo_joints.Tpo -c -o demo_joints.o demo_joints.cpp
+In file included from demo_jointPR.cpp:32:
+In file included from /Users/collin/Documents/Code/pyrosim/pyrosim/simulator/external/ode-0.12/include/ode/ode.h:40:
+/Users/collin/Documents/Code/pyrosim/pyrosim/simulator/external/ode-0.12/include/ode/misc.h:58:70: warning: conversion from string literal to 'char *' is deprecated [-Wc++11-compat-deprecated-writable-strings]
+ODE_API void dPrintMatrix (const dReal *A, int n, int m, char *fmt = "%10.4f ",
+                                                                     ^
+In file included from demo_joints.cpp:48:
+In file included from /Users/collin/Documents/Code/pyrosim/pyrosim/simulator/external/ode-0.12/include/ode/ode.h:40:
+/Users/collin/Documents/Code/pyrosim/pyrosim/simulator/external/ode-0.12/include/ode/misc.h:58:70: warning: conversion from string literal to 'char *' is deprecated [-Wc++11-compat-deprecated-writable-strings]
+ODE_API void dPrintMatrix (const dReal *A, int n, int m, char *fmt = "%10.4f ",
+                                                                     ^
+1 warning generated.
+mv -f .deps/demo_joints.Tpo .deps/demo_joints.Po
+g++ -DHAVE_CONFIG_H -I. -I../../ode/src  -I/Users/collin/Documents/Code/pyrosim/pyrosim/simulator/external/ode-0.12/include -DDRAWSTUFF_TEXTURE_PATH="\"/Users/collin/Documents/Code/pyrosim/pyrosim/simulator/external/ode-0.12/drawstuff/textures\"" -DdTRIMESH_ENABLED -DdDOUBLE  -g -O2 -MT demo_jointPU.o -MD -MP -MF .deps/demo_jointPU.Tpo -c -o demo_jointPU.o demo_jointPU.cpp
+In file included from demo_jointPU.cpp:40:
+In file included from /Users/collin/Documents/Code/pyrosim/pyrosim/simulator/external/ode-0.12/include/ode/ode.h:40:
+/Users/collin/Documents/Code/pyrosim/pyrosim/simulator/external/ode-0.12/include/ode/misc.h:58:70: warning: conversion from string literal to 'char *' is deprecated [-Wc++11-compat-deprecated-writable-strings]
+ODE_API void dPrintMatrix (const dReal *A, int n, int m, char *fmt = "%10.4f ",
+                                                                     ^
+1 warning generated.
+mv -f .deps/demo_jointPR.Tpo .deps/demo_jointPR.Po
+g++ -DHAVE_CONFIG_H -I. -I../../ode/src  -I/Users/collin/Documents/Code/pyrosim/pyrosim/simulator/external/ode-0.12/include -DDRAWSTUFF_TEXTURE_PATH="\"/Users/collin/Documents/Code/pyrosim/pyrosim/simulator/external/ode-0.12/drawstuff/textures\"" -DdTRIMESH_ENABLED -DdDOUBLE  -g -O2 -MT demo_kinematic.o -MD -MP -MF .deps/demo_kinematic.Tpo -c -o demo_kinematic.o demo_kinematic.cpp
+1 warning generated.
+In file included from demo_kinematic.cpp:5:
+In file included from /Users/collin/Documents/Code/pyrosim/pyrosim/simulator/external/ode-0.12/include/ode/ode.h:40:
+/Users/collin/Documents/Code/pyrosim/pyrosim/simulator/external/ode-0.12/include/ode/misc.h:58:70: warning: conversion from string literal to 'char *' is deprecated [-Wc++11-compat-deprecated-writable-strings]
+ODE_API void dPrintMatrix (const dReal *A, int n, int m, char *fmt = "%10.4f ",
+                                                                     ^
+mv -f .deps/demo_jointPU.Tpo .deps/demo_jointPU.Po
+g++ -DHAVE_CONFIG_H -I. -I../../ode/src  -I/Users/collin/Documents/Code/pyrosim/pyrosim/simulator/external/ode-0.12/include -DDRAWSTUFF_TEXTURE_PATH="\"/Users/collin/Documents/Code/pyrosim/pyrosim/simulator/external/ode-0.12/drawstuff/textures\"" -DdTRIMESH_ENABLED -DdDOUBLE  -g -O2 -MT demo_motion.o -MD -MP -MF .deps/demo_motion.Tpo -c -o demo_motion.o demo_motion.cpp
+In file included from demo_motion.cpp:5:
+In file included from /Users/collin/Documents/Code/pyrosim/pyrosim/simulator/external/ode-0.12/include/ode/ode.h:40:
+/Users/collin/Documents/Code/pyrosim/pyrosim/simulator/external/ode-0.12/include/ode/misc.h:58:70: warning: conversion from string literal to 'char *' is deprecated [-Wc++11-compat-deprecated-writable-strings]
+ODE_API void dPrintMatrix (const dReal *A, int n, int m, char *fmt = "%10.4f ",
+                                                                     ^
+1 warning generated.
+mv -f .deps/demo_motion.Tpo .deps/demo_motion.Po
+g++ -DHAVE_CONFIG_H -I. -I../../ode/src  -I/Users/collin/Documents/Code/pyrosim/pyrosim/simulator/external/ode-0.12/include -DDRAWSTUFF_TEXTURE_PATH="\"/Users/collin/Documents/Code/pyrosim/pyrosim/simulator/external/ode-0.12/drawstuff/textures\"" -DdTRIMESH_ENABLED -DdDOUBLE  -g -O2 -MT demo_motor.o -MD -MP -MF .deps/demo_motor.Tpo -c -o demo_motor.o demo_motor.cpp
+In file included from demo_motor.cpp:23:
+In file included from /Users/collin/Documents/Code/pyrosim/pyrosim/simulator/external/ode-0.12/include/ode/ode.h:40:
+/Users/collin/Documents/Code/pyrosim/pyrosim/simulator/external/ode-0.12/include/ode/misc.h:58:70: warning: conversion from string literal to 'char *' is deprecated [-Wc++11-compat-deprecated-writable-strings]
+ODE_API void dPrintMatrix (const dReal *A, int n, int m, char *fmt = "%10.4f ",
+                                                                     ^
+1 warning generated.
+mv -f .deps/demo_motor.Tpo .deps/demo_motor.Po
+g++ -DHAVE_CONFIG_H -I. -I../../ode/src  -I/Users/collin/Documents/Code/pyrosim/pyrosim/simulator/external/ode-0.12/include -DDRAWSTUFF_TEXTURE_PATH="\"/Users/collin/Documents/Code/pyrosim/pyrosim/simulator/external/ode-0.12/drawstuff/textures\"" -DdTRIMESH_ENABLED -DdDOUBLE  -g -O2 -MT demo_ode.o -MD -MP -MF .deps/demo_ode.Tpo -c -o demo_ode.o demo_ode.cpp
+1 warning generated.
+mv -f .deps/demo_kinematic.Tpo .deps/demo_kinematic.Po
+g++ -DHAVE_CONFIG_H -I. -I../../ode/src  -I/Users/collin/Documents/Code/pyrosim/pyrosim/simulator/external/ode-0.12/include -DDRAWSTUFF_TEXTURE_PATH="\"/Users/collin/Documents/Code/pyrosim/pyrosim/simulator/external/ode-0.12/drawstuff/textures\"" -DdTRIMESH_ENABLED -DdDOUBLE  -g -O2 -MT demo_piston.o -MD -MP -MF .deps/demo_piston.Tpo -c -o demo_piston.o demo_piston.cpp
+In file included from demo_ode.cpp:24:
+In file included from /Users/collin/Documents/Code/pyrosim/pyrosim/simulator/external/ode-0.12/include/ode/ode.h:40:
+/Users/collin/Documents/Code/pyrosim/pyrosim/simulator/external/ode-0.12/include/ode/misc.h:58:70: warning: conversion from string literal to 'char *' is deprecated [-Wc++11-compat-deprecated-writable-strings]
+ODE_API void dPrintMatrix (const dReal *A, int n, int m, char *fmt = "%10.4f ",
+                                                                     ^
+In file included from demo_piston.cpp:43:
+In file included from /Users/collin/Documents/Code/pyrosim/pyrosim/simulator/external/ode-0.12/include/ode/ode.h:40:
+/Users/collin/Documents/Code/pyrosim/pyrosim/simulator/external/ode-0.12/include/ode/misc.h:58:70: warning: conversion from string literal to 'char *' is deprecated [-Wc++11-compat-deprecated-writable-strings]
+ODE_API void dPrintMatrix (const dReal *A, int n, int m, char *fmt = "%10.4f ",
+                                                                     ^
+1 warning generated.
+mv -f .deps/demo_ode.Tpo .deps/demo_ode.Po
+g++ -DHAVE_CONFIG_H -I. -I../../ode/src  -I/Users/collin/Documents/Code/pyrosim/pyrosim/simulator/external/ode-0.12/include -DDRAWSTUFF_TEXTURE_PATH="\"/Users/collin/Documents/Code/pyrosim/pyrosim/simulator/external/ode-0.12/drawstuff/textures\"" -DdTRIMESH_ENABLED -DdDOUBLE  -g -O2 -MT demo_plane2d.o -MD -MP -MF .deps/demo_plane2d.Tpo -c -o demo_plane2d.o demo_plane2d.cpp
+In file included from demo_plane2d.cpp:7:
+In file included from /Users/collin/Documents/Code/pyrosim/pyrosim/simulator/external/ode-0.12/include/ode/ode.h:40:
+/Users/collin/Documents/Code/pyrosim/pyrosim/simulator/external/ode-0.12/include/ode/misc.h:58:70: warning: conversion from string literal to 'char *' is deprecated [-Wc++11-compat-deprecated-writable-strings]
+ODE_API void dPrintMatrix (const dReal *A, int n, int m, char *fmt = "%10.4f ",
+                                                                     ^
+1 warning generated.
+mv -f .deps/demo_piston.Tpo .deps/demo_piston.Po
+g++ -DHAVE_CONFIG_H -I. -I../../ode/src  -I/Users/collin/Documents/Code/pyrosim/pyrosim/simulator/external/ode-0.12/include -DDRAWSTUFF_TEXTURE_PATH="\"/Users/collin/Documents/Code/pyrosim/pyrosim/simulator/external/ode-0.12/drawstuff/textures\"" -DdTRIMESH_ENABLED -DdDOUBLE  -g -O2 -MT demo_slider.o -MD -MP -MF .deps/demo_slider.Tpo -c -o demo_slider.o demo_slider.cpp
+1 warning generated.
+mv -f .deps/demo_plane2d.Tpo .deps/demo_plane2d.Po
+g++ -DHAVE_CONFIG_H -I. -I../../ode/src  -I/Users/collin/Documents/Code/pyrosim/pyrosim/simulator/external/ode-0.12/include -DDRAWSTUFF_TEXTURE_PATH="\"/Users/collin/Documents/Code/pyrosim/pyrosim/simulator/external/ode-0.12/drawstuff/textures\"" -DdTRIMESH_ENABLED -DdDOUBLE  -g -O2 -MT demo_space.o -MD -MP -MF .deps/demo_space.Tpo -c -o demo_space.o demo_space.cpp
+In file included from demo_slider.cpp:23:
+In file included from /Users/collin/Documents/Code/pyrosim/pyrosim/simulator/external/ode-0.12/include/ode/ode.h:40:
+/Users/collin/Documents/Code/pyrosim/pyrosim/simulator/external/ode-0.12/include/ode/misc.h:58:70: warning: conversion from string literal to 'char *' is deprecated [-Wc++11-compat-deprecated-writable-strings]
+ODE_API void dPrintMatrix (const dReal *A, int n, int m, char *fmt = "%10.4f ",
+                                                                     ^
+In file included from demo_space.cpp:36:
+In file included from /Users/collin/Documents/Code/pyrosim/pyrosim/simulator/external/ode-0.12/include/ode/ode.h:40:
+/Users/collin/Documents/Code/pyrosim/pyrosim/simulator/external/ode-0.12/include/ode/misc.h:58:70: warning: conversion from string literal to 'char *' is deprecated [-Wc++11-compat-deprecated-writable-strings]
+ODE_API void dPrintMatrix (const dReal *A, int n, int m, char *fmt = "%10.4f ",
+                                                                     ^
+1 warning generated.
+mv -f .deps/demo_slider.Tpo .deps/demo_slider.Po
+g++ -DHAVE_CONFIG_H -I. -I../../ode/src  -I/Users/collin/Documents/Code/pyrosim/pyrosim/simulator/external/ode-0.12/include -DDRAWSTUFF_TEXTURE_PATH="\"/Users/collin/Documents/Code/pyrosim/pyrosim/simulator/external/ode-0.12/drawstuff/textures\"" -DdTRIMESH_ENABLED -DdDOUBLE  -g -O2 -MT demo_space_stress.o -MD -MP -MF .deps/demo_space_stress.Tpo -c -o demo_space_stress.o demo_space_stress.cpp
+1 warning generated.
+mv -f .deps/demo_space.Tpo .deps/demo_space.Po
+g++ -DHAVE_CONFIG_H -I. -I../../ode/src  -I/Users/collin/Documents/Code/pyrosim/pyrosim/simulator/external/ode-0.12/include -DDRAWSTUFF_TEXTURE_PATH="\"/Users/collin/Documents/Code/pyrosim/pyrosim/simulator/external/ode-0.12/drawstuff/textures\"" -DdTRIMESH_ENABLED -DdDOUBLE  -g -O2 -MT demo_step.o -MD -MP -MF .deps/demo_step.Tpo -c -o demo_step.o demo_step.cpp
+In file included from demo_space_stress.cpp:23:
+In file included from /Users/collin/Documents/Code/pyrosim/pyrosim/simulator/external/ode-0.12/include/ode/ode.h:40:
+/Users/collin/Documents/Code/pyrosim/pyrosim/simulator/external/ode-0.12/include/ode/misc.h:58:70: warning: conversion from string literal to 'char *' is deprecated [-Wc++11-compat-deprecated-writable-strings]
+ODE_API void dPrintMatrix (const dReal *A, int n, int m, char *fmt = "%10.4f ",
+                                                                     ^
+In file included from demo_step.cpp:30:
+In file included from /Users/collin/Documents/Code/pyrosim/pyrosim/simulator/external/ode-0.12/include/ode/ode.h:40:
+/Users/collin/Documents/Code/pyrosim/pyrosim/simulator/external/ode-0.12/include/ode/misc.h:58:70: warning: conversion from string literal to 'char *' is deprecated [-Wc++11-compat-deprecated-writable-strings]
+ODE_API void dPrintMatrix (const dReal *A, int n, int m, char *fmt = "%10.4f ",
+                                                                     ^
+1 warning generated.
+mv -f .deps/demo_space_stress.Tpo .deps/demo_space_stress.Po
+g++ -DHAVE_CONFIG_H -I. -I../../ode/src  -I/Users/collin/Documents/Code/pyrosim/pyrosim/simulator/external/ode-0.12/include -DDRAWSTUFF_TEXTURE_PATH="\"/Users/collin/Documents/Code/pyrosim/pyrosim/simulator/external/ode-0.12/drawstuff/textures\"" -DdTRIMESH_ENABLED -DdDOUBLE  -g -O2 -MT demo_tracks.o -MD -MP -MF .deps/demo_tracks.Tpo -c -o demo_tracks.o demo_tracks.cpp
+1 warning generated.
+mv -f .deps/demo_step.Tpo .deps/demo_step.Po
+g++ -DHAVE_CONFIG_H -I. -I../../ode/src  -I/Users/collin/Documents/Code/pyrosim/pyrosim/simulator/external/ode-0.12/include -DDRAWSTUFF_TEXTURE_PATH="\"/Users/collin/Documents/Code/pyrosim/pyrosim/simulator/external/ode-0.12/drawstuff/textures\"" -DdTRIMESH_ENABLED -DdDOUBLE  -g -O2 -MT demo_basket.o -MD -MP -MF .deps/demo_basket.Tpo -c -o demo_basket.o demo_basket.cpp
+In file included from demo_tracks.cpp:2:
+In file included from /Users/collin/Documents/Code/pyrosim/pyrosim/simulator/external/ode-0.12/include/ode/ode.h:40:
+/Users/collin/Documents/Code/pyrosim/pyrosim/simulator/external/ode-0.12/include/ode/misc.h:58:70: warning: conversion from string literal to 'char *' is deprecated [-Wc++11-compat-deprecated-writable-strings]
+ODE_API void dPrintMatrix (const dReal *A, int n, int m, char *fmt = "%10.4f ",
+                                                                     ^
+In file included from demo_basket.cpp:32:
+In file included from /Users/collin/Documents/Code/pyrosim/pyrosim/simulator/external/ode-0.12/include/ode/ode.h:40:
+/Users/collin/Documents/Code/pyrosim/pyrosim/simulator/external/ode-0.12/include/ode/misc.h:58:70: warning: conversion from string literal to 'char *' is deprecated [-Wc++11-compat-deprecated-writable-strings]
+ODE_API void dPrintMatrix (const dReal *A, int n, int m, char *fmt = "%10.4f ",
+                                                                     ^
+1 warning generated.
+mv -f .deps/demo_basket.Tpo .deps/demo_basket.Po
+g++ -DHAVE_CONFIG_H -I. -I../../ode/src  -I/Users/collin/Documents/Code/pyrosim/pyrosim/simulator/external/ode-0.12/include -DDRAWSTUFF_TEXTURE_PATH="\"/Users/collin/Documents/Code/pyrosim/pyrosim/simulator/external/ode-0.12/drawstuff/textures\"" -DdTRIMESH_ENABLED -DdDOUBLE  -g -O2 -MT demo_cyl.o -MD -MP -MF .deps/demo_cyl.Tpo -c -o demo_cyl.o demo_cyl.cpp
+1 warning generated.
+mv -f .deps/demo_tracks.Tpo .deps/demo_tracks.Po
+g++ -DHAVE_CONFIG_H -I. -I../../ode/src  -I/Users/collin/Documents/Code/pyrosim/pyrosim/simulator/external/ode-0.12/include -DDRAWSTUFF_TEXTURE_PATH="\"/Users/collin/Documents/Code/pyrosim/pyrosim/simulator/external/ode-0.12/drawstuff/textures\"" -DdTRIMESH_ENABLED -DdDOUBLE  -g -O2 -MT demo_moving_trimesh.o -MD -MP -MF .deps/demo_moving_trimesh.Tpo -c -o demo_moving_trimesh.o demo_moving_trimesh.cpp
+In file included from demo_cyl.cpp:29:
+In file included from /Users/collin/Documents/Code/pyrosim/pyrosim/simulator/external/ode-0.12/include/ode/ode.h:40:
+/Users/collin/Documents/Code/pyrosim/pyrosim/simulator/external/ode-0.12/include/ode/misc.h:58:70: warning: conversion from string literal to 'char *' is deprecated [-Wc++11-compat-deprecated-writable-strings]
+ODE_API void dPrintMatrix (const dReal *A, int n, int m, char *fmt = "%10.4f ",
+                                                                     ^
+In file included from demo_moving_trimesh.cpp:23:
+In file included from /Users/collin/Documents/Code/pyrosim/pyrosim/simulator/external/ode-0.12/include/ode/ode.h:40:
+/Users/collin/Documents/Code/pyrosim/pyrosim/simulator/external/ode-0.12/include/ode/misc.h:58:70: warning: conversion from string literal to 'char *' is deprecated [-Wc++11-compat-deprecated-writable-strings]
+ODE_API void dPrintMatrix (const dReal *A, int n, int m, char *fmt = "%10.4f ",
+                                                                     ^
+1 warning generated.
+mv -f .deps/demo_cyl.Tpo .deps/demo_cyl.Po
+g++ -DHAVE_CONFIG_H -I. -I../../ode/src  -I/Users/collin/Documents/Code/pyrosim/pyrosim/simulator/external/ode-0.12/include -DDRAWSTUFF_TEXTURE_PATH="\"/Users/collin/Documents/Code/pyrosim/pyrosim/simulator/external/ode-0.12/drawstuff/textures\"" -DdTRIMESH_ENABLED -DdDOUBLE  -g -O2 -MT demo_moving_convex.o -MD -MP -MF .deps/demo_moving_convex.Tpo -c -o demo_moving_convex.o demo_moving_convex.cpp
+In file included from demo_moving_convex.cpp:23:
+In file included from /Users/collin/Documents/Code/pyrosim/pyrosim/simulator/external/ode-0.12/include/ode/ode.h:40:
+/Users/collin/Documents/Code/pyrosim/pyrosim/simulator/external/ode-0.12/include/ode/misc.h:58:70: warning: conversion from string literal to 'char *' is deprecated [-Wc++11-compat-deprecated-writable-strings]
+ODE_API void dPrintMatrix (const dReal *A, int n, int m, char *fmt = "%10.4f ",
+                                                                     ^
+1 warning generated.
+mv -f .deps/demo_moving_trimesh.Tpo .deps/demo_moving_trimesh.Po
+g++ -DHAVE_CONFIG_H -I. -I../../ode/src  -I/Users/collin/Documents/Code/pyrosim/pyrosim/simulator/external/ode-0.12/include -DDRAWSTUFF_TEXTURE_PATH="\"/Users/collin/Documents/Code/pyrosim/pyrosim/simulator/external/ode-0.12/drawstuff/textures\"" -DdTRIMESH_ENABLED -DdDOUBLE  -g -O2 -MT demo_trimesh.o -MD -MP -MF .deps/demo_trimesh.Tpo -c -o demo_trimesh.o demo_trimesh.cpp
+1 warning generated.
+mv -f .deps/demo_moving_convex.Tpo .deps/demo_moving_convex.Po
+/bin/sh ../../libtool --tag=CXX   --mode=link g++  -g -O2   -o demo_boxstack demo_boxstack.o ../../drawstuff/src/libdrawstuff.la ../../ode/src/libode.la -framework OpenGL -framework GLUT  -lm  -lpthread
+In file included from demo_trimesh.cpp:25:
+In file included from /Users/collin/Documents/Code/pyrosim/pyrosim/simulator/external/ode-0.12/include/ode/ode.h:40:
+/Users/collin/Documents/Code/pyrosim/pyrosim/simulator/external/ode-0.12/include/ode/misc.h:58:70: warning: conversion from string literal to 'char *' is deprecated [-Wc++11-compat-deprecated-writable-strings]
+ODE_API void dPrintMatrix (const dReal *A, int n, int m, char *fmt = "%10.4f ",
+                                                                     ^
+1 warning generated.
+mv -f .deps/demo_trimesh.Tpo .deps/demo_trimesh.Po
+/bin/sh ../../libtool --tag=CXX   --mode=link g++  -g -O2   -o demo_buggy demo_buggy.o ../../drawstuff/src/libdrawstuff.la ../../ode/src/libode.la -framework OpenGL -framework GLUT  -lm  -lpthread
+libtool: link: g++ -g -O2 -o demo_boxstack demo_boxstack.o -Wl,-bind_at_load  ../../drawstuff/src/.libs/libdrawstuff.a ../../ode/src/.libs/libode.a -framework OpenGL -framework GLUT -lm -lpthread
+/bin/sh ../../libtool --tag=CXX   --mode=link g++  -g -O2   -o demo_cards demo_cards.o ../../drawstuff/src/libdrawstuff.la ../../ode/src/libode.la -framework OpenGL -framework GLUT  -lm  -lpthread
+libtool: link: g++ -g -O2 -o demo_buggy demo_buggy.o -Wl,-bind_at_load  ../../drawstuff/src/.libs/libdrawstuff.a ../../ode/src/.libs/libode.a -framework OpenGL -framework GLUT -lm -lpthread
+/bin/sh ../../libtool --tag=CC   --mode=link g++  -g -O2   -o demo_chain1 demo_chain1.o ../../drawstuff/src/libdrawstuff.la ../../ode/src/libode.la -framework OpenGL -framework GLUT  -lstdc++  -lm  -lpthread
+libtool: link: g++ -g -O2 -o demo_cards demo_cards.o -Wl,-bind_at_load  ../../drawstuff/src/.libs/libdrawstuff.a ../../ode/src/.libs/libode.a -framework OpenGL -framework GLUT -lm -lpthread
+/bin/sh ../../libtool --tag=CXX   --mode=link g++  -g -O2   -o demo_chain2 demo_chain2.o ../../drawstuff/src/libdrawstuff.la ../../ode/src/libode.la -framework OpenGL -framework GLUT  -lm  -lpthread
+libtool: link: g++ -g -O2 -o demo_chain1 demo_chain1.o  ../../drawstuff/src/.libs/libdrawstuff.a ../../ode/src/.libs/libode.a -framework OpenGL -framework GLUT -lstdc++ -lm -lpthread
+/bin/sh ../../libtool --tag=CXX   --mode=link g++  -g -O2   -o demo_collision demo_collision.o ../../drawstuff/src/libdrawstuff.la ../../ode/src/libode.la -framework OpenGL -framework GLUT  -lm  -lpthread
+libtool: link: g++ -g -O2 -o demo_chain2 demo_chain2.o -Wl,-bind_at_load  ../../drawstuff/src/.libs/libdrawstuff.a ../../ode/src/.libs/libode.a -framework OpenGL -framework GLUT -lm -lpthread
+/bin/sh ../../libtool --tag=CXX   --mode=link g++  -g -O2   -o demo_convex_cd demo_convex_cd.o ../../drawstuff/src/libdrawstuff.la ../../ode/src/libode.la -framework OpenGL -framework GLUT  -lm  -lpthread
+libtool: link: g++ -g -O2 -o demo_collision demo_collision.o -Wl,-bind_at_load  ../../drawstuff/src/.libs/libdrawstuff.a ../../ode/src/.libs/libode.a -framework OpenGL -framework GLUT -lm -lpthread
+/bin/sh ../../libtool --tag=CXX   --mode=link g++  -g -O2   -o demo_crash demo_crash.o ../../drawstuff/src/libdrawstuff.la ../../ode/src/libode.la -framework OpenGL -framework GLUT  -lm  -lpthread
+libtool: link: g++ -g -O2 -o demo_convex_cd demo_convex_cd.o -Wl,-bind_at_load  ../../drawstuff/src/.libs/libdrawstuff.a ../../ode/src/.libs/libode.a -framework OpenGL -framework GLUT -lm -lpthread
+/bin/sh ../../libtool --tag=CXX   --mode=link g++  -g -O2   -o demo_cylvssphere demo_cylvssphere.o ../../drawstuff/src/libdrawstuff.la ../../ode/src/libode.la -framework OpenGL -framework GLUT  -lm  -lpthread
+libtool: link: g++ -g -O2 -o demo_crash demo_crash.o -Wl,-bind_at_load  ../../drawstuff/src/.libs/libdrawstuff.a ../../ode/src/.libs/libode.a -framework OpenGL -framework GLUT -lm -lpthread
+/bin/sh ../../libtool --tag=CXX   --mode=link g++  -g -O2   -o demo_feedback demo_feedback.o ../../drawstuff/src/libdrawstuff.la ../../ode/src/libode.la -framework OpenGL -framework GLUT  -lm  -lpthread
+libtool: link: g++ -g -O2 -o demo_cylvssphere demo_cylvssphere.o -Wl,-bind_at_load  ../../drawstuff/src/.libs/libdrawstuff.a ../../ode/src/.libs/libode.a -framework OpenGL -framework GLUT -lm -lpthread
+/bin/sh ../../libtool --tag=CXX   --mode=link g++  -g -O2   -o demo_friction demo_friction.o ../../drawstuff/src/libdrawstuff.la ../../ode/src/libode.la -framework OpenGL -framework GLUT  -lm  -lpthread
+libtool: link: g++ -g -O2 -o demo_feedback demo_feedback.o -Wl,-bind_at_load  ../../drawstuff/src/.libs/libdrawstuff.a ../../ode/src/.libs/libode.a -framework OpenGL -framework GLUT -lm -lpthread
+/bin/sh ../../libtool --tag=CXX   --mode=link g++  -g -O2   -o demo_gyroscopic demo_gyroscopic.o ../../drawstuff/src/libdrawstuff.la ../../ode/src/libode.la -framework OpenGL -framework GLUT  -lm  -lpthread
+libtool: link: g++ -g -O2 -o demo_friction demo_friction.o -Wl,-bind_at_load  ../../drawstuff/src/.libs/libdrawstuff.a ../../ode/src/.libs/libode.a -framework OpenGL -framework GLUT -lm -lpthread
+/bin/sh ../../libtool --tag=CXX   --mode=link g++  -g -O2   -o demo_heightfield demo_heightfield.o ../../drawstuff/src/libdrawstuff.la ../../ode/src/libode.la -framework OpenGL -framework GLUT  -lm  -lpthread
+libtool: link: g++ -g -O2 -o demo_gyroscopic demo_gyroscopic.o -Wl,-bind_at_load  ../../drawstuff/src/.libs/libdrawstuff.a ../../ode/src/.libs/libode.a -framework OpenGL -framework GLUT -lm -lpthread
+/bin/sh ../../libtool --tag=CXX   --mode=link g++  -g -O2   -o demo_hinge demo_hinge.o ../../drawstuff/src/libdrawstuff.la ../../ode/src/libode.la -framework OpenGL -framework GLUT  -lm  -lpthread
+libtool: link: g++ -g -O2 -o demo_heightfield demo_heightfield.o -Wl,-bind_at_load  ../../drawstuff/src/.libs/libdrawstuff.a ../../ode/src/.libs/libode.a -framework OpenGL -framework GLUT -lm -lpthread
+/bin/sh ../../libtool --tag=CXX   --mode=link g++  -g -O2   -o demo_I demo_I.o ../../drawstuff/src/libdrawstuff.la ../../ode/src/libode.la -framework OpenGL -framework GLUT  -lm  -lpthread
+libtool: link: g++ -g -O2 -o demo_hinge demo_hinge.o -Wl,-bind_at_load  ../../drawstuff/src/.libs/libdrawstuff.a ../../ode/src/.libs/libode.a -framework OpenGL -framework GLUT -lm -lpthread
+/bin/sh ../../libtool --tag=CXX   --mode=link g++  -g -O2   -o demo_jointPR demo_jointPR.o ../../drawstuff/src/libdrawstuff.la ../../ode/src/libode.la -framework OpenGL -framework GLUT  -lm  -lpthread
+libtool: link: g++ -g -O2 -o demo_I demo_I.o -Wl,-bind_at_load  ../../drawstuff/src/.libs/libdrawstuff.a ../../ode/src/.libs/libode.a -framework OpenGL -framework GLUT -lm -lpthread
+/bin/sh ../../libtool --tag=CXX   --mode=link g++  -g -O2   -o demo_joints demo_joints.o ../../drawstuff/src/libdrawstuff.la ../../ode/src/libode.la -framework OpenGL -framework GLUT  -lm  -lpthread
+libtool: link: g++ -g -O2 -o demo_jointPR demo_jointPR.o -Wl,-bind_at_load  ../../drawstuff/src/.libs/libdrawstuff.a ../../ode/src/.libs/libode.a -framework OpenGL -framework GLUT -lm -lpthread
+/bin/sh ../../libtool --tag=CXX   --mode=link g++  -g -O2   -o demo_jointPU demo_jointPU.o ../../drawstuff/src/libdrawstuff.la ../../ode/src/libode.la -framework OpenGL -framework GLUT  -lm  -lpthread
+libtool: link: g++ -g -O2 -o demo_joints demo_joints.o -Wl,-bind_at_load  ../../drawstuff/src/.libs/libdrawstuff.a ../../ode/src/.libs/libode.a -framework OpenGL -framework GLUT -lm -lpthread
+/bin/sh ../../libtool --tag=CXX   --mode=link g++  -g -O2   -o demo_kinematic demo_kinematic.o ../../drawstuff/src/libdrawstuff.la ../../ode/src/libode.la -framework OpenGL -framework GLUT  -lm  -lpthread
+libtool: link: g++ -g -O2 -o demo_jointPU demo_jointPU.o -Wl,-bind_at_load  ../../drawstuff/src/.libs/libdrawstuff.a ../../ode/src/.libs/libode.a -framework OpenGL -framework GLUT -lm -lpthread
+/bin/sh ../../libtool --tag=CXX   --mode=link g++  -g -O2   -o demo_motion demo_motion.o ../../drawstuff/src/libdrawstuff.la ../../ode/src/libode.la -framework OpenGL -framework GLUT  -lm  -lpthread
+libtool: link: g++ -g -O2 -o demo_kinematic demo_kinematic.o -Wl,-bind_at_load  ../../drawstuff/src/.libs/libdrawstuff.a ../../ode/src/.libs/libode.a -framework OpenGL -framework GLUT -lm -lpthread
+/bin/sh ../../libtool --tag=CXX   --mode=link g++  -g -O2   -o demo_motor demo_motor.o ../../drawstuff/src/libdrawstuff.la ../../ode/src/libode.la -framework OpenGL -framework GLUT  -lm  -lpthread
+libtool: link: g++ -g -O2 -o demo_motion demo_motion.o -Wl,-bind_at_load  ../../drawstuff/src/.libs/libdrawstuff.a ../../ode/src/.libs/libode.a -framework OpenGL -framework GLUT -lm -lpthread
+/bin/sh ../../libtool --tag=CXX   --mode=link g++  -g -O2   -o demo_ode demo_ode.o ../../drawstuff/src/libdrawstuff.la ../../ode/src/libode.la -framework OpenGL -framework GLUT  -lm  -lpthread
+libtool: link: g++ -g -O2 -o demo_motor demo_motor.o -Wl,-bind_at_load  ../../drawstuff/src/.libs/libdrawstuff.a ../../ode/src/.libs/libode.a -framework OpenGL -framework GLUT -lm -lpthread
+/bin/sh ../../libtool --tag=CXX   --mode=link g++  -g -O2   -o demo_piston demo_piston.o ../../drawstuff/src/libdrawstuff.la ../../ode/src/libode.la -framework OpenGL -framework GLUT  -lm  -lpthread
+libtool: link: g++ -g -O2 -o demo_ode demo_ode.o -Wl,-bind_at_load  ../../drawstuff/src/.libs/libdrawstuff.a ../../ode/src/.libs/libode.a -framework OpenGL -framework GLUT -lm -lpthread
+/bin/sh ../../libtool --tag=CXX   --mode=link g++  -g -O2   -o demo_plane2d demo_plane2d.o ../../drawstuff/src/libdrawstuff.la ../../ode/src/libode.la -framework OpenGL -framework GLUT  -lm  -lpthread
+libtool: link: g++ -g -O2 -o demo_piston demo_piston.o -Wl,-bind_at_load  ../../drawstuff/src/.libs/libdrawstuff.a ../../ode/src/.libs/libode.a -framework OpenGL -framework GLUT -lm -lpthread
+/bin/sh ../../libtool --tag=CXX   --mode=link g++  -g -O2   -o demo_slider demo_slider.o ../../drawstuff/src/libdrawstuff.la ../../ode/src/libode.la -framework OpenGL -framework GLUT  -lm  -lpthread
+libtool: link: g++ -g -O2 -o demo_plane2d demo_plane2d.o -Wl,-bind_at_load  ../../drawstuff/src/.libs/libdrawstuff.a ../../ode/src/.libs/libode.a -framework OpenGL -framework GLUT -lm -lpthread
+/bin/sh ../../libtool --tag=CXX   --mode=link g++  -g -O2   -o demo_space demo_space.o ../../drawstuff/src/libdrawstuff.la ../../ode/src/libode.la -framework OpenGL -framework GLUT  -lm  -lpthread
+libtool: link: g++ -g -O2 -o demo_slider demo_slider.o -Wl,-bind_at_load  ../../drawstuff/src/.libs/libdrawstuff.a ../../ode/src/.libs/libode.a -framework OpenGL -framework GLUT -lm -lpthread
+/bin/sh ../../libtool --tag=CXX   --mode=link g++  -g -O2   -o demo_space_stress demo_space_stress.o ../../drawstuff/src/libdrawstuff.la ../../ode/src/libode.la -framework OpenGL -framework GLUT  -lm  -lpthread
+libtool: link: g++ -g -O2 -o demo_space demo_space.o -Wl,-bind_at_load  ../../drawstuff/src/.libs/libdrawstuff.a ../../ode/src/.libs/libode.a -framework OpenGL -framework GLUT -lm -lpthread
+/bin/sh ../../libtool --tag=CXX   --mode=link g++  -g -O2   -o demo_step demo_step.o ../../drawstuff/src/libdrawstuff.la ../../ode/src/libode.la -framework OpenGL -framework GLUT  -lm  -lpthread
+libtool: link: g++ -g -O2 -o demo_space_stress demo_space_stress.o -Wl,-bind_at_load  ../../drawstuff/src/.libs/libdrawstuff.a ../../ode/src/.libs/libode.a -framework OpenGL -framework GLUT -lm -lpthread
+/bin/sh ../../libtool --tag=CXX   --mode=link g++  -g -O2   -o demo_tracks demo_tracks.o ../../drawstuff/src/libdrawstuff.la ../../ode/src/libode.la -framework OpenGL -framework GLUT  -lm  -lpthread
+libtool: link: g++ -g -O2 -o demo_step demo_step.o -Wl,-bind_at_load  ../../drawstuff/src/.libs/libdrawstuff.a ../../ode/src/.libs/libode.a -framework OpenGL -framework GLUT -lm -lpthread
+/bin/sh ../../libtool --tag=CXX   --mode=link g++  -g -O2   -o demo_basket demo_basket.o ../../drawstuff/src/libdrawstuff.la ../../ode/src/libode.la -framework OpenGL -framework GLUT  -lm  -lpthread
+libtool: link: g++ -g -O2 -o demo_tracks demo_tracks.o -Wl,-bind_at_load  ../../drawstuff/src/.libs/libdrawstuff.a ../../ode/src/.libs/libode.a -framework OpenGL -framework GLUT -lm -lpthread
+/bin/sh ../../libtool --tag=CXX   --mode=link g++  -g -O2   -o demo_cyl demo_cyl.o ../../drawstuff/src/libdrawstuff.la ../../ode/src/libode.la -framework OpenGL -framework GLUT  -lm  -lpthread
+libtool: link: g++ -g -O2 -o demo_basket demo_basket.o -Wl,-bind_at_load  ../../drawstuff/src/.libs/libdrawstuff.a ../../ode/src/.libs/libode.a -framework OpenGL -framework GLUT -lm -lpthread
+/bin/sh ../../libtool --tag=CXX   --mode=link g++  -g -O2   -o demo_moving_trimesh demo_moving_trimesh.o ../../drawstuff/src/libdrawstuff.la ../../ode/src/libode.la -framework OpenGL -framework GLUT  -lm  -lpthread
+libtool: link: g++ -g -O2 -o demo_cyl demo_cyl.o -Wl,-bind_at_load  ../../drawstuff/src/.libs/libdrawstuff.a ../../ode/src/.libs/libode.a -framework OpenGL -framework GLUT -lm -lpthread
+/bin/sh ../../libtool --tag=CXX   --mode=link g++  -g -O2   -o demo_moving_convex demo_moving_convex.o ../../drawstuff/src/libdrawstuff.la ../../ode/src/libode.la -framework OpenGL -framework GLUT  -lm  -lpthread
+libtool: link: g++ -g -O2 -o demo_moving_trimesh demo_moving_trimesh.o -Wl,-bind_at_load  ../../drawstuff/src/.libs/libdrawstuff.a ../../ode/src/.libs/libode.a -framework OpenGL -framework GLUT -lm -lpthread
+/bin/sh ../../libtool --tag=CXX   --mode=link g++  -g -O2   -o demo_trimesh demo_trimesh.o ../../drawstuff/src/libdrawstuff.la ../../ode/src/libode.la -framework OpenGL -framework GLUT  -lm  -lpthread
+libtool: link: g++ -g -O2 -o demo_moving_convex demo_moving_convex.o -Wl,-bind_at_load  ../../drawstuff/src/.libs/libdrawstuff.a ../../ode/src/.libs/libode.a -framework OpenGL -framework GLUT -lm -lpthread
+libtool: link: g++ -g -O2 -o demo_trimesh demo_trimesh.o -Wl,-bind_at_load  ../../drawstuff/src/.libs/libdrawstuff.a ../../ode/src/.libs/libode.a -framework OpenGL -framework GLUT -lm -lpthread
+make[2]: Nothing to be done for `all-am'.
+Making all in tests
+Making all in UnitTest++
+Making all in src
+Making all in Posix
+make[4]: Nothing to be done for `all'.
+make[4]: Nothing to be done for `all-am'.
+make[3]: Nothing to be done for `all-am'.
+make[2]: Nothing to be done for `all-am'.
+make[1]: Nothing to be done for `all-am'.

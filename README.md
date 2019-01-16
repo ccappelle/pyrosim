@@ -28,8 +28,7 @@ environments. [Read the Docs](https://ccappelle.github.io/pyrosim)
   freeglut3 installed 
 
   ```
-  $ sudo apt-get install build-essential
-  $ sudo apt-get install freeglut3-dev
+  $ sudo apt-get install build-essential libx11-dev xorg-dev libglu1-mesa-dev freeglut3-dev libglu1-mesa libglu1-mesa-dev libgl1-mesa-glx libgl1-mesa-dev
   ```
 
   To build the underlying physics engine, ODE, run
