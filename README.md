@@ -79,6 +79,8 @@ environments. [Read the Docs](https://ccappelle.github.io/pyrosim)
   ```
   The simulator directory contains all of the C++ code used in pyrosim.
   
+  If you are having trouble getting pyrosim to work with Ubuntu, try using 16.x.
+  
 ### Next steps.
 
 Now you can start making robots [here](https://www.reddit.com/r/ludobots/wiki/pyrosim/simulation), starting at step #3.
