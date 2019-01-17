@@ -31,6 +31,12 @@ environments. [Read the Docs](https://ccappelle.github.io/pyrosim)
   $ sudo apt-get install build-essential libx11-dev xorg-dev libglu1-mesa-dev freeglut3-dev libglu1-mesa libglu1-mesa-dev libgl1-mesa-glx libgl1-mesa-dev
   ```
 
+  If you are installing from Mac make sure you have xcode command line tools installed
+
+  ```
+  $xcode-select --install
+  ```
+
   To build the underlying physics engine, ODE, run
   build.sh:
 
@@ -38,13 +44,7 @@ environments. [Read the Docs](https://ccappelle.github.io/pyrosim)
   $ sh build.sh
   ```
 
-  This takes three to five minutes. The output should look like this:
-  
-  ```bash
-  Unpacking ode-0.12.tar.bz2...done
-  Building ode-0.12...done
-  Building simulator...done
-  ```
+  This takes three to five minutes and will print out a bunch of messages related to the build process.
 
   This installs ODE and compiles the local C++ code on your machine in the 
   pyrosim/simulator directory. 
