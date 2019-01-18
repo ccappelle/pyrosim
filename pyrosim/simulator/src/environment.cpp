@@ -11,6 +11,7 @@ typedef std::map<std::string, Entity * (*) ()> StringToEntity;
 #include "joint/joint.hpp"
 #include "actuator/jointMotor.hpp"
 #include "actuator/thruster.hpp"
+#include "joint/spring.hpp"
 #include "network/ctrnn.hpp"
 #include "sensor/isSeenSensor.hpp"
 #include "sensor/positionSensor.hpp"
@@ -33,6 +34,9 @@ StringToEntity stringToEntityMap{
     {"SliderJoint",          &createEntityInstance<SliderJoint>          }, // slider joint
     {"BallAndSocketJoint",   &createEntityInstance<BallAndSocketJoint>   }, // Ball and socket Joint
     {"UniversalJoint",       &createEntityInstance<UniversalJoint>       }, // Universal joint
+    {"LinearSpringJoint",    &createEntityInstance<LinearSpringJoint>    }, // Slider Spring
+    {"HingeSpringJoint",     &createEntityInstance<HingeSpringJoint>     }, // Hinge Spring
+    // {"UniversalSpringJoint", &createEntityInstance<UniversalSpringJoint> }, // spring
     {"RotaryActuator",       &createEntityInstance<RotaryActuator>       }, // Rotary actuator - attaches to hinge joint
     {"LinearActuator",       &createEntityInstance<LinearActuator>       }, // Linear actuator - attaches to slider joint
     {"ThrusterActuator",     &createEntityInstance<ThrusterActuator>     }, // thruster - like a rocket
@@ -204,6 +208,7 @@ void Environment::takeStep(int timeStep, dReal dt){
     std::vector<int> sensorIDs = this->entityVectors[SENSOR];
     std::vector<int> neuronIDs = this->entityVectors[NEURON];
     std::vector<int> actuatorIDs = this->entityVectors[ACTUATOR];
+    std::vector<int> jointIDs = this->entityVectors[JOINT];
     std::vector<int> bodyIDs = this->entityVectors[BODY];
     // order is important
     // sense -> think -> act -> simulate
@@ -219,6 +224,7 @@ void Environment::takeStep(int timeStep, dReal dt){
     // update motors  (act)
     takeStep(actuatorIDs, timeStep, dt);
     // update other physics (simulate)
+    takeStep( jointIDs, timeStep, dt );
     takeStep(bodyIDs, timeStep, dt);
 }
 

@@ -76,8 +76,23 @@ class Simulator(_body.Mixin, _joint.Mixin,
         self._sensor_data = {}
 
     def assign_collision(self, group1, group2):
-        """Assign a collision between group1 and group2"""
+        """Specifies that members of *group1* and *group2* should collide in simulation
+
+        Parameters
+        ----------
+        group1 : str
+            String name of group 1
+        group2  : str
+            String name of group 2
+
+        Returns
+        -------
+        bool
+            True if successful
+        """
+
         self._send('AssignCollision', group1, group2)
+        return True
 
     def set_current_collision_group(self, group_name):
         """Set the current group name for future bodies to use as default"""
@@ -120,6 +135,14 @@ class Simulator(_body.Mixin, _joint.Mixin,
         self._send_parameter('CameraH', h)
         self._send_parameter('CameraP', p)
         self._send_parameter('CameraR', r)
+
+    def set_friction( self, mu = 'Infinite' ):
+
+        if mu == 'Infinite':
+            mu = -1.0
+        assert float( mu ) == mu, 'mu must be Infinite or float'
+
+        self._send_parameter( 'Friction', mu )
 
     def start(self):
         """Start the simulation"""
@@ -269,6 +292,18 @@ class Simulator(_body.Mixin, _joint.Mixin,
         self._send('Entity', *args)
         self._num_entities += 1
         return entity_id
+
+    def _send_actuator(self, *args):
+        self._send_entity('Actuator', *args)
+
+    def _send_sensor(self, *args):
+        self._send_entity('Sensor', *args)
+
+    def _send_neuron(self, *args):
+        self._send_entity('Neuron')
+
+    def _send_synapse(self, *args):
+        self._send_entity('Synapse')
 
     def _send_parameter(self, *args):
         self._send('Parameter', *args)

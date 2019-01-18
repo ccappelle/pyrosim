@@ -1,5 +1,5 @@
-#ifndef _HINGE_JOINT_HPP
-#define _HINGE_JOINT_HPP
+#ifndef __JOINT_HPP
+#define __JOINT_HPP
 
 #pragma once
 

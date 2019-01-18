@@ -285,6 +285,8 @@ void initializeParameters(void){
     parameters["GravityZ"] = -9.8f;
 
     parameters["nContacts"] = 10;
+
+    parameters["Friction"] = dInfinity;
 }
 
 void simulationStep(void){
@@ -416,7 +418,13 @@ void nearCallback(void *callbackData, dGeomID o1, dGeomID o2){
         for(int i=0; i<n; i++){
             // set friction parameters for contact
             contact[i].surface.mode = dContactSlip1 | dContactSlip2 | dContactApprox1;
-            contact[i].surface.mu = dInfinity;
+            if ( parameters["Friction"] < 0.0 ){
+                contact[i].surface.mu = dInfinity;
+            } else {
+                contact[i].surface.mu = parameters["Friction"];
+            }
+            // contact[i].surface.mu = dInfinity;
+            // contact[i].surface.mu = 0.0;
             contact[i].surface.slip1 = 0.01;
             contact[i].surface.slip2 = 0.01;
 
