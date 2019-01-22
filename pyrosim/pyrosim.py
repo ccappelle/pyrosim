@@ -293,18 +293,6 @@ class Simulator(_body.Mixin, _joint.Mixin,
         self._num_entities += 1
         return entity_id
 
-    def _send_actuator(self, *args):
-        self._send_entity('Actuator', *args)
-
-    def _send_sensor(self, *args):
-        self._send_entity('Sensor', *args)
-
-    def _send_neuron(self, *args):
-        self._send_entity('Neuron')
-
-    def _send_synapse(self, *args):
-        self._send_entity('Synapse')
-
     def _send_parameter(self, *args):
         self._send('Parameter', *args)
 
