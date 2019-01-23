@@ -172,44 +172,59 @@ class Mixin(object):
                                 body1, body2,
                                 anchor, axis1, axis2)
 
+    def send_length_spring_joint( self,
+                                  body1, body2,
+                                  resting_length = 1.0,
+                                  stiffness = 1.0,
+                                  damping = 0.0 ):
+        """Sends a spring which simply maintains a certain length between two bodies"""
+
+        self._assert_body( body1 )
+        self._assert_body( body2 )
+
+        return self._send_joint( 'LengthSpringJoint',
+                                 body1, body2,
+                                 resting_length,
+                                 stiffness, damping )
+
     def send_linear_spring_joint( self,
-                                  body_id_1,
-                                  body_id_2,
+                                  body1,
+                                  body2,
                                   resting_length = 1.0,
                                   stiffness = 1.0,
                                   damping = 0.0 ):
         """Sends a linear spring with infinite rotational stiffness"""
 
-        self._assert_body( body_id_1 )
-        self._assert_body( body_id_2 )
+        self._assert_body( body1 )
+        self._assert_body( body2 )
 
         return self._send_joint( 'LinearSpringJoint',
-                                 body_id_1, body_id_2,
+                                 body1, body2,
                                  resting_length,
                                  stiffness,
                                  damping )
 
     def send_hinge_spring_joint( self,
-                                  body_id_1,
-                                  body_id_2,
+                                  body1,
+                                  body2,
                                   stiffness = 1.0,
                                   axis1 = ( 0, 1, 0 ),
                                   axis2 = ( 0, 0, 1 ),
                                   damping = 0.0 ):
         """Sends a linear spring with infinite rotational stiffness"""
 
-        self._assert_body( body_id_1 )
-        self._assert_body( body_id_2 )
+        self._assert_body( body1 )
+        self._assert_body( body2 )
 
         return self._send_joint( 'HingeSpringJoint',
-                                 body_id_1, body_id_2,
+                                 body1, body2,
                                  stiffness,
                                  axis1, axis2,
                                  damping )
 
     def send_universal_spring_joint( self,
-                                     body_id_1,
-                                     body_id_2,
+                                     body1,
+                                     body2,
                                      resting_length = 1.0,
                                      linear_stiffness = 1.0,
                                      rotational_stiffness = 10.0 ):
@@ -217,11 +232,11 @@ class Mixin(object):
 
         # assert resting_length > 0, ('resting_length must be > 0' )
         # assert stiffness > 0, ( 'stiffness must be > 0' )
-        self._assert_body( body_id_1 )
-        self._assert_body( body_id_2 )
+        self._assert_body( body1 )
+        self._assert_body( body2 )
 
         return self._send_joint( 'UniversalSpringJoint',
-                                    body_id_1, body_id_2,
+                                    body1, body2,
                                     resting_length,
                                     linear_stiffness,
                                     rotational_stiffness )

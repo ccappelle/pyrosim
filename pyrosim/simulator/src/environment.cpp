@@ -34,6 +34,7 @@ StringToEntity stringToEntityMap{
     {"SliderJoint",          &createEntityInstance<SliderJoint>          }, // slider joint
     {"BallAndSocketJoint",   &createEntityInstance<BallAndSocketJoint>   }, // Ball and socket Joint
     {"UniversalJoint",       &createEntityInstance<UniversalJoint>       }, // Universal joint
+    {"LengthSpringJoint",    &createEntityInstance<LengthSpringJoint>    }, // Length Spring joint
     {"LinearSpringJoint",    &createEntityInstance<LinearSpringJoint>    }, // Slider Spring
     {"HingeSpringJoint",     &createEntityInstance<HingeSpringJoint>     }, // Hinge Spring
     // {"UniversalSpringJoint", &createEntityInstance<UniversalSpringJoint> }, // spring

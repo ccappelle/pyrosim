@@ -11,6 +11,92 @@
 #include "pythonReader.hpp"
 
 
+class LengthSpringJoint : public Entity{
+protected:
+    int body1ID, body2ID;
+    float stiffness;
+    float restingLength;
+    float damping;
+    dBodyID body1, body2;
+public:
+    LengthSpringJoint(){};
+
+    virtual EntityType getEntityType( void ){
+        return JOINT;
+    }
+
+    void readFromPython( void ){
+        readValueFromPython<int>( &this->body1ID, "Body 1 ID" );
+        readValueFromPython<int>( &this->body2ID, "Body 2 ID" );
+        readValueFromPython<float>( &this->restingLength, "Resting Length" );
+        readValueFromPython<float>( &this->stiffness, "Stiffness" );
+        readValueFromPython<float>( &this->damping, "Damping" );
+    }
+
+    void create( Environment *environment ){
+        // linear spring does not use any joints
+        // simply provides calculated force at each time step
+        std::cerr << "Creating Length Spring" << std::endl;
+        RigidBody *body1Obj = (RigidBody *) environment->getEntity( this->body1ID );
+        RigidBody *body2Obj = (RigidBody *) environment->getEntity( this->body2ID );
+
+        this->body1 = body1Obj->getBody();
+        this->body2 = body2Obj->getBody();
+    }
+
+    void takeStep( int timestep, dReal dt ){
+        // calculate f = -kx and apply forces on each
+        // body in the appropriate direction
+        const dReal *pos1 = dBodyGetPosition( this->body1 );
+        const dReal *pos2 = dBodyGetPosition( this->body2 );  
+
+        dReal direction[3] = { pos2[0] - pos1[0],
+                               pos2[1] - pos1[1],
+                               pos2[2] - pos1[2] };
+
+        // std::cerr << "Vector " << direction[0] << " " << direction[1] << " " << direction[2] << std::endl;
+        dReal magnitude = sqrt( direction[0] * direction[0] +
+                                direction[1] * direction[1] +
+                                direction[2] * direction[2] );
+        if ( magnitude > 0 ){
+            direction[0] /= magnitude;
+            direction[1] /= magnitude;
+            direction[2] /= magnitude;
+
+            dReal displacement = magnitude - this->restingLength;
+
+            dBodyAddForce( this->body1,
+                           displacement * this->stiffness * direction[0],
+                           displacement * this->stiffness * direction[1],
+                           displacement * this->stiffness * direction[2] );
+            dBodyAddForce( this->body2,
+                           -displacement * this->stiffness * direction[0],
+                           -displacement * this->stiffness * direction[1],
+                           -displacement * this->stiffness * direction[2] );
+        }
+
+    }
+
+    void draw( void ){
+        // draw as spheres along a line between bodies
+        dsSetColorAlpha( 0.0, 0.0, 0.0, 0.5 );
+        const dReal *p1 = dBodyGetPosition( this->body1 );
+        const dReal *p2 = dBodyGetPosition( this->body2 );
+
+        int nSpheres = 4;
+        // draw nSperes space between the bodies
+        for(int i=0; i<=nSpheres; i++){
+            float alpha = float( i ) / float(nSpheres);
+            // actual sampled value for center of spheres
+            const dReal p[3] = { p2[0] * (1 - alpha) + p1[0] * alpha,
+                                 p2[1] * (1 - alpha) + p1[1] * alpha,
+                                 p2[2] * (1 - alpha) + p1[2] * alpha };
+
+            dsDrawSphere( p, dBodyGetRotation( this->body1 ), 0.1 );
+        }
+    }
+};
+
 class LinearSpringJoint : public Entity{
 protected:
     int body1ID, body2ID; // entity ids
@@ -37,6 +123,8 @@ public:
     }
 
     void create( Environment *environment ){
+        // linear spring joint uses a slider joint to
+        // maintain rotational relationship between bodies
         std::cerr << "Creating Linear Spring" << std::endl;
         RigidBody *body1Obj = (RigidBody *) environment->getEntity( this->body1ID );
         RigidBody *body2Obj = (RigidBody *) environment->getEntity( this->body2ID );
@@ -77,8 +165,10 @@ public:
 
         float force = -this->stiffness * displacement;
 
-        // undamped
-        dJointAddSliderForce( this->joint, force );
+        // calculate damping based of velocity of slider joint
+        float velocity = dJointGetSliderPositionRate( this->joint );
+
+        dJointAddSliderForce( this->joint, force - velocity * this->damping );
     }
 
     void draw( void ){
@@ -164,8 +254,13 @@ public:
         torque1 = - this->stiffness * angle1;
         torque2 = - this->stiffness * angle2;
 
-        // std::cerr << "JOINT STEP: " << angle1 << " " << angle2 << std::endl;
-        dJointAddUniversalTorques( this->joint, torque1, torque2 );
+        // calc damping
+        float v1 = dJointGetUniversalAngle1Rate( this->joint );
+        float v2 = dJointGetUniversalAngle2Rate( this->joint );
+
+        dJointAddUniversalTorques( this->joint,
+                                   torque1 - this->damping * v1,
+                                   torque2 - this->damping * v2 );
     }
 
     void draw( void ){
@@ -177,7 +272,7 @@ public:
         const dReal *c3 = dBodyGetPosition( this->body2 );
 
         int nSpheres = 4;
-        // draw bezier curve with 10 spheres
+        // draw bezier curve with sspheres
         for(int i=0; i<=nSpheres; i++){
             float alpha = float( i ) / float(nSpheres);
             // weighted points between control lines
