@@ -5,6 +5,7 @@
 #include "raySensor.h"
 #include "lightSensor.h"
 #include "positionSensor.h"
+#include "rotationSensor.h"
 #include "touchSensor.h"
 #include "vestibularSensor.h"
 #include "isSeenSensor.h"
@@ -43,6 +44,7 @@ private:
 
 	LIGHT_SENSOR *lightSensor;
 	POSITION_SENSOR *positionSensor;
+	ROTATION_SENSOR *rotationSensor;
 	RAY_SENSOR *raySensor;
 	TOUCH_SENSOR *touchSensor;
 	VESTIBULAR_SENSOR *vestibularSensor;
@@ -71,6 +73,8 @@ public:
 	void Create_Light_Source(void);
 
 	void Create_Position_Sensor(int myID, int evalPeriod);
+
+	void Create_Rotation_Sensor(int myID, int evalPeriod);
 
 	void Create_Touch_Sensor(int myID, int evalPeriod);
 

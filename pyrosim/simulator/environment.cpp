@@ -157,6 +157,10 @@ void ENVIRONMENT::Read_From_Python(dWorldID world, dSpaceID space, Data *data)
 
                         Create_Position_Sensor(data->evaluationTime);
 
+                else if ( strcmp(incomingString,"RotationSensor") == 0 )
+
+                        Create_Rotation_Sensor(data->evaluationTime);
+
                 else if ( strcmp(incomingString,"TouchSensor") == 0 )
 
                         Create_Touch_Sensor(data->evaluationTime);
@@ -423,6 +427,19 @@ void ENVIRONMENT::Create_Position_Sensor(int evalPeriod) {
     std::cin >> objectIndex; 
 
     objects[objectIndex]->Create_Position_Sensor(ID,evalPeriod);	
+}
+
+void ENVIRONMENT::Create_Rotation_Sensor(int evalPeriod) {
+
+    int objectIndex;
+
+    int ID;
+
+    std::cin >> ID;
+
+    std::cin >> objectIndex;
+
+    objects[objectIndex]->Create_Rotation_Sensor(ID,evalPeriod);
 }
 
 void ENVIRONMENT::Create_Proprioceptive_Sensor(int evalPeriod) {

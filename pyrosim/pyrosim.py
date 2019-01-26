@@ -1123,6 +1123,32 @@ class Simulator(object):
 
         return sensor_id
 
+    def send_rotation_sensor(self, body_id=0):
+        """Attaches a rotation sensor to a body in simulation
+
+        Rotation sensor gives 3-axis rotation values
+
+        Parameters
+        ----------
+        body_id : int, optional
+                The body id of the body to connect the sensor to
+
+        Returns
+        -------
+        int
+                The id tag of the sensor
+        """
+        assert body_id < self._num_bodies, 'Body with id ' + \
+            str(body_id)+' has not been sent'
+
+        sensor_id = self._num_sensors
+        self._num_sensors += 1
+
+        self._send('RotationSensor',
+                   sensor_id, body_id)
+
+        return sensor_id
+
     def send_proprioceptive_sensor(self, joint_id=0):
         """Attaches a proprioceptive sensor to a joint in simulation
 

@@ -76,6 +76,8 @@ private:
 
 	void Create_Position_Sensor(int evalPeriod);
 
+	void Create_Rotation_Sensor(int evalPeriod);
+
 	void Create_Proprioceptive_Sensor(int evalPeriod);
 
 	void Create_Sensor_Neuron(void);

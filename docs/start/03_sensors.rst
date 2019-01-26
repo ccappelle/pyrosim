@@ -15,6 +15,7 @@ There are currently 5 sensors:
 #. Proprioceptive - senses the current angle of a joint.
 #. Touch - senses if a body is touching another body
 #. Vestibular - senses a bodies orientation in space
+#. Rotational - senses a bodies rotation angles in space
 
 After the simulation terminates, the results of the sensors from every time step
 is collected and returned as a numpy matrix. The matrix has indices 

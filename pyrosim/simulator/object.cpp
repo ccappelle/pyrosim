@@ -24,6 +24,7 @@ OBJECT::OBJECT(void) {
 	raySensor = NULL;
 	lightSensor = NULL;
 	positionSensor = NULL;
+	rotationSensor = NULL;
 	touchSensor = NULL;
 	vestibularSensor = NULL;
     isSeenSensor = NULL;
@@ -67,6 +68,11 @@ int OBJECT::Connect_Sensor_To_Sensor_Neuron(int sensorID , NEURON *sensorNeuron)
             positionSensor->Connect_To_Sensor_Neuron(sensorNeuron);
             return true;
         }
+    if ( rotationSensor )
+        if ( rotationSensor->Get_ID() == sensorID ) {
+            rotationSensor->Connect_To_Sensor_Neuron(sensorNeuron);
+            return true;
+        }
     if ( raySensor )
         if ( raySensor->Get_ID() == sensorID ) {
             raySensor->Connect_To_Sensor_Neuron(sensorNeuron);
@@ -108,6 +114,10 @@ void OBJECT::Create_Light_Source(void) {
 
 void OBJECT::Create_Position_Sensor(int myID, int evalPeriod) {
 	positionSensor = new POSITION_SENSOR(myID,evalPeriod);
+}
+
+void OBJECT::Create_Rotation_Sensor(int myID, int evalPeriod) {
+	rotationSensor = new ROTATION_SENSOR(myID,evalPeriod);
 }
 
 void OBJECT::Create_Touch_Sensor(int myID, int evalPeriod) {
@@ -181,6 +191,9 @@ void OBJECT::Poll_Sensors(int numObjects, OBJECT **objects, int t) {
     if ( positionSensor )
         positionSensor->Poll(body,t);
 
+    if ( rotationSensor )
+        rotationSensor->Poll(body,t);
+
 	if ( vestibularSensor )
 		vestibularSensor->Poll(body,t);
 }
@@ -245,6 +258,9 @@ void OBJECT::Update_Sensor_Neurons(int t) {
     if ( positionSensor )
         positionSensor->Update_Sensor_Neurons(t);
 
+    if ( rotationSensor )
+        rotationSensor->Update_Sensor_Neurons(t);
+
     if ( touchSensor )
         touchSensor->Update_Sensor_Neurons(t);
 
@@ -266,6 +282,10 @@ void OBJECT::Write_To_Python(int evalPeriod) {
 	if ( positionSensor ){
         std::cerr << "  writing position sensor to python "  << std::endl;
 		positionSensor->Write_To_Python(evalPeriod);
+    }
+	if ( rotationSensor ){
+        std::cerr << "  writing rotation sensor to python "  << std::endl;
+		rotationSensor->Write_To_Python(evalPeriod);
     }
 	if ( touchSensor ){
         std::cerr << "  writing touch sensor to python "  << std::endl;

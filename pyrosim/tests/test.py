@@ -27,6 +27,7 @@ class Test_Pyrosim(object):
     def test_bodies(self):
         bodies = [0]*4
         pos_sensors = [0]*4
+        rot_sensors = [0]*4
 
         bodies[0] = self.sim.send_box(x=0, y=0, z=0)
         bodies[1] = self.sim.send_cylinder(x=1, y=0, z=0,
@@ -36,6 +37,9 @@ class Test_Pyrosim(object):
         bodies[3] = self.sim.send_sphere(x=3, y=0, z=0)
         for i in range(4):
             pos_sensors[i] = self.sim.send_position_sensor(bodies[i])
+
+        for i in range(4):
+            rot_sensors[i] = self.sim.send_rotation_sensor(bodies[i])
 
         self.sim.start()
         self.sim.wait_to_finish()
