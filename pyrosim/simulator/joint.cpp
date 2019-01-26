@@ -329,6 +329,11 @@ void JOINT::Write_To_Python(int evalPeriod) {
                 proprioceptiveSensor->Write_To_Python(evalPeriod);
 }
 
+void JOINT::Write_To_Python_Single(int evalPeriod) {
+        if ( proprioceptiveSensor )
+                proprioceptiveSensor->Write_To_Python(evalPeriod);
+}
+
 // ------------------- Private methods --------------------------
 
 

@@ -281,6 +281,27 @@ void OBJECT::Write_To_Python(int evalPeriod) {
     }
 }
 
+void OBJECT::Write_To_Python_Single(int evalPeriod) {
+	if ( raySensor ){
+		raySensor->Write_To_Python_Single(evalPeriod);
+    }
+
+	if ( lightSensor ){
+		lightSensor->Write_To_Python_Single(evalPeriod);
+    }
+	if ( positionSensor ){
+    }
+	if ( touchSensor ){
+    	touchSensor->Write_To_Python_Single(evalPeriod);
+    }
+    if ( vestibularSensor ){
+        vestibularSensor->Write_To_Python_Single(evalPeriod);
+    }
+    if ( isSeenSensor ){
+        isSeenSensor->Write_To_Python_Single(evalPeriod);
+    }
+}
+
 // ------------------------------- Private methods ------------------------------
 
 int OBJECT::Contains_A_Light_Source(void) {

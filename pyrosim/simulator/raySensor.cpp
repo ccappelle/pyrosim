@@ -162,4 +162,16 @@ void RAY_SENSOR::Write_To_Python(int evalPeriod) {
     std::cout << outString;
 }
 
+void RAY_SENSOR::Write_To_Python_Single(int evalPeriod) {
+
+	char outString[100000];
+
+	sprintf(outString,"%d %d ",ID,4);
+
+    sprintf(outString,"%s %f %f %f %f ",outString,distances[evalPeriod],r[evalPeriod],g[evalPeriod],b[evalPeriod]);
+
+	sprintf(outString,"%s \n",outString);
+    std::cout << outString;
+}
+
 #endif

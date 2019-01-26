@@ -1,15 +1,14 @@
 from __future__ import division, print_function
-import math
-import os
-import numpy as np
-
-from subprocess import Popen, PIPE
-import subprocess
 
 import errno
+import math
+import os
 import shutil
+import subprocess
 from datetime import datetime
+from subprocess import Popen, PIPE
 
+import numpy as np
 
 # simulator init constants
 WINDOW_SIZE = (750, 500)
@@ -112,6 +111,9 @@ class Simulator(object):
             os.path.abspath(__file__)) + '/simulator'
 
         self.body_to_follow = -1
+
+        self._sensor_listeners = []
+        self._interrupted = False
 
         if debug:
             print ('Simulator exec location ', self.pyrosim_path, '\n')
@@ -1407,6 +1409,7 @@ class Simulator(object):
             self.pipe.stdin.write(string_to_send)
 
         self.pipe.stdin.write('Done\n')
+        self.pipe.stdin.close()
         if self.debug:
             print ('Done \n')
             print ('Pipe open with commands: ', commands)
@@ -1424,11 +1427,35 @@ class Simulator(object):
                 A matrix of the sensor values for each time step of
                 the simulation
         """
+        data_from_simulator = ""
+        single_reading = False
+        step_no = 0
+        for line in iter(self.pipe.stdout.readline, b''):
+            if self._interrupted:
+                self.pipe.terminate()
+                break
 
-        data_from_simulator = self.pipe.communicate()
+            if line.startswith("single-start"):
+                single_reading = True
+                step_no = int(line.rstrip().split()[-1])
+                continue
+
+            if line.startswith("single-done"):
+                single_reading = False
+                continue
+
+            if single_reading:
+                self._notify_live_data(step_no, line.split())
+                continue
+
+            data_from_simulator += line
+
+        retcode = self.pipe.poll()
+        if not self._interrupted and retcode != 0:
+            raise RuntimeError("Simulator binary has ended with non-zero code %s" % retcode)
 
         if self.eval_time >= 0:
-            self._collect_sensor_data(data_from_simulator)
+            self._collect_sensor_data([data_from_simulator, self.pipe.stderr.read()])
             self.evaluated = True
 
             return self.data
@@ -1539,3 +1566,14 @@ class Simulator(object):
         if self.debug:
             print (string_to_send,)
         self.strings_to_send.append(string_to_send)
+
+    def _notify_live_data(self, step_num, param):
+        """ Notify objects about live data coming """
+        for callable in self._sensor_listeners:
+            callable(step_num, int(param[0]), [float(x) for x in param[2:]])
+
+    def add_sensor_listener(self, callable):
+        self._sensor_listeners.append(callable)
+
+    def stop(self):
+        self._interrupted = True

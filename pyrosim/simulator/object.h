@@ -104,6 +104,8 @@ public:
 
 	void Write_To_Python(int evalPeriod);
 
+	void Write_To_Python_Single(int evalPeriod);
+
 private:
 	int  Contains_A_Light_Source(void);
 	double Distance_To(OBJECT *otherObject);

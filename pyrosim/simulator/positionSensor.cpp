@@ -79,4 +79,18 @@ void POSITION_SENSOR::Write_To_Python(int evalPeriod) {
         
 }
 
+void POSITION_SENSOR::Write_To_Python_Single(int evalPeriod) {
+
+        char outString[1000000];
+
+        sprintf(outString,"%d %d ",ID,3);
+
+        sprintf(outString,"%s %f %f %f ",outString,x[evalPeriod],y[evalPeriod],z[evalPeriod]);
+
+        sprintf(outString,"%s \n",outString);
+
+        std::cout << outString;
+
+}
+
 #endif

@@ -242,6 +242,17 @@ void ENVIRONMENT::Write_Sensor_Data(int evalPeriod) {
 	std::cout << "Done\n";
 }
 
+void ENVIRONMENT::Write_Sensor_Data_Single(int evalPeriod) {
+
+    std::cout << "single-start for " << evalPeriod << std::endl;
+	for (int i=0;i<numberOfBodies;i++)
+		objects[i]->Write_To_Python_Single(evalPeriod);
+    for (int j=0;j<numberOfJoints;j++)
+    	joints[j]->Write_To_Python_Single(evalPeriod);
+		std::cout.flush();
+	std::cout << "single-done\n";
+}
+
 // ----------------------- Private methods ---------------------------
 
 void ENVIRONMENT::Add_Motor_Neuron(int ID, int jointID, double tau, double alpha, double start) {

@@ -209,6 +209,8 @@ void Simulate_For_One_Time_Step(void) {
 
   dJointGroupEmpty(contactgroup);
 
+  environment->Write_Sensor_Data_Single(timer);
+
   timer++;
 
   if ( timer==data->evaluationTime )

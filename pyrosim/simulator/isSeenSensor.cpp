@@ -50,4 +50,15 @@ void IS_SEEN_SENSOR::Write_To_Python(int evalPeriod) {
         std::cout << outString;
 }
 
+void IS_SEEN_SENSOR::Write_To_Python_Single(int evalPeriod) {
+
+        char outString[100000];
+        sprintf(outString,"%d %d ",ID,1);
+
+        sprintf(outString,"%s %d ",outString,values[evalPeriod]);
+
+        sprintf(outString,"%s \n",outString);
+        std::cout << outString;
+}
+
 #endif

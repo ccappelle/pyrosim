@@ -98,6 +98,8 @@ public:
 
 	void Write_To_Python(int evalPeriod);
 
+	void Write_To_Python_Single(int evalPeriod);
+
 private:
 	//void Create_Fixed_Joint_In_Simulator(dWorldID world, OBJECT *firstObject, OBJECT *secondObject);
 
