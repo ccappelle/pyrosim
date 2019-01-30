@@ -209,12 +209,15 @@ class Simulator(_body.Mixin, _joint.Mixin,
 
         self._read_sensor_data()
 
-    def get_sensor_data(self, sensor_id):
+    def get_sensor_data(self, sensor_id = None):
         """Returns the sensor data of the specified sensor at each
         time step"""
         
-        self._assert_sensor(sensor_id, 'sensor_id')
-        return copy.copy(self._sensor_data[sensor_id][:])
+        if sensor_id is None:
+            return copy.copy( self._sensor_data )
+        else:
+            self._assert_sensor(sensor_id, 'sensor_id')
+            return copy.copy(self._sensor_data[sensor_id][:])
     
     def get_all_sensor_data( self ):
         """Outputs all sensor data created by the simulation
